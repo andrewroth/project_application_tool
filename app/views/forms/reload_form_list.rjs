@@ -1,0 +1,2 @@
+page.replace_html 'list_forms', :partial => 'form_list', :object => @forms
+page.replace_html 'new_form', :partial => 'new_form'

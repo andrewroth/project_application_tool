@@ -1,0 +1,9 @@
+<% if @profile && !@profile.new_record? %>
+  <% content_for "submenu" do %>
+    <%= sub_menu_item 'misc', :profiles, :view, :id => @profile.id %>
+    <%= sub_menu_item 'support received', :profiles, :support_received, :id => @profile.id %>
+    <%= sub_menu_item 'costing', :profiles, :costing, :id => @profile.id %>
+    <%= sub_menu_item 'travel', :profiles, :travel, :id => @profile.id %>
+  <% end %>
+<% end %>
+

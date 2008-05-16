@@ -1,0 +1,27 @@
+<script>
+function update_links() {
+	hrefs = $('event_group_links').getElementsByTagName("a");
+	for (i = 0; i < hrefs.length; i++) {
+		if (hrefs[i].href_orig == null) {
+			hrefs[i].href_orig = hrefs[i].href;
+		}
+
+		hrefs[i].href = hrefs[i].href_orig;
+		if ($F('remember') == 'true') {
+			hrefs[i].href = hrefs[i].href + '?remember=true';
+		}
+	}
+
+}
+
+</script>
+
+Choose your event group for this session:
+
+<div id="event_group_links">
+  <% cache(:controller => 'event_groups', :action => 'index') do %>
+    <%= render :partial => 'ajax_tree/tree' %>
+  <% end %>
+</div>
+
+<p><%= check_box_tag 'remember', 'true', false, :onClick => "update_links();" %>Remember my choice for next time.</p>

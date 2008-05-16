@@ -1,0 +1,9 @@
+<p>Change profile for <%= @profile.viewer ? @profile.viewer.name : '?' %> for <%= @profile.project ? @profile.project.title : '[no project chosen]' %> (Currently profile type is <%= @profile.class.name %><% if @profile.respond_to?(:status) %> status <%= @profile.status %><% end %>) </p>
+
+<% form_tag :action => :update, :id => @profile.id do -%>
+
+<%= render :partial => 'form' %>
+
+<%= submit_tag 'Save' %>
+
+<% end -%>

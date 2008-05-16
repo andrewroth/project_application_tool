@@ -1,0 +1,21 @@
+<% form_tag :action => :create do -%>
+
+<p><strong>Create new profile</strong></p>
+
+<p>For: <input id='viewer', name='viewer'/> <span id='viewer_id_span'></span>
+<%= observe_field 'viewer', :url => { :action => 'viewer_id_dropdown' }, 
+   :update => 'viewer_id_span',
+   :loading => "$('loading').show();", :complete => "$('loading').hide();",
+   :frequency => 3,
+   :with => 'viewer'
+-%>
+</p>
+
+<p>Application: <span id='appln_span'></span></p>
+
+<%= render :partial => 'form' %>
+
+<%= submit_tag 'Create' %>
+
+<% end -%>
+

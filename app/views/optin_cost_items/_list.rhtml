@@ -1,0 +1,7 @@
+<div id="spt_loading" style="clear:both; display:none">
+   Loading <%=image_tag('spinner.gif')%><br />
+</div>
+
+<ul id="cost_item_list">
+  <%= render :partial => 'cost_item', :collection => @cost_items %>
+</ul>

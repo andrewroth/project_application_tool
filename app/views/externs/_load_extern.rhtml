@@ -1,0 +1,47 @@
+<% 
+def do_load_externs(values)
+  r = ""
+  
+  values.each_pair do |file, values2|
+    values2 = [ values2 ] if values2.class == Hash
+    
+    values2.each do |val2|
+      if val2.class == Hash
+        val2.each_pair do |controller, action|
+          actions = action.class == Array ? action : [ action ]
+          if controller == params[:controller].to_sym && actions.include?(params[:action].to_sym)
+            r += render :partial => "externs/"+file.to_s
+          end
+        end
+      else
+        if params[:controller].to_sym == val2
+          r += render :partial => "externs/"+file.to_s
+        end
+      end
+    end
+  end
+  
+  r
+end
+%>
+
+<%=
+
+load_externs = {
+ :questionnaire_admin => [ :admin, :pages, :elements, :question_options, :questionnaires ],
+ :questionnaire => [ :appln, :view_online, :instance, :processor, 
+                     :processor_form, :reference_instances, :acceptance ],
+ :lists => [ :cost_items, :optin_cost_items, :profile_travel_segments,
+             { :profiles => [ :costing, :travel ] }, :travel_segments, :event_groups ],
+ :controls => [ { :main => :search_people_by_name }, :cost_items, 
+                  :acceptance, :optin_cost_items, :travel_segements, :profiles,
+                  { :reports => :custom_itinerary_report } ],
+ :ajax_tree => [ :event_groups ],
+ :dragdrop => [ :custom_reports ],
+ :update_view_links => [ :custom_reports ],
+ :active_scaffold => [ :custom_reports, :report_elements, :report_models, :report_model_methods, :airports, :countries ],
+ :no_script_removal => [ :main ]
+}
+
+do_load_externs load_externs
+%>

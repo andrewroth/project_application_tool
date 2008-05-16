@@ -1,0 +1,9 @@
+
+<% content_for "submenu" do %>
+    <!-- no point in adding the menu for people who aren't projects
+      coordinators, since they will only have the 'add' item -->
+    <% if @user.is_projects_coordinator? %>
+        <%= sub_menu_item 'New', :manual_donations, :new %>
+        <%= sub_menu_item 'List', :manual_donations, :list %>
+    <% end %>
+<% end %>

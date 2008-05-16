@@ -1,0 +1,31 @@
+<% bold = values.to_a.compact.size == 1 %>
+
+<% values.each_with_index do |val, i| %>
+    <% next if val == :skip %>
+
+    <% if val.is_a? Struct %>
+        <%= render :partial => 'values_to_cols', :locals => { :values => val } %>
+    <% else %>
+        <td>
+        <% if bold %><b><% end %>
+            <% if @columns.values[i] == 'currency' %>
+                <% begin %>
+                    <p style='float:right'>
+                    <%= format_currency(val) %>
+                    </p>
+                <% rescue %>
+                    <%= val %>
+                <% end %>
+            <% elsif @columns.values[i] == 'datetime' %>
+               <% begin %>
+                  <%= format_datetime(val) %>
+               <% rescue %>
+                  <%= val %>
+               <% end %>
+            <% else %>
+                <%= val %>
+            <% end %>
+        <% if bold %></b><% end %>
+        </td>
+    <% end %>
+<% end %>

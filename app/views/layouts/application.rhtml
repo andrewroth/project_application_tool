@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<% if RAILS_ENV == "development" %>
+  <% flash[:error] ||= "You are on our development site -- you should NOT be filling in your app or reference here.  Remove the 'dev.' from your url, and email spt@campusforchrist.org with how you got here" %>
+<% end %>
+
+<html>
+  <head>
+    <title>Project Application Tool</title>
+    <%= stylesheet_link_tag 'main2' %>
+    <%= render :partial => "externs/sortable_tables" %>
+    <%= javascript_include_tag "prototype", "effects" %>
+    <%= render :partial => "externs/load_extern" %>
+  </head>
+  <body>
+    <% if RAILS_ENV == 'development' && @debug -%>
+      <div>debug: <%= @debug -%></div>
+    <% end -%>
+    <!-- display style must be inline -->
+    <div id="loading" style="display:none;">
+      Loading <%=image_tag('spinner.gif')%><br />
+    </div>
+    <div id="header">
+      <div id="user_info">
+        <% if @user %> 
+          <p>user: 
+            <%= @user.viewer.name %> - 
+            <%= link_to 'logout', :action => :logout, :controller => :security %>
+          </p>
+        <% end %>
+      </div>
+      <div id="event_group_info">
+        <% if @eg %>
+          <p>group:
+            <%= @eg.to_s_with_eg_path %> 
+            <%= link_to 'change', scope_event_groups_url %>
+          </p>
+        <% end %>
+      </div>
+      <h1>Project Application Tool</h1>
+    </div>
+    
+    <% if @user %>
+      <div class="menu">
+        <ul>
+          <%= new_item "Your Apps", "your_apps", :list %>
+          <% if @show_your_project %>
+            <%= new_item "Your Projects", "main", :your_projects %>
+          <% end %>
+          <% unless @user.is_student? %>    
+            <%= new_item "App Processing", "main", :your_applications %>
+	    <% if @eg && @eg.has_your_campuses %>
+              <%= new_item "Your Campuses", "main", :your_campuses %>
+	    <% end %>
+            <% if @user.is_projects_coordinator? %>
+              <%= new_item "Tools", "tools", :index %>
+              <%= new_item "Manage Forms", "forms" %>
+              <%= new_item "Manage Groups", "event_groups" %>
+            <% end %>
+            <%= new_item "Manage Projects", "manage_projects", :list %>
+            <%= new_item "Reports", "reports", :index %> 
+          <% end %>
+          <%= new_item "Profiles", "profiles", :index%>
+        </ul>
+        <br clear="left">
+      </div>
+    <% end %>
+    
+    <% flash.each do |key, msg| %>
+      <% full_msg = msg << "<p>" << link_to_function('Hide') do |page| 
+      	page["flash_#{key}"].visual_effect :fade
+    	end << "</p>"%>
+      <%= content_tag :div, full_msg, :id => "flash_#{key}", :class => 'error flash' %>
+    <% end %>
+    
+    <% if @user && !@user.is_student? && !@eg.nil? %>
+      <div id="search" >
+        <%= form_remote_tag :url => { :controller => 'main', :action => :find_people },	:before => "Element.show('loading');", :complete  => "Element.hide('loading');" %>
+          <label for="viewer_name">Search People:</label>
+          <%= text_field 'viewer', 'name', :size => 20%>
+          <%= submit_tag "Search" %>
+        </form>
+      </div>
+    <% end %>
+      
+    <% if @title %>
+      <h3><%=@title%></h3>
+    <% end %>
+		
+    <% if file_exists? controller.controller_name + "/_menu" %>
+      <%= render :partial => controller.controller_name + "/menu" %>
+    <% elsif @submenu && file_exists?(@submenu + "/_menu") %>
+      <%= render :partial => @submenu + "/menu" %>
+    <% end %>
+
+    <% submenu_items_html = yield :submenu %>
+    <% if submenu_items_html && !@eg.nil? %>
+      <div class="submenu">
+        <ul>
+          <%= submenu_items_html %>
+        </ul>
+      </div>
+    <% end %>
+    <div>
+      <div id="content">
+        <% if @form && params[:controller] != 'forms' %>
+          <%= render "layouts/form_#{@form}.rhtml" %>
+        <% else %>
+          <%= yield %>
+        <% end %>
+      </div>
+    </div>
+    <% if @eg %>
+      <div id="footer" class="inconspicuous_hr">
+        <!-- nix the north border, it looks better. -->
+        <b>Non-Technical Inquiries:</b><br />
+				Campus for Christ - projects@campusforchrist.org<br />
+				LeaderImpact Group - danielled@leaderimpactgroup.com<br />
+				Athletes in Action - morgank@athletesinaction.com<br />
+				<br/>
+			<b>Technial Inquiries:</b> spt@campusforchrist.org<br/>
+			<br/>
+			Online help can be found <a href="http://resources.campusforchrist.org/index.php/Project_Application_Tool">here</a>.
+        <br/>
+      </div>
+    <% end %>
+      
+    <!-- init any sortable tables made on this page -->
+    <%= initialize_sortable_tables %>
+  <!-- Google Analytics Code: Start-->
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    var pageTracker = _gat._getTracker("UA-2437988-4");
+    pageTracker._initData();
+    pageTracker._trackPageview();
+    </script>
+  <!-- Google Analytics Code: End-->   
+  </body>
+</html>
+

@@ -1,0 +1,21 @@
+<div>
+  <fieldset id="forms">
+  	<legend>Forms</legend>
+    <p>Name your reference forms "&lt;reference name&gt; Form" (ex "Peer Reference").  
+    Name the form you want tied to each application "Processor Form".</p>
+    <p>Keep all forms hidden, except for the one students will use to apply.</p>
+    <div id="list_forms">
+      <%= render :partial => 'form_list', :object => @forms %>
+    </div>
+    <div id="new_form">
+    	<%= render :partial => 'new_form' %>
+  	</div>
+    <%= render :partial => 'clone_form', :object => @clone_form_options %>
+  </fieldset>
+  <fieldset id="list_emails">
+    <legend>Emails</legend>
+    <p>The following is a list of events when an email is sent. Click one to edit the body of
+    the email that will be sent</p>
+    <ul><%= render :partial => "reference_emails/list_references_emails" %></ul>
+  </fieldset>
+<div>

@@ -1,0 +1,16 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+calvin_student:
+  viewer_id: 1
+  accessgroup_id: 1
+keener_student:
+  viewer_id: <%=$viewers['keener']%>
+  accessgroup_id: 1
+superadmin:
+  viewer_id: 3
+  accessgroup_id: 2
+just_starting:
+  viewer_id: 4
+  accessgroup_id: 1
+dude:
+  viewer_id: 7
+  accessgroup_id: 1

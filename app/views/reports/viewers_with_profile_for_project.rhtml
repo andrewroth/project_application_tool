@@ -1,0 +1,7 @@
+<%= select_tag 'viewers', options_for_select( 
+      (params[:include_all] ? ['all'] : []) + 
+      (params[:include_blank] ? [''] : []) + 
+      @accepted_viewers.collect { |v| [v.name, v.id ] } 
+    ),
+    :id => @id 
+%>

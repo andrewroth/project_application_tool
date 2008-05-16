@@ -1,0 +1,39 @@
+<p>
+
+<% @accepted = Acceptance.find_all_by_project_id_and_support_coach_id(@project.id, @user.id) %>
+
+
+<% if @accepted.length > 0 %>
+    <p>You are coaching the following people:
+    <blockquote>
+
+        <p><%= sortable_table %>
+          <thead><tr>
+            <%= th 'name' %>
+            <%= th 'campus' %>
+            <%= th 'email' %>
+            <%= th 'permanent phone' %>
+            <%= th 'local phone' %>
+            <!--<%= 'appln (summary)' %>-->
+            <%= th 'support claimed', 'currency' %></th>
+            <%= th 'support received', 'currency' %></th>
+            <td></td>
+          </tr></thead>
+          <% for acceptance in @accepted %>
+            <% viewer = acceptance.viewer %>
+            <tr>
+              <td><%=h viewer.name %></td>
+              <td><%=h viewer.person.campus_shortDesc %></td>
+              <td><%=h viewer.person.email %></td>
+              <td><%=h viewer.person.person_phone %></td>
+              <td><%=h viewer.person.person_local_phone %></td>
+              <!--<td><%= link_to "view summary", :controller => "appln", :action => "view_summary", :id => acceptance.id, :project_id => @project.id %></td>-->
+              <td><%= format_currency acceptance.support_claimed %><br /><%= format_date acceptance.support_claimed_updated_at %></td>
+              <td><%= format_currency acceptance.donations_total %></td>
+              <td><%= costing_link acceptance.id %></td>
+            </tr>
+        <% end %>
+        </table>
+    </blockquote>
+<% else %>
+<% end %>

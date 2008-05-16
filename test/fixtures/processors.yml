@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+sean_afghanistan:
+  id: 1
+  viewer_id: 6
+  project_id: 1
+sean_3:
+  id: 2
+  viewer_id: 6
+  project_id: 3

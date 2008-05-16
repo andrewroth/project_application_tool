@@ -1,0 +1,561 @@
+body {
+	font-family: Arial;
+	font-size: 12px;
+	margin: 0px;
+	min-width: 750px;
+}
+
+fieldset {
+	margin: 5px;
+}
+
+fieldset ol {
+	float: right;
+}
+
+fieldset img {
+	margin-top: 20px;
+	margin-left: 10px;
+}
+
+#forms fieldset {
+	padding: 1em;
+	margin: 1em;
+	width: 90%;
+}
+
+#header p {
+	margin: 0px;
+}
+
+p {
+	margin: 0.3em;
+}
+
+hr {
+	clear: both;
+}
+
+table#cost_items, table#cost_items td, table#cost_items th {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+table#cost_items td {
+	padding: 5px;
+}
+
+table#cost_items th {
+	padding: 3px;
+}
+
+table#application_status {
+	margin-left: 2em;
+}
+
+#list_projects table {
+	margin: 10px 0px;
+	margin: auto;
+	text-align: left;
+}
+
+#list_projects thead {
+	text-align: center;
+}
+
+#header {
+	background-color: #94E2FF;
+	border-bottom: 2px solid #253940;
+	padding: 5px;
+}
+
+#content {
+	margin: 5px;
+	margin-top: 30px;
+}
+
+#header h1 {
+	font-size: 18px;
+	margin: 0px;
+	padding: 10px;
+}
+
+.menu li a {
+	text-decoration: none;
+	color: black;
+	padding: 0px 2px 2px 2px;
+}
+
+.menu li a:hover, .submenu li a:hover {
+	background-color: #85CCE6;
+}
+
+.menu li.menuactive {
+	padding-top: 2px;
+	border-top: none;
+	background-color: #94E2FF;
+}
+
+.submenu li.submenuactive {
+	padding-bottom: 4px;
+	border-bottom: none;
+	background-color: #94E2FF;
+}
+
+.submenu li a{
+	text-decoration: none;
+	color: black;
+	padding: 0px 2px 4px 2px;
+}
+
+.menu li, .submenu li {
+	background-color: #6FAABF;
+	border: 2px solid #253940;
+	padding: 0px 0px 2px 0px;
+}
+
+.menu ul, .submenu ul {
+	padding: 0px;
+}
+
+.inconspicuous_hr {
+	font-size: 12px;
+	text-align: center;
+	border: lightgrey dotted 2px;
+	padding: 5px;
+}
+
+.error {
+	border: red double 2px;
+	padding: 10px;
+	background-color: lightpink;
+	text-align: center;
+}
+
+.notice {
+	padding: 10px;
+	text-align: center;
+}
+
+#select_project {
+	border: lightgrey 2px dotted;
+	padding: 5px;
+	text-align: center;
+}
+
+#forms, #list_emails {
+	padding: 1em;
+	width: 47%;
+}
+
+#list_emails {
+	float: right;
+}
+
+#forms {
+	float: left;
+	clear: both;
+}
+
+#tools {
+	border: lightgrey 2px dotted;
+	padding: 5px;
+	text-align: center;
+}
+
+#list_projects, #list_cost_items, #list_travel_segments, .submenu_container, #view_appln, #processor_actions,
+div#student_view, div#support_received, div#travel_itinerary, div#cost_items {
+	padding: 20px;
+	border: 2px solid #253940;
+}
+
+.inconspicuous, .inconspicuous td, .inconspicuous th {
+	border: lightgrey dotted 2px;
+	margin-bottom: 1em;
+}
+
+#sums {
+	margin-top: 1em;
+}
+
+#list_reports ol li {
+	padding: 5px;
+}
+
+#login {
+	width: 250px;
+	margin: auto;
+	margin-top: 20px;
+	text-align: center;
+	padding: 10px;
+}
+
+#login table {
+	margin: auto;
+}
+
+#login form {
+	margin-bottom: 10px;
+}
+
+#loading {
+  background-color: red;
+  padding:10px;
+  right:20px;
+  bottom:20px;
+  width:100px;
+  height: 20px;
+  position:fixed;
+  font-weight:bold;
+  border: 2px solid black;
+}
+
+#user_info {
+	float: right;
+	margin-bottom: 10px;
+}
+
+#event_group_info {
+	float: right;
+	clear: both;
+}
+
+.menu li, .submenu li {
+	display: inline;
+}
+
+.menu ul {
+	margin: 0px 5px;
+}
+
+.submenu ul {
+	margin: 0px 100px;
+	position:	relative;
+	top: 3px;
+}
+
+#search {
+	margin: 0px 10px;
+	float: right;
+	padding: 5px;
+	position: relative;
+	bottom: 13px;
+}	
+
+.flash {
+	width: 600px;
+	margin: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#select_project {
+	width: 400px;
+	float: right;
+	margin: 5px;
+}
+
+
+
+#tools {
+	margin: 10px;
+}
+
+#footer {
+	margin: auto;
+	width: 350px;
+	margin-bottom: 40px;
+	margin-top: 40px;
+	clear: both;
+	position: relative;
+	top: 10px;
+	padding: 10px;
+	font-size: 10px;
+}
+
+img {
+	border: none;
+}
+
+
+/* QUESTIONNAIRE ENGINE, STUDENT VIEW */
+
+#section_list {
+	width: 15%;
+}
+
+#section_list ul {
+	list-style-type: none;
+	padding: 0px;
+	position: relative;
+	left: 3px;
+	z-index: 3;
+}
+
+#section_list li {
+	padding: 3px;
+}
+
+#section_list .completed_menuactive {
+	background-color: #94E2FF;
+	border: 1px solid #253940;
+	border-right: none;
+	padding-right: 10px;
+}
+
+#section_list .hover_completed_menuactive {
+	background-color: #85CCE6;
+	border: 1px solid #253940;
+	cursor: pointer;
+	border-right: none;
+}
+
+#section_list .incomplete_menuactive {
+	background-color: #94E2FF;
+	border: 1px solid #253940;
+	font-weight: bold;
+	border-right: none;
+}
+
+#section_list .hover_incomplete_menuactive {
+	background-color: #85CCE6;
+	border: 1px solid #253940;
+	font-weight: bold;
+	cursor: pointer;
+	border-right: none;
+}
+
+#section_list .completed_menuinactive {
+	background-color: #6FAABF;
+	border: 1px solid #253940;
+	border-right-width: 2px;
+}
+
+#section_list .hover_completed_menuinactive {
+	background-color: #85CCE6;
+	border: 1px solid #253940;
+	cursor: pointer;
+	border-right-width: 2px;
+}
+
+#section_list .incomplete_menuinactive {
+	background-color: #6FAABF;
+	border: 1px solid #253940;
+	font-weight: bold;
+	border-right-width: 2px;
+}
+
+#section_list .hover_incomplete_menuinactive {
+	background-color: #85CCE6;
+	border: 1px solid #253940;
+	font-weight: bold;
+	cursor: pointer;
+	border-right-width: 2px;
+}
+
+#form_centercontent {
+	border: 2px solid #253940;
+	padding: 10px;
+}
+
+#content1 p {
+	padding: 10px;
+}
+
+.app {
+	padding: 3px;
+}
+
+table.app { 
+	border-collapse:collapse;
+}
+
+td.app, #controls {
+	border-top: 1px solid lightgrey;
+}
+
+#saved_at, #save_button, #next, #back {
+  margin: 10px;
+}
+
+a.button {
+	border-style: outset;
+	padding: 1px;
+}
+
+a.button:hover {
+	border-style: inset;
+	cursor: pointer;
+}
+
+.required, .reqactive, .reqfilled {
+	background-color: #FFFF99;
+	border: 1px solid #253940;
+}
+
+.required {
+	border-right-width: 2px;
+}
+
+div.fieldWithErrors {
+	display: inline;
+}
+
+div.fieldWithErrors input, div.fieldWithErrors select,  
+div.fieldWithErrors textarea {
+	background-color: pink;
+}
+
+#errorExplanation {
+	background-color: pink;
+	border: red 2px solid;
+	padding: 0px 20px;
+}
+
+.small {
+	font-size: 10px;
+	font-style: italic;
+}
+
+/* FORM STYLING FOR LOGIN FORM */
+
+form fieldset {
+	width: 330px;
+	margin: auto;
+	padding: 0;
+}
+
+legend {
+	margin-left: 1em;
+	color: #000000;
+	font-weight: bold;
+}
+
+fieldset ol {
+	padding: 1em 1em 0 1em;
+	list-style: none;
+}
+
+fieldset li {
+	float: left;
+	clear: left;
+	width: 100%;
+	padding-bottom: 1em;
+}
+
+fieldset label {
+	float: left;
+	width: 5em;
+	margin-right: 1em;
+}
+
+div#account_links {
+	width: 22em;
+	margin: auto;
+	clear: both;
+	text-align: center;
+	margin-top: 1.5em;
+}
+
+input#submit {
+	float: right;
+	margin: 0 2.5em 1em 0;
+}
+
+/* styles for the read-only view of forms */
+.readonly_question_text {
+  color: red;
+}
+
+.readonly_page_header {
+  font-weight: bold;
+  color: red;
+}
+
+.blue {
+  color: blue;
+}
+
+/* draggable */
+.drag_me {
+        float: right;
+        margin-right: 15px;
+        border: 1px solid black;
+        background-color: Yellow;
+        padding: 1px;
+}
+td.drag_me {
+    float: none;
+    margin-right: 0px;
+}
+
+/* custom reports */
+.id_textfield {
+  width: 50px;
+}
+
+/*
+tr.association-record {
+  height: 25px;
+}
+*/
+
+.active-scaffold dd {
+  margin: 0;
+  padding: 0;
+}
+
+input.id_textfield {
+  height: 15px;
+}
+
+.active-scaffold .sub-form table tr.association-record-errors td {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+img.new_window {
+/*
+  padding-left: 1px;
+  padding-right: 1px;
+*/
+  margin: 2px 2px 5px;
+  vertical-align: middle;
+}
+
+/* AUTO-COMPLETE FORMATS */
+.auto_complete {
+      position:absolute;
+      background-color:white;
+      border:1px solid #888;
+      margin:0px;
+      padding:0px;
+      z-index: 3;
+}
+
+.auto_complete ul {
+      list-style-type: none;
+      margin:0px;
+      padding:0px;
+      z-index: 3;
+}
+
+.auto_complete ul li .highlight {
+      color: red;
+}
+
+.auto_complete ul li.selected
+{ 
+      background-color: #bbf;
+      z-index: 3;
+}
+
+.auto_complete ul li {
+      list-style-type: none;
+      display:block;
+      margin:0;
+      padding:2px;
+      height:16px;
+      z-index: 3;
+}

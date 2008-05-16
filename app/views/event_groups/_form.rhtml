@@ -1,0 +1,41 @@
+<table><tr><td>
+  <p>
+    <b>Title</b><br />
+    <%= f.text_field :title %>
+  </p>
+
+  <p>
+    <b>Ministry</b><br />
+    <%= f.select :ministry_id, @ministries_options %>
+  </p>
+
+  <p>
+    <b>Default text area character length</b><br />
+    <%= f.text_field :default_text_area_length %>
+  </p>
+
+</td><td>
+
+  <p>
+    <b>Parent</b><br />
+    <%= f.select :parent_id, @tree_list %>
+  </p>
+
+  <p>
+    <b>Long description</b> (this should should fit in a sentence like "you are applying for ..." for example "a 2007 summer project")<br />
+    <%= f.text_field :long_desc %>
+  </p>
+
+  <p>
+    <b>Outgoing email</b><br />
+    <%= f.text_field :outgoing_email %>
+  </p>
+
+  <p>
+    <%= f.check_box :has_your_campuses %>
+    <b>Has Your Campuses Page</b>
+  </p>
+
+</td></tr></table>
+
+

@@ -1,0 +1,34 @@
+<%
+top_element = 'td' if top_element.nil?
+pse = assigned_travel_segment_profile_specific_element
+can_edit = false if can_edit.nil?
+ats_id = assigned_travel_segment.id
+%>
+
+<% if top_element == 'td' %>
+    <%= td_tag :id => "#{pse}_#{ats_id}", :class => 'profile_item' %>
+<% elsif top_element == 'div' %>
+    <div id="<%= "#{pse}_#{ats_id}" %>" class="profile_item">
+<% end %>
+
+      <div id="loading_<%=pse%>_<%=ats_id%>" style="display:none; float: right;"><% if !@pdf %><%= image_tag 'spinner.gif' %><% end %></div>
+      <div id="<%=pse%>_view_<%=ats_id%>">
+        <div id="<%=pse%>_value_<%=ats_id%>">
+          <%= profile_travel_segment.send(pse) %>
+        </div>
+        <% if can_edit %>
+          <%= link_to_remote 'edit', :update => "#{pse}_edit_#{ats_id}",
+            :url => { :action => "update_attribute_form",
+                      :profile_id => @profile.id,
+                      :travel_segment_id => assigned_travel_segment.id,
+                      :attribute => pse
+                    },
+            :loading => "Element.show('loading_#{pse}_#{ats_id}');",
+            :complete => "Element.hide('loading_#{pse}_#{ats_id}'); Element.hide('#{pse}_view_#{ats_id}'); new Effect.Appear('#{pse}_edit_#{ats_id}');"
+      %>
+        </div>
+        <div id="<%=pse%>_edit_<%=ats_id%>" style="display:none">
+        </div>
+      <% end %>
+
+</<%= top_element %>>

@@ -1,0 +1,24 @@
+<input class="" onFocus="Highlight(this)" onBlur="UnHighlight(this)" 
+        type="text" name="table[column]" id="#{id}" 
+        value="<%=format_date(value.to_s)%>" onChange="set_dirty();"
+        readonly="readonly"/>
+
+<script language="javascript">
+    function clear_date(item) {
+        $(item).value='';
+        UnHighlight($(item))
+    }
+</script>
+<a class="button" href="#" id="pick_date_<%=id%>">choose date</a> &nbsp;&nbsp;
+<a class="button" href="javascript:clear_date('<%=id%>');">clear date</a>
+<script type="text/javascript">
+  Calendar.setup(
+    {
+      inputField  : "<%=id%>",              // ID of the input field
+      ifFormat    : "%m/%d/%Y",    			// the date format
+      button      : "pick_date_<%=id%>",    // ID of the button
+      showsTime		: false,
+      showOthers	: true
+    }
+  );
+</script>

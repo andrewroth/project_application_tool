@@ -1,0 +1,21 @@
+<%= javascript_tag %|
+function toggle_more(id) {
+  if ($('long_text_'+id).visible()) {
+    $('long_text_'+id).hide();
+    $('short_text_'+id).show();
+  } else {
+    $('long_text_'+id).show();
+    $('short_text_'+id).hide();
+  }
+}
+
+function value_chosen(id) {
+  opener.document.getElementById('#{params[:js_id]}').value = id;
+  window.close();
+}
+|
+%>
+
+<%= form_tag %>
+<%= render :partial => 'elements', :object => @page.elements %>
+</form>

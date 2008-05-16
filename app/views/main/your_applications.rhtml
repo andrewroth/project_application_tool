@@ -1,0 +1,7 @@
+<p>
+
+<% if @processor_list.empty? %>
+    <p><i>Sorry, no applications have been submitted for a project you are processing.</i>
+<% else  %>
+    <%= render :partial => "processor_pile" %>
+<% end %>

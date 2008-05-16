@@ -1,0 +1,25 @@
+<div id="support_received">
+  <p>Click here to download the <%= link_to("Record of Funds", "http://backup.campusforchrist.org/sptdocuments/record_of_funds.xls")%> form.  Please complete this form on your computer for all the support you receive.  Save it for your records and print a copy to send with your cheques.</p>
+  <p>Please allow a minimum of 10 business days after your support has been sent in before you contact our office to inquire about missing support on the Project Application Tool.  A high volume of email inquiries about missing donations slows down the donation process.  If after 10 business days an expected donation from a supporter has not showed up.  Don't hesitant to contact us.</p>
+  <hr/>
+	<p>Power to Change offices have received these donations for you:<p>
+	<table>
+	  <tr>
+	    <th>Date</th>
+	    <th>Donor name</th>
+	    <th>Amount</th>
+	  </tr>
+		<% total = 0 %>
+		<% for donation in @donations %>
+		  <tr>
+		    <td><%= donation.donation_date %></td>
+		    <td><%= donation.donor_name %></td>
+		    <td align="right">$<%= "%0.2f" % donation.amount.to_f %></td>
+		    <% total += donation.amount.to_f %>
+		  <tr>
+		<% end %>
+	  <td> </td>
+	  <td>TOTAL</td>
+	  <td align="right">$<%= total %></td>
+	</table>
+</div>

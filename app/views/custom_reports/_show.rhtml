@@ -1,0 +1,12 @@
+<% formats = [ 'html', 'excel(csv)' ] %>
+
+Project: <%= select_tag 'render_report_project_id', options_for_select([[]] + 
+  @eg.projects.collect{ |p| [p.title, p.id] } << [ 'All','all' ] ),
+  :onChange => "update_view_links('custom_reports','render_report', [ 'id', 'project_id' ], [ #{formats.collect{|f| "'#{f}'"}.join(',')} ]);"
+%>
+
+<%= text_field_tag 'render_report_id', @record.id.to_s, :style => 'display:none' %>
+
+<% for format in formats %>
+  <%= link_to format, {}, :id => "render_report_#{format}" %>
+<% end %>

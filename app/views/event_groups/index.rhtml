@@ -1,0 +1,7 @@
+<h1>Event Groups</h1>
+
+<% cache({:controller => 'event_groups', :action => 'index'}) do %>
+  <%= render :partial => 'ajax_tree/tree' %>
+<% end %>
+<%= render :partial => 'ajax_tree/create' %>
+

@@ -1,0 +1,5 @@
+<%= 
+render_component(:controller => 'processor_form', :action => 'index', :params => {
+                 :view => 'print', :pile => 'acceptance', :pile_entry_id => processor_form_component.id.to_s,
+                 :load_all_pages => true })
+%>

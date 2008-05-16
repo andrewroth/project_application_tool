@@ -1,0 +1,5 @@
+<% for r in struct %>
+<tr>
+    <%= render :partial => 'values_to_cols', :locals => { :values => r } %>
+</tr>
+<% end %>

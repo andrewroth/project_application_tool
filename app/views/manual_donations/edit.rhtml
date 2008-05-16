@@ -1,0 +1,9 @@
+<h1>Editing Manual Donation</h1>
+
+<%= form_tag :action => 'update', :id => @manual_donation %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Save' %>
+</form>
+
+<br/>
+<%= link_to 'Back', :action => 'list' %>

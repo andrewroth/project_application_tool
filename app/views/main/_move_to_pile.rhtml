@@ -1,0 +1,46 @@
+<%
+  if @move_piles.nil? # cache
+      pile_tables = %w(Accepted Processor)
+      @move_piles = []
+      Project.find_current(:all).collect { |project|
+        pile_tables.each { |pile|
+           pile_name = "#{project.title} #{pile} Pile"
+           pile_values = "#{project.title}|#{pile}"
+           @move_piles << [ pile_name, pile_values ]
+        }
+      }
+  end
+  default_entry = ' '
+  if @pile == 'started'
+    piles << [ ' ' ] # not in a pile yet
+  else
+    curr_project = @project
+    default_entry = "#{curr_project.title}|#{@pile.capitalize}"
+  end
+%>
+  
+  <% name = "move_to_#{@pile}_pile_#{@id}" %>
+  <%= select_tag(name, options_for_select(@move_piles, default_entry)) %>
+
+  <%= observe_field name,
+             :url => {
+                :controller => :main,
+                :action => :move_pile,
+                :curr_pile => @pile.capitalize,
+                :id => @id
+             },
+        	:success => "window.location.href=window.location.href;",
+        	:confirm => "Are you sure you want to move this pile entry to another pile? " + 
+        	   "This method should only be used in extenuating circumstances.  It would be " + 
+        	   "better wait until the application is completed, then evaluate it, is possible.\n" + 
+        	   "\n" + 
+        	   "If you move someone from a processor pile to an acceptance pile, you are" + 
+        	   "in effect accepting them to that project. Be aware the processor form may not " + 
+        	   "be filled out!  You can go edit the processor form after accepting them.\n" + 
+        	   "\n" + 
+               "If you switch from one acceptance pile to another, the support coach will stay " + 
+               "the same if possible (ie if the coach is coaching the other " +
+        	   "project).  If not, it will go to 'let projects administrator decide'." + 
+        	   "Support claimed will also remain the same.",
+            :with =>  "'new_values='+escape($('#{name}').value)"
+   %>

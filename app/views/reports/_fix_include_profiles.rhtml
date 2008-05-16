@@ -1,0 +1,4 @@
+<% # very strange bug without this, it seems include_profiles is like nil every 3rd of 4th time
+   @include_profiles ||= params[:include_profiles] == true.to_s
+   @include_profiles = true if params[:action] == "itinerary"
+ -%>

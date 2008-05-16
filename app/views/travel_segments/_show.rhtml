@@ -1,0 +1,4 @@
+<% for att in @ts.attributes %>
+  <% next if att.first == 'event_group_id' %>
+  <%= att.first %>: <%= att.last %><br />
+<% end %>

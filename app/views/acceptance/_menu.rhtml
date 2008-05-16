@@ -1,0 +1,27 @@
+<% #although this is in the acceptance folder it's being used for the processor_form menu and appln menu 
+-%>
+<% content_for "submenu" do %>
+   <% view_controller = if [ Applying, Withdrawn ].include? @profile.class then 'processor' 
+      elsif @profile.class == Acceptance then 'acceptance'
+      end %>
+
+   <% params = { :profile_id => @profile.id } %>
+
+   <% if @can_view_entire %>
+       <%= sub_menu_item 'View Appln', view_controller, 'view_entire', params %>
+   <% end %>
+   <%= sub_menu_item 'View Appln Summary', view_controller, 'view_summary', params %>
+   <% if @can_view_references %>
+       <% for ref in @appln.form.questionnaire.references %>
+         <%= sub_menu_item "#{ref.text}", view_controller, 'view_entire', 
+	       params.merge(:type => 'ref', :ref_id => ref.id) %>
+       <% end %>
+   <% end %>
+   <% if @can_view_entire %>
+     <%= sub_menu_item 'Processor Form', 'processor_form', nil, params %>
+   <% end %>
+   <% if ( (@project && @user.is_processor?) || @user.is_projects_coordinator?) && 
+   @profile.class == Applying %>
+     <%= sub_menu_item 'Actions', 'processor', 'actions', params %>
+   <% end %>
+<% end %>

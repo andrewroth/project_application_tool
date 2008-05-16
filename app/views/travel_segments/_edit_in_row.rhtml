@@ -1,0 +1,32 @@
+<!-- this template should go in a <tr> element -->
+
+<% 
+just_modified ||= @just_modified
+reload_page_on_action = params[:reload_page_on_action]
+%>
+
+<td colspan='10'>
+
+    <%= form_remote_tag :update => 'list', 
+          :url => { :action => 'update', :id => @travel_segment },
+          :complete => ('window.location.reload();' if reload_page_on_action)
+     %>
+        
+        <%= render :partial => 'form' %>
+        
+        <%= submit_tag 'Save' %>
+        
+        <%= link_to_remote 'Delete', :url => { :controller => 'travel_segments', :action => 'destroy', :id => @travel_segment.id },
+              :update => 'list',
+              :loading => "$('loading').show();",
+              :loaded => "$('loading').hide();",
+              :confirm => 'Are you sure?',
+              :complete => ('window.location.reload();' if reload_page_on_action)
+         %>
+        
+        <%= image_tag 'spinner.gif', :id => 'spinner_' + @travel_segment.id.to_s, 
+               :style => 'display:none; position:absolute; top:0; right:0;' %>
+        
+        <a onClick="window.location.reload()">Cancel</a>
+    </form>
+</td>

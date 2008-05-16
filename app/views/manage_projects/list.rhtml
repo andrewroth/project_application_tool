@@ -1,0 +1,46 @@
+<div id="list_projects">
+  <p><% if !@user.is_projects_coordinator? && @projects.length == 0 %>
+      You haven't been assigned to manage any projects.
+      <% view_only = true %>
+      <!-- TODO!!! -->
+  <% elsif @user.is_projects_coordinator? %>
+      As projects adminsitrator, you have full functionality.  You can add and remove projects, edit descriptions, and add/remove staff to/from projects.
+  <% else %>
+      You can edit descriptions and details for projects you are projects coordinator or projects administrator.
+  <% end %>
+  </p>
+  <table id="sortable_table" class="datagrid">
+    <thead><tr>
+    <% for column in Project.content_columns %>
+      <th mochi:format="str"><%= column.human_name %></th>
+    <% end %>
+    </tr></thead>
+    
+    <tbody>
+  <% for project in @projects %>
+    <tr>
+      <% for column in Project.content_columns %>
+        <td><%=h project.send(column.name) %></td>
+      <% end %>
+      <td>
+        <%= link_to 'Show', :action => 'show', :id => project %>
+        <% if !view_only %>
+          | <%= link_to 'Edit', :action => 'edit', :id => project %>
+        <% end %>
+        <% if @user.is_projects_coordinator? || @user.set_project(project) || @user.is_project_administrator? %>
+          | <%= link_to 'Staff', :action => 'staff', :id => project %>
+	<% end %>
+        <% if @user.is_projects_coordinator? %>
+          | <%= link_to 'Destroy', { :action => 'destroy', :id => project }, :confirm => 'Are you sure?', :method => :post %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody></table>
+  
+  <br />
+  
+  <% if @user.is_projects_coordinator? %>
+      <%= link_to 'New project', :action => 'new' %>
+  <% end %>
+</div>

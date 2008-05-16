@@ -1,0 +1,13 @@
+<html><head>
+<%= javascript_include_tag :defaults %>
+</head><body>
+
+<%= start_form_tag :name => 'popupform' %>
+  <%= text_field_tag 'field_value' %>
+  <input type="button" value="update" onClick="<%= %|
+    opener.document.getElementById('#{params[:js_id]}').value = $('field_value').value;
+    window.close();
+  | %>">
+<%= end_form_tag %>
+
+</body>

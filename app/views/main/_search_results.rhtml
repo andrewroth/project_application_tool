@@ -1,0 +1,48 @@
+<% if !@viewers.nil? %>
+  <hr />
+  <p>Click on a person's name to see more information about what projects this person is associated with.</p>
+  <% if @viewers.length > 0 %>
+      <p><%= sortable_table %>
+        <thead><tr>
+          <%= th 'person record' %>
+          <%= th 'name' %>
+          <%= th 'viewer id', :type => 'int' %>
+          <%= th 'username' %>
+          <%= th 'email' %>
+          <%= th 'campus' %>
+        </tr></thead><tbody>
+        <% for viewer in @viewers %>
+          <tr id="row_<%=viewer.id%>" class="search_result" >
+            <% if viewer.person %>
+              <td>yes</td>
+            <% else %>
+              <td>no</td>
+            <% end %>
+            <td>
+                <% view_result_params = { :url => {:action => 'get_viewer_specifics', :id => viewer.id},
+                                  :update => 'viewer_specifics',
+                                  :before => "Element.show('finding_viewer_specifics_#{viewer.id}');",
+                                  :complete => "Element.hide('finding_viewer_specifics_#{viewer.id}');" } %>
+                <%= link_to_remote viewer.name, view_result_params %>
+                <% if @viewers.length == 1 %>
+                  <script>
+                    <%= remote_function view_result_params %>
+                  </script>
+                <% end %>
+            </td>
+            <td><%=h viewer.id %></td>
+            <td><%=h viewer.viewer_userID %></td>
+            <td><%=h viewer.person.person_email if viewer.person %></td>
+            <td><%=h viewer.person.campuses.empty? ? "None" : viewer.person.campuses[0].campus_shortDesc %></td>
+            <td>
+              <span id="finding_viewer_specifics_<%= viewer.id %>" style="clear:both; display:none;">
+                <%=image_tag('spinner.gif')%><br />
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody></table></p>
+  <% else %>
+      <p><i>No results found.</i></p>
+  <% end %>
+<% end %>

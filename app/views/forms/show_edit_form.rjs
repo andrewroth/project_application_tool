@@ -1,0 +1,1 @@
+page.replace_html 'new_form', :partial => 'edit_form', :object => @form

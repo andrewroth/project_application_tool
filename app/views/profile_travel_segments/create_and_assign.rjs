@@ -1,0 +1,39 @@
+
+if @success
+
+  page.visual_effect :BlindUp, 'travel_segment_add_shortcut'
+  page.replace_html 'travel_segment_message', "TravelSegment was successfully created and assigned to #{@profile.viewer.name}."
+  page.replace_html 'assigned_list', :partial => 'assigned_list', :locals => { :can_edit => true, :div => false, :sortable => true }
+  page.visual_effect :highlight, 'assigned_list'
+
+elsif @parse_error
+  page.replace_html 'travel_segment_message', %|
+<STRONG>There was an error parsing your travel segment line '#{@ts_line}': #{@error_msg}</STRONG>
+
+The format expected is, for example:
+
+  "AA 967K 15JAN LAXMIA HK1 825A 410P+1"
+  "AA 967K 15JAN LAXMIA HK1 0825 1610+1"
+
+**You need at least one space between each section** (The only exception is the first two can be combined, for example "AA967K ..."
+
+AA = Airline code (always two characters)
+
+967K = flight number and booking class, the flight number is between 1 and 4 digits
+
+15JAN = day in DDMonth format, note the year is not given.  dates are always in the future, however, the travel agent cannot generate info for more than 330 days in advance, so if the day is more than 330 days ahead, it's assumed it's in the past
+
+LAXMIA = city pair of departure and arrival airport for example, LAX to MIA (we need to find a list of all airport codes and then input both the airport name/city and the code i.e. Toronto (YYZ).
+
+HK1 = booking status
+
+825A = departure time on the date indicated - if A/P not given, then interpreted as 24hour time.
+
+410P = arrival time (appended with the following '+', '+1' or '+2' if next day arrival or '-' if previous day).  if A/P not given, then interpreted as 24hour time.
+
+  |.gsub("\n","<br/ >")
+else
+  page.replace_html 'travel_segment_message', 'An unknown error occurred (this should never be reached..)'
+end
+
+page.visual_effect :Highlight, 'travel_segment_message'

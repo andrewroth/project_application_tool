@@ -1,0 +1,2 @@
+module ManageProjectsHelper
+end

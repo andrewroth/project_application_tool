@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+2007:
+  id: 1
+  title: 2007 Projects
+  ministry_id: 1
+  parent_id: null
+  location_id: null
+  type: EventGroup
+
+2008:
+  id: 2
+  title: 2008 Projects 
+  ministry_id: 1
+  parent_id: null
+  location_id: null
+  type: EventGroup

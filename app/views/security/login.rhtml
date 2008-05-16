@@ -1,0 +1,18 @@
+<% form_tag :action => :login do -%>
+  <fieldset>
+    <legend>Login</legend>
+    <ol>
+      <li><label>Username: </label><%= text_field_tag 'username', {} %></li>
+      <li><label>Password: </label><%= text_field_tag 'password', {}, :type => 'password' %></li>
+    </ol>
+    <img src="/images/login.jpg" width="50px" />
+    <%= submit_tag 'Login', :id => 'submit' %>
+  </fieldset>   
+<% end -%>
+<div id="account_links">
+  <%= link_to "Create an Account", "https://intranet.campusforchrist.org/modules/app_cim_newaccount/" +
+   "index.php?P=P32&RU=https://spt.campusforchrist.org" %> | 
+  <%= link_to "Forgot Password",  "https://intranet.campusforchrist.org/modules/app_cim_newaccount/" +
+   "index.php?P=P35" %>
+</div>
+

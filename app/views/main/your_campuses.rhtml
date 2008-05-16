@@ -1,0 +1,57 @@
+<P>Here you can see some statistics for campuses you're assigned to.
+
+<% if @campuses == nil%>
+<P>Sorry, you're not assigned to any campuses.
+<% else %>
+    <P>Your campuses:
+        <BLOCKQUOTE>
+            <%= sortable_table %>
+            
+            <thead><TR>
+                <TH mochi:format="str">Campus</TH>
+                <TH mochi:format="int">applied</TH>
+                <TH mochi:format="int" mochi:default='true' mochi:default_direction='descending'>accepted</TH>
+            </TR></thead>
+            
+            <tbody>
+            <% for campus in @campuses %>
+                <TR>
+                    <TD align="center"><%= campus.campus_desc %> (<%= campus.campus_shortDesc%>)</TD>
+                    <TD align="center"><%= @campus_stats[campus].applied_cnt %></TD>
+                    <TD align="center"><%= @campus_stats[campus].accepted_cnt %></TD>
+                </TR>
+            <% end %>
+            </tbody>
+        </TABLE></BLOCKQUOTE>
+    <P>Your students:
+    <BLOCKQUOTE>
+        <%= sortable_table %>
+            <thead><TR>
+                <TH>Name</TH>
+                <TH>User ID</TH>
+                <TH>Campus</TH>
+                <TH>Status</TH>
+                <TH>Preference1</TH>
+                <TH>Accepted</TH>
+            </TR></thead>
+            <tbody>
+            <% def title(project) project.nil? ? "" : project.title end %>
+            <% for campus in @campuses %>
+                <% for student_appln in @campus_stats[campus].student_applns %>
+                    <% student = student_appln.student; appln = student_appln.appln %>
+                    <% viewer = student.viewer %>
+                    <TR>
+                        <TD align="center"><%= viewer.name %></TD>
+                        <TD align="center"><%= viewer.viewer_userID %></TD>
+                        <TD align="center"><%= campus.campus_shortDesc %></TD>
+                        <TD align="center"><%= appln.status %></TD>
+                        <TD align="center"><%= title(appln.preference1)%></TD>
+                        <TD align="center"><%= title((appln.acceptances[0].project if appln.acceptances[0]))%></TD>
+                    </TR>
+                <% end %>
+            <% end %>
+            </tbody>
+        </TABLE>
+    </BLOCKQUOTE>
+    </P>    
+<% end %>

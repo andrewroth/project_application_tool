@@ -1,0 +1,22 @@
+<% 
+@accepted = Acceptance.find_all_by_project_id accepted_pile.id, :include => [
+            { :viewer => [
+                :vieweraccessgroups,
+                { :persons => :campuses }
+              ]
+            },
+            :appln,
+            #:manual_donations,
+            #:auto_donations,
+            :support_coach,
+            :profile_cost_items,
+            :optin_cost_items,
+            { :project => :cost_items }
+          ]
+@user.set_project accepted_pile
+@full_view = @user.fullview? 
+@cache = ProfileDonation.cache accepted_pile.id
+%>
+<%= 
+render :partial => "accepted_pile_table" 
+%>

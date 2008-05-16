@@ -1,0 +1,5 @@
+<% if @acceptance.support_coach.nil? %>
+You haven't been assigned a support coach yet.
+<% else %>
+Your support coach is <%= @acceptance.support_coach.name %>
+<% end %>

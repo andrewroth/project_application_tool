@@ -1,0 +1,17 @@
+<%= error_messages_for 'project' %>
+
+<!--[form:project]-->
+<p><label for="project_title">Title</label><br/>
+<%= text_field 'project', 'title'  %></p>
+
+<p><label for="project_description">Description</label><br/>
+<%= text_field 'project', 'description'  %></p>
+
+<p><label for="project_start">Start</label><br/>
+<%= date_select 'project', 'start'  %></p>
+
+<p><label for="project_end">End</label><br/>
+<%= date_select 'project', 'end'  %></p>
+
+<p><label for="cost_center">Cost Center</label><br/>
+<%= text_field 'project', 'cost_center'  %></p>

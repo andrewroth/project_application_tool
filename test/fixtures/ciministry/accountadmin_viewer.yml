@@ -1,0 +1,34 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+<%
+$viewers = {}
+def add_viewer(id, user_id)
+  $viewers[id] = user_id
+  $viewers[user_id] = id
+  "viewer_id: #{id}\n" + 
+  "  viewer_userID: #{user_id}"
+end
+%>
+
+john:
+  viewer_id: 1
+  viewer_userID: john.calvin # goes to uw
+keener: # has already submitted an application
+  <%= add_viewer(2, 'keener') %>  # goes to uw
+superadmin:
+  <%= add_viewer(3, 'superadmin') %>
+just_starting: # doesn't even has an application yet
+  viewer_id: 4
+  viewer_userID: starter
+greg:
+  viewer_id: 5  # assigned to the National/Regional campus (TODO)
+  viewer_userID: greg
+sean:
+  viewer_id: 6  # assigned to UW, Mac and Guelph, Processor for Afghanistan project
+                # going to oex
+  <%= add_viewer(6, 'sean') %>
+dude:
+  # student at U of A applying to project 7
+  <%= add_viewer(7, 'dude') %>
+bob:
+  # student at ... applying to project 3
+  <%= add_viewer(8, 'bob') %>

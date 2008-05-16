@@ -1,0 +1,19 @@
+<p>This page shows all emails sent since the last server restart.</p>
+<style>
+span.header {
+  color: red;
+}
+</style>
+
+<% for email in @emails %>
+  <div class="inconspicuous">
+  <span class="header">From:</span> <%= email.from %><br />
+  <span class="header">To: </span><%= email.to %><br />
+  <% if email.header['reply-to'] %>
+    <span class="header">Reply-To: </span><%= email.header['reply-to'] %><br />
+  <% end %>
+  <span class="header">Subject: </span><%= email.subject %><br />
+  <span class="header">Date: </span><%= email.date %><br />
+  <p><%= email.body.gsub("\n","<br />") %><p />
+  </div>
+<% end %>

@@ -1,0 +1,8 @@
+<% for column in CostItem.content_columns %>
+<p>
+  <b><%= column.human_name %>:</b> <%=h @cost_item.send(column.name) %>
+</p>
+<% end %>
+
+<%= link_to 'Edit', :action => 'edit', :id => @cost_item %> |
+<%= link_to 'Back', :action => 'list' %>

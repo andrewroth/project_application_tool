@@ -1,0 +1,2 @@
+module ApplnHelper
+end

@@ -1,0 +1,21 @@
+<p>Type: <%= select_tag('profile[type]', options_for_select(Profile.types, @profile.class.name)) %>
+</p>
+<p>Project: <%= select_tag('profile[project_id]', options_for_select(
+          @eg.projects.find(:all).sort{ |a,b| a.title <=> b.title }.collect{|p| [ p.title, p.id ]},
+             @profile.project_id)) %>
+</p>
+<%= observe_field 'profile[type]', :update => 'class_options', :url =>
+         { :action => 'class_options', :id => @profile.id },
+       :with => "'type='+$F('profile[type]')",
+       :loading => "$('loading').show();", :complete => "$('loading').hide();" -%>
+
+<div id="class_options">
+  <% params[:type] = @profile.class.name %>
+  <%= render :partial => 'class_options' %>
+</div>
+
+<p>
+Notes: <br />
+<%= text_area 'profile', 'reason_notes', :rows => 4 %>
+</p>
+

@@ -1,0 +1,67 @@
+<% @cost_item = cost_item %>
+<% opted = @opted[cost_item.id] %>
+
+<% type = cost_item.class.name.underscore.split('_')[0] + "_item" %>
+<div class='inconspicuous' style='width: 500px; position:relative;'>
+<div class='<%= type %>'>
+
+<label>Applies to: </label><%= 
+current_project_value = case cost_item.class.name
+  when 'YearCostItem'
+    "All Projects"
+  when 'ProjectCostItem'
+    cost_item.project.title
+  when 'ProfileCostItem'
+    cost_item.profile.viewer.name + " for " + cost_item.profile.project.title + " " + cost_item.year.to_s
+  else
+    "er.."
+  end
+%>
+<br />
+<% if cost_item.class.name == "ProfileCostItem" %>
+    <label>Description: </label> 
+    <span id="cost_item_description_<%=cost_item.id.to_s%>_in_place_editor" class="in_place_editor_field" 
+title="Click to edit" ><%= cost_item.description %></span>
+        <%= in_place_editor_onComplete( "cost_item_description_#{cost_item.id}_in_place_editor", '/optin_cost_items/set_cost_item_description/'+cost_item.id.to_s, :update => 'sums', :url => {:controller => 'optin_cost_items', :action => 'sums', :profile_id => @profile.id} ) %>
+    <br />
+<label>Amount: </label>
+
+<span id="cost_item_amount_<%=cost_item.id.to_s%>_in_place_editor" class="in_place_editor_field" 
+title="Click to edit" style="background-color: transparent; background-image: none;"><%= cost_item.amount %></span>
+
+  <%= in_place_editor_onComplete( "cost_item_amount_#{cost_item.id}_in_place_editor", '/optin_cost_items/set_cost_item_amount/'+cost_item.id.to_s+'&profile_id='+@profile.id.to_s, :update => 'sums', :url => {:controller => 'optin_cost_items', :action => 'sums', :profile_id => @profile.id} ) %>
+<br />
+<% else %>
+    <label>Description: </label><%= cost_item.description %> <br />
+    <label>Amount: </label><%= cost_item.amount %> <br />
+<% end %>
+
+<% name = "optin_#{cost_item.id}" %>
+<input type="checkbox" id="<%=name%>" name="<%=name%>" <%= (!cost_item.optional || opted) ? 'checked=\'true\'':''%> <%=cost_item.optional ? '' : 'disabled'%>/> I will support raise for this item
+
+<% if cost_item.optional %>
+
+<!-- save optin value.  it returns the sums html -->
+<%= observe_field 'optin_' + cost_item.id.to_s, 
+	:url => {:controller => 'optin_cost_items', :action => "set_opt", :cost_item_id => cost_item.id, :profile_id => @profile.id},
+        :update => 'sums',
+	:loading => "$('spinner_#{cost_item.id}').show();",
+	:loaded => "$('spinner_#{cost_item.id}').hide();",
+	:with => "'value=' + $('optin_#{cost_item.id.to_s}').checked" %>
+
+<% end %>
+
+<% if cost_item.class.name == "ProfileCostItem" %>
+    <br />
+    <%= link_to_remote 'Delete', :url => { :controller => 'optin_cost_items', :action => 'destroy', :cost_item_id => cost_item.id, :profile_id => @profile.id },
+          :update => 'list',
+          :loading => "$('spt_loading').show();",
+          :loaded => "$('spt_loading').hide(); #{remote_function(:update => 'sums', :url => {:controller => 'optin_cost_items', :action => 'sums', :profile_id => @profile.id})}",
+          :confirm => 'Are you sure?' %>
+          
+<% end %>
+
+<%= image_tag 'spinner.gif', :id => 'spinner_' + cost_item.id.to_s, 
+       :style => 'display:none; position:absolute; top:0; right:0;' %>
+
+</div></div>

@@ -1,0 +1,70 @@
+    <% pts_id = profile_travel_segment.id %>
+    <% ats_id = assigned_travel_segment.id %>
+
+    <% content_for :"profile_specific_notes_#{ats_id}_#{pts_id}" do %>
+      <%= render :partial => 'profile_travel_segments/assigned_travel_segment_profile_specific_element', 
+                 :object => 'notes', 
+                 :locals => { :profile_travel_segment => profile_travel_segment, 
+                              :top_element => 'div', 
+                              :pts_id => pts_id,
+                              :can_edit => can_edit,
+                              :assigned_travel_segment => assigned_travel_segment
+                  } 
+      %>
+    <% end %>
+
+    <%= render :partial => 'travel_segments/view_in_row',
+            :object => assigned_travel_segment,
+            :locals => { :widths => widths, :pts_id => pts_id,
+            :editors => @editors }
+         %>
+
+    <%= render :partial => 'profile_travel_segments/assigned_travel_segment_profile_specific_element', 
+               :object => 'eticket', 
+               :locals => { :profile_travel_segment => profile_travel_segment, 
+                            :top_element => 'td', 
+                            :pts_id => pts_id,
+                            :can_edit => can_edit,
+                            :assigned_travel_segment => assigned_travel_segment
+                } 
+    %>
+
+    <%= render :partial => 'profile_travel_segments/assigned_travel_segment_profile_specific_element', 
+               :object => 'confirmation_number', 
+               :locals => { :profile_travel_segment => profile_travel_segment, 
+                            :top_element => 'td', 
+                            :pts_id => pts_id,
+                            :can_edit => can_edit,
+                            :assigned_travel_segment => assigned_travel_segment
+                } 
+    %>
+
+   <% if can_edit %>
+      <%= td_tag :width => widths[@td_index] %>
+          <%= link_to_remote 'Edit', 
+            :url => { :action => 'edit', :profile_id => @profile.id, 
+              :travel_segment_id => assigned_travel_segment.id, 
+              :row => true 
+            },
+            :update => "assigned_#{id}",
+            :loading => "$('loading').show(); $('assigned_loading_#{id}').show();",
+            :complete => "$('loading').hide(); $('assigned_loading_#{id}').hide(); $('assigned_#{id}').hide();"
+         %>
+      </td>
+
+      <%= td_tag :width => widths[@td_index] %>
+          <% if sortable %>
+              <%= link_to_remote 'Remove', 
+                :url => { :action => 'delete', :profile_id => @profile.id, 
+                  :travel_segment_id => assigned_travel_segment.id },
+                :loading => "$('loading').show(); $('assigned_loading_#{id}').show();",
+                :complete => "$('loading').hide();",
+                :confirm => "Are you sure?"
+              %>
+            <% end %>
+        </td>
+    
+      <%= td_tag :width => widths[@td_index], :class => (sortable ? 'drag_me' : '') %>
+           <% if sortable %>drag me<% end %>
+      </td>
+    <% end %>

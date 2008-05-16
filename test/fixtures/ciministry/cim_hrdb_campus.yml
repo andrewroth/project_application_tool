@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+nat_reg:
+  campus_id: 1
+  campus_desc: Regional/National
+  campus_shortDesc: Reg/Nat
+uw:
+  campus_id: 2
+  campus_desc: University of Waterloo
+  campus_shortDesc: UW
+mcmaster:
+  campus_id: 3
+  campus_desc: McMaster University
+  campus_shortDesc: MAC
+uofg:
+  campus_id: 4
+  campus_desc: University of Guelph
+  campus_shortDesc: UofG
+uofa:
+  campus_id: 5
+  campus_desc: Univesity of Alberta
+  campus_shortDesc: UofA

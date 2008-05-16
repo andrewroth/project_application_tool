@@ -1,0 +1,31 @@
+<% 
+travel_segment ||= @travel_segment 
+just_modified ||= @just_modified
+editors ||= 'all_editors'
+include_parse_by_line ||= false
+%>
+
+<% @id = 0; TravelSegment.send(editors).each_pair do |k,v| %>
+    <% @id += 1 %>
+    <% if v == :inplace_editor %>
+        <label><%= k.to_s %>: </label><%= in_place_editor_field(:travel_segment, k) %>
+        <br />
+    <% elsif v == :calendar_editor %>
+        <label><%= k.to_s %>: </label><%= render(:partial => 'calendar_editor', :locals => { :value => travel_segment.send(k), :id => "#{travel_segment.id}_#{@ed}" } ) %> <br />
+        <br />
+    <% elsif v == :textfield_editor %>
+        <label><%= k.to_s %>: </label><%= text_field 'travel_segment', k.to_s %>
+        <br />
+    <% elsif v == :text_field_with_auto_complete_editor %>
+        <label><%= k.to_s %>: </label><%= text_field_with_auto_complete 'travel_segment', k.to_s, { :size => 45 }, :skip_style => true %>
+        <br />
+    <% elsif v == :datetime_editor %>
+        <label><%= k.to_s %>: </label><%= datetime_select 'travel_segment', k.to_s %>
+        <br />
+    <% end %>
+<% end %>
+
+<% if include_parse_by_line %>
+  <p>or paste the one-line travel segment info line here (everything but notes, tags, eticket, and conf number will be ignored):</p>
+    <%= text_field_tag "travel_segment[parse_line]", '', :size => 100 %><br />
+<% end %>

@@ -1,0 +1,13 @@
+<h1>Editing reason_for_withdrawal</h1>
+
+<%= error_messages_for :reason_for_withdrawal %>
+
+<% form_for(:reason_for_withdrawal, :url => reason_for_withdrawal_path(@reason_for_withdrawal), :html => { :method => :put }) do |f| %>
+  <%= render :partial => 'form' %>
+  <p>
+    <%= submit_tag "Save" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', reason_for_withdrawal_path(@reason_for_withdrawal) %> |
+<%= link_to 'Back', reason_for_withdrawals_path %>

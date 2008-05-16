@@ -1,0 +1,28 @@
+greg_nat_reg:
+  assignment_id: 1
+  person_id: 5
+  campus_id: 1
+sean_uw:
+  assignment_id: 2
+  person_id: 6
+  campus_id: 2
+sean_mcm:
+  assignment_id: 3
+  person_id: 6
+  campus_id: 3
+sean_ug:
+  assignment_id: 4
+  person_id: 6
+  campus_id: 4
+calvin:
+  assignment_id: 5
+  person_id: 1
+  campus_id: 2 # uw
+dude:
+  assignment_id: 6
+  person_id: 7
+  campus_id: 4 # guelph
+keener:
+  assignment_id: 7
+  person_id: 2
+  campus_id: 2 # uw

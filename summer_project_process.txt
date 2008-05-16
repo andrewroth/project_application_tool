@@ -1,0 +1,66 @@
+0. Project Setup
+	1. PC can create projects
+	2. PC can create cost items for projects
+	3. PC can create application and references
+	4. PC can edit emails that are sent out
+	5. Add Staff to Projects (assign permissions)
+1. applicant applies for summer project
+	1. create and account with c4c intranet
+	2. choose event group
+	3. choose year (is this necessary) (implicit)
+	4. choose application to fill out
+	4b. make payment (this is necessary to submit application)
+	5. fill out app
+		1. fill out references
+	6. submit application
+		1. send out emails {applicant, referrers}
+	7. Referrers fill out references
+	8. Application goes into completed mode
+	9. Can withdraw application
+		1. notify projects coordinator and project director (and processor if necessary)
+	10. Can modify (unsubmit application)
+		1. Change references
+	11. Modify application data (editable fields)
+1b. Application phase
+	1. PC can manually send references or bypass them
+	2. PD/PC/ProjectStaff can see the registrant report
+	3. Project Stats report
+	4. Project Interns report
+	5. People Search
+	6. Campus Staff can see who has applied from their campus
+2. Processor reviews application
+	1. Processor must have an account
+	2. Project coordinator adds processor for each project
+	3. Processor accesses applications for all projects they have permissions for
+		1. They can access an applicants application and references
+		2. (consider) can they access previous applications?
+	4. Processor can print application
+	5. Processor can fill out the processor form
+	6. Processor can {accept, reject, transfer}
+3. Student is accepted for project
+	1. Get email
+	2. They must "accept the acceptance" --> moved to confirmed status
+4. Project Admin Setup
+	1. Assigned a motivation code
+	2. Assigned a support coach
+5. Project Preparation Phase
+	0. PC/PD/ProjectStaff can see list of received project participants (report)
+	1. Applicant/PC/PD/SupportCoach can view support received
+	2. Applicant/PC/PD can adjust support target (applicant add cost items)
+	3. Applicant can claim amount raised
+	4. Project Services can enter manual donations
+	5a. Ticketing request generated 
+	5b. Travel segments assigned
+		1. Project Admin can assign
+		2. Applicant can print itinerary
+	6. Generate Crisis management report
+	7. Parental Emails report
+	8. Generate Travel list
+	9. Campus Staff can see support for students from their campus
+6. Project Director Preparation 
+	1. Can Generate reports of processor forms
+	2. Can generate reports of summary forms
+	3. Generate a report of itineraries
+	4. Two financial reports are: funding status and funding details
+7. Project Coordinator Post-project
+	1. Fund Transfers {WC, Summit, Reimbursements, etc}

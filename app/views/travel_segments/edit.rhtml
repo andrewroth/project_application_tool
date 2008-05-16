@@ -1,0 +1,16 @@
+<%= form_tag :action => 'update', :id => @travel_segment %>
+    
+    <%= render :partial => 'form' %>
+    
+    <%= submit_tag 'Save' %>
+    
+    <%= link_to_remote 'Delete', :url => { :controller => 'travel_segments', :action => 'destroy', :id => @travel_segment.id },
+          :update => 'list',
+          :loading => "$('loading').show();",
+          :loaded => "$('loading').hide();",
+          :confirm => 'Are you sure this travel segment is not added to any students?' %>
+    
+    <%= image_tag 'spinner.gif', :id => 'spinner_' + @travel_segment.id.to_s, 
+           :style => 'display:none; position:absolute; top:0; right:0;' %>
+    
+</form>

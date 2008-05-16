@@ -1,0 +1,24 @@
+<% @pdf = params[:print] == 'pdf' -%>
+<html>
+    <head>
+        <% if !@pdf %>
+          <title>Summer Project Tool</title>
+        <% end %>
+        <%= stylesheet_link_tag 'main2' %>
+        <%= javascript_include_tag "prototype", "effects" %>
+        <%= render :partial => "externs/load_extern" %>
+    </head>
+    <body>
+      <!-- display style must be inline -->
+      <% if !@pdf %>
+        <div id="loading" style="display:none;">
+          Loading <%=image_tag('spinner.gif')%><br />
+        </div>
+      <% end %>
+      <div id="content">
+        <%= yield %>
+      </div>
+    </body>
+</html>
+
+

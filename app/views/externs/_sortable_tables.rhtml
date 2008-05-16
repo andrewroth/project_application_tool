@@ -1,0 +1,14 @@
+<%
+# special case for sortable tables; we can tell regardless of
+# controller/action because this flag is set in the sortable table
+# creator helper
+#
+# heck, let's just load sortable tables all the time, no more 'initialize not defined
+# errors, and it's not much extra, lots of stuff is ajax now so it will only load
+# once with the main page anyways
+#
+if true || @sortable_tables_used %> 
+  <%= stylesheet_link_tag 'sortable_tables' %>
+  <script type="text/javascript" src="/javascripts/mochikit/MochiKit.js"></script>
+  <script type="text/javascript" src="/javascripts/sortable_tables.js"></script>
+<% end %>

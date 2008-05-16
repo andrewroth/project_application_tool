@@ -1,0 +1,33 @@
+<div id="view_appln">
+  <div id="form_title"><h2>
+   <% if @form_title %>
+     <%= @form_title %>
+   <% else %>
+     <%= # make a form title as best we can
+     if @instance.class == Appln || @instance.class == ApplnReference 
+       @instance.viewer.name
+     end
+     %> 
+     <%= @questionnaire.title %>
+   <% end %>
+  </h2></div>
+  <div id="error" style="display:none">
+    <!--<P>It seems there's been an error.  Email <%= $tech_email_only %> and let them know when and what you were trying to do.-->
+  </div>
+  <div id="form_holder" style="display:none">
+  </div>
+  <div id="loading_form">
+    <p>Your application is being constructed this very moment.  This should only take a minute. <%=image_tag('spinner.gif')%> </p>
+    <script>
+      <% pass_params = ""; (@pass_params || {}).each_pair do |k,v| pass_params += "&#{k}=#{v}" end %>
+      new Ajax.Updater('form_holder', "/<%= params[:controller] %>/<%= params[:action] %>?<%= pass_params %>", { 
+          asynchronous: true, 
+          method: 'get', 
+          evalScripts: true, 
+          onFailure: function(request){ $('error').show(); },
+          onComplete: function(request){ $('loading_form').hide(); $('form_holder').show(); },
+          parameters: 'load_all_pages=true'
+       });
+    </script>
+  </div>
+</div>

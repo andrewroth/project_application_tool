@@ -1,0 +1,17 @@
+<head>
+    <%= stylesheet_link_tag 'sortable_tables', :media => "all" %>
+    <%= stylesheet_link_tag 'main2', :media => "all" %>
+    <%= stylesheet_link_tag 'list', :media => "all" %>
+    <%= stylesheet_link_tag 'reports', :media => "all" %>
+    <script type="text/javascript" src="/javascripts/mochikit/MochiKit.js"></script>
+    <script type="text/javascript" src="/javascripts/sortable_tables.js"></script>
+    <title><%= @title || params[:action] %></title>
+    <style>
+      li {
+         list-style-type: none;
+      }
+    </style>
+</head>
+<body>
+    <%= yield -%>
+</body>

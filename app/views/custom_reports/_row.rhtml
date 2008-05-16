@@ -1,0 +1,11 @@
+<% if @format == 'csv' -%>
+<%= row.collect{ |v| "\"#{v}\"" }.join(",") %>
+<% else -%>
+<tr>
+<% for column_value in row %>
+  <td>
+    <%= column_value %>
+  </td>
+<% end %>
+</tr>
+<% end -%>

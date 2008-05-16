@@ -1,0 +1,25 @@
+<% if @found_viewers.length > 0 %>
+  <% i = 0 %>
+  <% for viewer in @found_viewers %>
+    <% i = i + 1 %>
+    <% userid = viewer.name + " (" + viewer.viewer_userID + ")" %>
+    <div id="<%=@role%>_result_<%=i%>">
+        <%= link_to_remote(userid, 
+            :url => { :action => "add", 
+                :role => @role,
+                :viewer_id => viewer.viewer_id,
+                :project_id => @project.id },
+            :update   => "#{@role}_list",
+            :loading  => "Element.hide('#{@role}_result_#{i}'); Element.show('#{@role}_result_#{i}_removing')",
+            :complete => "Element.hide('#{@role}_result_#{i}_removing'); Element.show('#{@role}_result_#{i}_removed'); Element.show('#{@role}_search_action_response');") %>
+    </div>
+    <div id="<%=@role%>_result_<%=i%>_removing" style="display:none">
+        <%= userid %>
+        <%= image_tag("/images/spinner.gif") %>
+    </div>
+    <div id="<%=@role%>_result_<%=i%>_removed" style="display:none">
+    </div>
+  <% end %>
+<% else %>
+<div class="search_none_found">Sorry, nobody found by that name.</div>
+<% end %>

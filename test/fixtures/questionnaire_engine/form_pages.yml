@@ -1,0 +1,16 @@
+preferences:
+  id: 1
+  title: Project Preferences
+  url_name: project_preferences
+submit:
+  id: 2
+  title: Submit Application
+  url_name: submit_application
+references:
+  id: 3
+  title: References
+  url_name: references
+peer_ref_intro:
+  id: 4
+  title: Introduction
+  url_name: introduction

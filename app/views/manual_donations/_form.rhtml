@@ -1,0 +1,20 @@
+<%= error_messages_for 'manual_donation' %>
+
+<!-- form.manual_donation -->
+    <p><label for="manual_donation_motivation_code">Motivation code</label><br/>
+    <%= text_field 'manual_donation', :motivation_code %></p>
+    
+    <p><label for="manual_donation_donor_name">Donor name</label><br/>
+    <%= text_field 'manual_donation', :donor_name %></p>
+    
+    <p><label for="manual_donation_donation_type_id">Donation type</label><br/>
+    <%= select 'manual_donation', :donation_type_id, get_donation_types %>
+    
+    <p>Original amount is intended for USD (or other foreign currency) donations, where the original USD amount is stored in original amount, and the converted amount into amount.  <B>If this is a Canadian dollar donation, please put the same value for both original amount and amount.</B>
+
+    <p><label for="manual_donation_original_amount">Original amount</label><br/>
+    <%= text_field 'manual_donation', :original_amount %></p>
+    
+    <p><label for="manual_donation_amount">Amount</label><br/>
+    <%= text_field 'manual_donation', :amount %></p> 
+<!-- eoform.manual_donation -->

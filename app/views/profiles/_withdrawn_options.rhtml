@@ -1,0 +1,10 @@
+<p>
+State: <%= select_tag 'profile[status]', 
+           options_for_select(Withdrawn.states.reject{|s| s == :uninitialized }.collect{|s| s.to_s.downcase}, 
+           (@profile ? @profile.status.to_s.downcase : '')) %>
+</p>
+
+<p>
+Reason: <%= select_tag('profile[reason_id]', options_for_select(
+    ReasonForWithdrawal.find(:all).collect{ |r| [ r.blurb, r.id ] } )) %>
+</p>

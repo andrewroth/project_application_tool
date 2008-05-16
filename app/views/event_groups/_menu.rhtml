@@ -1,0 +1,5 @@
+<% content_for "submenu" do %>
+  <% if @user.is_projects_coordinator? %>
+    <%= sub_menu_item 'reasons for withdrawal', :reason_for_withdrawals, nil %>
+  <% end %>
+<% end %>

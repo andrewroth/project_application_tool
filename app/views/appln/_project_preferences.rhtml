@@ -1,0 +1,46 @@
+<% 
+@projects_options = @eg.projects.collect { |p| [ p.title, p.id ] }
+%>
+
+<table cellspacing="0" border="0" cellpadding="0">
+  <%#Display dropdown menues for their preferences%>
+  <% for i in 1..2 -%>
+    <tr>
+	 <td align="left" class="app">Project Preference <%=i%> &nbsp;</td>
+	 <td align="left" class="app">
+	 
+	 <%= @answers = @appln
+	     
+	     select("answers", "preference#{i}_id", @projects_options, 
+	     { :include_blank => true
+	     }, { 
+	       :class => "required", 
+		   :onFocus => "Highlight(this)", 
+		   :onBlur => "UnHighlight(this)", 
+		   :onChange => "set_dirty();",
+		   :disabled => !@appln.editable?
+		 }) %>
+	 </td>
+	</tr>
+  <% end -%>
+</table>
+<!--
+
+Removed this blurb as requested in issue 538
+
+<blockquote>
+	<h3>Athletes in Action</h3>
+	<p>For more information on these projects, visit <a href="http://www.athletesinaction.com">athletesinaction.com</a></p>
+	
+	<h3>Leader Impact Group</h3>
+	<p>For more information on these projects, visit <a href="http://www.leaderimpactgroup.com">leaderimpactgroup.com</a></p>
+	
+	<h3>Campus for Christ</h3>
+	<p>For more information on these projects, visit <a href="http://www.campusforchrist.com">campusforchrist.org</a></p>
+	<p>
+	    <b>NOTE:</b> While we do our best to place you on your top choice summer project, we cannot guarantee your assignment as project spots fill up quickly.  We ask that once you are accepted to a specific project, you attend that project unless you choose to decline and not go on any summer project.  It is not possible to switch project assignments once you have been accepted to a specific location.
+	</p>
+</blockquote>
+-->
+
+<%= render :partial => 'instance/elements' %>

@@ -1,0 +1,2 @@
+page.replace_html 'your_project', :partial => 'your_project', :collection => @show_projects
+page.insert_html :bottom, 'your_project', initialize_sortable_tables

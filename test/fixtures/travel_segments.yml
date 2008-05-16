@@ -1,0 +1,56 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+oex1:
+  id: 1
+  year: 2007
+  flight_no: AC45
+  departure_city: Toronto
+  departure_time: 2007-03-15 16:39:04
+  arrival_time: 2007-03-15 18:26:05
+  arrival_city: Vancouver
+  carrier: AC
+  notes: OEX optional 
+  event_group_id: 1
+oex2:
+  id: 2
+  year: 2007
+  flight_no: WJ900
+  departure_city: Vancouver
+  departure_time: 2007-03-15 20:20:00
+  arrival_time: 2007-03-16 10:43:54
+  arrival_city: Misc City
+  carrier: WJ
+  notes: OEX - first segment
+  event_group_id: 1
+oex3:
+  id: 3
+  year: 2007
+  flight_no: WJ73
+  departure_city: Misc City
+  departure_time: 2007-03-16 13:53:44
+  arrival_time: 2007-03-16 16:23:45
+  arrival_city: OEX City
+  carrier: WJ
+  notes: OEX - last segment
+  event_group_id: 1
+sea1:
+  id: 4
+  year: 2007
+  flight_no: AC12
+  departure_city: Vancouver
+  departure_time: 2007-05-15 16:39:04
+  arrival_time: 2007-05-16 16:39:04
+  arrival_city: Africa
+  carrier: AC
+  notes: South East Africa - To
+  event_group_id: 1
+sea2:
+  id: 5
+  year: 2007
+  flight_no: WJ8
+  departure_city: Africa
+  departure_time: 2007-06-25 16:39:04
+  arrival_time: 2007-06-25 10:39:04
+  arrival_city: Vancouver
+  carrier: WJ
+  notes: South East Africa - Return
+  event_group_id: 1

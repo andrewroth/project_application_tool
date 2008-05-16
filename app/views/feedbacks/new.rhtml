@@ -1,0 +1,15 @@
+<h1>New feedback</h1>
+<p>We welcome any comments you have.  Your comments will be emailed to <%= $tech_email_only %>, and stored in a database but only projects coordinators will be able to see them (we hadn't noticed all staff could list them, that's now changed)
+
+<%= error_messages_for 'feedback' %>
+
+<% form_for :feedback, :url => { :action => :create } do |form| %>
+    
+    <p><label for="feedback_type">Feedback Type</label><br />
+    <%= form.select :feedback_type, Feedback.FEEDBACK_TYPES, :prompt => "Choose a Feedback Type" %>
+    
+    <p><label for="feedback_description">Description</label><br />
+    <%= form.text_area :description %></p>
+    
+    <%= submit_tag "Submit" %>
+<% end %>
