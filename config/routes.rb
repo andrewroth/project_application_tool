@@ -36,7 +36,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.connect 'javascripts/questionnaire2.js', :controller => "main", :action => "questionnaire"
   
-  map.from_plugin :references_engine
+  map.from_plugin :reference_engine
   #map.from_plugin :'selenium-on-rails'
   
   # You can have the root of your site routed by hooking up '' 

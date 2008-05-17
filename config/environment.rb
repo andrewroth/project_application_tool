@@ -48,7 +48,7 @@ Rails::Initializer.run do |config|
   config.action_mailer.raise_delivery_errors = false
   
   # Load Engines first
-  config.plugins = [:engines, :engines_model_mixins, :questionnaire_engine, :references_engine, :all]
+  config.plugins = [:engines, :engines_model_mixins, :questionnaire_engine, :reference_engine, :all]
 
   # shhhh secret!  apparently this is required in 2.x
   config.action_controller.session = { :session_key => "_spt_session", 
