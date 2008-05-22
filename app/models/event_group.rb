@@ -16,9 +16,8 @@ class EventGroup < Node
   acts_as_tree
 
   def to_s
-    location = self.location ? self.location.to_s + ' ' : 'any'
-    ministry = self.ministry ? self.ministry.to_s + ' ': (self.ministry_id ? 
-       "&lt;can't find ministry id=#{self.ministry_id}&gt;" : nil)
+    ministry = self.ministry ? self.ministry.to_s + ' ': 
+      (self.ministry_id ? "Can't find ministry where id=#{self.ministry_id}" : nil)
     "#{ministry}#{title}"
   end
 
