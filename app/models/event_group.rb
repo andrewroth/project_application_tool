@@ -15,19 +15,9 @@ class EventGroup < Node
 
   acts_as_tree
 
-  def to_s
-    ministry = self.ministry ? self.ministry.to_s + ' ': 
-      (self.ministry_id ? "Can't find ministry where id=#{self.ministry_id}" : nil)
-    "#{ministry}#{title}"
-  end
-
-  def to_s_with_ministry
-    "#{ministry_inherited_name}:#{title}"
-  end
-
   # returns the ministry followed by the entire path of parents in the event group tree
   def to_s_with_ministry_and_eg_path
-    "#{ministry_inherited_name} - #{eg_path}"
+    "#{[ministry_inherited_name, eg_path].compact.join(' - ')}"
   end
   
   def to_s_with_eg_path
