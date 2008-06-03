@@ -188,6 +188,10 @@ class ManageProjectsController < ApplicationController
       @profile = Profile.find_by_viewer_id_and_project_id viewer.id, @project.id
       if @profile && no_assignments(:staff_viewer => viewer, :project => @project)
         @profile = StaffProfile.find_by_viewer_id_and_project_id viewer.id, @project.id
+
+        # if 'going' has been unchecked, the staff profile is set to withdrawn
+        @profile ||= Withdrawn.find_by_viewer_id_and_project_id viewer.id, @project.id
+
         @profile.manual_update :type => Withdrawn, :status => :staff_profile_dropped, :user => @user
       end
     end
