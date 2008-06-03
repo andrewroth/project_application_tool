@@ -48,6 +48,10 @@ class EventGroup < Node
     eg_path
   end
 
+  def to_s
+    title
+  end
+
   def ministry_inherited
     node = self
     while node.ministry.nil? && !node.parent_id.nil?
