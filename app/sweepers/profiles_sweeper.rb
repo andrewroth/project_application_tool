@@ -42,15 +42,15 @@ class ProfilesSweeper < ActionController::Caching::Sweeper
   def before_save(profile)
     for section in [ 'Acceptance', 'Applying', 'StaffProfile', 'Withdrawn' ]
       if profile_changed_wrt_section(profile, section)
-        logger.info "sweeper got that section #{section} changed"
-        #logger.info "sweeper orig_atts: #{profile.orig_atts.inspect}"
+        logger.info "sweeper got that section #{section} changed" if logger
+        #logger.info "sweeper orig_atts: #{profile.orig_atts.inspect}" if logger
 
         # clear old section cache if project changed (special case)
         if profile.att_changed(:project_id)
           #expire_fragment(:controller => 'main', :action => 'your_projects', 
           #            :section => profile.orig_atts['type'], 
           #            :project_id => profile.orig_atts['project_id'])
-	  logger.info "fragment: special case hit (project_id changed)"
+	  logger.info "fragment: special case hit (project_id changed)" if logger
           expire_fragment(%r{your_projects.project_id=#{profile.orig_atts['project_id']}&role=.*&section=#{profile.orig_atts['type']}})
         end
 
