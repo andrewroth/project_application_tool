@@ -114,6 +114,13 @@ class CustomReportsController < ApplicationController
       for re in @report_elements
         if re.class == ReportElementQuestion
           e = re.element
+
+	  # fix 1402 - http://ccc.clockingit.com/tasks/edit/79620
+	  if e.nil?
+	    row << "Couldn't find element #{re.element_id}"
+	    next
+	  end
+
 	  q = e.traverse_to_questionnaire
 
           # find answer by question_id and instance_id
