@@ -28,7 +28,7 @@ class ProfilesSweeper < ActionController::Caching::Sweeper
     #   then we know that the cache does not need to be cleared if the section
     #   being considered right now is different than the section the profile is
     #   in
-    logger.info "sweeper checking section #{section} (profile's section is #{profile.class.name}"
+    logger.info "sweeper checking section #{section} (profile's section is #{profile.class.name}" if logger
     return false if profile.class.name != section
 
     # no obvious cases above triggered then go through each attribute
