@@ -143,6 +143,7 @@ class CustomReportsController < ApplicationController
 
         elsif re.class == ReportElementModelMethod
           mm = re.report_model_method
+	  return "" if mm.nil?
           method_s = mm.method_s
           class_s = mm.report_model.model_s
 
