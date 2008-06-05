@@ -61,7 +61,6 @@ class CustomReportsController < ApplicationController
       i += 1
     end
 
-    # sort by first column
     @results.sort! { |r1,r2|  if r1.length > 0 && r2.length > 0 then r1[0] <=> r2[0] else 0 end }
 
     if @format == 'csv'
@@ -145,22 +144,19 @@ class CustomReportsController < ApplicationController
           mm = re.report_model_method
 
           if mm.nil?
-	    ""
+	    row << 'nil modelmethod'
 	  else
             method_s = mm.method_s
             class_s = mm.report_model.model_s
 
             result = if valid_eval_str(method_s) && valid_eval_str(class_s)
                 class_o = eval(class_s)
-                res = if class_o then class_o.send(method_s).to_s else "error: '#{class_s}' not defined" end
-	      
-	        if res.class == Date || res.class == DateTime
-	        end
+                res = if class_o then class_o.send(method_s) else "error: '#{class_s}' not defined" end
               else
                 'not allowed'
               end
 
-            row << result.to_s
+            row << result
 	  end
         end
       end
