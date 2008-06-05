@@ -143,18 +143,25 @@ class CustomReportsController < ApplicationController
 
         elsif re.class == ReportElementModelMethod
           mm = re.report_model_method
-	  return "" if mm.nil?
-          method_s = mm.method_s
-          class_s = mm.report_model.model_s
 
-          result = if valid_eval_str(method_s) && valid_eval_str(class_s)
-              class_o = eval(class_s)
-              if class_o then class_o.send(method_s).to_s else "error: '#{class_s}' not defined" end
-            else
-              'not allowed'
-            end
+          if mm.nil?
+	    ""
+	  else
+            method_s = mm.method_s
+            class_s = mm.report_model.model_s
 
-          row << result.to_s
+            result = if valid_eval_str(method_s) && valid_eval_str(class_s)
+                class_o = eval(class_s)
+                res = if class_o then class_o.send(method_s).to_s else "error: '#{class_s}' not defined" end
+	      
+	        if res.class == Date || res.class == DateTime
+	        end
+              else
+                'not allowed'
+              end
+
+            row << result.to_s
+	  end
         end
       end
 
