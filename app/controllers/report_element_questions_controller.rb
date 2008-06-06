@@ -10,8 +10,15 @@ class ReportElementQuestionsController < ReportElementsController
   end
 
   def create
-    req = ReportElementQuestion.create params[:report_element_question]
-    render :inline => "success: #{req.inspect}" if request.xml_http_request?
+    if params[:bulk]
+      render :inline => params.inspect
+      for req in params[:check].keys
+        ReportElementQuestion.create :element_id => req, :report_id => params[:report_id]
+      end
+    else
+      req = ReportElementQuestion.create params[:report_element_question]
+      render :inline => "success: #{req.inspect}" if request.xml_http_request?
+    end
   end
 
   def get_element

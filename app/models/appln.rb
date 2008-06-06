@@ -115,7 +115,9 @@ class Appln < ActiveRecord::Base
   # mark the whole application as complete if it's all finished (including refs)
   def complete(ref = nil)
     return false unless self.submitted?
-    return false if self.reference_instances.empty?  # no references even saved (assuming all apps have at least 1)
+    #return false if self.reference_instances.empty?  # no references even saved (assuming all apps have at least 1)
+    # ^^^ this shouldn't affect applyings.. and needs to be removed for apps w/o refs
+    
     done = false
     self.reference_instances.each do |r|
       done ||= !(r.completed? || r.bypassed? || r == ref)   # if ref completed, or about to be completed

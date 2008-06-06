@@ -49,6 +49,14 @@ ignoreEvent = function (ev) {
     }
 };
 
+function loadAllSortableTables() {
+  tables = document.getElementsByTagName("table");
+  for (var i = 0; i < tables.length; i++) {
+    if (tables[i].className == 'datagrid') {
+      initialize_sortable_table(tables[i].id);
+    }
+  }
+}
 
 update(SortableManager.prototype, {
 
@@ -60,10 +68,13 @@ update(SortableManager.prototype, {
         ***/
         // Ensure that it's a DOM element
         table = getElement(table);
-        // Find the thead
-        if (table == null) {
-            return
+
+        // Find the thead, make sure it's not been initialized already
+        if (table == null || table.getAttribute('initialized')) {
+            return;
         }
+	table.setAttribute('initialized', true);
+
         this.thead = table.getElementsByTagName('thead')[0];
         // get the mochi:format key and contents for each column header
         var cols = this.thead.getElementsByTagName('th');

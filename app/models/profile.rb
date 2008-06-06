@@ -125,7 +125,19 @@ class Profile < ActiveRecord::Base
       params[:cache][id.to_s]
     else
       all_donations = manual_donations + auto_donations
-      all_donations.sort! { |a,b| a.donation_date <=> b.donation_date }
+
+      all_donations.sort! { |a,b| 
+        if a.donation_date.nil? && b.donation_date.nil?
+          0
+        elsif a.donation_date.nil? && b.donation_date
+          1
+        elsif b.donation_date.nil? && a.donation_date
+          -1
+        else
+          a.donation_date <=> b.donation_date
+        end
+      }
+
     end || []
   end
   

@@ -23,6 +23,12 @@ function value_chosen(id) {
   opener.document.getElementById('#{params[:js_id]}').value = id;
   window.close();
 }
+
+function refresh() {
+  //$('custom_reports-edit-51-link').action_link.reload();
+  link = opener.document.getElementById('custom_reports-edit-#{params[:report_id]}-link');
+  link.action_link.reload();
+}
 |
 %>
 
@@ -40,7 +46,7 @@ Form: <%= select_tag 'form_id',
          :update => 'pages_select_div',
 	 :loading => "$('form_spinner').show();",
 	 :complete => "$('form_spinner').hide();",
-	 :with => "'form_id='+$('form_id').value+'&report_id=#{params[:report_id]}'"
+	 :with => "'form_id='+$('form_id').value+'&report_id=#{params[:report_id]}'#{'+\'&bulk=true\'' if params[:bulk]}"
    %>
 </div>
 </div>

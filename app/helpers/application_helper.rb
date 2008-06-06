@@ -12,13 +12,13 @@ module ApplicationHelper
       item_html += " class=\"menuinactive\""
     end
     item_html += ">"
-   
+    
     controller ||= params[:controller]
     #item_html += link_to title, :controller => controller, :action => action
     item_html += "<a href='/#{controller}/#{action}'>#{title}</a>"
-   
+    
     item_html += "</li>"
-   
+    
     return item_html
   end
   
@@ -51,8 +51,6 @@ module ApplicationHelper
         id
       end).to_s
     table = "<table id=\"#{table_id_str}\" class=\"datagrid\">"
-    @sortable_tables_to_initialize = [] if @sortable_tables_to_initialize.nil?
-    @sortable_tables_to_initialize << table_id_str
     @next_free_table_id += 1;
     
     table
@@ -187,16 +185,10 @@ module ApplicationHelper
   end
   
   def initialize_sortable_tables
-    return "" if @sortable_tables_to_initialize.nil?
-
-    %|
+    return unless @sortable_tables_used
+%|
 <script>
-  var sortableTableLoadSpecific = function() {
-#{(@sortable_tables_to_initialize).collect{ |id| "    initialize_sortable_table('#{id}');" }.join("\n")}
-  };
-  
-  #{request.xml_http_request? ? 'sortableTableLoadSpecific();' : 'addLoadEvent(sortableTableLoadSpecific);' }
-
+#{request.xml_http_request? ? 'loadAllSortableTables();' : 'addLoadEvent(loadAllSortableTables);' }
 </script>
 |
 

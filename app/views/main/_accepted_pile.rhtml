@@ -16,6 +16,7 @@
 @user.set_project accepted_pile
 @full_view = @user.fullview? 
 @cache = ProfileDonation.cache accepted_pile.id
+@project = accepted_pile # support coach list requires this
 %>
 <%= 
 render :partial => "accepted_pile_table" 

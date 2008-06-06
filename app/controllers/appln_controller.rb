@@ -70,10 +70,13 @@ class ApplnController < InstanceController
   
   def after_submit
     # If we haven't yet done so, send reference invitations
-    get_references.each do |reference|
+    refs = get_references
+    refs.each do |reference|
       reference.send_invitation unless reference.email_sent?
     end
     @appln.profile.submit!
+    
+    @appln.complete # will try to go into completed for if there are no refs
   end
   
   # custom projects preferences save/display method

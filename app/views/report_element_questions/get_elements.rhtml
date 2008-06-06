@@ -1,21 +1,10 @@
-<%= javascript_tag %|
-function toggle_more(id) {
-  if ($('long_text_'+id).visible()) {
-    $('long_text_'+id).hide();
-    $('short_text_'+id).show();
-  } else {
-    $('long_text_'+id).show();
-    $('short_text_'+id).hide();
-  }
-}
+<%= form_remote_tag :url => { :controller => 'report_element_questions',
+      :action => 'create', :bulk => true, :report_id => params[:report_id] },
+      :success => 'alert("Elements added to report.  You can add more elements on different pages or click Done to close this window."); refresh();' %>
 
-function value_chosen(id) {
-  opener.document.getElementById('#{params[:js_id]}').value = id;
-  window.close();
-}
-|
-%>
-
-<%= form_tag %>
 <%= render :partial => 'elements', :object => @page.elements %>
+
+<%= submit_tag 'Add Selected Elements to Report' %>
+<input type="button" value="Done" onClick="window.close();"/>
+
 </form>
