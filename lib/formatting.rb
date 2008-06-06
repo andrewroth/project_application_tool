@@ -12,6 +12,8 @@ module Formatting
   
   def format_datetime(value=nil, style=:default)
     return '' if value.to_s.empty?
+    return format_date(value) if value.class == Date
+
     time = (value.class == Time || value.class == DateTime) ? value : Time.parse(value)
 
     if style == :ts
