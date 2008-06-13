@@ -75,6 +75,11 @@ module CustomReportsHelper
     "</span>"
   end
  
+  include ActiveScaffoldSortableSubforms
+  active_scaffold_sortable_subform :report_element_model_method => :position, 
+                                   :report_element_question => :position,
+                                   :report_element => :position
+
   protected
 
   def textfield_popup_helper(params)
