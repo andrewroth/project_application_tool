@@ -23,7 +23,7 @@ return unless show_add_new or show_add_existing
     <% add_label = column.plural_association? ? as_('Create Another') : as_('Replace With New') -%>
     <%= button_to_function add_label, "new Ajax.Request(#{add_new_url.to_json}, {asynchronous: true, evalScripts: true, onFailure: function(){ActiveScaffold.report_500_response(#{active_scaffold_id.to_json})}})" %>
     <% if params[:controller] == 'custom_reports' %>
-      <div><%= button_to_function "Bulk Create", "window.open('http://dev.spt.campusforchrist.org/report_element_questions/get_element?report_id=#{parent_record.id}&bulk=true','new_window','height=600,width=600,resizable=1,scrollbars=1');return false;" %>
+      <div><%= button_to_function "Bulk Create", "window.open('/report_element_questions/get_element?report_id=#{parent_record.id}&bulk=true','new_window','height=600,width=600,resizable=1,scrollbars=1');return false;" %>
       </div>
     <% end -%>
     <% end -%>
