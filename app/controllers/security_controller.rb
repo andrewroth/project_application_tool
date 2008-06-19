@@ -254,7 +254,7 @@ class SecurityController < ApplicationController
   def ensure_gcx_in_session
     unless session[:gcx]
       flash[:error] = "Error: No gcx info found in session."
-      redirect_to :action => :index
+      redirect_to :action => :login
     end
   end
 end
