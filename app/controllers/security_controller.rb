@@ -52,7 +52,7 @@ class SecurityController < ApplicationController
     redirect_to(:action => 'login') if session[:gcx].nil?
 
     flash.delete :gcx # this should be done from the last page, but doesn't seem to clear it..
-    flash[:link] = "Congratulations, your GCX login worked!  There's just one more step.  We need to link GCX logins to the old intranet/project tool logins.  You only need to do this once.<BR /><BR />Please log in now the old way."
+    flash[:link] = "Congratulations, your GCX login worked!  There's just one more step.  We need to link GCX logins to the old intranet/project tool logins.  You only need to do this once.  If you don't have an intranet login, <A HREF='/security/link_gcx_new'>click here</A>.<BR /><BR />Please log in now the old way."
     @show_contact_emails_override = true
   end
 
@@ -80,8 +80,8 @@ class SecurityController < ApplicationController
     return unless params[:username]
 
     result = login_by_ticket
-    result = login_by_cim if result[:keep_trying]
     result = login_by_gcx if result[:keep_trying]
+    result = login_by_cim if result[:keep_trying]
 
     if result[:error]
       flash[:notice] = result[:error]
