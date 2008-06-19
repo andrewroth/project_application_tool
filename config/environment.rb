@@ -107,3 +107,5 @@ ActiveRecord::Base.table_name_prefix = ActiveRecord::Base.configurations[RAILS_E
 
 # Add my own override for table_exists
 require 'active_record_base_table_name'
+
+gem 'soap4r'
