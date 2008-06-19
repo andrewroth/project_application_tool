@@ -51,7 +51,8 @@ class SecurityController < ApplicationController
   def link_gcx
     redirect_to(:action => 'login') if session[:gcx].nil?
 
-    flash[:link] = "This is the first time you've logged in with GCX. Please enter your campus intranet login/password, so that we can link it with your GCX account.  If you don't have an intranet login, <A HREF='/security/link_gcx_new'>click here</A>.  Thanks!  If you have problems, please email the contact emails below."
+    flash.delete :gcx # this should be done from the last page, but doesn't seem to clear it..
+    flash[:link] = "Congratulations, your GCX login worked!  There's just one more step.  We need to link GCX logins to the old intranet/project tool logins.  You only need to do this once.<BR /><BR />Please log in now the old way."
     @show_contact_emails_override = true
   end
 

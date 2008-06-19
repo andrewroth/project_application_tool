@@ -1,7 +1,6 @@
-<% login_action ||= nil -%>
-<% form_tag :action => (login_action || :login) do -%>
+<% form_tag :action => (@login_action || :login) do -%>
   <fieldset>
-    <legend>Login</legend>
+    <legend><%= @login_title || 'Login' %></legend>
     <ol>
       <li><label>Username: </label><%= text_field_tag 'username', {} %></li>
       <li><label>Password: </label><%= text_field_tag 'password', {}, :type => 'password' %></li>

@@ -4,5 +4,7 @@
    "index.php?P=P35" %>
 <% end %>
 
-<%= render :partial => 'login', :locals => { :login_action => :do_link_gcx } %>
+<% @login_action = 'do_link_gcx' -%>
+<% @login_title = 'Old Login' -%>
+<%= render :partial => 'login' %>
 
