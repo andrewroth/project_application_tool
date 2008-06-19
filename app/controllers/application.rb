@@ -31,7 +31,8 @@ class ApplicationController < ActionController::Base
 
   # Ensures that the user came from the campus intranet to
   # the login page.
-  before_filter :verify_user, :except => [ :logout, :login, :motd, :read_login_message_confirm ]
+  before_filter :verify_user, :except => [ :logout, :login, :motd, :read_login_message_confirm, 
+                                           :link_gcx, :do_link_gcx, :link_gcx_new, :do_link_gcx_new ]
   
   # create the session object from the db
   before_filter :set_user
@@ -151,6 +152,7 @@ class ApplicationController < ActionController::Base
     session[:event_group_id] = cookies[:event_group_id] if cookies[:event_group_id]
 
     unless session[:event_group_id] && !EventGroup.find(:all).empty?
+      flash.keep
       redirect_to scope_event_groups_url
       false
     end 
