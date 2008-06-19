@@ -57,7 +57,7 @@ class SecurityController < ApplicationController
   end
 
   def link_gcx_new
-    flash[:gcx] = "The following fields are required to make an intranet login."
+    flash[:gcx] = "That's ok -- we just need the following information."
     @show_contact_emails_override = true
   end
 
@@ -83,6 +83,7 @@ class SecurityController < ApplicationController
     result = login_by_gcx if result[:keep_trying]
     result = login_by_cim if result[:keep_trying]
 
+    result[:error] = "Sorry, authentication failed for '#{params[:username]}'" if result[:keep_trying]
     if result[:error]
       flash[:notice] = result[:error]
       return
@@ -144,7 +145,7 @@ class SecurityController < ApplicationController
        ticket = cas.getServiceTicketFromUserNamePassword(args).getServiceTicketFromUserNamePasswordResult
      rescue
        # Auth failed
-       return { :error => "Sorry, authentication failed for '#{params[:username]}'" }
+       return { :keep_trying => true }
      end
 
      args = GetSsoUserFromServiceTicket.new(return_to, ticket)
@@ -172,6 +173,7 @@ class SecurityController < ApplicationController
     if (params[:ticket])
     elsif (params[:username] && params[:password])
       login_viewer = Viewer.find_by_viewer_userID params[:username]
+      flash[:notice] = "Sorry, no user found with username '#{params[:username]}'"
 
       hash_pass = Digest::MD5.hexdigest(params[:password])
       if hash_pass == login_viewer.viewer_passWord || (RAILS_ENV == 'development' && params[:password] == 'secret123')
