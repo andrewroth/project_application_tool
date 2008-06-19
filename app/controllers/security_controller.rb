@@ -13,6 +13,8 @@ class SecurityController < ApplicationController
   skip_before_filter :verify_event_group_chosen
   skip_before_filter :set_event_group
 
+  before_filter :ensure_gcx_in_session, :only => [ :link_gcx, :do_link_gcx, :link_gcx_new, :do_link_gcx_new ]
+
   # makes a new viewer and person and links them to the gcx logged in
   def do_link_gcx
     result = login_by_cim
@@ -47,11 +49,15 @@ class SecurityController < ApplicationController
   end
 
   def link_gcx
+    redirect_to(:action => 'login') if session[:gcx].nil?
+
     flash[:link] = "This is the first time you've logged in with GCX. Please enter your campus intranet login/password, so that we can link it with your GCX account.  If you don't have an intranet login, <A HREF='/security/link_gcx_new'>click here</A>.  Thanks!  If you have problems, please email the contact emails below."
     @show_contact_emails_override = true
   end
 
   def link_gcx_new
+    flash[:gcx] = "The following fields are required to make an intranet login."
+    @show_contact_emails_override = true
   end
 
   def index
@@ -69,6 +75,7 @@ class SecurityController < ApplicationController
   end
   
   def login
+    flash[:gcx] = "[6/19/2008] You can now use your GCX email and password to log in."
     return unless params[:username]
 
     result = login_by_ticket
@@ -153,6 +160,7 @@ class SecurityController < ApplicationController
      session[:gcx] = { :ticket => ticket, :firstName => user.firstName, :lastName => user.lastName, :guid => user.userID, :email => user.email }
 
      if viewer
+       session[:login_source] = 'gcx'
        return { :viewer_id => viewer.id }
      else
        return { :gcx_no_viewer => true }
@@ -225,8 +233,8 @@ class SecurityController < ApplicationController
   def setup_given_viewer_id(viewer_id)
     @user = User.new(viewer_id)
 
-    session[:login_source] = 'spt'
     session[:user_id] = @user.id
+    session[:gcx] = nil
 
     # if the secret password was used, we want to reset the session, since
     # automated tests will use this and they will want to set the eg id
@@ -240,5 +248,12 @@ class SecurityController < ApplicationController
     #flash[:downtime] ||= "<br />There will be two short periods of downtime (approx 10 mins each) sometime before 9:30 AM EST (6:30 PST) on Tuesday Jan 22, 2007 for maintenance"
       
     redirect_to :controller => "main"
+  end
+
+  def ensure_gcx_in_session
+    unless session[:gcx]
+      flash[:error] = "Error: No gcx info found in session."
+      redirect_to :action => :index
+    end
   end
 end

@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
     $server_url = "http://dev.spt.campusforchrist.org"
   end
 
-  $cim_url = "http://www.campusforchrist.org/phoenix/php5/index.php"
+  $cim_url = "http://intranet.campusforchrist.org"
   $sp_email_only = 'projects@campusforchrist.org'
   $sp_email = "Power to Change Projects <#{$sp_email_only}>"
   $tech_email_only = 'spt@campusforchrist.org'
