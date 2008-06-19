@@ -26,3 +26,7 @@ deploy.task :restart, :roles => :app do
   # sudo "/opt/lsws/bin/lswsctrl restart"
   run "touch #{current_path}/tmp/restart.txt"
 end
+
+deploy.task :after_symlink do
+  run "cp #{File.join(deploy_to, 'database.yml')} #{File.join(current_path, 'config', 'database.yml')}"
+end
