@@ -143,7 +143,7 @@ class SecurityController < ApplicationController
        ticket = cas.getServiceTicketFromUserNamePassword(args).getServiceTicketFromUserNamePasswordResult
      rescue
        # Auth failed
-       return { :error => "Sorry, authentication from gcx failed for '#{params[:username]}'" }
+       return { :error => "Sorry, authentication failed for '#{params[:username]}'" }
      end
 
      args = GetSsoUserFromServiceTicket.new(return_to, ticket)
