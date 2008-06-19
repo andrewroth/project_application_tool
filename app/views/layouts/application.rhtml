@@ -73,7 +73,7 @@
     	end + "</p>" -%>
       <%= content_tag :div, full_msg, :id => "flash_#{key}", :class => 'error flash' %>
     <% end -%>
-    <% flash.clear -%>
+    <% flash.discard -%>
     
     <% if @user && !@user.is_student? && !@eg.nil? %>
       <div id="search" >
