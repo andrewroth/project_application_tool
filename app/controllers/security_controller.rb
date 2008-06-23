@@ -57,7 +57,7 @@ class SecurityController < ApplicationController
   def link_gcx
     redirect_to(:action => 'login') if session[:gcx].nil?
 
-    flash.delete :gcx # this should be done from the last page, but doesn't seem to clear it..
+    flash.delete :gcx
     flash[:link] = "Congratulations, your GCX login worked!  There's just one more step.  We need to link GCX logins to the old intranet/project tool logins.  You only need to do this once.  If you don't have an intranet login, <A HREF='/security/link_gcx_new'>click here</A>.<BR /><BR />Please log in now the old way."
     @show_contact_emails_override = true
   end
@@ -138,92 +138,43 @@ class SecurityController < ApplicationController
   end
 
   def login_by_gcx
-     # look for a gcx guid
-     cas = TntWareSSOProviderSoap.new
-     return_to = request.protocol + request.host
-     remote_ip = request.remote_ip # apparently this doesn't matter, but this looks like a good value
-     args = GetServiceTicketFromUserNamePassword.new(return_to, params[:username], params[:password], remote_ip)
+    # look for a gcx guid
+    cas = TntWareSSOProviderSoap.new
+    return_to = request.protocol + request.host
+    remote_ip = request.remote_ip # apparently this doesn't matter, but this looks like a good value
+    args = GetServiceTicketFromUserNamePassword.new(return_to, params[:username], params[:password], remote_ip)
 
-     # A little debug code can save the day
-     log = ''
-     cas.wiredump_dev = log
-     begin
-       ticket = cas.getServiceTicketFromUserNamePassword(args).getServiceTicketFromUserNamePasswordResult
-     rescue
-       # Auth failed
-       return { :keep_trying => true }
-     end
-
-     args = GetSsoUserFromServiceTicket.new(return_to, ticket)
-     # A little debug code can save the day
-     log = ''
-     cas.wiredump_dev = log
-     begin
-       user = cas.getSsoUserFromServiceTicket(args).getSsoUserFromServiceTicketResult
-     rescue
-       return { :error => "Sorry, failed getting user information from gcx for '#{params[:username]}'" }
-     end
-
-     viewer = Viewer.find_by_guid user.userID
-     session[:gcx] = { :ticket => ticket, :firstName => user.firstName, :lastName => user.lastName, :guid => user.userID, :email => user.email }
-
-     if viewer
-       session[:login_source] = 'gcx'
-       return { :viewer_id => viewer.id }
-     else
-       return { :gcx_no_viewer => true }
-     end
-   end
-
-  def login_old
-    if (params[:ticket])
-    elsif (params[:username] && params[:password])
-      login_viewer = Viewer.find_by_viewer_userID params[:username]
-      flash[:notice] = "Sorry, no user found with username '#{params[:username]}'"
-
-      hash_pass = Digest::MD5.hexdigest(params[:password])
-      if hash_pass == login_viewer.viewer_passWord || (RAILS_ENV == 'development' && params[:password] == 'secret123')
-        @user = User.new(login_viewer.id)
-        session[:login_source] = 'spt'
-	
-	# if the secret password was used, we want to reset the session, since 
-	# automated tests will use this and they will want to set the eg id
-	if (RAILS_ENV == 'development' && params[:password] == 'secret123')
-	  cookies[:event_group_id] = nil
-	  session[:event_group_id] = nil
-	end
-	
-      else
-        flash[:notice] = "Sorry, that password is incorrect."
-      end
-    elsif session[:user_id]
-      # they've already logged in??
-      @user = User.new session[:user_id]
-
-      if !(session[:login_source] == 'spt' &&
-                   @user.is_student? && session[:needs_read_login_message_confirm])
-        redirect_to :controller => "main"
-        return
-      end
+    # A little debug code can save the day
+    log = ''
+    cas.wiredump_dev = log
+    begin
+      ticket = cas.getServiceTicketFromUserNamePassword(args).getServiceTicketFromUserNamePasswordResult
+    rescue
+      # Auth failed
+      return { :keep_trying => true }
     end
 
-    # Save the userid and redirect to root if they're logged in.
-    if (@user)
-      session[:user_id] = @user.id
-      
-      logger.debug(@user.inspect)
-      flash[:downtime] ||= "<br />There will be two short periods of downtime (approx 10 mins each) sometime before 9:30 AM EST (6:30 PST) on Tuesday Jan 22, 2007 for maintenance"
-      
-      #if session[:login_source] == 'spt' && @user.is_student?
-      #  session[:needs_read_login_message_confirm] = true
-      #  redirect_to :action => :motd
-      #else
-      #  session[:needs_read_login_message_confirm] = false
-        redirect_to :controller => "main"
-      #end
+    args = GetSsoUserFromServiceTicket.new(return_to, ticket)
+    # A little debug code can save the day
+    log = ''
+    cas.wiredump_dev = log
+    begin
+      user = cas.getSsoUserFromServiceTicket(args).getSsoUserFromServiceTicketResult
+    rescue
+      return { :error => "Sorry, failed getting user information from gcx for '#{params[:username]}'" }
+    end
+
+    viewer = Viewer.find_by_guid user.userID
+    session[:gcx] = { :ticket => ticket, :firstName => user.firstName, :lastName => user.lastName, :guid => user.userID, :email => user.email }
+
+    if viewer
+      session[:login_source] = 'gcx'
+      return { :viewer_id => viewer.id }
+    else
+      return { :gcx_no_viewer => true }
     end
   end
-  
+ 
   def logout
     @user = nil
     session[:user_id] = nil
