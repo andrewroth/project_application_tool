@@ -5,7 +5,10 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-#RAILS_GEM_VERSION = '1.1.6'
+RAILS_GEM_VERSION = '2.0.2'
+
+require 'rubygems'
+gem 'soap4r'
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -108,4 +111,4 @@ ActiveRecord::Base.table_name_prefix = ActiveRecord::Base.configurations[RAILS_E
 # Add my own override for table_exists
 require 'active_record_base_table_name'
 
-gem 'soap4r'
+$LOAD_PATH.sort!{ |a,b| ag = a['gem']; bg = b['gem']; if ag and bg then a <=> b elsif ag then -1 elsif bg then +1 else 0 end }
