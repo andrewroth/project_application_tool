@@ -19,7 +19,7 @@ class SecurityController < ApplicationController
   def do_link_gcx
     result = login_by_cim
     if result[:keep_trying]
-      result[:error] = "Sorry, couldn't find an intranet user '#{params[:username]}'"
+      result[:error] = "Sorry, couldn't find an intranet user '#{params[:username]}'.  Please try again."
     end
 
     if result[:error]
@@ -29,10 +29,16 @@ class SecurityController < ApplicationController
     end
 
     v = Viewer.find result[:viewer_id]
+    if v.guid && !v.guid.empty? && v.guid != session[:gcx][:guid]
+      flash[:notice] = "Error: Account '#{params[:username]}' already linked with a different gcx account."
+      redirect_to :action => 'link_gcx'
+      return
+    end
+
     v.guid = session[:gcx][:guid]
     v.save!
 
-    flash[:notice] = "Connected intranet user '#{params[:username]}' with gcx user '#{session[:gcx][:email]}'"
+    flash[:notice] = "Connected intranet user '#{params[:username]}' with gcx user '#{session[:gcx][:email]}'.  Now you can log in with your gcx user."
     flash.keep
 
     setup_given_viewer_id v.id
@@ -134,7 +140,7 @@ class SecurityController < ApplicationController
   def login_by_gcx
      # look for a gcx guid
      cas = TntWareSSOProviderSoap.new
-     return_to = request.protocol + request.host_with_port # apparently this doesn't matter, but this looks like a good value
+     return_to = request.protocol + request.host
      remote_ip = request.remote_ip # apparently this doesn't matter, but this looks like a good value
      args = GetServiceTicketFromUserNamePassword.new(return_to, params[:username], params[:password], remote_ip)
 
