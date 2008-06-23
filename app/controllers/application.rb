@@ -152,7 +152,7 @@ class ApplicationController < ActionController::Base
     session[:event_group_id] = cookies[:event_group_id] if cookies[:event_group_id]
 
     unless session[:event_group_id] && !EventGroup.find(:all).empty?
-      flash.keep
+      flash.keep :notice
       redirect_to scope_event_groups_url
       false
     end 
