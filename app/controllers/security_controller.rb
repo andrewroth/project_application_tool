@@ -107,6 +107,7 @@ class SecurityController < ApplicationController
 
     if ticket && ticket.viewer_id
       session[:login_source] = 'intranet'
+      logger.debug "ticket login succeeded for #{params[:username]}"
       { :viewer_id => ticket.viewer_id }
     else
       { :error => "Sorry, that ticket (#{params[:ticket]}) is invalid."}
@@ -130,6 +131,7 @@ class SecurityController < ApplicationController
         session[:event_group_id] = nil
       end
 
+      logger.debug "cim login succeeded for #{params[:username]}"
       { :viewer_id => login_viewer.id }
     else
       { :error => "Sorry, that password is incorrect." }
@@ -169,6 +171,7 @@ class SecurityController < ApplicationController
 
     if viewer
       session[:login_source] = 'gcx'
+      logger.debug "gcx login succeeded for #{params[:username]}"
       return { :viewer_id => viewer.id }
     else
       return { :gcx_no_viewer => true }
