@@ -81,9 +81,24 @@ class SecurityController < ApplicationController
     #end
   end
   
+  def signup
+  end
+
   def login
     flash[:gcx] = "[6/19/2008] You can now use your GCX email and password to log in."
     return unless params[:username]
+
+    # props to Waterloo project
+    if params[:username] == 'stupid ninja game time'
+      e = (' '*(rand(30)+10)).split('').collect { |c| rand() < 0.8 ? '!' : '1' }.join
+      options = [ "BOOOOOOM SUCKAAAAAAA!!!!!#{e}", "Sooooooonic BOOOOOOOOOOM!!!#{e}******", "Beat you with a stick!!#{e}", "bust u up!!!!!!!!!!!#{e}", 
+          "AUuuugh Auuuurrgh Auuuuuuuugh!!#{e}! <ripping heart out>", "Proooteiiiin RAAAAAAAGGGGE!!!1!1!#{e}", "blessed.", 
+          "AAAAAAAAAAAAAAAAAAAUGH#{e} <breaks neck>", "AAAAaaaaaaah!#{e} <rabid squirrel>" ]
+      i = rand(options.length)
+      s = options[i]
+      flash[:stupidninjagame] = s
+      return
+    end
 
     result = login_by_ticket
     result = login_by_gcx if result[:keep_trying]
@@ -172,6 +187,7 @@ class SecurityController < ApplicationController
     if viewer
       session[:login_source] = 'gcx'
       logger.debug "gcx login succeeded for #{params[:username]}"
+
       return { :viewer_id => viewer.id }
     else
       return { :gcx_no_viewer => true }

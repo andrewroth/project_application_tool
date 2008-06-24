@@ -242,7 +242,7 @@ div#student_view, div#support_received, div#travel_itinerary, div#cost_items {
 	bottom: 13px;
 }	
 
-.flash {
+.flash, .centerblock {
 	width: 600px;
 	margin: auto;
 	margin-top: 10px;
@@ -420,9 +420,13 @@ div.fieldWithErrors textarea {
 /* FORM STYLING FOR LOGIN FORM */
 
 form fieldset {
-	width: 330px;
+	width: 400px;
 	margin: auto;
 	padding: 0;
+}
+
+form fieldset #username, form fieldset #password {
+        width: 18em;
 }
 
 legend {
@@ -450,7 +454,7 @@ fieldset label {
 }
 
 div#account_links {
-	width: 22em;
+	width: 50em;
 	margin: auto;
 	clear: both;
 	text-align: center;

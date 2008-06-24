@@ -13,10 +13,9 @@
   <% if @content_for_account_links %>
     <%= yield :account_links %>
   <% else %>
-    <%= link_to "Create an Account", "https://intranet.campusforchrist.org/modules/app_cim_newaccount/" +
-   "index.php?P=P32&RU=https://spt.campusforchrist.org" %> | 
-    <%= link_to "Forgot Password",  "https://intranet.campusforchrist.org/modules/app_cim_newaccount/" +
-   "index.php?P=P35" %>
+    <%= link_to "Create an Account", "/security/signup" %>
+    | <%= link_to "Change Password", "https://signin.mygcx.org/sso/selfservice/protected/password/changePassword.jsp" %>
+    | <%= link_to "Reset Password", "https://signin.mygcx.org/sso/selfservice/resetPassword.jsp" %>
   <% end %>
 </div>
 

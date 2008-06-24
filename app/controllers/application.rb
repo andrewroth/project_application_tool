@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
   # Ensures that the user came from the campus intranet to
   # the login page.
   before_filter :verify_user, :except => [ :logout, :login, :motd, :read_login_message_confirm, 
-                                           :link_gcx, :do_link_gcx, :link_gcx_new, :do_link_gcx_new ]
+                                           :link_gcx, :do_link_gcx, :link_gcx_new, :do_link_gcx_new, :signup ]
   
   # create the session object from the db
   before_filter :set_user
