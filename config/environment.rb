@@ -82,7 +82,7 @@ end
 
 # Include your application configuration below
 
-ExceptionNotifier.exception_recipients = %w(andrew.roth@c4c.ca russ.martin@c4c.ca jon.baelde@c4c.ca) 
+ExceptionNotifier.exception_recipients = %w(andrew.roth@c4c.ca russ.martin@c4c.ca)
 ExceptionNotifier.sender_address = %w(spt@campusforchrist.org)
 
 # questionnaire engine config
