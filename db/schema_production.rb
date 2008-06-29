@@ -463,17 +463,6 @@ ActiveRecord::Schema.define(:version => 104) do
 
   add_index "tags", ["event_group_id"], :name => "index_tags_on_event_group_id"
 
-  create_table "temp_manual_donations", :force => true do |t|
-    t.string   "motivation_code"
-    t.datetime "created_at"
-    t.string   "donor_name"
-    t.integer  "donation_type_id"
-    t.float    "original_amount"
-    t.float    "amount"
-  end
-
-  add_index "temp_manual_donations", ["motivation_code"], :name => "manual_donations_motivation_code_index"
-
   create_table "travel_segments", :force => true do |t|
     t.integer  "year"
     t.string   "departure_city"
