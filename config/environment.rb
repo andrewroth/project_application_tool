@@ -54,8 +54,7 @@ Rails::Initializer.run do |config|
   config.plugins = [:engines, :engines_model_mixins, :questionnaire_engine, :reference_engine, :all]
 
   # shhhh secret!  apparently this is required in 2.x
-  config.action_controller.session = { :session_key => "_spt_session", 
-      :secret => "In the beginning was the Word, and the Word was with God, and the Word was God." }
+  config.action_controller.session = { :secret => "In the beginning was the Word, and the Word was with God, and the Word was God." }
 
   # Some people want plugins not be be reloadable.  I disagree and definitely want plugins
   # to be reloadable since we use them for code sharing.
