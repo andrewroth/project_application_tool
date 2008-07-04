@@ -1,4 +1,7 @@
-puts ENV['target']
+ENV['target'] ||= 'prod'
+
+puts "target = '#{ENV['target']}'"
+puts
 
 role :app, "ministryapp.com"
 role :web, "ministryapp.com"
@@ -12,7 +15,10 @@ set :application, "Project Application Tool"
 if ENV['target'] == 'dev'
   set :repository,  "https://svn.ministryapp.com/pat/trunk"
   set :deploy_to, "/var/www/dev.pat.ministryapp.com"
-else
+elsif ENV['target'] == 'demo'
+  set :repository,  "https://svn.ministryapp.com/pat/trunk"
+  set :deploy_to, "/var/www/demo.pat.ministryapp.com"
+elsif ENV['target'] == 'prod'
   set :repository,  "https://svn.ministryapp.com/pat/trunk"
   set :deploy_to, "/var/www/pat.ministryapp.com"
 end
@@ -27,6 +33,12 @@ deploy.task :restart, :roles => :app do
   run "touch #{current_path}/tmp/restart.txt"
 end
 
-deploy.task :after_symlink do
-  run "cp #{File.join(deploy_to, 'database.yml')} #{File.join(current_path, 'config', 'database.yml')}"
+deploy.task :before_migrate do
+  run "cd #{current_path}; rake db:setup:pat"
+end
+
+unless ENV['target'] == 'demo'
+  deploy.task :after_symlink do
+    run "cp #{File.join(deploy_to, 'database.yml')} #{File.join(current_path, 'config', 'database.yml')}"
+  end
 end
