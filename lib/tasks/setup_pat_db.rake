@@ -17,7 +17,9 @@ namespace :db do
         end
       end
 
-      for schema in Dir.glob('db/schema*')
+      # make sure to load schema_production last if it exists
+      for schema in Dir.glob('db/schema*').sort{ |a,b| if a == 'schema_production.rb' then 1 elsif b == 'schema_production' then -1 else a <=> b end }
+        puts "load #{schema}"
         load schema
       end
 
