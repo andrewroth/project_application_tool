@@ -484,4 +484,8 @@ ActiveRecord::Schema.define(:version => 104) do
   add_index "travel_segments", ["flight_no"], :name => "travel_segments_flight_no_index"
   add_index "travel_segments", ["event_group_id"], :name => "index_travel_segments_on_event_group_id"
 
+  create_table "schema_info", :id => false, :force => true do |t|
+    t.integer "version"
+  end
+
 end

@@ -21,9 +21,35 @@ def dump_db2(database, file = "db/schema", tables = :all)
     ActiveRecord::SchemaDumper.ignore_tables = ActiveRecord::Base.connection.tables - tables
   end
 
+  ActiveRecord::SchemaDumper.include_schema_info = (ActiveRecord::Base.connection.current_database['spt'] != nil)
   File.open(file, "w") do |file|
     ActiveRecord::SchemaDumper.dump(ActiveRecord::Base.connection, file)
   end
+  ActiveRecord::SchemaDumper.include_schema_info = false
+end
+
+# I don't know why ActiveRecord::SchemaDumper doesn't put in the schema_info, you would think
+# a schema dump is more valuable if you know what migration it was at
+# This hack adds the option of including the schema info
+class ActiveRecord::SchemaDumper
+  cattr_accessor :include_schema_info
+  @@include_schema_info = false
+
+  def tables_with_schema_info(stream)
+    tables_without_schema_info(stream)
+    table('schema_info', stream) if include_schema_info && @connection.tables.include?('schema_info')
+  end
+
+  alias_method_chain :tables, :schema_info
+
+=begin
+
+  def self.dump_schema_if_possible(file)
+    if ActiveRecord::Base.connection.tables.include?('schema_info')
+      table('schema_info', file)
+    end
+  end
+=end
 end
 
 namespace :db do
