@@ -378,12 +378,12 @@ td.app, #controls {
   margin: 10px;
 }
 
-a.button {
+.button {
 	border-style: outset;
 	padding: 1px;
 }
 
-a.button:hover {
+.button:hover {
 	border-style: inset;
 	cursor: pointer;
 }
