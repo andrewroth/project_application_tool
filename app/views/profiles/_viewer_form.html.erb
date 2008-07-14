@@ -1,0 +1,9 @@
+<p><%= @content_for_viewer_title || 'For:' %> <input id='viewer', name='viewer'/> <span id='viewer_id_span'></span>
+<%= observe_field 'viewer', :url => { :action => 'viewer_id_dropdown' },
+   :update => 'viewer_id_span',
+   :loading => "$('loading').show();", :complete => "$('loading').hide();",
+   :frequency => 3,
+   :with => 'viewer'
+-%>
+</p>
+

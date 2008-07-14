@@ -124,11 +124,12 @@ class ProfilesController < ApplicationController
   end
 
   def update
+    original_profile_owner = @profile.viewer.name
     success = @profile.manual_update(params[:profile], @user)
     
     if !request.xml_http_request?
       @profile.viewer_id ||= @profile.appln.viewer_id
-      flash[:notice] = "Successfully updated #{@profile.viewer.name}'s profile."
+      flash[:notice] = "Successfully updated #{original_profile_owner}'s profile."
       redirect_to :controller => :main, :action => :your_projects, :project_id => original_project_id
     else
       render :inline => (success ? 'success' : 'error')

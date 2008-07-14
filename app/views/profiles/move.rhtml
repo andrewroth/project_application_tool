@@ -1,6 +1,15 @@
-<p>Change profile for <%= @profile.viewer ? @profile.viewer.name : '?' %> for <%= @profile.project ? @profile.project.title : '[no project chosen]' %> (Currently profile type is <%= @profile.class.name %><% if @profile.respond_to?(:status) %> status <%= @profile.status %><% end %>) </p>
+<p>Change profile for <%= @profile.viewer ? "#{@profile.viewer.name} (username '#{@profile.viewer.viewer_userID}')": '?' %> for <%= @profile.project ? @profile.project.title : '[no project chosen]' %> (Currently profile type is <%= @profile.class.name %><% if @profile.respond_to?(:status) %> status <%= @profile.status %><% end %>) </p>
+<br />
 
 <% form_tag :action => :update, :id => @profile.id do -%>
+
+<p>Owner: <%= @profile.viewer ? @profile.viewer.name : '?' %> <span class="button" onClick="new Effect.BlindDown('change_ownership')">Change</span>
+<div id='change_ownership' style='display:none'>
+  <% content_for(:viewer_title) do %>
+    Change owner to:
+  <% end %>
+  <%= render :partial => 'viewer_form' %>
+</div>
 
 <%= render :partial => 'form' %>
 

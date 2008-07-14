@@ -79,6 +79,13 @@ class Profile < ActiveRecord::Base
     profile.update_attributes params
     profile.save!
 
+    # special case - update the appln's viewer_id if viewer_id changed
+    if params[:viewer_id] && profile.appln
+      app = profile.appln
+      app.viewer_id = profile.viewer_id
+      app.save!
+    end
+
     # force classes to do any actions required for chagning state
     if (params[:status] || params[:type]) && profile.respond_to?(:initialize_state)
       profile.initialize_state(

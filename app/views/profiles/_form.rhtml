@@ -10,8 +10,10 @@
        :loading => "$('loading').show();", :complete => "$('loading').hide();" -%>
 
 <div id="class_options">
+ <p>
   <% params[:type] = @profile.class.name %>
   <%= render :partial => 'class_options' %>
+ </p>
 </div>
 
 <p>
