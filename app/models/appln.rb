@@ -48,7 +48,7 @@ class Appln < ActiveRecord::Base
   end
   
   def full_name
-    [self.form.event_group.parent.title, self.form.event_group.title, self.form.name].join(" ")
+    [(self.form.event_group.parent.title if self.form.event_group.parent).to_s, self.form.event_group.title, self.form.name].join(" ")
   end
   
   def profile
