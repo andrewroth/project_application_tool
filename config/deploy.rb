@@ -15,12 +15,15 @@ set :application, "Project Application Tool"
 if ENV['target'] == 'dev'
   set :repository,  "https://svn.ministryapp.com/pat/trunk"
   set :deploy_to, "/var/www/dev.pat.ministryapp.com"
+  RAILS_ENV = 'development'
 elsif ENV['target'] == 'demo'
   set :repository,  "https://svn.ministryapp.com/pat/trunk"
   set :deploy_to, "/var/www/demo.pat.ministryapp.com"
+  RAILS_ENV = 'production'
 elsif ENV['target'] == 'prod'
   set :repository,  "https://svn.ministryapp.com/pat/trunk"
   set :deploy_to, "/var/www/pat.ministryapp.com"
+  RAILS_ENV = 'production'
 end
 
 # If you aren't using Subversion to manage your source code, specify
@@ -34,7 +37,7 @@ deploy.task :restart, :roles => :app do
 end
 
 deploy.task :before_migrate do
-  run "cd #{current_path}; rake db:setup:pat"
+  run "cd #{current_path}; RAILS_ENV=#{RAILS_ENV} rake db:setup:pat"
 end
 
 unless ENV['target'] == 'demo'
