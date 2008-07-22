@@ -68,7 +68,7 @@
     <% end %>
     
     <% flash.each do |key, msg| -%>
-      <% full_msg = h(msg) + "<p>" + link_to_function('Hide') do |page| 
+      <% full_msg = h(msg).gsub("\n", "<br />") + "<p>" + link_to_function('Hide') do |page| 
       	page["flash_#{key}"].visual_effect :fade
     	end + "</p>" -%>
       <%= content_tag :div, full_msg, :id => "flash_#{key}", :class => 'error flash' %>
