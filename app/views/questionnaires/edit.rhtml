@@ -15,7 +15,7 @@ Pages: Click-and-drag on "drag me" to change the order, or click on a page title
 %>
 <%= link_to_remote("Add another page", :url => pages_url(@questionnaire)) %>&nbsp;&nbsp;
 <%= link_to "Back to managing forms", :controller => :forms %>&nbsp;&nbsp;
-<A HREF="javascript:$('import').show();">Import page</A>
+<SPAN onClick="javascript:$('import').show();" style="button">Import questionnaire.</SPAN>
 <DIV id="import" style="display:none">
   <form method="post" enctype="multipart/form-data" 
     action="<%=import_pages_url(@questionnaire)%>">
