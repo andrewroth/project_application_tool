@@ -86,6 +86,23 @@ class SecurityController < ApplicationController
 
   def login
     flash[:gcx] = "[6/19/2008] You can now use your GCX email and password to log in."
+
+    if is_demo_host
+      student_str = "- To demo a student filling out an application, use the username 'student' and password 'student'"
+      processor_str = "- To demo a processor deciding whether to accept or decline a student, use the username 'processor' and password 'processor'"
+      admin_str = "- To demo an admin with access to configure applications, set up mission trips, etc., use the username 'admin' and password 'admin'"
+
+      if params[:demo] == 'student'
+        flash[:demo] = student_str
+      elsif params[:demo] == 'processor'
+        flash[:demo] = processor_str
+      elsif params[:demo] == 'admin'
+        flash[:demo] = admin_str
+      else
+        flash[:demo] = "#{student_str}\n#{processor_str}\n#{admin_str}"
+      end
+    end
+
     return unless params[:username]
 
     # props to Waterloo project
@@ -234,5 +251,9 @@ class SecurityController < ApplicationController
       flash[:error] = "Error: No gcx info found in session."
       redirect_to :action => :login
     end
+  end
+
+  def is_demo_host
+    true
   end
 end
