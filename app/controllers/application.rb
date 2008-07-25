@@ -63,6 +63,8 @@ class ApplicationController < ActionController::Base
 
   after_filter :no_cache
 
+  before_filter :get_notifications
+
   protected
 
   # prevent Internet Explorer from caching Ajax GET request with Cache-Control:
@@ -170,5 +172,23 @@ class ApplicationController < ActionController::Base
 
   def debug_eval(s)
     puts "#{s}: #{eval(s)}"
+  end
+
+  def get_notifications
+    # match controller
+    @notifications = Notification.find_all_by_controller [ '*', '', params[:controller] ]
+    @notifications += Notification.find_all_by_controller nil # this needs to be its own call apaprently
+
+    @notifications.delete_if { |n| 
+      if n.premature? || n.expired?
+        true
+      elsif n.matches_controller?(params[:controller]) && n.matches_action?(params[:action])
+        false
+      elsif viewer.notification_acknowledgments.find_by_notification_id n.id
+        true
+      else
+        true
+      end
+    }
   end
 end

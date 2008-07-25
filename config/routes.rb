@@ -1,4 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :notification_acknowledgments
+  map.resources :notifications
+
   map.resources :reason_for_withdrawals
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -21,6 +24,10 @@ ActionController::Routing::Routes.draw do |map|
   
   #load 'questionnaire_routes.rb'
   #ActionController::Routing::Routes.draw do |map|
+  map.resources :notification_acknowledgments
+
+  map.resources :notifications
+
   map.resources :airports
 
   map.resources :countries

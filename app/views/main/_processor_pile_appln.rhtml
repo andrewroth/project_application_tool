@@ -5,7 +5,7 @@
         <tr>
           <td><%= v.name %></td>
           <td><%= v.viewer_userID %></td>
-          <td><% campus = v.person.campuses[0] %>
+          <td><% 'a' || campus = v.person.campuses[0] %>
           <%= campus.nil? ? "No Assignment" : campus.campus_shortDesc %></td>
           <td><%= @profile.status %></td>
 	  <td><%= @profile.project ? @profile.project.title : 'not chosen' %></td>
