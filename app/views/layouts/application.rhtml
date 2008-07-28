@@ -75,7 +75,7 @@
    
     <% @notifications.each do |n| -%>
       <% full_msg = h(n.message) + "<p>"
-         unless n.permanent
+         unless n.permanent || @user.nil?
            full_msg += link_to_remote('Hide', 
             :url => { :controller => 'notification_acknowledgments', 
                       :action => 'create', :notification_id => n.id },
