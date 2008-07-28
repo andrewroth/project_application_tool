@@ -85,8 +85,6 @@ class SecurityController < ApplicationController
   end
 
   def login
-    flash[:gcx] = "[6/19/2008] You can now use your GCX email and password to log in."
-
     if is_demo_host
       student_str = "- To demo a student filling out an application, use the username 'student' and password 'student'"
       processor_str = "- To demo a processor deciding whether to accept or decline a student, use the username 'processor' and password 'processor'"
@@ -254,6 +252,6 @@ class SecurityController < ApplicationController
   end
 
   def is_demo_host
-    true
+    request.host['demo']
   end
 end
