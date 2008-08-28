@@ -11,6 +11,7 @@ class Time
     # Convert a UTC offset measured in minutes to one measured in a
     # fraction of a day.
     offset ||= Rational(utc_offset, 60 * 60 * 24)
+    session[:debug_datetime] = "year: #{year} month: #{month} day: #{day} hour: #{hour} min: #{min} seconds: #{seconds} offset: #{offset}"
     DateTime.new(year, month, day, hour, min, seconds, offset)
   end
 end
