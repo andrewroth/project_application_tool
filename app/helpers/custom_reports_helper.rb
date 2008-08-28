@@ -70,7 +70,11 @@ module CustomReportsHelper
 
   def report_model_method_form_column(record, input_name)
     "<span id='#{input_name}_span'>" + 
-      collection_select(:record, :report_model_method_id, ReportModelMethod.find(:all), :id, :name, 
+      collection_select(:record, :report_model_method_id, ReportModelMethod.find(:all, :include => :report_model).delete_if { 
+           |mm| mm.report_model.nil?  # get rid of the ones that start with '?' ie. they don't have a valid model (should we delete them?)
+	 }.sort { 
+	   |a,b| a.name <=> b.name # issue 1427, as requested
+	 }, :id, :name, 
         options ={:prompt => "- select -"}, :id => input_name, :name => input_name) + 
     "</span>"
   end
