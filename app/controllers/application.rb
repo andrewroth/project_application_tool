@@ -184,8 +184,10 @@ class ApplicationController < ActionController::Base
         true
       elsif n.matches_controller?(params[:controller]) && n.matches_action?(params[:action])
         false
-      elsif @user.viewer.notification_acknowledgments.find_by_notification_id n.id
+      elsif @user && @user.viewer && @user.viewer.notification_acknowledgments.find_by_notification_id(n.id)
         true
+      elsif n.permanent?
+        false
       else
         true
       end
