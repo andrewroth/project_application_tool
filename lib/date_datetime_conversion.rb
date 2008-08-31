@@ -5,14 +5,10 @@ class Time
   def to_gm_datetime() to_datetime(Rational(0,1)) end
 
   def to_datetime(offset = nil)
-    # Convert seconds + microseconds into a fractional number of seconds
-    seconds = sec + Rational(usec, 10**6)
-
     # Convert a UTC offset measured in minutes to one measured in a
     # fraction of a day.
     offset ||= Rational(utc_offset, 60 * 60 * 24)
-    session[:debug_datetime] = "year: #{year} month: #{month} day: #{day} hour: #{hour} min: #{min} seconds: #{seconds} offset: #{offset}"
-    DateTime.new(year, month, day, hour, min, seconds, offset)
+    DateTime.new(year, month, day, hour, min, sec, offset)
   end
 end
 
