@@ -47,6 +47,8 @@ class SecurityController < ApplicationController
   def do_link_gcx_new
     v = Viewer.create :guid => session[:gcx][:guid], :viewer_lastLogin => 0, :accountgroup_id => 15, :viewer_userID => params[:email]
     p = Person.create :person_fname => params[:first_name], :person_lname => params[:last_name]
+    ag_st = Accessgroup.find_by_accessgroup_key '[accessgroup_student]'
+    Vieweraccessgroup.create :viewer_id => v.id, :accessgroup_id => ag_st.id
     Access.create :viewer_id => v.id, :person_id => p.id
 
     flash[:notice] = "Account created."
@@ -58,7 +60,7 @@ class SecurityController < ApplicationController
     redirect_to(:action => 'login') if session[:gcx].nil?
 
     flash.delete :gcx
-    flash[:link] = "Congratulations, your GCX login worked!  There's just one more step.  We need to link GCX logins to the old intranet/project tool logins.  You only need to do this once.  If you don't have an intranet login, <A HREF='/security/link_gcx_new'>click here</A>.<BR /><BR />Please log in now the old way."
+    flash[:link] = "Congratulations, your GCX login worked!  There's just one more step.  We need to link GCX logins to the old intranet/project tool logins.  You only need to do this once.  If you don't have an intranet login, click the link below. Otherwise please log in now the old way."
     @show_contact_emails_override = true
   end
 
