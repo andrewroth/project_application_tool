@@ -5,5 +5,10 @@
     <%= sub_menu_item 'costing', :profiles, :costing, :id => @profile.id %>
     <%= sub_menu_item 'travel', :profiles, :travel, :id => @profile.id %>
   <% end %>
+<% else %>
+  <% content_for "submenu" do %>
+    <%= sub_menu_item 'Your Profiles', :profiles, :list %>
+    <%= sub_menu_item 'Crisis Info', :profiles, :crisis_info %>
+  <% end %>
 <% end %>
 

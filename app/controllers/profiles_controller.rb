@@ -5,11 +5,12 @@ class ProfilesController < ApplicationController
   #cache_sweeper :profiles_sweeper, :only => [ :create, :update ]
 
   skip_before_filter :restrict_students, :only => [ :index, :list, :view, :update, 
-                                              :travel, :support_received, :costing, :update_support ]
+                                              :travel, :support_received, :costing, :update_support,
+                                              :crisis_info, :update_crisis_info ]
   before_filter :set_title
-  before_filter :get_profile, :except => [ :index, :list, :set_profile_going, :new, :create ]
-  before_filter :ensure_profile_ownership, :except => [ :view, :index, :list, :update, :set_profile_going,
-                                                        :class_options, :new, :viewer_id_dropdown, :populate_applications, :create ]
+  before_filter :get_profile, :except => [ :index, :list, :set_profile_going, :new, :create, :crisis_info, :update_crisis_info ]
+  before_filter :ensure_profile_ownership, :except => [ :view, :index, :list, :update, :set_profile_going, :update_crisis_info,
+                                                        :class_options, :new, :viewer_id_dropdown, :populate_applications, :create, :crisis_info ]
   before_filter :ensure_profile_ownership_or_projects_coordinator, :only => [ :view, :update ]
   before_filter :ensure_projects_coordinator, :only => [ :new, :create ]
 
@@ -124,12 +125,11 @@ class ProfilesController < ApplicationController
   end
 
   def update
-    original_profile_owner = @profile.viewer.name
     success = @profile.manual_update(params[:profile], @user)
     
     if !request.xml_http_request?
       @profile.viewer_id ||= @profile.appln.viewer_id
-      flash[:notice] = "Successfully updated #{original_profile_owner}'s profile."
+      flash[:notice] = "Successfully updated #{@profile.viewer.name}'s profile."
       redirect_to :controller => :main, :action => :your_projects, :project_id => original_project_id
     else
       render :inline => (success ? 'success' : 'error')
@@ -140,10 +140,38 @@ class ProfilesController < ApplicationController
     @profiles = Profile.find_all_by_viewer_id(@user.viewer.id, :include => :project).reject{ |profile|
         profile.project.nil? || profile.project.event_group_id != @eg.id
     }
+
+    @submenu_title = 'Your Profiles'
   end
   
+  def crisis_info
+    @submenu_title = 'Crisis Info'
+    @person = @user.viewer.person
+    @emerg = @person.emerg
+  end
+  
+  def update_crisis_info
+    @submenu_title = 'Crisis Info'
+
+    @person = @user.viewer.person
+    @emerg = @person.emerg
+    # create a new emerg if necessary
+    @emerg ||= Emerg.new :person_id => @person.id
+
+    @person.update_attributes(params[:person])
+    @emerg.update_attributes(params[:emerg])
+
+    if @person.save! && @emerg.save!
+      flash[:notify] = 'Successfully updated your crisis info.'
+    else
+      flash[:notify] = 'There was an error updating your crisis info.  Please try again.'
+    end
+
+    redirect_to :action => 'index'
+  end
+
   def support_received
-  	@submenu_title = "support received"
+    @submenu_title = "support received"
     @donations = @profile.donations
   end
 
