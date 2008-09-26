@@ -26,9 +26,9 @@ Legal last name: <%= text_field :person, :person_legal_fname %>
 
 <P> Passport Nationality: <%= text_field :emerg, :emerg_passportOrigin %>
 
-<P> Do you have any medical conditions that could potentially become an emergency?  If so, please explain.: <%= text_field :emerg, :emerg_medicalNotes %>
+<P> Do you have any medical conditions that could potentially become an emergency?  If so, please explain.: <BR /><%= text_area :emerg, :emerg_medicalNotes, :rows => 5, :cols => 80 %>
 
-<P> Medication(s) Needed:  Will you be traveling with this medication on project? <%= text_field :emerg, :emerg_meds %>
+<P> Medication(s) Needed:  Will you be traveling with this medication on project? <BR /><%= text_area :emerg, :emerg_meds, :rows => 5, :cols => 80 %>
 
 <HR>
 
