@@ -1,0 +1,16 @@
+<P>
+What do you normally go by?
+
+First name: <%= text_field :person, :person_fname %>
+Last name: <%= text_field :person, :person_lname %>
+
+<P> Gender: <%= collection_select :person, :gender_id, Gender.find(:all), :id, :gender_desc %>
+
+<P> Email: <%= text_field :person, :person_email %>
+
+<P> Current Province: <%= collection_select :person, :person_local_province_id, Province.find(:all), :id, :province_desc %>
+
+<P> Permanent Province: <%= collection_select :person, :province_id, Province.find(:all), :id, :province_desc %>
+
+<P> Birthdate: <%= date_select :emerg, :emerg_birthdate, :start_year => 1950, :end_year => 10.years.ago.year %>
+

@@ -145,13 +145,13 @@ class ProfilesController < ApplicationController
   end
   
   def crisis_info
-    @submenu_title = 'Crisis Info'
+    @submenu_title = 'Personal Info and Crisis Info'
     @person = @user.viewer.person
     @emerg = @person.emerg
   end
   
   def update_crisis_info
-    @submenu_title = 'Crisis Info'
+    @submenu_title = 'Personal Info and Crisis Info'
 
     @person = @user.viewer.person
     @emerg = @person.emerg
