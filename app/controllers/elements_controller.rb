@@ -1,4 +1,4 @@
 class ElementsController < ApplicationController
-  TYPES_FOR_SELECT << ['CrisisInformation', 'CrisisInformation']
+  TYPES_FOR_SELECT << ['Personal Information', 'PersonalInformation'] << ['Crisis Information','CrisisInformation']
 end
 

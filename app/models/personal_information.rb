@@ -1,7 +1,7 @@
-class CrisisInformation < Element
+class PersonalInformation < Element
 
   def text()
-    "Crisis Information Form"
+    "Personal Information Form"
   end
 
   def save_answer(instance, params, answers)
