@@ -6,11 +6,18 @@ Last name: <%= text_field :person, :person_lname %>
 
 <P> Gender: <%= collection_select :person, :gender_id, Gender.find(:all), :id, :gender_desc %>
 
+<P> Birthdate: <%= date_select :emerg, :emerg_birthdate, :start_year => 1950, :end_year => 10.years.ago.year %>
+
 <P> Email: <%= text_field :person, :person_email %>
 
-<P> Current Province: <%= collection_select :person, :person_local_province_id, Province.find(:all), :id, :province_desc %>
+<HR/>
+<P><STRONG> Current Address </STRONG></P>
+<%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Current ', :mid => 'local_' } %>
 
-<P> Permanent Province: <%= collection_select :person, :province_id, Province.find(:all), :id, :province_desc %>
+<HR>
+<P><STRONG> Permanent Address </STRONG></P>
+<%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Permanent ', :mid => '' } %>
 
-<P> Birthdate: <%= date_select :emerg, :emerg_birthdate, :start_year => 1950, :end_year => 10.years.ago.year %>
+<P> 
+
 

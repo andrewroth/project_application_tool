@@ -5,6 +5,20 @@ class PersonalInformation < Element
   end
 
   def save_answer(instance, params, answers)
+    @person = instance.viewer.person
+    @emerg = @person.emerg
+
+    # create a new emerg if necessary
+    @emerg ||= Emerg.new :person_id => @person.id
+
+    # person[:email] is in the campus project app as a q with programmer
+    # options
+    person_params = params[:person].clone
+    person_params.delete 'email'
+    @person.update_attributes(person_params)
+    @emerg.update_attributes(params[:emerg])
+
+    @person.save! & @emerg.save!
   end
 
   def validate!(page, instance)
