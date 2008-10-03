@@ -4,13 +4,15 @@ class ProfilesController < ApplicationController
   include Permissions
   #cache_sweeper :profiles_sweeper, :only => [ :create, :update ]
 
+  INFO_ACTIONS = [ :crisis_info, :update_crisis_info, :campus_info, :update_campus_info, :campus_info_new ]
+
   skip_before_filter :restrict_students, :only => [ :index, :list, :view, :update, 
-                                              :travel, :support_received, :costing, :update_support,
-                                              :crisis_info, :update_crisis_info ]
+                                              :travel, :support_received, :costing, :update_support ] + INFO_ACTIONS
+                                              
   before_filter :set_title
-  before_filter :get_profile, :except => [ :index, :list, :set_profile_going, :new, :create, :crisis_info, :update_crisis_info ]
-  before_filter :ensure_profile_ownership, :except => [ :view, :index, :list, :update, :set_profile_going, :update_crisis_info,
-                                                        :class_options, :new, :viewer_id_dropdown, :populate_applications, :create, :crisis_info ]
+  before_filter :get_profile, :except => [ :index, :list, :set_profile_going, :new, :create ] + INFO_ACTIONS
+  before_filter :ensure_profile_ownership, :except => [ :view, :index, :list, :update, :set_profile_going, 
+                                                        :class_options, :new, :viewer_id_dropdown, :populate_applications, :create ] + INFO_ACTIONS
   before_filter :ensure_profile_ownership_or_projects_coordinator, :only => [ :view, :update ]
   before_filter :ensure_projects_coordinator, :only => [ :new, :create ]
 
@@ -144,22 +146,25 @@ class ProfilesController < ApplicationController
     @submenu_title = 'Your Profiles'
   end
   
+  def campus_info
+    @submenu_title = 'Campus Status'
+    @person = @user.viewer.person
+  end
+
   def crisis_info
     @submenu_title = 'Personal Info and Crisis Info'
     @person = @user.viewer.person
     @emerg = @person.emerg
   end
   
-  def update_crisis_info
+  def update_crisis_info # also updates personal info
     @submenu_title = 'Personal Info and Crisis Info'
 
     @person = @user.viewer.person
     @emerg = @person.emerg
-    # create a new emerg if necessary
-    @emerg ||= Emerg.new :person_id => @person.id
 
-    @person.update_attributes(params[:person])
-    @emerg.update_attributes(params[:emerg])
+    PersonalInformation.save_from_params @person, params
+    CrisisInformation.save_from_params @person, params
 
     if @person.save! && @emerg.save!
       flash[:notify] = 'Successfully updated your crisis info.'

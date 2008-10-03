@@ -2,7 +2,7 @@
 
 <P> <%= label_prefix %> City: <%= text_field :person, :"person_#{mid}city" %>
 
-<% if mid # special case since column names are province_id and person_local_province_id for 
+<% if mid.nil? || mid.empty? # special case since column names are province_id and person_local_province_id for 
           # permanent and local provinces, respecively.  Note inconsistent naming, perm province
           # doesn't have person_ before it when all other fields do.
    %>

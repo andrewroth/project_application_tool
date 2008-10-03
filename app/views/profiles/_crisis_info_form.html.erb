@@ -1,10 +1,10 @@
 <P> Birthdate: <%= date_select :emerg, :emerg_birthdate, :start_year => 1950, :end_year => 10.years.ago.year %>
 
 <P>
-What is your formal name on your passport?
+What are the names on your passport?
 
-Legal first name: <%= text_field :person, :person_legal_fname %>
-Legal last name: <%= text_field :person, :person_legal_fname %>
+Surname: <%= text_field :person, :person_legal_lname %>
+Given names: <%= text_field :person, :person_legal_fname %>
 
 <P> Passport #: <%= text_field :emerg, :emerg_passportNum %>
 
