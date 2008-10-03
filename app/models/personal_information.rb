@@ -13,12 +13,19 @@ class PersonalInformation < Element
 
     # person[:email] is in the campus project app as a q with programmer
     # options
-    person_params = params[:person].clone
-    person_params.delete 'email'
-    @person.update_attributes(person_params)
-    @emerg.update_attributes(params[:emerg])
+    if params[:person]
+      person_params = params[:person].clone
+      person_params.delete 'email'
+      @person.update_attributes(person_params)
+      @person.save!
+    end
 
-    @person.save! & @emerg.save!
+    # note that you can't have a null emerg_passportExpiry
+    if params[:emerg]
+      params[:emerg][:emerg_passportExpiry] ||= '0000-00-00'
+      @emerg.update_attributes(params[:emerg])
+      @emerg.save!
+    end
   end
 
   def validate!(page, instance)
