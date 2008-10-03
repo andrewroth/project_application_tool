@@ -161,12 +161,11 @@ class ProfilesController < ApplicationController
     @submenu_title = 'Personal Info and Crisis Info'
 
     @person = @user.viewer.person
-    @emerg = @person.emerg
 
-    PersonalInformation.save_from_params @person, params
-    CrisisInformation.save_from_params @person, params
+    success_p = PersonalInformation.save_from_params @person, params
+    success_c = CrisisInformation.save_from_params @person, params
 
-    if @person.save! && @emerg.save!
+    if success_p && success_p
       flash[:notify] = 'Successfully updated your crisis info.'
     else
       flash[:notify] = 'There was an error updating your crisis info.  Please try again.'
