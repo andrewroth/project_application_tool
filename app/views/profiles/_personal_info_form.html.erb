@@ -6,8 +6,6 @@ Last name: <%= text_field :person, :person_lname %>
 
 <P> Gender: <%= collection_select :person, :gender_id, Gender.find(:all), :id, :gender_desc %>
 
-<P> Birthdate: <%= date_select :emerg, :emerg_birthdate, :start_year => 1950, :end_year => 10.years.ago.year %>
-
 <P> Email: <%= text_field :person, :person_email %>
 
 <HR/>
