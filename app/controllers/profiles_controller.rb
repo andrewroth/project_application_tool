@@ -167,7 +167,8 @@ class ProfilesController < ApplicationController
       flash[:notify] = 'There was an error updating your crisis info.  Please try again.'
     end
 
-    redirect_to :action => 'index'
+    crisis_info
+    render :action => 'crisis_info'
   end
 
   def support_received
