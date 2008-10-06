@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :assignments
+
   map.resources :notification_acknowledgments
   map.resources :notifications
 
@@ -24,6 +26,8 @@ ActionController::Routing::Routes.draw do |map|
   
   #load 'questionnaire_routes.rb'
   #ActionController::Routing::Routes.draw do |map|
+  map.resources :assignments
+
   map.resources :notification_acknowledgments
 
   map.resources :notifications

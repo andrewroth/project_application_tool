@@ -1,0 +1,3 @@
+page.visual_effect :fade, @show_dom_id
+page.replace_html @show_dom_id, ''
+page.replace_html @edit_dom_id, ''
