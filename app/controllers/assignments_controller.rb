@@ -28,9 +28,9 @@ class AssignmentsController < ApplicationController
       end
     end
 
-    flash[:notice] = 'Saved assignments.'
+    flash[:notice] = 'Saved campus info.'
 
-    redirect_to :action => :index
+    redirect_to :controller => :profiles, :action => :campus_info
     #render :inline => @debug
   end
 

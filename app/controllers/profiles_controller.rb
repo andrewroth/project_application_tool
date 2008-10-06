@@ -147,8 +147,11 @@ class ProfilesController < ApplicationController
   end
   
   def campus_info
-    @submenu_title = 'Campus Status'
+    @submenu_title = 'Campus Info'
     @person = @user.viewer.person
+    @assignments = @person.assignments
+
+    render :template => 'assignments/index'
   end
 
   def crisis_info
