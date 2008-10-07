@@ -1,0 +1,15 @@
+<DIV id='edit_year' style="display:none">
+  <P>Year in school: 
+
+  <%= collection_select :person, :year_in_school_id, YearInSchool.find(:all), :year_id, :year_desc %>
+
+  <P>
+
+  Graduation date: <%= date_select :person, :grad_date %>
+</DIV>
+
+<DIV id='year'>
+  <P>Year in school: <%= @person.year_in_school.year_desc %>
+  <P> Graduation date: <%= @person.grad_date %>
+  <A HREF="#" onClick="Effect.BlindUp('year'); Effect.BlindDown('edit_year');">Edit</A>
+</DIV>

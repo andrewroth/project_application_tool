@@ -1,0 +1,13 @@
+<% form_for :person, :url => { :controller => 'assignments', :action => 'update' } do |p| %>
+  <script>next_new_id = 0</script>
+  <table id='assignments'><tr><th style='width:300px'>Campus</th><th style='width:200px'>Status</th><th></th></tr>
+    <%= render :partial => 'assignments/assignment_row', :collection => @assignments %>
+  </table>
+  <%= link_to_remote 'new', :url => "/assignments/new", :with => "'id='+next_new_id", :complete => 'next_new_id = next_new_id + 1' %>
+  <BR />
+  <BR />
+  <%= render :partial => 'assignments/year' %>
+  <BR />
+  <BR />
+  <%= submit_tag 'Save' %>
+<% end %>

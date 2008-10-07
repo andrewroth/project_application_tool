@@ -28,6 +28,21 @@ class AssignmentsController < ApplicationController
       end
     end
 
+    if params[:person] && params[:person][:year_in_school_id] && 
+       params[:person]['grad_date(1i)']
+
+      person_year = @person.person_year
+
+      # this is bad database design on Russ's part to put 
+      #  cim_hrdb_person_year.year_id instead of 
+      #  cim_hrdb_person_year.year_in_school_id
+      yis = params[:person].delete :year_in_school_id
+      params[:person][:year_id] = yis
+
+      person_year.update_attributes params[:person]
+      person_year.save!
+    end
+
     flash[:notice] = 'Saved campus info.'
 
     redirect_to :controller => :profiles, :action => :campus_info
