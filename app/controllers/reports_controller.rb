@@ -958,8 +958,8 @@ class ReportsController < ApplicationController
       next if @as.empty?
       @a = @as[0]
       
-      p1 = (@a && @a.preference1_id) ? @a.preference1.title : ''
-      p2 = (@a && @a.preference2_id) ? @a.preference2.title : ''
+      p1 = (@a && @a.preference1) ? @a.preference1.title : ''
+      p2 = (@a && @a.preference2) ? @a.preference2.title : ''
       
       accepts = @a.nil? ? nil : Acceptance.find_all_by_appln_id(@a.id)
       @acceptance_obj = accepts.nil? ? nil : accepts.find { |acc| acc.project.event_group_id == @eg.id }
