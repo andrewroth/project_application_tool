@@ -7,41 +7,7 @@ class AssignmentsController < ApplicationController
   end
 
   def update
-    if params[:assignment][:new]
-      for new_map in params[:assignment][:new].values
-        a = Assignment.new new_map
-        a.person_id = @person.id
-        a.save!
-      end
-    end
-
-    if params[:assignment][:update]
-      for id, upd_map in params[:assignment][:update]
-        puts "[#{id} #{upd_map}]"
-        begin
-          a = @person.assignments.find id
-        rescue Exception
-        end
-        a.update_attributes upd_map
-        a.person_id = @person.id
-        a.save!
-      end
-    end
-
-    if params[:person] && params[:person][:year_in_school_id] && 
-       params[:person]['grad_date(1i)']
-
-      person_year = @person.person_year
-
-      # this is bad database design on Russ's part to put 
-      #  cim_hrdb_person_year.year_id instead of 
-      #  cim_hrdb_person_year.year_in_school_id
-      yis = params[:person].delete :year_in_school_id
-      params[:person][:year_id] = yis
-
-      person_year.update_attributes params[:person]
-      person_year.save!
-    end
+    CampusInformation.save_from_form @person, params
 
     flash[:notice] = 'Saved campus info.'
 

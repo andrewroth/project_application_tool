@@ -31,7 +31,7 @@ class ProfilesController < ApplicationController
         filter_1, filter_2 = filters
 	filter_2.gsub!(' ','%')
         [ '(person_fname like ? and person_lname like ?) or (person_fname like ? or person_lname like ?)', 
-	    "%#{filter_1}%", "%#{filter_2}%", "%#{filter_s}%", "%#{filter_s}%" ]
+             "%#{filter_1}%", "%#{filter_2}%", "%#{filter_s}%", "%#{filter_s}%" ]
       end
 
     ps = Person.find :all, :conditions => conditions,
