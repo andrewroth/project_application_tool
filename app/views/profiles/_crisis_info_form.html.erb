@@ -1,4 +1,5 @@
 <% @appln_person ||= @instance.viewer.person %>
+<% @emerg = @appln_person.emerg %>
 
 <P> Birthdate: <%= date_select :emerg, :emerg_birthdate, :start_year => 1950, :end_year => 10.years.ago.year %>
 

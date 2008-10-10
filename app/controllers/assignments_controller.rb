@@ -7,7 +7,7 @@ class AssignmentsController < ApplicationController
   end
 
   def update
-    CampusInformation.save_from_form @person, params
+    CampusInformation.save_from_params @person, params
 
     flash[:notice] = 'Saved campus info.'
 
