@@ -1,18 +1,18 @@
-<P> <%= label_prefix %> Address: <%= text_field :person, :"person_#{mid}addr" %>
+<P> <%= label_prefix %> Address: <%= text_field :appln_person, :"person_#{mid}addr" %>
 
-<P> <%= label_prefix %> City: <%= text_field :person, :"person_#{mid}city" %>
+<P> <%= label_prefix %> City: <%= text_field :appln_person, :"person_#{mid}city" %>
 
 <% if mid.nil? || mid.empty? # special case since column names are province_id and person_local_province_id for 
           # permanent and local provinces, respecively.  Note inconsistent naming, perm province
           # doesn't have person_ before it when all other fields do.
    %>
-  <P> <%= label_prefix %> Province: <%= collection_select :person, :"province_id", 
+  <P> <%= label_prefix %> Province: <%= collection_select :appln_person, :"province_id", 
           Province.find(:all), :id, :province_desc %>
 <% else %>
-  <P> <%= label_prefix %> Province: <%= collection_select :person, :"person_#{mid}province_id", 
+  <P> <%= label_prefix %> Province: <%= collection_select :appln_person, :"person_#{mid}province_id", 
           Province.find(:all), :id, :province_desc %>
 <% end %>
 
-<P> <%= label_prefix %> Postal Code: <%= text_field :person, :"person_#{mid}pc" %>
-<P> <%= label_prefix %> Phone: <%= text_field :person, :"person_#{mid}phone" %><P> 
+<P> <%= label_prefix %> Postal Code: <%= text_field :appln_person, :"person_#{mid}pc" %>
+<P> <%= label_prefix %> Phone: <%= text_field :appln_person, :"person_#{mid}phone" %><P> 
 

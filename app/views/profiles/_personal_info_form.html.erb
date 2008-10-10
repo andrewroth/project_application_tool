@@ -1,12 +1,14 @@
+<% @appln_person ||= @instance.viewer.person %>
+
 <P>
 What do you normally go by?
 
-First name: <%= text_field :person, :person_fname %>
-Last name: <%= text_field :person, :person_lname %>
+First name: <%= text_field :appln_person, :person_fname %>
+Last name: <%= text_field :appln_person, :person_lname %>
 
-<P> Gender: <%= collection_select :person, :gender_id, Gender.find(:all), :id, :gender_desc %>
+<P> Gender: <%= collection_select :appln_person, :gender_id, Gender.find(:all), :id, :gender_desc %>
 
-<P> Email: <%= text_field :person, :person_email %>
+<P> Email: <%= text_field :appln_person, :person_email %>
 
 <HR/>
 <P><STRONG> Current Address </STRONG></P>

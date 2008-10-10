@@ -156,14 +156,14 @@ class ProfilesController < ApplicationController
 
   def crisis_info
     @submenu_title = 'Personal Info and Crisis Info'
-    @person = @user.viewer.person
+    @person = @appln_person = @user.viewer.person
     @emerg = @person.emerg
   end
   
   def update_crisis_info # also updates personal info
     @submenu_title = 'Personal Info and Crisis Info'
 
-    @person = @user.viewer.person
+    @person = @appln_person = @user.viewer.person
 
     success_p = PersonalInformation.save_from_params @person, params
     success_c = CrisisInformation.save_from_params @person, params
