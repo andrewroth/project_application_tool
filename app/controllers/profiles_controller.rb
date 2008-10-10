@@ -148,7 +148,7 @@ class ProfilesController < ApplicationController
   
   def campus_info
     @submenu_title = 'Campus Info'
-    @person = @user.viewer.person
+    @person = @appln_person = @user.viewer.person
     @assignments = @person.assignments
 
     render :template => 'assignments/index'

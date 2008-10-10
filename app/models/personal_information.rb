@@ -19,8 +19,8 @@ class PersonalInformation < Element
     # person[:email] is in the campus project app as a q with programmer
     # options, it messes up the update_attributes save since it's a defined
     # method and not a column
-    if params[:person]
-      person_params = params[:person].clone
+    if params[:appln_person]
+      person_params = params[:appln_person].clone
       person_params.delete 'email'
       person.update_attributes(person_params)
       person.save!
