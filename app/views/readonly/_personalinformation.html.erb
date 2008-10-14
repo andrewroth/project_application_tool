@@ -1,0 +1,27 @@
+<% @appln_person ||= @instance.viewer.person %>
+
+<%
+def q(q,a)
+  render :partial => 'readonly/textarea_equivalent', 
+    :locals => { :question => q, :answer => a }
+end
+%>
+
+<TR><TD class="app">&nbsp;</TD><TD class="app">
+
+<%= q 'What do you normally go by?', '' %>
+<%= q 'First name: ', @appln_person.person_fname %>
+<%= q 'Last name: ', @appln_person.person_lname %>
+<%= q 'Gender: ', @appln_person.gender %>
+<%= q 'Email: ', @appln_person.person_email %>
+
+<HR/>
+<P><STRONG> Current Address </STRONG></P>
+<%= render :partial => 'readonly/personal_info_address', :locals => { :label_prefix => 'Current ', :mid => 'local_' } %>
+
+<HR>
+<P><STRONG> Permanent Address </STRONG></P>
+<%= render :partial => 'readonly/personal_info_address', :locals => { :label_prefix => 'Permanent ', :mid => '' } %>
+
+<P> 
+</TD></TR>
