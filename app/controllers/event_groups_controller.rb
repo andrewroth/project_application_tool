@@ -9,7 +9,10 @@ class EventGroupsController < AjaxTreeController
   before_filter :ensure_projects_coordinator, :except => [ :scope, :set_as_scope ]
   before_filter :set_title, :except => [ :scope, :set_as_scope ]
 
-  before_filter :clear_cache, :only => [ :create, :update, :destroy ]
+  # bug with caching when you edit, it caches the edit screen
+  # then scope doesn't work
+  before_filter :clear_cache#, :only => [ :create, :update, :destroy ]
+
 
   def views() [ 'scope' ] end
 
