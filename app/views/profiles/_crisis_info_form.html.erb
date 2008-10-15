@@ -3,22 +3,6 @@
 
 <P> Birthdate: <%= date_select :emerg, :emerg_birthdate, :start_year => 1950, :end_year => 10.years.ago.year %>
 
-<P>
-What are the names on your passport?
-
-Surname: <%= text_field :appln_person, :person_legal_lname %>
-Given names: <%= text_field :appln_person, :person_legal_fname %>
-
-<P> Passport #: <%= text_field :emerg, :emerg_passportNum %>
-
-<P> Passport Exp: <%= date_select :emerg, :emerg_passportExpiry %>
-
-<P> Passport Nationality: <%= text_field :emerg, :emerg_passportOrigin %>
-
-<P> Do you have any medical conditions that could potentially become an emergency?  If so, please explain.: <BR /><%= text_area :emerg, :emerg_medicalNotes, :rows => 5, :cols => 80 %>
-
-<P> Medication(s) Needed:  Will you be traveling with this medication on project? <BR /><%= text_area :emerg, :emerg_meds, :rows => 5, :cols => 80 %>
-
 <HR>
 
 <P> Emergency Contact 1: <%= render :partial => 'profiles/crisis_info_emerg_contact', :locals => { :prefix => 'emerg_contact' } %>
@@ -26,3 +10,28 @@ Given names: <%= text_field :appln_person, :person_legal_fname %>
 <HR>
 
 <P> Emergency Contact 2: <%= render :partial => 'profiles/crisis_info_emerg_contact', :locals => { :prefix => 'emerg_contact2' } %>
+
+<HR>
+
+<P> Do you have any medical conditions that could potentially become an emergency?  If so, please explain.: <BR /><%= text_area :emerg, :emerg_medicalNotes, :rows => 5, :cols => 80 %>
+
+<P> Medication(s) Needed:  Will you be traveling with this medication on project? <BR /><%= text_area :emerg, :emerg_meds, :rows => 5, :cols => 80 %>
+
+<HR>
+
+<P>
+
+<P><STRONG>Passport Info:</STRONG> complete if going on an international project.
+
+<P>What are the names on your passport?
+
+Surname: <%= text_field :person, :person_legal_lname %>
+Given names: <%= text_field :person, :person_legal_fname %>
+
+<P> Passport #: <%= text_field :emerg, :emerg_passportNum %>
+
+<P> Passport Exp: <%= date_select :emerg, :emerg_passportExpiry %>
+
+<P> Passport Nationality: <%= text_field :emerg, :emerg_passportOrigin %>
+
+
