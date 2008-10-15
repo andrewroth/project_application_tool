@@ -1,10 +1,3 @@
-<%
-def q(q,a)
-  render :partial => 'readonly/textarea_equivalent', 
-    :locals => { :question => q, :answer => a }
-end
-%>
-
 <TR><TD class="app">&nbsp;</TD><TD class="app">
 
 <% @appln_person ||= @instance.viewer.person %>
