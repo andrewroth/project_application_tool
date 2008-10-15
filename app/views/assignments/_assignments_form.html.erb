@@ -1,4 +1,4 @@
-  <% @appln_person ||= @instance.viewer.person %>
+  <% @appln_person ||= @instance.viewer.person if @instance%>
 
   <% @assignments ||= (@appln_person ? @appln_person.assignments : []) %>
   <script>next_new_id = 0</script>
