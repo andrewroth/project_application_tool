@@ -1,2 +1,4 @@
 module AcceptanceHelper
-end
+  include ReadonlyHelper
+end 
+

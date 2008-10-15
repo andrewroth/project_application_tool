@@ -4,7 +4,6 @@ require 'questionnaire_engine/completion_indicator.rb'
 class InstanceController < BaseViewController
   include CompletionIndicator
   include BulkPrinting
-  include InstanceHelper
   
   before_filter :set_view_pass_param, :only => [ :submit ] # for redirect, :init_form_from_param will 
                                                            # be hit on subsequent direct to display_page
