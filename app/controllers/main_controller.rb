@@ -1,15 +1,17 @@
 class MainController < ApplicationController
   before_filter :set_campuses, :only => [ :index, :your_campuses, :your_applications ]
   
-  skip_before_filter :verify_user, :only => [ :questionnaire ]
-  skip_before_filter :verify_event_group_chosen, :only => [ :questionnaire ]
-  skip_before_filter :set_event_group, :only => [ :questionnaire ]
+  stateless_tasks = [ :questionnaire, :dump_fixtures, :load_fixtures ]
 
-  skip_before_filter :set_user, :only => [ :questionnaire ]
-  skip_before_filter :get_user, :only => [ :questionnaire ]
+  skip_before_filter :verify_user, :only => stateless_tasks
+  skip_before_filter :verify_event_group_chosen, :only => stateless_tasks
+  skip_before_filter :set_event_group, :only => stateless_tasks
+
+  skip_before_filter :set_user, :only => stateless_tasks
+  skip_before_filter :get_user, :only => stateless_tasks
   skip_before_filter :restrict_students, :only => [ :questionnaire, :emails ]
-  skip_before_filter :ensure_year_set, :only => [ :questionnaire ]
-  skip_before_filter :set_campuses, :only => [ :questionnaire ]
+  skip_before_filter :ensure_year_set, :only => stateless_tasks
+  skip_before_filter :set_campuses, :only => stateless_tasks
   
   CampusStats = Struct.new(:students_cnt, :student_applns, :accepted_cnt, :applied_cnt, :students_no_appln)
   StudentAppln = Struct.new(:student, :appln)
@@ -207,7 +209,24 @@ render :partial => "viewer_specifics"
   def search_people_by_name
     @page_title = "Search"
   end
-  
+
+  def dump_fixtures
+    return unless RAILS_ENV == 'test'
+    r = %x[cd #{RAILS_ROOT}; rake db:fixtures:dump_test]
+    render :inline => "<html><body><pre>#{r}</pre></body></html>"
+  end
+
+  def load_fixtures
+    return unless RAILS_ENV == 'test'
+    require RAILS_ROOT + '/spec/spec_helper'
+
+    r = describe EventGroup, "loading all fixtures" do
+      fixtures :all
+    end
+
+    render :inline => "<html><body><pre>#{r}</pre></body></html>"
+  end
+
   protected
   
   def generate_campus_stats(campuses)
