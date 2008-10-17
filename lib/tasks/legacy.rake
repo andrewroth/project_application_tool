@@ -64,6 +64,8 @@ namespace :db do
         legacy_dbs.each do |legacy_db|
           desc "copies #{legacy_db} structure to the RAILS_ENV database" 
           task legacy_db => :environment do
+            puts "Cloning structure of #{legacy_db} database to #{RAILS_ENV} database."
+
             ActiveRecord::Schema.verbose = false
             # dump legacy db
             ActiveRecord::Base.establish_connection(legacy_db)
