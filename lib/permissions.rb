@@ -4,7 +4,7 @@ module Permissions
     return true if @halted # to avoid the dreaded DoubleRendererError
     msg = @override_msg if @override_msg
     @halted = true
-    msg += '<br />' + @debug.to_s + caller.join('<br/>') if RAILS_ENV == 'development'
+    msg += '<br />' + @debug.to_s + caller.join('<br/>') if (%w(development, test).include?(RAILS_ENV))
     render :inline => msg
     true
   end
