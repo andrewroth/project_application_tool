@@ -1,4 +1,7 @@
 # my extensions to the QE
+
+require 'vendor/plugins/questionnaire_engine/app/controllers/base_view_controller.rb'
+
 require 'questionnaire_engine/form_loading_indicator.rb'
 require 'questionnaire_engine/bulk_printing.rb'
 require 'questionnaire_engine/form_printing.rb'
