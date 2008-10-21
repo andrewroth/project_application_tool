@@ -1,3 +1,4 @@
+require 'vendor/plugins/reference_engine/app/controllers/reference_instances_controller.rb'
 require 'appln_admin/modules/acceptance_pile_functionality.rb'
 
 class ReferenceInstancesController < InstanceController
