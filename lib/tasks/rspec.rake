@@ -38,6 +38,7 @@ namespace :spec do
     t.rcov_opts = lambda do
       IO.readlines("#{RAILS_ROOT}/spec/rcov.opts").map {|l| l.chomp.split " "}.flatten
     end
+    system "ln -s ../coverage public/coverage"
   end
   
   desc "Print Specdoc for all specs (excluding plugin specs)"
