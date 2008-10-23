@@ -2,7 +2,7 @@ class ReasonForWithdrawalsController < ApplicationController
   # GET /reason_for_withdrawals
   # GET /reason_for_withdrawals.xml
   def index
-    @reason_for_withdrawals = @eg.reason_for_withdrawals
+    @reason_for_withdrawals = ReasonForWithdrawal.find(:all)
 
     respond_to do |format|
       format.html # index.rhtml
