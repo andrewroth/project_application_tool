@@ -6,8 +6,9 @@ namespace :db do
     desc 'Dumps all models into spec/fixtures.'
     task :dump => :environment do
       models = []
-      Find.find(RAILS_ROOT + '/app/models') do |path|
-        next if path['svn']
+      Find.find(RAILS_ROOT + '/app/models', 
+                RAILS_ROOT + '/vendor/plugins/common_models/app/models') do |path|
+        next if path['svn'] || path.downcase['mailer']
         unless File.directory?(path) then models << path.match(/(\w+).rb/)[1] end
       end
   
@@ -19,7 +20,9 @@ namespace :db do
         begin
           puts "Dumping model: " + m
           model = m.camelize.constantize
-          entries = model.find(:all, :order => 'id ASC')
+          next if model.abstract_class
+
+          entries = model.find(:all, :order => "#{model.primary_key} ASC")
 
           formatted, increment, tab = '', 1, '  '
           entries.each do |a|
@@ -46,7 +49,14 @@ namespace :db do
             formatted += "\n"
           end
 
-          model_file = RAILS_ROOT + fixtures_base + '/' + m.pluralize + '.yml'
+          table_name = if model.table_name['.']
+              model.table_name =~ /\.(.*)/
+              $1
+            else
+              model.table_name
+            end
+
+          model_file = RAILS_ROOT + fixtures_base + '/' + table_name + '.yml'
 
           File.exists?(model_file) ? File.delete(model_file) : nil
           File.open(model_file, 'w') {|f| f << formatted}
