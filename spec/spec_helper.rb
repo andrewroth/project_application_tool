@@ -45,3 +45,34 @@ Spec::Runner.configure do |config|
   # 
   # For more information take a look at Spec::Example::Configuration and Spec::Runner
 end
+
+def setup_eg
+  session[:event_group_id] = 1
+  @eg = mock("eg", :empty? => false, :default_text_area_length => nil)
+  EventGroup.stub!(:find).and_return(@eg)
+end
+
+def setup_form
+  @form = mock("form", 
+      :questionnaire => mock('questionnaire', :filter= => nil, :pages => []), 
+      :event_group => @eg, 
+      :title => 'a form'
+  )
+end
+
+def setup_viewer
+  session[:user_id] = 1
+
+  @viewer = mock("viewer", {
+    :project_director_projects => [],
+    :project_administrator_projects => [],
+    :support_coach_projects => [],
+    :project_staff_projects => [],
+    :processor_projects => [],
+    :is_student? => false,
+    :is_projects_coordinator? => false,
+    :name => 'Bob'
+  })
+
+  Viewer.stub!(:find).with(1).and_return(@viewer)
+end
