@@ -1,0 +1,6 @@
+staff:
+  assignmentstatus_desc: Staff
+student:
+  assignmentstatus_desc: Current Student
+unknown:
+  assignmentstatus_desc: Unknown Status

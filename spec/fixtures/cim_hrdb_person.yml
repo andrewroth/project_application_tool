@@ -1,0 +1,7 @@
+student_seven_person:
+  person_fname: Student
+  person_lname: Seven
+
+staff_bob_person:
+  person_fname: Staff
+  person_lname: Bob

@@ -3,11 +3,11 @@ event_group_1:
   type: 
   location_type: 
   location_id: 
-  id: 846965874
+  id: 1
   default_text_area_length: 4000
   parent_id: 
   outgoing_email: 
-  ministry_id: 957586378
+  ministry_id: 
   long_desc: 
   has_your_campuses: 
 
