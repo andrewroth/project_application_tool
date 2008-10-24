@@ -1,7 +1,7 @@
-#Student Seven:
-#  viewer_id: 1
-#  person_id: 1
+student_seven_access:
+  viewer: student_seven_viewer
+  person: student_seven_person
 
-#Bob Staff:
-#  viewer_id: 2
-#  person_id: 2
+bob_staff_access:
+  viewer_id: bob_staff_viewer
+  person_id: bob_staff_person
