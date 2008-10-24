@@ -76,3 +76,16 @@ def setup_viewer
 
   Viewer.stub!(:find).with(1).and_return(@viewer)
 end
+
+FIXTURE_CLASS = {
+  :cim_hrdb_campus => Campus,
+  :accountadmin_viewer => Viewer,
+  :cim_hrdb_person => Person,
+  :cim_hrdb_assignment => Assignment,
+  :cim_hrdb_assignmentstatus => Assignmentstatus,
+}
+
+def load_fixtures(*fixtures_array)
+  set_fixture_class FIXTURE_CLASS
+  fixtures fixtures_array
+end
