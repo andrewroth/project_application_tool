@@ -1,6 +1,7 @@
 class Profile < ActiveRecord::Base
   belongs_to :project
   belongs_to :viewer
+  belongs_to :appln
   
   has_many :profile_cost_items
   has_many :profile_travel_segments, :order => "position ASC"
