@@ -1,3 +1,5 @@
+require 'bsearch'
+
 class MainController < ApplicationController
   before_filter :set_campuses, :only => [ :index, :your_campuses, :your_applications ]
   
@@ -13,8 +15,8 @@ class MainController < ApplicationController
   skip_before_filter :ensure_year_set, :only => stateless_tasks
   skip_before_filter :set_campuses, :only => stateless_tasks
   
-  CampusStats = Struct.new(:students_cnt, :student_applns, :accepted_cnt, :applied_cnt, :students_no_appln)
-  StudentAppln = Struct.new(:student, :appln)
+  CampusStats = Struct.new(:students_cnt, :student_profiles, :accepted_cnt, :applied_cnt, :students_no_profiles)
+  StudentProfile = Struct.new(:student, :profile)
   
   def emails
     if RAILS_ENV =~ /test/ || RAILS_ENV == 'development'
@@ -53,6 +55,9 @@ class MainController < ApplicationController
   
   def your_campuses
     @current_projects_form = @eg.forms.find_by_hidden(false)
+
+    # getting the project name as a join is simply too slow
+    @projects_cache = Hash[*@eg.projects.collect{ |p| [ p.id, p.title ] }.flatten]
     
     generate_campus_stats(@campuses)
     
@@ -229,32 +234,52 @@ render :partial => "viewer_specifics"
 
   protected
   
+  def get_students_profiles_from_sorted_profiles(profiles, viewers)
+    viewers.collect{ |viewer|
+      # do a binary search to find all profiles by viewer
+      range = profiles.bsearch_range { |profile| profile.viewer_id <=> viewer.id }
+
+      # return all appropriate applications
+      profiles[range]
+    }.compact.flatten
+  end
+
   def generate_campus_stats(campuses)
     @campus_stats = { }
     for campus in campuses
       @campus_stats[campus] = CampusStats.new
       
       @campus_stats[campus].students_cnt = 0
-      @campus_stats[campus].student_applns = [ ]
-      @campus_stats[campus].students_no_appln = [ ]
+      @campus_stats[campus].student_profiles = [ ]
+      @campus_stats[campus].students_no_profiles = [ ] # not used
       @campus_stats[campus].accepted_cnt = 0
       @campus_stats[campus].applied_cnt = 0
       
       next if @current_projects_form.nil?
 
-      for student in campus.students
+      all_students_current_profiles = Profile.find(:all, :include => [ :appln ], 
+                                            :conditions => [ 'form_id in (?)', @current_projects_form.id ],
+                                            :order => 'profiles.viewer_id'
+                                      )
+      #puts "all_students_current_profiles: #{all_students_current_profiles.collect(&:mock_name).inspect}"
+
+      for person in campus.students
         @campus_stats[campus].students_cnt += 1
-        students_current_applns = student.viewers.collect{ |v| 
-	  v.applns.select { |a| a.form_id == @current_projects_form.id }
-	}.compact.flatten
+
+        @a = students_current_profiles = get_students_profiles_from_sorted_profiles(all_students_current_profiles, person.viewers)
+        #debug_eval "@a"
+
+        #students_current_applns = student.viewers.collect{ |v| 
+        #  v.applns.select { |a| a.form_id == @current_projects_form.id }
+        #}.compact.flatten
         
-        for students_current_appln in students_current_applns
-          @campus_stats[campus].student_applns << StudentAppln.new(student, students_current_appln)
+        for students_current_profile in students_current_profiles
+          @campus_stats[campus].student_profiles << StudentProfile.new(person, students_current_profile)
           
-          if students_current_appln.profile.class == Acceptance
+          if students_current_profile.class == Acceptance
             @campus_stats[campus].accepted_cnt += 1
             @campus_stats[campus].applied_cnt += 1
-	  elsif students_current_appln.profile.class == Applying
+	  elsif students_current_profile.class == Applying
             @campus_stats[campus].applied_cnt += 1
           end
         end

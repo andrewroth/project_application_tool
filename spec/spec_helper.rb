@@ -54,6 +54,7 @@ end
 
 def setup_form
   @form = mock("form", 
+      :id => 1,
       :questionnaire => mock('questionnaire', :filter= => nil, :pages => []), 
       :event_group => @eg, 
       :title => 'a form'

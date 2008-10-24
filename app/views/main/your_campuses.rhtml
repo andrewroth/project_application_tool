@@ -35,18 +35,17 @@
                 <TH>Accepted</TH>
             </TR></thead>
             <tbody>
-            <% def title(project) project.nil? ? "" : project.title end %>
+            <% def title(pid) pid.nil? ? "" : @projects_cache[pid] end %>
             <% for campus in @campuses %>
-                <% for student_appln in @campus_stats[campus].student_applns %>
-                    <% student = student_appln.student; appln = student_appln.appln %>
-                    <% viewer = student.viewer %>
+                <% for student_profile in @campus_stats[campus].student_profiles %>
+                    <% person = student_profile.student; profile = student_profile.profile %>
                     <TR>
-                        <TD align="center"><%= viewer.name %></TD>
-                        <TD align="center"><%= viewer.viewer_userID %></TD>
+                        <TD align="center"><%= person.name %></TD>
+                        <TD align="center"><%= person.viewer.viewer_userID %></TD>
                         <TD align="center"><%= campus.campus_shortDesc %></TD>
-                        <TD align="center"><%= appln.status %></TD>
-                        <TD align="center"><%= title(appln.preference1)%></TD>
-                        <TD align="center"><%= title((appln.acceptances[0].project if appln.acceptances[0]))%></TD>
+                        <TD align="center"><%= profile.status %></TD>
+                        <TD align="center"><%= title(profile.appln.preference1_id) %></TD>
+                        <TD align="center"><%= title(if profile.class == Acceptance then profile.project_id else nil end) %></TD>
                     </TR>
                 <% end %>
             <% end %>
