@@ -78,6 +78,11 @@ def setup_viewer
   Viewer.stub!(:find).with(1).and_return(@viewer)
 end
 
+def setup_project
+  @project = mock("project", :id => 1, :title => "some project")
+  EventGroup.stub!(:projects).and_return([ @project ])
+end
+
 FIXTURE_CLASS = {
   :cim_hrdb_campus => Campus,
   :accountadmin_viewer => Viewer,
