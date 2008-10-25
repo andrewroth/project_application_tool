@@ -1,8 +1,8 @@
 require 'bsearch'
 
-require 'rubygems'
-require 'ruby-prof'
-require 'select_with_include'
+#require 'rubygems'
+#require 'ruby-prof'
+#require 'select_with_include'
 
 class MainController < ApplicationController
   before_filter :set_campuses, :only => [ :index, :your_campuses, :your_applications ]
@@ -261,35 +261,40 @@ render :partial => "viewer_specifics"
       
       next if @current_projects_form.nil?
 
-      all_students_current_profiles = Profile.find(:all, :include => [ :appln ], 
-                                            :conditions => [ 'form_id in (?)', @current_projects_form.id ],
-                                            :order => 'profiles.viewer_id',
-                                            :select => (%w(viewer_id, status, type, project_id).collect{ |c| 
-                                                         "#{Profile.table_name}.#{c}"
-                                                       }+["#{Appln.table_name}.preference1_id"]).join(',')
-                                      )
+      #all_students_current_profiles = Profile.find(:all, :include => [ :appln ], 
+      #                                      :conditions => [ 'form_id in (?)', @current_projects_form.id ],
+      #                                      :order => 'profiles.viewer_id',
+      #                                      :select => (%w(viewer_id, status, type, project_id).collect{ |c| 
+      #                                                   "#{Profile.table_name}.#{c}"
+      #                                                 }+["#{Appln.table_name}.preference1_id"]).join(',')
+      #                                )
       #puts "all_students_current_profiles: #{all_students_current_profiles.collect(&:mock_name).inspect}"
 
-      for person in campus.students(:select => [ "#{Person.table_name}.person_fname",
-                                               "#{Person.table_name}.person_lname",
-                                               "#{Viewer.table_name}.viewer_userID"
-                                   ].join(',') )
+      #for person in campus.students(:select => [ "#{Person.table_name}.person_fname",
+      #                                          "#{Person.table_name}.person_lname",
+      #                                          "#{Viewer.table_name}.viewer_userID"
+      #                                         ].join(',') )
+      for person in campus.persons
         @campus_stats[campus].students_cnt += 1
 
-        @a = students_current_profiles = get_students_profiles_from_sorted_profiles(all_students_current_profiles, person.viewers)
+        #students_current_profiles = get_students_profiles_from_sorted_profiles(all_students_current_profiles, person.viewers)
         #debug_eval "@a"
 
         #students_current_applns = student.viewers.collect{ |v| 
         #  v.applns.select { |a| a.form_id == @current_projects_form.id }
         #}.compact.flatten
         
-        for students_current_profile in students_current_profiles
-          @campus_stats[campus].student_profiles << StudentProfile.new(person, students_current_profile)
+	next unless person.viewer
+
+        for profile in person.viewer.profiles
+	  next unless profile.appln && profile.appln.form_id == @current_projects_form.id
+
+          @campus_stats[campus].student_profiles << StudentProfile.new(person, profile)
           
-          if students_current_profile.class == Acceptance
+          if profile.class == Acceptance
             @campus_stats[campus].accepted_cnt += 1
             @campus_stats[campus].applied_cnt += 1
-	  elsif students_current_profile.class == Applying
+	  elsif profile.class == Applying
             @campus_stats[campus].applied_cnt += 1
           end
         end
@@ -305,24 +310,30 @@ render :partial => "viewer_specifics"
     campuses = nil
     if (user.is_projects_coordinator? || 
     user.is_assigned_regional_or_national?)
-      campuses = Campus.find(:all)
+      campuses_find = :all
     else
-      campuses = @user.viewer.person.campuses
+      campuses_find = @user.viewer.person.campuses.collect(&:id)
     end
-    campuses
+
+    campuses = Campus.find(campuses_find, :include => { :persons => { :viewers => { :profiles => :appln } } }, 
+      :select => "#{Campus.table_name}.campus_desc, #{Campus.table_name}.campus_shortDesc, " + 
+                 "#{Appln.table_name}.form_id, #{Person.table_name}.person_fname, #{Person.table_name}.person_lname," + 
+                 "#{Viewer.table_name}.viewer_userID, #{Profile.table_name}.status, #{Profile.table_name}.type," +
+		 "#{Appln.table_name}.preference1_id, #{Profile.table_name}.project_id",
+      :conditions => "#{Assignment.table_name}.assignmentstatus_id in (#{Assignmentstatus.campus_student_ids.join(',')})" )
   end
  
   private
 
-  def start_profiling() RubyProf.start end
+  #def start_profiling() RubyProf.start end
 
-  def end_profiling
-    result = RubyProf.stop
-    #printer = RubyProf::GraphHtmlPrinter.new(result)
-    printer = RubyProf::FlatPrinter.new(result)
-    @debug = ''
-    printer.print(@debug, :min_percentage => 0)
-    @debug = "<pre>#{@debug}</pre>"
-  end
+  #def end_profiling
+  #  result = RubyProf.stop
+  #  #printer = RubyProf::GraphHtmlPrinter.new(result)
+  #  printer = RubyProf::FlatPrinter.new(result)
+  #  @debug = ''
+  #  printer.print(@debug, :min_percentage => 0)
+  #  @debug = "<pre>#{@debug}</pre>"
+  #end
 
 end
