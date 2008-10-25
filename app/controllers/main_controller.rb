@@ -261,41 +261,23 @@ render :partial => "viewer_specifics"
       
       next if @current_projects_form.nil?
 
-      #all_students_current_profiles = Profile.find(:all, :include => [ :appln ], 
-      #                                      :conditions => [ 'form_id in (?)', @current_projects_form.id ],
-      #                                      :order => 'profiles.viewer_id',
-      #                                      :select => (%w(viewer_id, status, type, project_id).collect{ |c| 
-      #                                                   "#{Profile.table_name}.#{c}"
-      #                                                 }+["#{Appln.table_name}.preference1_id"]).join(',')
-      #                                )
-      #puts "all_students_current_profiles: #{all_students_current_profiles.collect(&:mock_name).inspect}"
-
-      #for person in campus.students(:select => [ "#{Person.table_name}.person_fname",
-      #                                          "#{Person.table_name}.person_lname",
-      #                                          "#{Viewer.table_name}.viewer_userID"
-      #                                         ].join(',') )
       for person in campus.persons
         @campus_stats[campus].students_cnt += 1
 
-        #students_current_profiles = get_students_profiles_from_sorted_profiles(all_students_current_profiles, person.viewers)
-        #debug_eval "@a"
-
-        #students_current_applns = student.viewers.collect{ |v| 
-        #  v.applns.select { |a| a.form_id == @current_projects_form.id }
-        #}.compact.flatten
-        
 	next unless person.viewer
 
-        for profile in person.viewer.profiles
-	  next unless profile.appln && profile.appln.form_id == @current_projects_form.id
+        for viewer in person.viewers
+          for profile in viewer.profiles
+            next unless profile.appln && profile.appln.form_id == @current_projects_form.id
 
-          @campus_stats[campus].student_profiles << StudentProfile.new(person, profile)
+            @campus_stats[campus].student_profiles << StudentProfile.new(person, profile)
           
-          if profile.class == Acceptance
-            @campus_stats[campus].accepted_cnt += 1
-            @campus_stats[campus].applied_cnt += 1
-	  elsif profile.class == Applying
-            @campus_stats[campus].applied_cnt += 1
+            if profile.class == Acceptance
+              @campus_stats[campus].accepted_cnt += 1
+              @campus_stats[campus].applied_cnt += 1
+            elsif profile.class == Applying
+              @campus_stats[campus].applied_cnt += 1
+	    end
           end
         end
       end
@@ -321,6 +303,8 @@ render :partial => "viewer_specifics"
                  "#{Viewer.table_name}.viewer_userID, #{Profile.table_name}.status, #{Profile.table_name}.type," +
 		 "#{Appln.table_name}.preference1_id, #{Profile.table_name}.project_id",
       :conditions => "#{Assignment.table_name}.assignmentstatus_id in (#{Assignmentstatus.campus_student_ids.join(',')})" )
+
+    if campuses.class == Array then campuses else [ campuses ] end
   end
  
   private
