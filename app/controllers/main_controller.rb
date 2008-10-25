@@ -1,5 +1,9 @@
 require 'bsearch'
 
+require 'rubygems'
+require 'ruby-prof'
+require 'select_with_include'
+
 class MainController < ApplicationController
   before_filter :set_campuses, :only => [ :index, :your_campuses, :your_applications ]
   
@@ -259,11 +263,17 @@ render :partial => "viewer_specifics"
 
       all_students_current_profiles = Profile.find(:all, :include => [ :appln ], 
                                             :conditions => [ 'form_id in (?)', @current_projects_form.id ],
-                                            :order => 'profiles.viewer_id'
+                                            :order => 'profiles.viewer_id',
+                                            :select => (%w(viewer_id, status, type, project_id).collect{ |c| 
+                                                         "#{Profile.table_name}.#{c}"
+                                                       }+["#{Appln.table_name}.preference1_id"]).join(',')
                                       )
       #puts "all_students_current_profiles: #{all_students_current_profiles.collect(&:mock_name).inspect}"
 
-      for person in campus.students
+      for person in campus.students(:select => [ "#{Person.table_name}.person_fname",
+                                               "#{Person.table_name}.person_lname",
+                                               "#{Viewer.table_name}.viewer_userID"
+                                   ].join(',') )
         @campus_stats[campus].students_cnt += 1
 
         @a = students_current_profiles = get_students_profiles_from_sorted_profiles(all_students_current_profiles, person.viewers)
@@ -303,5 +313,16 @@ render :partial => "viewer_specifics"
   end
  
   private
+
+  def start_profiling() RubyProf.start end
+
+  def end_profiling
+    result = RubyProf.stop
+    #printer = RubyProf::GraphHtmlPrinter.new(result)
+    printer = RubyProf::FlatPrinter.new(result)
+    @debug = ''
+    printer.print(@debug, :min_percentage => 0)
+    @debug = "<pre>#{@debug}</pre>"
+  end
 
 end
