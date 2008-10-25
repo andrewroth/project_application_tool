@@ -264,8 +264,6 @@ render :partial => "viewer_specifics"
       for person in campus.persons
         @campus_stats[campus].students_cnt += 1
 
-	next unless person.viewer
-
         for viewer in person.viewers
           for profile in viewer.profiles
             next unless profile.appln && profile.appln.form_id == @current_projects_form.id
