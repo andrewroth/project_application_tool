@@ -27,6 +27,13 @@ class CrisisInformation < Element
       emerg.update_attributes(params[:emerg])
       emerg.save!
     end
+
+    if params[:appln_person]
+      person_params = params[:appln_person].clone
+      person.update_attributes(person_params)
+      person.save!
+    end
+
   end
 
 end

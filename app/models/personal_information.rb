@@ -5,6 +5,7 @@ class PersonalInformation < Element
   end
 
   def save_answer(instance, params, answers)
+    throw 'here'
     @person = instance.viewer.person
 
     PersonalInformation.save_from_params(@person, params)
