@@ -26,6 +26,7 @@ class ApplnController < InstanceController
     super
     @pass_params ||= {}
     @pass_params[:appln_id] = @appln.id if @appln
+    @profile = @appln.profile if @appln
   end
   
   def preview

@@ -39,7 +39,7 @@ This is your home page for applying for <%= @appln.form.event_group.long_desc %>
   <% unless questionnaire_instance.withdrawn? -%>
   	If you are no longer planning on going on <%= @appln.form.event_group.long_desc %>
   	<%=link_to("you can withdraw your application by clicking here", 
-  	 {:action => :withdraw, :appln_id => @appln.id}, :method => :post, 
+  	 {:action => :withdraw, :appln_id => @appln.id, :profile_id => @profile.id}, :method => :post, 
   	 :confirm => "Are you sure you want to withdraw?\n\n (click cancel if you DO NOT want to withdraw)") 
   	%>.  <br />
   <% end -%>
