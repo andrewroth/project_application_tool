@@ -12,8 +12,17 @@ class CrisisInformation < Element
   end
 
   def validate!(page, instance)
-      #page.errors.add_to_base("All reference fields must be completed ")
-      #page.add_invalid_element(self)
+    @person = instance.viewer.person
+
+    if @person.person_legal_fname.nil? || @person.person_legal_fname.empty?
+      page.errors.add_to_base("\"Legal first name\" is required")
+    end
+
+    if @person.person_legal_lname.nil? || @person.person_legal_lname.empty?
+      page.errors.add_to_base("\"Legal last name\" is required")
+    end
+
+    page.add_invalid_element(self)
   end
 
   def self.save_from_params(person, params)
