@@ -15,7 +15,7 @@ class CrisisInformation < Element
     @person = instance.viewer.person
 
     if @person.person_legal_fname.nil? || @person.person_legal_fname.empty?
-      page.errors.add_to_base("\"Legal first name\" is required")
+      page.errors.add_to_base("\"Legal given names\" is required")
     end
 
     if @person.person_legal_lname.nil? || @person.person_legal_lname.empty?
