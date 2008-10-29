@@ -34,7 +34,7 @@
             <% else %>
               <td><%=h viewer.name %></td>
               <td><% if viewer.person %>
-	        <%=h viewer.person.campuses.empty? ? "None" : viewer.person.campuses[0].campus_shortDesc %>
+	        <%= h viewer.person.campus_shortDesc %>
 		  <% else %>
 		    no person for viewer '<%= viewer.viewer_userID %>' id <%= viewer.id %>
 		  <% end %>

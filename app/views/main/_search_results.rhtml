@@ -33,7 +33,7 @@
             <td><%=h viewer.id %></td>
             <td><%=h viewer.viewer_userID %></td>
             <td><%=h viewer.person.person_email if viewer.person %></td>
-            <td><%=h viewer.person.campuses.empty? ? "None" : viewer.person.campuses[0].campus_shortDesc %></td>
+            <td><%=h viewer.person.campus_shortDesc %></td>
             <td>
               <span id="finding_viewer_specifics_<%= viewer.id %>" style="clear:both; display:none;">
                 <%=image_tag('spinner.gif')%><br />

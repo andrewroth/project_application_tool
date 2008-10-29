@@ -5,8 +5,7 @@
         <tr>
           <td><%= v.name %></td>
           <td><%= v.viewer_userID %></td>
-          <td><% 'a' || campus = v.person.campuses[0] %>
-          <%= campus.nil? ? "No Assignment" : campus.campus_shortDesc %></td>
+          <td><%= v.person.campus_shortDesc %>
           <td><%= @profile.status %></td>
 	  <td><%= @profile.project ? @profile.project.title : 'not chosen' %></td>
           <td><%= format_datetime(@appln.submitted_at) %></td>

@@ -59,6 +59,9 @@ def setup_form
       :event_group => @eg, 
       :title => 'a form'
   )
+  if @eg
+    @eg.stub!(:forms).and_return(mock('forms', :find_by_hidden => @form))
+  end
 end
 
 def setup_viewer
@@ -81,6 +84,7 @@ end
 def setup_project
   @project = mock("project", :id => 1, :title => "some project")
   EventGroup.stub!(:projects).and_return([ @project ])
+  Project.stub!(:find).and_return(@project)
 end
 
 FIXTURE_CLASS = {
