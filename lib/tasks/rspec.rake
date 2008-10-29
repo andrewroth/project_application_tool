@@ -6,7 +6,8 @@ raise "To avoid rake task loading problems: run 'rake clobber' in vendor/plugins
 # it if it is.  If not, use the gem version.
 rspec_base = File.expand_path(File.dirname(__FILE__) + '/../../vendor/plugins/rspec/lib')
 $LOAD_PATH.unshift(rspec_base) if File.exist?(rspec_base)
-require 'spec/rake/spectask'
+begin
+  require 'spec/rake/spectask'
 
 def test_db_prepared
   ActiveRecord::Base.establish_connection(:test)
@@ -138,4 +139,7 @@ namespace :spec do
       end
     end
   end
+end
+
+rescue LoadError => load_error
 end
