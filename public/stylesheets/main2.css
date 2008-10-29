@@ -466,6 +466,14 @@ input#submit {
 	margin: 0 2.5em 1em 0;
 }
 
+.event_group_hidden {
+  color: #88bbff;
+}
+
+.event_group_editing {
+  background-color: #00aa88;
+}
+
 /* styles for the read-only view of forms */
 .readonly_question_text {
   color: red;

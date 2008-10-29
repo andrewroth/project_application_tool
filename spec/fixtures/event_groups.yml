@@ -10,4 +10,17 @@ event_group_1:
   ministry_id: 
   long_desc: 
   has_your_campuses: 
+  hidden: false
+
+event_group_2:
+  title: hidden eg
+  id: 2
+  parent_id: 1
+  hidden: true
+
+event_group_3:
+  title: not hidden eg
+  id: 3
+  parent_id: 1
+  hidden: false
 

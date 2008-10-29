@@ -1,5 +1,8 @@
 <h1>Event Groups</h1>
 
+<p class='event_group_hidden'>Hidden event groups look like this</p>
+<p class='event_group_editing'>The event group you are currently editing looks like this</p>
+
 <% cache({:controller => 'event_groups', :action => 'index'}) do %>
   <%= render :partial => 'ajax_tree/tree' %>
 <% end %>

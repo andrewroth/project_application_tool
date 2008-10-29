@@ -1,9 +1,14 @@
 <% if @user.is_projects_coordinator? %>
-  <%= link_to_remote node.to_s, :update => 'create',
+  <%= link_to_remote node.to_s, { 
+       :update => 'create',
        :url => edit_event_group_url(node.id),
        :method => :get,
        :loading => "$('loading').show();",
-       :complete => "$('loading').hide();" 
+       :complete => "$('loading').hide(); $('link_#{node.id}').className += ' event_group_editing';" 
+      }, {
+       :id => "link_#{node.id}",
+       :class => node.classes
+      }
    %>
 <% else %>
   <%= node.to_s %>

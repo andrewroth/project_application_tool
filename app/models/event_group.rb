@@ -15,6 +15,22 @@ class EventGroup < Node
 
   acts_as_tree
 
+  attr :filter_hidden, true
+
+  def classes
+    "#{hidden ? 'event_group_hidden' : ''}"
+  end
+
+  def children_with_hidden_check
+    if filter_hidden
+      c = children_without_hidden_check.reject{ |c| c.hidden? }
+      c.each{ |c| c.filter_hidden = true }
+    else
+      children_without_hidden_check
+    end
+  end
+  alias_method_chain :children, :hidden_check
+
   # returns the ministry followed by the entire path of parents in the event group tree
   def to_s_with_ministry_and_eg_path
     "#{[ministry_inherited_name, eg_path].compact.join(' - ')}"

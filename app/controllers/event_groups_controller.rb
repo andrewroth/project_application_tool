@@ -13,13 +13,18 @@ class EventGroupsController < AjaxTreeController
   # then scope doesn't work
   before_filter :clear_cache#, :only => [ :create, :update, :destroy ]
 
-
   def views() [ 'scope' ] end
 
   def scope
     @view = 'scope'
+    @show_hidden = !params[:show_hidden].nil? && params[:show_hidden] && @user.is_projects_coordinator? # hide by default
     unless read_fragment({:action => 'index'})
-      @nodes = EventGroup.find_all_by_parent_id(nil, :include => :projects)
+      if @show_hidden
+        @nodes = EventGroup.find_all_by_parent_id(nil, :include => :projects)
+      else
+        @nodes = EventGroup.find_all_by_parent_id_and_hidden(nil, false, :include => :projects)
+        @nodes.each do |n| n.filter_hidden = true end
+      end
     end
     index
   end
