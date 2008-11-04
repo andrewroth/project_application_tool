@@ -32,7 +32,8 @@ class ApplicationController < ActionController::Base
   # Ensures that the user came from the campus intranet to
   # the login page.
   before_filter :verify_user, :except => [ :logout, :login, :motd, :read_login_message_confirm, 
-                                           :link_gcx, :do_link_gcx, :link_gcx_new, :do_link_gcx_new, :signup ]
+                                           :link_gcx, :do_link_gcx, :link_gcx_new, :do_link_gcx_new, :signup, 
+                                           :test_rescues_path ]
   
   # create the session object from the db
   before_filter :set_user
@@ -49,11 +50,6 @@ class ApplicationController < ActionController::Base
   
   # sets whether the user can see your projects page
   before_filter :set_show_your_projects
-  
-  # every so often we need to recreate the profile donations join table
-  # NOTE - reverted back to custom sql (April 12) because of inaccurate
-  # support tracking (issue 209)
-  #before_filter :potentially_reinit_donations
   
   before_filter :set_pdf
   after_filter :output_pdf_if_requested
@@ -91,10 +87,6 @@ class ApplicationController < ActionController::Base
     true
   end
 
-  def potentially_reinit_donations
-    ProfileDonation.potentially_initialize
-  end
-  
   def only_when_not_ajax_or_printing
     request.xml_http_request? ? false : (
       if ['true','pdf', true].include?(params[:print]) then 'print'
