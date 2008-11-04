@@ -64,7 +64,10 @@ def setup_form
   end
 end
 
-def setup_viewer
+def setup_viewer(options = {})
+  options[:student] ||= false
+  options[:pc] ||= false
+
   session[:user_id] = 1
 
   @viewer = mock("viewer", {
@@ -73,8 +76,8 @@ def setup_viewer
     :support_coach_projects => [],
     :project_staff_projects => [],
     :processor_projects => [],
-    :is_student? => false,
-    :is_projects_coordinator? => false,
+    :is_student? => options[:student],
+    :is_projects_coordinator? => options[:pc],
     :name => 'Bob'
   })
 

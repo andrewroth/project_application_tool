@@ -12,7 +12,7 @@ describe AcceptanceController do
          :appln => @appln, 
          :viewer => @viewer, 
          :project => @project, 
-         :profile => @profile)
+         :id => 1)
     @appln.stub!(:profile => @profile)
 
     Profile.stub!(:find).and_return(@profile)
@@ -30,11 +30,11 @@ describe AcceptanceController do
     setup_eg; setup_form; setup_viewer; setup_project
 
     @appln = mock("appln", :form => @form)
-    @profile = mock("profile", :id => 1, 
+    @profile = mock("profile", 
+         :id => 1, 
          :appln => @appln, 
          :viewer => @viewer, 
-         :project => @project, 
-         :profile => @profile)
+         :project => @project)
     @appln.stub!(:profile => @profile)
 
     Profile.stub!(:find).and_return(@profile)
@@ -86,5 +86,99 @@ describe AcceptanceController do
     assigns[:instances].length.should be(1)
   end
 
+  it "should enforce view permissions" do
 
+    setup_eg; setup_form; setup_viewer; setup_project
+    setup_appln_profile
+
+    get :view_summary, :viewer_id => 1, :profile_id => 1
+
+    response.body.should == 'no permission'
+  end
+
+  def setup_appln_profile
+    @appln = mock("appln", :form => @form, :viewer => @viewer)
+    @profile = mock('profile', :appln => @appln, :viewer => @viewer,
+                 :project => @project, :id => 1)
+    @appln.stub!(:profile => @profile)
+    Profile.stub!(:find).and_return(@profile)
+  end
+
+  it "should view summary" do
+    setup_eg; setup_form; setup_viewer(:pc => true); setup_project
+    setup_appln_profile
+
+    get :view_summary, :viewer_id => 1, :profile_id => 1
+
+    assigns[:form_title].should_not be_nil
+    assigns[:pass_params].should_not be_nil
+  end
+
+  it "should update intern status" do
+    setup_eg; setup_form; setup_viewer(:pc => true); setup_project
+    setup_appln_profile
+
+    @profile.stub!(:as_intern => true)
+    @profile.should_receive(:as_intern=).with(false)
+    @profile.should_receive(:save!)
+
+    post :update_intern_status, :viewer_id => 1, :profile_id => 1
+    assigns[:profile].should_not be_nil
+  end
+
+  it "should update intern status rjs" do
+    setup_eg; setup_form; setup_viewer(:pc => true); setup_project
+    setup_appln_profile
+
+    @profile.stub!(:as_intern => true)
+    @profile.should_receive(:as_intern=).with(false)
+    @profile.should_receive(:save!)
+
+    xhr :post, :update_intern_status, :viewer_id => 1, :profile_id => 1
+    assigns[:profile].should_not be_nil
+  end
+
+  it "should set support coach to a viewer" do
+    setup_eg; setup_form; setup_viewer(:pc => true); setup_project
+    setup_appln_profile
+
+    @profile.stub!(:as_intern => true)
+    @profile.should_receive(:support_coach_id=).with('999')
+    @profile.should_receive(:save!)
+
+    post :update_support_coach, :support_coach_id => 999, :profile_id => 1
+    assigns[:profile].should_not be_nil
+  end
+
+  it "should set support coach to a viewer using ajax" do
+    setup_eg; setup_form; setup_viewer(:pc => true); setup_project
+    setup_appln_profile
+
+    @profile.stub!(:as_intern => true)
+    @profile.should_receive(:support_coach_id=).with('999')
+    @profile.should_receive(:save!)
+
+    xhr :post, :update_support_coach, :support_coach_id => 999, :profile_id => 1
+    assigns[:profile].should_not be_nil
+  end
+
+  it "should set support coach to none" do
+    setup_eg; setup_form; setup_viewer(:pc => true); setup_project
+    setup_appln_profile
+
+    @profile.stub!(:as_intern => true)
+    @profile.should_receive(:support_coach_id=).with(nil)
+    @profile.should_receive(:save!)
+
+    post :update_support_coach, :support_coach_id => Acceptance.support_coach_none, :profile_id => 1
+    assigns[:profile].should_not be_nil
+  end
+
+  it "should stop update support coach without the right permission" do
+    setup_eg; setup_form; setup_viewer; setup_project
+    setup_appln_profile
+
+    post :update_support_coach, :support_coach_id => 999, :profile_id => 1
+    response.body.should == 'No permission'
+  end
 end

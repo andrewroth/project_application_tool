@@ -7,7 +7,7 @@ class SecurityController < ApplicationController
   filter_parameter_logging :password
   
   skip_before_filter :restrict_students
-  skip_before_filter :set_user
+  skip_before_filter :set_user, :except => [ :test_rescues_path ]
   skip_before_filter :get_appln
   skip_before_filter :ensure_projects_app_created
   skip_before_filter :verify_event_group_chosen
@@ -224,6 +224,10 @@ class SecurityController < ApplicationController
     end
   end
   
+  def test_rescues_path
+    render :inline => "doesn't exist test: #{rescues_path('doesntexist')} exists test: #{rescues_path('layout')}"
+  end
+
   protected
 
   def setup_given_viewer_id(viewer_id)
