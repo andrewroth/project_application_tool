@@ -22,13 +22,6 @@ class ApplnController < InstanceController
     index
   end
   
-  def get_appln
-    super
-    @pass_params ||= {}
-    @pass_params[:appln_id] = @appln.id if @appln
-    @profile = @appln.profile if @appln
-  end
-  
   def preview
     @page_title = "Preview"
     redirect_to :controller => "appln"
@@ -132,6 +125,12 @@ class ApplnController < InstanceController
 
   def redirect_to_default_view
     redirect_to :controller => :appln, :appln_id => @appln.id
+  end
+
+  def get_appln
+    super
+    @pass_params ||= {}
+    @pass_params[:appln_id] = @appln.id if @appln
   end
 
 end
