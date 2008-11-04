@@ -5,12 +5,12 @@
         <%= th 'name' %>
         <%= th 'campus' %>
         <%= th 'project' %>
-        <% if @full_view %>
+        <% if @full_view || @restricted_full_view %>
             <%= th 'appln (entire)' %>
         <% end %>
         <%= th 'appln (summary)' %>
         <%= th 'accepted at', 'str', true %>
-        <% if @full_view %>
+        <% if @full_view || @restricted_full_view %>
             <%= th 'support claimed', 'currency' %>
             <%= th 'support recvd', 'currency' %>
             <%= th 'support goal', 'currency'%>
@@ -22,8 +22,13 @@
       <tbody>
         <% for acceptance in @accepted %>
           <% 
-          @project ||= acceptance.project
-          @user.set_project @project
+          if acceptance.project != @project
+            @project = acceptance.project
+            @user.set_project @project
+
+            @full_view = @user.fullview?
+            @cache = ProfileDonation.cache @project.id
+          end
           %>
 
           <tr id="row_<%=acceptance.id%>">
@@ -46,6 +51,8 @@
                 <td>
                   <%= view_entire_link acceptance.id %>
                 </td>
+            <% elsif @restricted_full_view %>
+                <td></td>
             <% end %>
 
             <td>
@@ -79,6 +86,8 @@
                           %>
                     <% end %>
                 </td>
+            <% elsif @restricted_full_view %>
+                <td></td>
             <% end %>
             </td>
             <td><%= render :partial => 'accepted_pile_table_intern', :object => acceptance %></td>
