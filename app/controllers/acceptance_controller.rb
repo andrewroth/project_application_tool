@@ -68,14 +68,6 @@ class AcceptanceController < BaseApplnAndRefsViewer
     end
   end
   
-  def update
-    if @pile_entry.update_attributes(params[:acceptance])
-      render :inline => 'success'
-    else
-      render :inline => 'failure'
-    end
-  end
-  
   protected
   
   def set_questionnaire_manually
