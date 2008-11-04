@@ -21,8 +21,8 @@ class User
     @viewer
   end
   
-  def fullview?    
-    full_view =  is_projects_coordinator? || 
+  def fullview?
+    full_view = is_projects_coordinator? || 
       (@project && set_project(@project) && 
          (is_project_director? ||
          is_project_administrator?))
