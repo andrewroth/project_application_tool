@@ -177,6 +177,16 @@ class MainController < ApplicationController
       } ]
     }
 
+    for profile in profiles
+      @project = profile.project
+      @user.set_project @project
+
+      if @user.fullview?
+        # we know at least one project has a full view
+        @restricted_full_view = true
+      end
+    end
+
     render :partial => "viewer_specifics"
   end
 
