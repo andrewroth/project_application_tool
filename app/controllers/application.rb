@@ -175,11 +175,8 @@ class ApplicationController < ActionController::Base
       if n.premature? || n.expired?
         true
       elsif n.matches_controller?(params[:controller]) && n.matches_action?(params[:action])
-        false
-      elsif @user && @user.viewer && @user.viewer.notification_acknowledgments.find_by_notification_id(n.id)
-        true
-      elsif n.permanent?
-        false
+        # matches controller and action, delete only if acknowledged
+        @user && @user.viewer && @user.viewer.notification_acknowledgments.find_by_notification_id(n.id)
       else
         true
       end
