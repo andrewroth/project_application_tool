@@ -5,11 +5,11 @@ class Notification < ActiveRecord::Base
   def end_datetime() self[:end_time].to_local_datetime end
     
   def premature?
-    !ignore_begin && begin_time && DateTime.now < begin_datetime
+    !permanent && !ignore_begin && begin_time && DateTime.now < begin_datetime
   end
 
   def expired?
-    !ignore_end && end_time && DateTime.now > end_datetime
+    !permanent && !ignore_end && end_time && DateTime.now > end_datetime
   end
 
   def matches_controller?(controller)
