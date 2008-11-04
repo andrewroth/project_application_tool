@@ -187,6 +187,8 @@ class MainController < ApplicationController
       end
     end
 
+    @project = nil # force it to reset view permission for each item
+
     render :partial => "viewer_specifics"
   end
 
