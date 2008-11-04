@@ -6,12 +6,12 @@ module AcceptancePileFunctionality
     @type = params[:type] || 'app'
 
     @profile = if params[:profile_id]
-                  Profile.find params[:profile_id]
+                 Profile.find params[:profile_id]
                elsif params[:ref_id]
-	          @ref = ApplnReference.find params[:ref_id]
-		  @ref.instance.profile
+                 @ref = ApplnReference.find params[:ref_id]
+                 @ref.instance.profile
                elsif params[:viewer_id] && params[:project_id]
-                  Profile.find_by_viewer_id_and_project_id params[:viewer_id], params[:project_id]
+                 Profile.find_by_viewer_id_and_project_id params[:viewer_id], params[:project_id]
                end
 
     @pass_params = { :profile_id => (@profile.id if @profile), :type => @type }
