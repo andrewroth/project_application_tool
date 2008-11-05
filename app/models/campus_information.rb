@@ -28,7 +28,7 @@ class CampusInformation < Element
   end
 
   def CampusInformation.save_from_params(person, params)
-    if params[:assignment][:new]
+    if params[:assignment] && params[:assignment][:new]
       for new_map in params[:assignment][:new].values
         a = Assignment.new new_map
         a.person_id = person.id
