@@ -943,6 +943,7 @@ class ReportsController < ApplicationController
       :pref1, 'string',
       :pref2, 'string',
       :accepted, 'string',
+      :phone, 'string',
       :email, 'string'
     ].flatten.compact )
     @rows = [ ]
@@ -977,7 +978,7 @@ class ReportsController < ApplicationController
       registrant = Registrant.new(p.person_lname, p.person_fname, gender,
                                   (if !@eg.has_your_campuses then :skip elsif p.campuses[0] then p.campuses[0].campus_shortDesc else '' end), 
                                   (if !@eg.has_your_campuses then :skip elsif p.campuses[0] then p.person_year.year_in_school.year_desc else '' end),
-      status, p1, p2, acceptance, p.person_email)
+      status, p1, p2, acceptance, p.person_local_phone, p.person_email)
       
       if block_given?
         yield v, @a, registrant
