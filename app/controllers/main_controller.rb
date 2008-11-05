@@ -164,7 +164,7 @@ class MainController < ApplicationController
   def get_viewer_specifics
     @viewer = Viewer.find(params[:id], :include => :persons)
 
-    profiles = Profile.find_all_by_viewer_id(@viewer.id)
+    profiles = Profile.find_all_by_viewer_id(@viewer.id, :include => [ :appln => :form ])
     @profiles_by_eg = EventGroup.find(:all).collect { |eg|
       [ eg, profiles.find_all { |p| 
         if p.project 
