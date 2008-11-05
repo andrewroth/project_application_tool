@@ -48,7 +48,7 @@ end
 
 def setup_eg
   session[:event_group_id] = 1
-  @eg = mock("eg", :empty? => false, :default_text_area_length => nil)
+  @eg = mock("eg", :empty? => false, :default_text_area_length => nil, :id => 1)
   EventGroup.stub!(:find).and_return(@eg)
 end
 
@@ -57,6 +57,7 @@ def setup_form
       :id => 1,
       :questionnaire => mock('questionnaire', :filter= => nil, :pages => []), 
       :event_group => @eg, 
+      :event_group_id => @eg.id, 
       :title => 'a form'
   )
   if @eg

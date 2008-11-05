@@ -1,6 +1,8 @@
 class AssignmentsController < ApplicationController
   before_filter :set_person
 
+  skip_before_filter :restrict_students, :only => [ :new, :update ]
+
   def new
     @new = Assignment.new
     @new.id = params[:id] || 1
