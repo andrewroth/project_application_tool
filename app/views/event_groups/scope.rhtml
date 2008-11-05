@@ -16,13 +16,12 @@ function update_links() {
 
 </script>
 
-Choose your event group for this session: <% if @user.is_projects_coordinator? -%>
+Choose your event group for this session: 
   <% if params[:show_hidden] -%>
     (Showing all event groups)
   <% else -%>
     (<%= link_to 'Show hidden event groups', '/event_groups/scope?show_hidden=true' %>)
   <% end %>
-<% end -%>
 
 
 <div id="event_group_links">
