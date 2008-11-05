@@ -50,7 +50,7 @@ class ReportsController < ApplicationController
     send_data(generator.read, :filename => "test.pdf", :type => "application/pdf")
   end
 
-  Registrant = Struct.new(:last_name, :first_name, :gender, :campus, :year, :status, :pref1, :pref2, :accepted, :email)
+  Registrant = Struct.new(:last_name, :first_name, :gender, :campus, :year, :status, :pref1, :pref2, :accepted, :phone, :email)
   def registrants
     @page_title = (@many_projects ? @eg.title : @project_title) + " Registrants"
     registrants_only
