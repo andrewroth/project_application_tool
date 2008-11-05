@@ -21,7 +21,10 @@ describe "/main/_viewer_specifics" do
     assigns[:user] = @user
 
     @project = mock('project', :title => 'project', :id => 1)
-    @appln = mock('appln', :id => 1)
+    @appln = mock('appln', :id => 1, :form => mock('form2', 
+                    :id => 2, :questionnaire => mock('q', :references => [ ])),
+                    :viewer => @viewer, :submitted_at => 5.days.ago, 
+                    :completed_at => nil, :reference_instances => [])
     @profile = mock('profile',
                  :class => Acceptance,
                  :project => @project,
@@ -36,6 +39,7 @@ describe "/main/_viewer_specifics" do
                  :motivation_code => '123ABC',
                  :funding_target => 123,
                  :support_coach_str => 'john doe',
+                 :status => 'started',
                  :id => 1
     )
 
@@ -61,6 +65,20 @@ describe "/main/_viewer_specifics" do
     render :partial => "/main/viewer_specifics"
 
     response.should_not include_text('view entire')
+  end
+
+  it "should show a processor pile result of a past event group" do
+    setup_all :fullview => true;
+    assigns[:eg] = mock('eg', :forms => mock('forms', :find_all_by_hidden => [ ]))
+
+    @profile.stub!(:class => Applying)
+    @form.stub!(:event_group_id => 2)
+    @appln.stub!(:status => @profile.status)
+    @appln.stub!(:as_intern? => false)
+
+    render :partial => "/main/viewer_specifics"
+
+    response.should include_text('view entire')
   end
 
 end
