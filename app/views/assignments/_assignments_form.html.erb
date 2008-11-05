@@ -5,7 +5,7 @@
   <table id='assignments'><tr><th style='width:300px'>Campus</th><th style='width:200px'>Status</th><th></th></tr>
     <%= render :partial => 'assignments/assignment_row', :collection => @assignments %>
   </table>
-  <P><%= link_to_remote 'add campus', :url => "/assignments/new", :with => "'id='+next_new_id", :complete => 'next_new_id = next_new_id + 1' %></P>
+  <P><%= link_to_remote 'add campus', :url => "/assignments/new", :with => "'id='+next_new_id", :complete => "next_new_id = next_new_id + 1; $('loading').hide();", :loading => "$('loading').show();" %></P>
   <BR />
   <BR />
   <%= render :partial => 'assignments/year' %>
