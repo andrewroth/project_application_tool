@@ -474,6 +474,20 @@ input#submit {
   background-color: #00aa88;
 }
 
+/* link gcx and intranet ids */
+.link_gcx_big {
+  font-size: 200%;
+}
+
+.link_gcx_indent {
+  padding-left: 1em;
+}
+
+#link_gcx_pastlogin_yesno input#submit {
+	float: none;
+	margin: 0;
+}
+
 /* styles for the read-only view of forms */
 .readonly_question_text {
   color: red;

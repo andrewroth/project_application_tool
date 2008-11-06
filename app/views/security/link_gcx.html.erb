@@ -1,10 +1,33 @@
-<% content_for :account_links do %>
-  <A HREF='/security/link_gcx_new'>I don't have an intranet login</A> | 
-<%= link_to "Forgot Password",  "https://intranet.campusforchrist.org/modules/app_cim_newaccount/" +
-   "index.php?P=P35" %>
-<% end %>
+<div>
+<div id='link_gcx_pastlogin_q' class="centerblock">
+  <P>Welcome!</P>
+  <P>Have you logged in to the PAT or our campus intranet before?</P>
+  <P><%= image_tag 'link_gcx_screenshots.png', :width => '600px;', :height => '176' %>
+</div>
 
-<% @login_action = 'do_link_gcx' -%>
-<% @login_title = 'Old Login' -%>
-<%= render :partial => 'login' %>
+<div id='link_gcx_pastlogin_yesno' class='centerblock link_gcx_indent'>
+  <P><%= link_to 'Yes', '#', :onClick => "Effect.SlideDown('link_gcx_pastlogin_yescontent');", :class => 'link_gcx_big' %></P>
+  <div style='<%= "display:none;" unless params[:try_again] %>' id='link_gcx_pastlogin_yescontent' class='link_gcx_indent'><div class="link_gcx_indent">
+
+<% form_tag :action => :do_link_gcx do -%>
+  <p>Please enter your previous login and password and hit submit.</p>
+
+  <table>
+    <tr><td>Username:</td><td><%= text_field_tag 'username', params[:username], {} %></td></tr>
+    <tr><td>Password:</td><td><%= text_field_tag 'password', {}, :type => 'password' %></td></tr>
+  </table>
+
+  <p><%= submit_tag 'Submit', :id => 'submit' %></p>
+
+  <br />
+  <p>Forget your username or password?
+<%= link_to "Click here",  "https://intranet.campusforchrist.org/modules/app_cim_newaccount/" +
+   "index.php?P=P35" %></p>
+<% end -%>
+
+  </div></div>
+  <BR />
+  <P><%= link_to 'No', { :controller => :security, :action => :do_link_gcx_new }, :method => :post, :class => 'link_gcx_big' %></P>
+</div>
+
 

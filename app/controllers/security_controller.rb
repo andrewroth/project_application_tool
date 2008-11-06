@@ -19,40 +19,44 @@ class SecurityController < ApplicationController
   def do_link_gcx
     result = login_by_cim
     if result[:keep_trying]
-      result[:error] = "Sorry, couldn't find an intranet user '#{params[:username]}'.  Please try again."
+      flash[:notice] = "Sorry, couldn't find an intranet user '#{params[:username]}'.  Please try again."
+      redirect_to :action => 'link_gcx', :try_again => true
+      return
     end
 
     if result[:error]
       flash[:notice] = result[:error]
-      redirect_to :action => 'link_gcx'
+      redirect_to :action => 'link_gcx', :try_again => true, :username => params[:username]
       return
     end
 
     v = Viewer.find result[:viewer_id]
     if v.guid && !v.guid.empty? && v.guid != session[:gcx][:guid]
       flash[:notice] = "Error: Account '#{params[:username]}' already linked with a different gcx account."
-      redirect_to :action => 'link_gcx'
+      redirect_to :action => 'link_gcx', :try_again => true, :username => params[:username]
       return
     end
 
     v.guid = session[:gcx][:guid]
     v.save!
 
-    flash[:notice] = "Connected intranet user '#{params[:username]}' with gcx user '#{session[:gcx][:email]}'.  Now you can log in with your gcx user."
+    flash[:notice] = "Connected old user '#{params[:username]}' with gcx user '#{session[:gcx][:email]}'.  Now you can log in with your gcx user."
     flash.keep
 
     setup_given_viewer_id v.id
   end
 
   def do_link_gcx_new
-    v = Viewer.create :guid => session[:gcx][:guid], :viewer_lastLogin => 0, :accountgroup_id => 15, :viewer_userID => params[:email]
-    p = Person.create :person_fname => params[:first_name], :person_lname => params[:last_name]
+    fn = params[:first_name] || session[:gcx][:firstName]
+    ln = params[:last_name] || session[:gcx][:lastName]
+    uid = params[:email] || session[:gcx][:email]
+
+    v = Viewer.create :guid => session[:gcx][:guid], :viewer_lastLogin => 0, :accountgroup_id => 15, :viewer_userID => uid
+    p = Person.create :person_fname => fn, :person_lname => ln
     ag_st = Accessgroup.find_by_accessgroup_key '[accessgroup_student]'
     Vieweraccessgroup.create :viewer_id => v.id, :accessgroup_id => ag_st.id
     Access.create :viewer_id => v.id, :person_id => p.id
 
-    flash[:notice] = "Account created."
-    flash.keep
     setup_given_viewer_id v.id
   end
 
@@ -60,7 +64,6 @@ class SecurityController < ApplicationController
     redirect_to(:action => 'login') if session[:gcx].nil?
 
     flash.delete :gcx
-    flash[:link] = "Congratulations, your GCX login worked!  There's just one more step.  We need to link GCX logins to the old intranet/project tool logins.  You only need to do this once.  If you don't have an intranet login, click the link below. Otherwise please log in now the old way."
     @show_contact_emails_override = true
   end
 
