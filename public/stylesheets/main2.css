@@ -479,6 +479,10 @@ input#submit {
   font-size: 200%;
 }
 
+.link_gcx_medium {
+  font-size: 150%;
+}
+
 .link_gcx_indent {
   padding-left: 1em;
 }
