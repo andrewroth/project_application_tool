@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   end
 
   if RAILS_ENV == 'production'
-    $server_url = "https://spt.campusforchrist.org"
+    $server_url = "https://pat.powertochange.org"
   else
     $server_url = "http://dev.spt.campusforchrist.org"
   end
