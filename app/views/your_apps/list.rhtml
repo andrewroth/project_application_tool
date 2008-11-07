@@ -24,7 +24,7 @@
     <% for profile in @submitted %>
       <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (submitted)</li>
     <% end %>
-    <% for appln in @completed %>
+    <% for profile in @completed %>
       <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (completed)</li>
     <% end %>
   </ul>
