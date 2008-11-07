@@ -96,7 +96,7 @@ class YourAppsController < ApplicationController
   end
 
   def view_always_editable
-    redirect_to :controller => :appln, :action => 'view_always_editable', :appln_id => @appln.id
+    redirect_to :controller => :appln, :action => 'view_always_editable', :profile_id => @profile.id
   end
 
   def acceptance

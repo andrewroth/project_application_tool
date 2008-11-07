@@ -11,37 +11,30 @@ describe ApplnController do
          :id => 1)
     @appln.stub!(:profile => @profile)
 
-    Appln.stub!(:find).and_return(@appln)
+    Profile.stub!(:find).and_return(@profile)
   end
 
-  it "should require appln_id" do
+  it "should require appln" do
     setup_eg; setup_form; setup_viewer; setup_project
 
-    get :view_always_editable, :profile_id => 1
-    response.body.should == "Couldn't find application id "
+    begin
+      get :view_always_editable, :profile_id => 1
+    rescue Exception
+      
+    end
   end
 
   it "should allow view always editable" do
     setup_eg; setup_form; setup_viewer; setup_project; setup_appln;
 
-    @appln = mock("appln", :form => @form, :viewer => @viewer, :id => 1)
-    @profile = mock("profile", :id => 1, 
-         :appln => @appln, 
-         :viewer => @viewer, 
-         :project => @project, 
-         :id => 1)
-    @appln.stub!(:profile => @profile)
-
-    Appln.stub!(:find).and_return(@appln)
-
-    get :view_always_editable, :appln_id => 1
+    get :view_always_editable, :profile_id => 1
     assigns('pass_params')
   end
 
   it "should not crash on preview" do
     setup_eg; setup_form; setup_viewer; setup_project; setup_appln
 
-    get :preview, :appln_id => 1
+    get :preview, :profile_id => 1
     assigns('page_title')
   end
 

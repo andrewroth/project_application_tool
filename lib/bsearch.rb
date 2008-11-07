@@ -33,7 +33,7 @@
 #  => 2...2
 
 module Bsearch
-  VERSION = '1.5'
+  VERSION = '1.5' unless defined?(VERSION)
 end
 
 class Array

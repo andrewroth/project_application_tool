@@ -61,7 +61,9 @@ def setup_form
       :title => 'a form'
   )
   if @eg
-    @eg.stub!(:forms).and_return(mock('forms', :find_by_hidden => @form))
+    @forms = mock('forms', :find_by_hidden => @form, :find_all_by_hidden => [ @form ])
+    @forms.stub!(:find).with('1').and_return(@form)
+    @eg.stub!(:forms).and_return(@forms)
   end
 end
 
@@ -79,16 +81,22 @@ def setup_viewer(options = {})
     :processor_projects => [],
     :is_student? => options[:student],
     :is_projects_coordinator? => options[:pc],
-    :name => 'Bob'
+    :name => 'Bob',
+    :id => 1
   })
 
   Viewer.stub!(:find).with(1).and_return(@viewer)
 end
 
 def setup_project
-  @project = mock("project", :id => 1, :title => "some project")
-  EventGroup.stub!(:projects).and_return([ @project ])
+  @project = mock('project', :id => 1, :title => "some project")
+  @eg.stub!(:projects).and_return([ @project ]) if @eg
   Project.stub!(:find).and_return(@project)
+end
+
+def setup_profile
+  @profile = mock('profile', :id => 1, :appln => @appln)
+  Profile.stub!(:find).and_return(@profile)
 end
 
 FIXTURE_CLASS = {
@@ -97,7 +105,7 @@ FIXTURE_CLASS = {
   :cim_hrdb_person => Person,
   :cim_hrdb_assignment => Assignment,
   :cim_hrdb_assignmentstatus => Assignmentstatus,
-}
+} unless defined?(FIXTURE_CLASS)
 
 def load_fixtures(*fixtures_array)
   set_fixture_class FIXTURE_CLASS
