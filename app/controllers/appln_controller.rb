@@ -12,7 +12,7 @@ class ApplnController < InstanceController
   prepend_before_filter :preview_setup, :only => [ :preview ]
 
   prepend_before_filter :set_appln_from_ref, :only => [ :delete_reference, :resend_reference_email ]
-  skip_before_filter :get_appln, :only => [ :delete_reference, :resend_reference_email ]
+  skip_before_filter :get_profile_and_appln, :only => [ :delete_reference, :resend_reference_email ]
   
   before_filter :ensure_appln_ownership_or_processor
   
@@ -33,7 +33,8 @@ class ApplnController < InstanceController
   
   def withdraw
     @appln.profile.withdraw! :status => 'self_withdrawn', :user => @user
-    get_page
+    flash[:notice] = 'Your application has been withdrawn.  If you change your mind, please email the appropriate address below.'
+    redirect_to :controller => :your_apps, :action => :list
   end
   
   # VARIOUS HELPERS TO FOLLOW
@@ -45,9 +46,7 @@ class ApplnController < InstanceController
 #    @questionnaire = @appln.form.questionnaire
 #    @pages = @questionnaire.pages
     if @appln.nil?
-      error = "Couldn't find application id #{params[:appln_id]}"
-      render :inline => error
-      return false
+      throw "Couldn't find application id #{params[:appln_id]}"
     end
 
     @appln.form.questionnaire
@@ -121,16 +120,10 @@ class ApplnController < InstanceController
   def set_appln_from_ref
     @reference = ReferenceInstance.find params[:ref_id]
     @appln = @reference.instance
+    @profile = @appln.profile
   end
 
   def redirect_to_default_view
-    redirect_to :controller => :appln, :appln_id => @appln.id
+    redirect_to :controller => :appln, :profile_id => @profile.id
   end
-
-  def get_appln
-    super
-    @pass_params ||= {}
-    @pass_params[:appln_id] = @appln.id if @appln
-  end
-
 end

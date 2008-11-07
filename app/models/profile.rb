@@ -57,6 +57,8 @@ class Profile < ActiveRecord::Base
     [ 'StaffProfile', 'Acceptance', 'Withdrawn', 'Applying' ]
   end
   
+  def form_title() appln.form.questionnaire.title if appln && appln.form && appln.form.questionnaire end
+
   # params:
   #
   #  :type - the new profile type

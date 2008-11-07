@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
   before_filter :verify_event_group_chosen
   before_filter :set_event_group
 
-  before_filter :get_appln
+  before_filter :get_profile_and_appln
   
   # ensure students only go to the students page
   before_filter :restrict_students
@@ -112,14 +112,23 @@ class ApplicationController < ActionController::Base
       @user = nil
     end
   end
-		  
-  # this is the current application a student is filling out. @appln should
-  # be nil unless a student is actually filling out a form
-  def get_appln
+
+  # note: no security done here because you might actually have people looking at applications
+  # that aren't theirs, for example processors; permissions are checked elsewhere though in their
+  # respective contorllers/actions
+  def get_profile_and_appln
     begin
-      @appln = Appln.find(params[:appln_id])
+      if params[:profile_id]
+        @profile = Profile.find(params[:profile_id], :include => :appln)
+        @appln = @profile.appln
+        
+        if params[:appln_id] && @appln.id.to_s != params[:appln_id]
+          render :inline => "Error: requested appln (#{params[:appln_id]}) doesn't match requested profile's appln (#{@appln.id})"
+        end
+      end
+
       @pass_params ||= {}
-      @pass_params[:appln_id] = @appln.id
+      @pass_params[:profile_id] = @profile.id
     rescue
       @appln = nil
     end

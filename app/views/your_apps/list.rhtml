@@ -1,8 +1,8 @@
 <% if @started.length > 0 %>
   <p>You can continue the following applications:
   <ul>
-    <% for appln in @started %>
-        <li><%= link_to appln.full_name, :action => "apply", :id => appln.form.id, :appln_id => appln.id %> (started)</li>
+    <% for profile in @started %>
+        <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (started)</li>
     <% end %>
   </ul>
   </p>
@@ -12,7 +12,7 @@
   <p>You can start the following applications: 
   <ul>
     <% for form in @not_started %>
-      <li><%= link_to form.name, :action => "apply", :id => form.id %></li>
+      <li><%= link_to form.title, :action => "start", :form_id => form.id %></li>
     <% end %>
   </ul>
   </p>
@@ -21,11 +21,11 @@
 <% if @submitted.length > 0 || @completed.length > 0 %>
   <p>You have submitted the following applications: 
   <ul>
-    <% for appln in @submitted %>
-      <li><%= link_to appln.full_name, :action => "apply", :id => appln.form.id, :appln_id => appln.id %> (submitted)</li>
+    <% for profile in @submitted %>
+      <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (submitted)</li>
     <% end %>
     <% for appln in @completed %>
-      <li><%= link_to appln.full_name, :action => "apply", :id => appln.form.id, :appln_id => appln.id %> (completed)</li>
+      <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (completed)</li>
     <% end %>
   </ul>
   </p>
@@ -34,8 +34,8 @@
 <% if @unsubmitted.length > 0 %>
   <p>You have submitted the following applications, but their status is now unsubmitted: 
   <ul>
-    <% for appln in @unsubmitted %>
-      <li><%= link_to appln.full_name, :action => "apply", :id => appln.form.id, :appln_id => appln.id %> (unsubmitted)</li>
+    <% for profile in @unsubmitted %>
+      <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (unsubmitted)</li>
     <% end %>
   </ul>
   </p>
@@ -45,7 +45,7 @@
   <p>Your application has been accepted to the projects listed below!  Click on the link to go to an acceptance page.
   <ul>
     <% for acceptance in @acceptances %>
-      <li><%= link_to acceptance.project.title, :action => "acceptance", :id => acceptance.id %> (accepted)</li>
+      <li><%= link_to acceptance.project.title, :action => "acceptance", :profile_id => acceptance.id %> (accepted)</li>
     <% end %>
   </ul>
   </p>
@@ -55,7 +55,7 @@
   <p>Your application has been withdrawn: 
   <ul>
     <% for appln in @withdrawn %>
-      <li><%= appln.full_name %> (<%= appln.status %>)</li>
+      <li><%= appln.form_title %> (<%= appln.status %>)</li>
     <% end %>
   </ul>
   </p>

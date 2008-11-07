@@ -6,7 +6,7 @@ class ProcessorFormController < InstanceController
   include AcceptancePileFunctionality
   include Permissions
   
-  skip_before_filter :get_appln
+  skip_before_filter :get_profile_and_appln
   prepend_before_filter :setup # make sure this runs before anything else, 
                                # as it sets up @appln and @project
   prepend_before_filter :set_project, :only => [ :bulk_processor_forms ]
