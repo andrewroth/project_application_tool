@@ -1,6 +1,3 @@
-require File.join(RAILS_ROOT, 'app','controllers','application')
-require File.join(RAILS_ROOT, 'app','controllers','reference_emails_controller')
-
 class EventGroup < Node
   belongs_to :ministry
   belongs_to :location

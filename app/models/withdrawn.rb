@@ -7,18 +7,12 @@ class Withdrawn < Profile
 
   acts_as_state_machine :initial => :started, :column => :status
 
-  state :admin_withdrawn, :enter => Proc.new{ |profile|
-                                profile.send_withdrawn_notifications
-                              }
+  state :admin_withdrawn
 
-  state :declined, :enter => Proc.new { |profile|
-                                profile.send_withdrawn_notifications
-                              }
+  state :declined
 
   state :self_withdrawn, :enter => Proc.new{ |profile|
                                 SpApplicationMailer.deliver_withdrawn(profile.appln)
-
-                                profile.send_withdrawn_notifications
                               }
   state :uninitialized
 
@@ -89,6 +83,9 @@ class Withdrawn < Profile
     end
 
     self.withdrawn_at = Time.now
+
+    # send notifications here so that the other statuses are set
+    self.send_withdrawn_notifications unless want_status == :staff_withdrawn
 
     save!
   end
