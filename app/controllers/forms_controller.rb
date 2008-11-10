@@ -105,24 +105,7 @@ class FormsController < ApplicationController
   end
 
   def ensure_this_event_groups_emails
-    ReferenceEmailsController.types.each_pair do |type_key, type_desc|
-      existing = @eg.reference_emails.find_by_email_type(type_key)
-      if (existing == nil)
-        # use the default one if possible
-        path = File::join(RAILS_ROOT, "app/views/reference_emails/#{type_key}.default.rhtml")
-        if File.exists?(path)
-          File.open(path, "r") { |f|
-              text = f.read
-          }
-        else
-          text = type_desc
-        end
-
-        ReferenceEmail.create :email_type => type_key,
-          :event_group_id => @eg.id,
-          :text => text
-      end
-    end
+    @eg.ensure_emails_exist
   end
 
 end

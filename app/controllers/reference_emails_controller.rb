@@ -14,7 +14,8 @@ class ReferenceEmailsController < ApplicationController
               'app_unsubmitted'       => 'App email: To applicant, that app is marked incomplete since a ref was deleted',
               'app_withdrawn'         => 'App email: To applicant, that app has been withdrawn',
               'app_submitted'         => 'App email: To applicant, that app submitted and waiting on refs',
-              'app_accepted'          => 'App email: To applicant, that app accepted'
+              'app_accepted'          => 'App email: To applicant, that app accepted',
+              'app_withdrawn_notify'  => 'App email: To projects coordinators, project administrators and project directors, that app withdrawn'
             }
   
   def self.types() @@types end
