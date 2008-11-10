@@ -8,7 +8,7 @@
     <% else %>
         <td>
         <% if bold %><b><% end %>
-            <% if @columns.values[i] == 'currency' %>
+            <% if @columns.values[i].to_s == 'currency' %>
                 <% begin %>
                     <p style='float:right'>
                     <%= format_currency(val) %>
@@ -16,7 +16,7 @@
                 <% rescue %>
                     <%= val %>
                 <% end %>
-            <% elsif @columns.values[i] == 'datetime' %>
+            <% elsif @columns.values[i].to_s == 'datetime' %>
                <% begin %>
                   <%= format_datetime(val) %>
                <% rescue %>
