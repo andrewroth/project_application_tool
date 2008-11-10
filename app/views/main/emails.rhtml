@@ -7,8 +7,8 @@ span.header {
 
 <% for email in @emails %>
   <div class="inconspicuous">
-  <span class="header">From:</span> <%= email.from %><br />
-  <span class="header">To: </span><%= email.to %><br />
+  <span class="header">From:</span> <%= email.from.join(', ') %><br />
+  <span class="header">To: </span><%= email.to.join(', ') %><br />
   <% if email.header['reply-to'] %>
     <span class="header">Reply-To: </span><%= email.header['reply-to'] %><br />
   <% end %>
