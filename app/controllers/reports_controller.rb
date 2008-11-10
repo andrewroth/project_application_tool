@@ -50,10 +50,71 @@ class ReportsController < ApplicationController
     send_data(generator.read, :filename => "test.pdf", :type => "application/pdf")
   end
 
+  def mk_sel(s)
+    for klass in [ Person, Campus, Assignment, YearInSchool, Project, Profile ]
+      s.gsub!(klass.name, klass.table_name)
+    end
+    logger.info s
+    s
+  end
+
   Registrant = Struct.new(:last_name, :first_name, :gender, :campus, :year, :status, :pref1, :pref2, :accepted, :phone, :email)
   def registrants
+    @columns = MyOrderedHash.new( [
+      :last_name, 'string',
+      :first_name, 'string',
+      :gender, 'string',
+      @eg.has_your_campuses ? [ :campus, 'string' ] : nil,
+      @eg.has_your_campuses ? [ :year, 'int' ] : nil,
+      :status, 'string',
+      :pref1, 'string',
+      :pref2, 'string',
+      :accepted, 'string',
+      :phone, 'string',
+      :email, 'string'
+    ].flatten.compact )
+    @rows = [ ]
+
     @page_title = (@many_projects ? @eg.title : @project_title) + " Registrants"
-    registrants_only
+
+    # this is gonna be awesome
+    applns = Appln.find_all_by_preference1_id(@projects_ids, :include =>
+      [ :preference1, :preference2,
+        { :profiles =>
+          [ :project,
+            { :viewer =>
+              { :persons =>
+                { :person_years => :year_in_school, :assignments => :campus
+                }
+              }
+            }
+          ]
+        }
+      ],
+      :select => mk_sel("Person.person_lname, Person.person_fname, Person.gender_id, Campus.campus_shortDesc, Assignment.assignmentstatus_id, YearInSchool.year_desc, Project.title, Profile.status, Profile.type, Person.person_local_phone, Person.person_email")
+    )
+
+    #@rows = [ [  ] ]
+    @rows = applns.collect{ |appln|
+      profile = appln.profile
+      viewer = appln.profile.viewer
+      person = viewer.person
+
+      [
+        person.person_lname,
+        person.person_fname,
+        person.gender,
+        @eg.has_your_campuses ? person.campus_shortDesc(:search_arrays => true) : :skip,
+        @eg.has_your_campuses ? person.year_in_school.year_desc : :skip,
+        profile.status,
+        appln.preference1.title,
+        (appln.preference2.title if appln.preference2),
+        if profile.class == Acceptance then profile.project.title end,
+        person.person_local_phone,
+        person.person_email
+      ].delete_if{ |i| i == :skip }
+    }
+
     render_report @rows
   end
   
