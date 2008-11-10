@@ -1,2 +1,2 @@
-rake migrate
+rake db:migrate
 

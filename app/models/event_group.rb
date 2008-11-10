@@ -1,3 +1,6 @@
+require File.join(RAILS_ROOT, 'app','controllers','application')
+require File.join(RAILS_ROOT, 'app','controllers','reference_emails_controller')
+
 class EventGroup < Node
   belongs_to :ministry
   belongs_to :location
@@ -76,4 +79,24 @@ class EventGroup < Node
 
     node.ministry
   end
+
+  def ensure_emails_exist
+    ReferenceEmailsController.types.each_pair do |type_key, type_desc|
+      existing = self.reference_emails.find_by_email_type(type_key)
+      if (existing == nil)
+        # use the default one if possible
+        path = File::join(RAILS_ROOT, "app/views/reference_emails/#{type_key}.default.rhtml")
+        if File.exists?(path)
+          text = File.read(path)
+        else
+          text = type_desc
+        end
+
+        ReferenceEmail.create :email_type => type_key,
+          :event_group_id => self.id,
+          :text => text
+      end
+    end
+  end
+
 end

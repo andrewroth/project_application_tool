@@ -28,6 +28,15 @@ class SpApplicationMailer < ActionMailer::Base
     render_from_email 'app_completed'
   end
   
+  def withdrawn_notification(profile, recipients)
+    setup(profile.appln)
+    @subject = 'Application has been Withdrawn'
+    @body[:profile] = profile
+    @recipients = recipients
+
+    render_from_email 'app_withdrawn_notify'
+  end
+
   def withdrawn(app)
     setup(app)
     @subject = 'Application has been Withdrawn'

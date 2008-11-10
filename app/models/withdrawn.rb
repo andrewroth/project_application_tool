@@ -7,13 +7,18 @@ class Withdrawn < Profile
 
   acts_as_state_machine :initial => :started, :column => :status
 
-  state :admin_withdrawn
+  state :admin_withdrawn, :enter => Proc.new{ |profile|
+                                profile.send_withdrawn_notifications
+                              }
 
-  state :declined, :enter => Proc.new {|profile|
+  state :declined, :enter => Proc.new { |profile|
+                                profile.send_withdrawn_notifications
                               }
 
   state :self_withdrawn, :enter => Proc.new{ |profile|
                                 SpApplicationMailer.deliver_withdrawn(profile.appln)
+
+                                profile.send_withdrawn_notifications
                               }
   state :uninitialized
 
@@ -33,6 +38,31 @@ class Withdrawn < Profile
 
   event :drop_staff_profile do
     transitions :to => :staff_profile_dropped, :from => :uninitialized
+  end
+
+  def send_withdrawn_notifications
+    return unless appln && status != 'staff_profile_dropped'
+
+    recipients = [ ]
+
+    eg_id = appln && appln.form && appln.form.event_group_id
+
+    if eg_id == 41 # 2009 projects
+      recipients << 'susan.dossantos@c4c.ca'
+    elsif [28, 43, 45].include?(eg_id) # Brian's event groups
+      recipients << 'brian.fowler@athletesinaction.org' 
+    end
+
+    # notify all project directors/admins
+    if project
+      more_viewers = %w(project_directors project_administrators).collect{ |role|
+        project.send(role, :include => :viewer).collect(&:viewer)
+      }.flatten
+
+      recipients += more_viewers.collect{ |v| v.person.person_email }
+    end
+
+    SpApplicationMailer.deliver_withdrawn_notification(self, recipients.join(','))
   end
 
   def reason() r_o = reason_for_withdrawal; r_o ? r_o.blurb : '' end

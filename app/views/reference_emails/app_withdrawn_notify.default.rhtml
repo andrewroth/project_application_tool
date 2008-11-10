@@ -1,0 +1,8 @@
+<%= @profile.viewer.name %>'s profile has been withdrawn.  You are receiving this message because you are a project administrator or coordinator.
+
+project: <%= @profile.project.title if @profile.project %>
+status when withdrawn: <%= @profile.class_when_withdrawn %>
+withdraw by: <%= @profile.withdrawn_by.name if @profile.withdrawn_by %>
+withdrawn at: <%= @profile.withdrawn_at %>
+reason: <%= @profile.reason %>
+notes: <%= @profile.reason_notes %>

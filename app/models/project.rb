@@ -8,6 +8,7 @@ class Project < ActiveRecord::Base
   has_many :profiles
   has_many :withdrawns
   has_many :acceptances
+  has_many :applyings
   has_many :cost_items
   
   has_many :processor_pile
