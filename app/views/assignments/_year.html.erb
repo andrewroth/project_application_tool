@@ -3,12 +3,11 @@
 <DIV id='edit_year' <%= " style=\"display:none\"" unless @edit_mode %>>
   <P>Year in school: 
 
-  <%= collection_select :appln_person, :year_in_school_id, YearInSchool.find(:all), :year_id, :year_desc, 
-           :name => 'person[year_in_school_id]' %>
+  <%= collection_select :appln_person, :year_in_school_id, YearInSchool.find(:all), :year_id, :year_desc %>
 
   <P>
 
-  Graduation date: <%= date_select :appln_person, :grad_date, {}, :name => 'person[grad_date] %>
+  Graduation date: <%= date_select :appln_person, :grad_date, :end_year => 8.years.from_now.year %>
 </DIV>
 
 <DIV id='year' <%= " style=\"display:none\"" if @edit_mode %>>

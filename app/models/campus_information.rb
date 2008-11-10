@@ -48,22 +48,22 @@ class CampusInformation < Element
       end
     end
 
-    if params[:person] && params[:person][:year_in_school_id] &&
-       params[:person]['grad_date(1i)']
+    if params[:appln_person] && params[:appln_person][:year_in_school_id] &&
+       params[:appln_person]['grad_date(1i)']
 
       person_year = person.person_year
 
       # this is bad database design on Russ's part to put 
       #  cim_hrdb_person_year.year_id instead of 
       #  cim_hrdb_person_year.year_in_school_id
-      yis = params[:person].delete :year_in_school_id
-      params[:person][:year_id] = yis
+      yis = params[:appln_person].delete :year_in_school_id
+      params[:appln_person][:year_id] = yis
 
       py = {
-        "grad_date(1i)" => params["person"]["grad_date(1i)"],
-        "grad_date(2i)" => params["person"]["grad_date(2i)"],
-        "grad_date(3i)" => params["person"]["grad_date(3i)"],
-        "year_id" => params["person"]["year_id"]
+        "grad_date(1i)" => params["appln_person"]["grad_date(1i)"],
+        "grad_date(2i)" => params["appln_person"]["grad_date(2i)"],
+        "grad_date(3i)" => params["appln_person"]["grad_date(3i)"],
+        "year_id" => params["appln_person"]["year_id"]
       }
       person_year.update_attributes(py)
 
