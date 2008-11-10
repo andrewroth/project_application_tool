@@ -3,15 +3,16 @@
 <DIV id='edit_year' <%= " style=\"display:none\"" unless @edit_mode %>>
   <P>Year in school: 
 
-  <%= collection_select :appln_person, :year_in_school_id, YearInSchool.find(:all), :year_id, :year_desc %>
+  <%= collection_select :appln_person, :year_in_school_id, YearInSchool.find(:all), :year_id, :year_desc, 
+           :name => 'person[year_in_school_id]' %>
 
   <P>
 
-  Graduation date: <%= date_select :appln_person, :grad_date %>
+  Graduation date: <%= date_select :appln_person, :grad_date, {}, :name => 'person[grad_date] %>
 </DIV>
 
 <DIV id='year' <%= " style=\"display:none\"" if @edit_mode %>>
-  <P>Year in school: <%= @appln_person.year_in_school.year_desc if @person %>
+  <P>Year in school: <%= @appln_person.year_in_school.year_desc if @appln_person %>
   <P>Graduation date: <%= @appln_person.grad_date if @appln_person %>
   <P><A HREF="#" onClick="Effect.BlindUp('year'); Effect.BlindDown('edit_year');">Edit</A>
 </DIV>
