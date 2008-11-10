@@ -36,7 +36,7 @@ class CampusInformation < Element
       end
     end
 
-    if params[:assignment][:update]
+    if params[:assignment] && params[:assignment][:update]
       for id, upd_map in params[:assignment][:update]
         begin
           a = person.assignments.find id
