@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+  ServerName <%= @domain %>
+  DocumentRoot /var/www/<%= @domain %>/current/public
+  RailsEnv production
+  <%= @passenger_line %>
+<% if @anything_extra %>
+    <%= @anything_extra %>
+<% end %>
+</VirtualHost>
