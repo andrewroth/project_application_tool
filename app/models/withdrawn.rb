@@ -43,8 +43,10 @@ class Withdrawn < Profile
 
     if eg_id == 41 # 2009 projects
       recipients << 'susan.dossantos@c4c.ca'
-    elsif [28, 43, 45].include?(eg_id) # Brian's event groups
-      recipients << 'brian.fowler@athletesinaction.org' 
+    elsif eg_id == 43 # Brian's event groups - 2009 soccer tour/projects group
+      recipients << 'brianf@athletesinaction.com'
+    elsif eg_id == 45 # Clarke's - 2009 Soccer Coach Application
+      recipients << 'clarkeg@athletesinaction.com'
     end
 
     # notify all project directors/admins
