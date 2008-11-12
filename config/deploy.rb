@@ -31,8 +31,6 @@ puts "env = #{RAILS_ENV}"
 puts "deploy_to = #{ENV['deploy_to']}"
 puts
 
-abort
-
 role :app, ENV['host']
 role :web, ENV['host']
 role :db,  ENV['host'], :primary => true
