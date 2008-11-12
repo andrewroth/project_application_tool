@@ -3,6 +3,8 @@ echo "This is the Project Application Tool (PAT) install script."
 echo " located at http://static.ministryapp.com/canada/pat_auto/install.sh"
 echo ""
 echo "Important: You should be root."
+echo "Important: You should also know the username and password of a regular user."
+echo "           Said user will be used with the capistrano tool to deploy the PAT."
 echo ""
 echo -n "Continue? (y/n) "
 read answer

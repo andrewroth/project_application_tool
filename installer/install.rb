@@ -6,10 +6,16 @@ RUBY_EE_URL  = "http://rubyforge.org/frs/download.php/41040/ruby-enterprise-1.8.
 
 Dir.chdir('installer')
 
+def decision(m)
+  printf "#{m} (Y/n) "
+  return gets.chomp != 'n'
+end
+
 def confirm
-  printf 'Continue? (y/n) '
+  printf "Continue? (Y)es/(s)kip "
   c = gets.chomp
-  abort unless c == 'y'
+
+  return c != 's'
 end
   
 def find(f)
@@ -27,12 +33,15 @@ PAT files will go in /var/www/{name_of_domain}
 You will be prompted along the way for various options.
 
 |
-confirm
+abort unless decision('Continue?')
 
 def run(cmd)
   puts "\nRun> #{cmd}"
-  confirm
-  system cmd
+  go = confirm
+  if go then
+    system cmd
+  else puts('skipped command')
+  end
 end
 
 puts ""
@@ -67,9 +76,9 @@ else puts('found')
 end
 
 # gems -- passenger depends on having apache2
-required_gems = %w(rdoc rails passenger capistrano)
+required_gems = %w(rdoc rails passenger capistrano soap4r)
 puts ""
-puts "Installing required gems: #{required_gems.join(', ')}"
+puts "Looking for required gems: #{required_gems.join(', ')}"
 for gem in required_gems
   found_gem = %x[gem list -i #{gem}].chomp == 'true'
   run "gem install #{gem}" unless found_gem
@@ -83,9 +92,10 @@ if %x[grep Passenger #{apache2_conf}].empty?
   run "apt-get install libopenssl-ruby apache2-prefork-dev"
   run "passenger-install-apache2-module"
 
-  printf "\nDo you want to append\n#{File.read('passenger_apache2')}\nto #{apache2_conf}? (y/n) "
-  a = gets.chomp
-  run "cat passenger_apache2 >> /etc/apache2/apache2.conf" if a == 'y'
+  append = decision("\nDo you want to append\n" + 
+               "#{File.read('passenger_apache2')}\nto #{apache2_conf}?")
+  run "cat passenger_apache2 >> /etc/apache2/apache2.conf" if append
+else puts "found"
 end
 
 # ruby ee
@@ -103,7 +113,7 @@ ruby_ee_path = Dir['/opt/*'].sort.last
 @ruby_ee_line = "PassengerRuby #{ruby_ee_path}/bin/ruby"
 
 # install sites
-printf "\nWhat is your domain (ex site.com)? "
+printf "\n\nWhat is your domain (ex site.com)? "
 domain = gets.chomp
 
 config = {
@@ -141,10 +151,7 @@ if domain == 'powertochange.org' || true
 
   puts "\nFound special settings for your domain:"
   puts override.inspect
-  printf "Do you want to use them? (y/n) "
-  confirm = gets.chomp
-
-  if confirm == 'y' then config = override end
+  if decision("Do you want to use them?") then config = override end
 end
 
 def sub(f)
@@ -154,8 +161,7 @@ end
 
 def confirm_overwrite(p)
   if File.exists? p
-    printf "File #{p} already exists, overwrite? (y/n) "
-    write = gets.chomp == 'y'
+    write = decision("File #{p} already exists, overwrite?")
   else write = true
   end
 
@@ -168,11 +174,17 @@ def write(p)
   f.close
 end
 
+def ensure_dir_exists(p)
+  run "mkdir #{p}" unless File.exists?(p)
+end
+
 for prefix, options in config
   site = "#{prefix}.#{domain}"
 
-  puts "Setup #{site}"
-  run "mkdir /var/www/#{site}" unless File.exists?("/var/www/#{site}")
+  puts "\nSetup #{site}"
+  ensure_dir_exists "/var/www/#{site}"
+  ensure_dir_exists "/var/www/#{site}/shared"
+  ensure_dir_exists "/var/www/#{site}/shared/log"
 
   config_path = "/etc/apache2/sites-available/#{site}"
   confirm_overwrite(config_path) do |f|
@@ -206,14 +218,25 @@ else puts 'found'
 end
 
 # need a user in www-data group
-printf "what user will be used to do deploys? "
+printf "\nwhat user will be used to do deploys? "
 user = gets.chomp
 run "usermod -G www-data #{user}"
 run "chmod g+rw /var/www -R"
+run "chgrp www-data /var/www -R"
 
 # check out the source and do one deploy to get it in there
-run "svn co https://svn.ministryapp.com/pat/trunk pat" unless File.exists?('pat')
+unless File.exists? 'pat'
+  puts "need to check out the source code once so that cap deploys can be run."
+  puts "this may take a few minutes.."
+  puts
+  run "svn co https://svn.ministryapp.com/pat/trunk pat"
+else
+  run "svn up pat/config/deploy.rb"
+end
+
 Dir.chdir('pat')
-run "cap deploy host=127.0.0.1 port=22 user=#{user}"
+for prefix, options in config
+  run "cap deploy host=127.0.0.1 user=#{user} target=prod domain=#{prefix}.#{domain}"
+end
 
 # TODO: make it install a clean version of mysql
