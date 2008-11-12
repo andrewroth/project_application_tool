@@ -15,7 +15,9 @@ ENV['user'] ||= %x[whoami].chomp
 ENV['deploy_to'] ||= if ENV['target'] == 'prod' then 
                        ENV['domain'] else "#{ENV['target']}.#{ENV['domain']}" end
 
-if ENV['target'] == 'dev'
+if ENV['env']
+  RAILS_ENV = ENV['env']
+elsif ENV['target'] == 'dev'
   RAILS_ENV = 'development'
 elsif ENV['target'] == 'demo'
   RAILS_ENV = 'production'
