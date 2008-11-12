@@ -1,10 +1,32 @@
 ENV['target'] ||= 'prod'
-ENV['host'] ||= 'ministryapp.com'
-ENV['port'] ||= 40022
-ENV['user'] ||= 'andrew'
+ENV['system'] ||= 'p2c'
 
-puts "target = '#{ENV['target']}'"
-puts "host = '#{ENV['host']}'"
+if %w(ma mh).include? ENV['system']
+  ENV['host'] ||= 'ministryapp.com'
+  ENV['domain'] ||= 'pat.ministryapp.com'
+  ENV['port'] ||= '40022'
+elsif %w(p2c pc).include? ENV['system']
+  ENV['host'] ||= 'pat.powertochange.org' # NOTE won't work until Brent sets this up
+  ENV['domain'] ||= 'pat.powertochange.org'
+  ENV['port'] ||= '22'
+end
+
+ENV['user'] ||= %x[whoami].chomp
+ENV['deploy_to'] ||= "#{ENV['target']}.#{ENV['domain']}"
+
+if ENV['target'] == 'dev'
+  RAILS_ENV = 'development'
+elsif ENV['target'] == 'demo'
+  RAILS_ENV = 'production'
+elsif ENV['target'] == 'prod'
+  RAILS_ENV = 'production'
+end
+
+puts
+puts "host = #{ENV['host']}:#{ENV['port']}"
+puts "user = #{ENV['user']}"
+puts "env = #{RAILS_ENV}"
+puts "deploy_to = #{ENV['deploy_to']}"
 puts
 
 role :app, ENV['host']
@@ -16,17 +38,7 @@ set :user, ENV['user']
 
 set :application, "Project Application Tool"
 set :repository,  "https://svn.ministryapp.com/pat/trunk"
-
-if ENV['target'] == 'dev'
-  set :deploy_to, "/var/www/dev.pat.ministryapp.com"
-  RAILS_ENV = 'development'
-elsif ENV['target'] == 'demo'
-  set :deploy_to, "/var/www/demo.pat.ministryapp.com"
-  RAILS_ENV = 'production'
-elsif ENV['target'] == 'prod'
-  set :deploy_to, "/var/www/pat.ministryapp.com"
-  RAILS_ENV = 'production'
-end
+set :deploy_to, "/var/www/#{ENV['deploy_to']}"
 
 # If you aren't using Subversion to manage your source code, specify
 # your SCM below:
