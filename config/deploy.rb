@@ -12,7 +12,8 @@ elsif %w(p2c pc).include? ENV['system']
 end
 
 ENV['user'] ||= %x[whoami].chomp
-ENV['deploy_to'] ||= "#{ENV['target']}.#{ENV['domain']}"
+ENV['deploy_to'] ||= if ENV['target'] == 'prod' then 
+                       ENV['domain'] else "#{ENV['target']}.#{ENV['domain']}" end
 
 if ENV['target'] == 'dev'
   RAILS_ENV = 'development'
@@ -20,6 +21,7 @@ elsif ENV['target'] == 'demo'
   RAILS_ENV = 'production'
 elsif ENV['target'] == 'prod'
   RAILS_ENV = 'production'
+
 end
 
 puts
@@ -28,6 +30,8 @@ puts "user = #{ENV['user']}"
 puts "env = #{RAILS_ENV}"
 puts "deploy_to = #{ENV['deploy_to']}"
 puts
+
+abort
 
 role :app, ENV['host']
 role :web, ENV['host']
