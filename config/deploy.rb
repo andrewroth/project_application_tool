@@ -12,8 +12,8 @@ elsif %w(p2c pc).include? ENV['system']
 end
 
 ENV['user'] ||= %x[whoami].chomp
-ENV['deploy_to'] ||= if ENV['target'] == 'prod' then 
-                       ENV['domain'] else "#{ENV['target']}.#{ENV['domain']}" end
+ENV['deploy_to'] ||= "/var/www/#{if ENV['target'] == 'prod' then 
+                       ENV['domain'] else "#{ENV['target']}.#{ENV['domain']}" end}"
 
 if ENV['env']
   RAILS_ENV = ENV['env']
@@ -42,7 +42,7 @@ set :user, ENV['user']
 
 set :application, "Project Application Tool"
 set :repository,  "https://svn.ministryapp.com/pat/trunk"
-set :deploy_to, "/var/www/#{ENV['deploy_to']}"
+set :deploy_to, ENV['deploy_to']
 
 # If you aren't using Subversion to manage your source code, specify
 # your SCM below:
