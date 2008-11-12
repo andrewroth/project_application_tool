@@ -1,27 +1,29 @@
 ENV['target'] ||= 'prod'
+ENV['host'] ||= 'ministryapp.com'
+ENV['port'] ||= 40022
+ENV['user'] ||= 'andrew'
 
 puts "target = '#{ENV['target']}'"
+puts "host = '#{ENV['host']}'"
 puts
 
-role :app, "ministryapp.com"
-role :web, "ministryapp.com"
-role :db,  "ministryapp.com", :primary => true
+role :app, ENV['host']
+role :web, ENV['host']
+role :db,  ENV['host'], :primary => true
 
-ssh_options[:port] = 40022
-set :user, "andrew"
+ssh_options[:port] = ENV['port']
+set :user, ENV['user']
 
 set :application, "Project Application Tool"
+set :repository,  "https://svn.ministryapp.com/pat/trunk"
 
 if ENV['target'] == 'dev'
-  set :repository,  "https://svn.ministryapp.com/pat/trunk"
   set :deploy_to, "/var/www/dev.pat.ministryapp.com"
   RAILS_ENV = 'development'
 elsif ENV['target'] == 'demo'
-  set :repository,  "https://svn.ministryapp.com/pat/trunk"
   set :deploy_to, "/var/www/demo.pat.ministryapp.com"
   RAILS_ENV = 'production'
 elsif ENV['target'] == 'prod'
-  set :repository,  "https://svn.ministryapp.com/pat/trunk"
   set :deploy_to, "/var/www/pat.ministryapp.com"
   RAILS_ENV = 'production'
 end
