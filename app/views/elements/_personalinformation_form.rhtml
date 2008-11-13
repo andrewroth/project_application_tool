@@ -1,5 +1,8 @@
 <BR />
+<% if params[:action] == 'edit' -%>
+<% else -%>
 <P>This will add the following form:</P>
+<% end -%>
 
 <BLOCKQUOTE>
 <%= render :partial => 'profiles/personal_info_form' %>

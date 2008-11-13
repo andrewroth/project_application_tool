@@ -3,12 +3,16 @@
 <P>
 What do you normally go by?
 
-First name: <%= text_field :appln_person, :person_fname %>
-Last name: <%= text_field :appln_person, :person_lname %>
+<%= custom_element_text_field('First name: ', :appln_person, :person_fname) %>
 
-<P> Gender: <%= collection_select :appln_person, :gender_id, Gender.find(:all), :id, :gender_desc %>
+<%= custom_element_text_field('Last name: ', :appln_person, :person_lname) %>
 
-<P> Email: <%= text_field :appln_person, :person_email %>
+<%= custom_element_item('Gender: ', :appln_person, :gender_id) do |m,c,classes|
+      collection_select :appln_person, :gender_id, Gender.find(:all), :id, :gender_desc, {}, { :class => classes }
+    end
+%>
+
+<%= custom_element_text_field('Email: ', :appln_person, :person_email) %>
 
 <HR/>
 <P><STRONG> Current Address </STRONG></P>
@@ -19,5 +23,3 @@ Last name: <%= text_field :appln_person, :person_lname %>
 <%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Permanent ', :mid => '' } %>
 
 <P> 
-
-

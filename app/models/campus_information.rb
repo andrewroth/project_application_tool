@@ -57,14 +57,14 @@ class CampusInformation < Element
       #  cim_hrdb_person_year.year_id instead of 
       #  cim_hrdb_person_year.year_in_school_id
       yis = params[:appln_person].delete :year_in_school_id
-      params[:appln_person][:year_id] = yis
 
       py = {
-        "grad_date(1i)" => params["appln_person"]["grad_date(1i)"],
-        "grad_date(2i)" => params["appln_person"]["grad_date(2i)"],
-        "grad_date(3i)" => params["appln_person"]["grad_date(3i)"],
-        "year_id" => params["appln_person"]["year_id"]
+        "grad_date(1i)" => params["appln_person"].delete("grad_date(1i)"),
+        "grad_date(2i)" => params["appln_person"].delete("grad_date(2i)"),
+        "grad_date(3i)" => params["appln_person"].delete("grad_date(3i)"),
+        "year_id" => yis
       }
+
       person_year.update_attributes(py)
 
       person_year.save!

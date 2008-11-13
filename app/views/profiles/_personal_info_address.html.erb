@@ -1,9 +1,12 @@
-<P> <%= label_prefix %> Address: <%= text_field :appln_person, :"person_#{mid}addr" %>
+<%= custom_element_text_field("#{label_prefix} Address: ", :appln_person, :"person_#{mid}addr") %>
 
-<P> <%= label_prefix %> City: <%= text_field :appln_person, :"person_#{mid}city" %>
+<%= custom_element_text_field("#{label_prefix} City: ", :appln_person, :"person_#{mid}city") %>
 
-<P> <%= label_prefix %> Province: <%= collection_select :appln_person, :"person_#{mid}province_id", 
-        Province.find(:all), :id, :province_desc %>
+<%= custom_element_item("#{label_prefix} Province: ", :appln_person, :"person_#{mid}province_id") do |m,c,classes|
+        collection_select(m, c, Province.find(:all), :id, :province_desc, {}, { :class => classes })
+    end
+%>
 
-<P> <%= label_prefix %> Postal Code: <%= text_field :appln_person, :"person_#{mid}pc" %>
-<P> <%= label_prefix %> Phone (include area code): <%= text_field :appln_person, :"person_#{mid}phone" %><P> 
+<%= custom_element_text_field("#{label_prefix} Postal Code: ", :appln_person, :"person_#{mid}pc") %>
+
+<%= custom_element_text_field("#{label_prefix} Phone (include area code): ", :appln_person, :"person_#{mid}phone") %>

@@ -1,5 +1,4 @@
-class PersonalInformation < Element
-
+class PersonalInformation < CustomElement
   def text()
     "Personal Information Form"
   end
@@ -8,11 +7,6 @@ class PersonalInformation < Element
     @person = instance.viewer.person
 
     PersonalInformation.save_from_params(@person, params)
-  end
-
-  def validate!(page, instance)
-    #page.errors.add_to_base("All reference fields must be completed ")
-    #page.add_invalid_element(self)
   end
 
   def self.save_from_params(person, params)

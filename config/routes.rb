@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :custom_element_required_sections
+
   map.resources :assignments
 
   map.resources :notification_acknowledgments
@@ -26,6 +28,8 @@ ActionController::Routing::Routes.draw do |map|
   
   #load 'questionnaire_routes.rb'
   #ActionController::Routing::Routes.draw do |map|
+  map.resources :custom_element_required_sections
+
   map.resources :assignments
 
   map.resources :notification_acknowledgments

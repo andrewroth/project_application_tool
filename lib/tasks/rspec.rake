@@ -9,7 +9,7 @@ $LOAD_PATH.unshift(rspec_base) if File.exist?(rspec_base)
 begin
   require 'spec/rake/spectask'
 
-def test_db_prepared
+def is_db_prepared?
   ActiveRecord::Base.establish_connection(:test)
   r = EventGroup.table_exists?
   ActiveRecord::Base.establish_connection(RAILS_ENV)
@@ -17,7 +17,6 @@ def test_db_prepared
   r
 end
 
-spec_prereq = File.exist?(File.join(RAILS_ROOT, 'config', 'database.yml')) && !test_db_prepared ? "db:test:prepare" : :noop
 task :noop do
 end
 
@@ -25,7 +24,7 @@ task :default => :spec
 task :stats => "spec:statsetup"
 
 desc "Run all specs in spec directory (excluding plugin specs)"
-Spec::Rake::SpecTask.new(:spec => spec_prereq) do |t|
+Spec::Rake::SpecTask.new() do |t|
   t.spec_opts = ['--options', "\"#{RAILS_ROOT}/spec/spec.opts\""]
   t.spec_files = FileList['spec/**/*_spec.rb']
 end
@@ -33,10 +32,14 @@ end
 namespace :spec do
   desc "Run all specs in spec directory with RCov (excluding plugin specs)"
   Spec::Rake::SpecTask.new(:rcov) do |t|
+
     t.spec_opts = ['--options', "\"#{RAILS_ROOT}/spec/spec.opts\"", ' -- --rcov_baseline']
     t.spec_files = FileList['spec/**/*_spec.rb']
     t.rcov = true
     t.rcov_opts = lambda do
+      # TODO: call db:test:prepare if testing db isn't made yet
+      prepare_test_db = File.exist?(File.join(RAILS_ROOT, 'config', 'database.yml')) && !is_db_prepared?
+
       IO.readlines("#{RAILS_ROOT}/spec/rcov.opts").map {|l| l.chomp.split " "}.flatten
     end
     system "ln -s ../coverage public/coverage" unless File.exists?('public/coverage')
@@ -56,14 +59,16 @@ namespace :spec do
 
   [:models, :controllers, :views, :helpers, :lib].each do |sub|
     desc "Run the specs under spec/#{sub}"
-    Spec::Rake::SpecTask.new(sub => spec_prereq) do |t|
+    Spec::Rake::SpecTask.new() do |t|
+      #TODO ensure db:test:prepare if necessary
       t.spec_opts = ['--options', "\"#{RAILS_ROOT}/spec/spec.opts\""]
       t.spec_files = FileList["spec/#{sub}/**/*_spec.rb"]
     end
   end
   
   desc "Run the specs under vendor/plugins (except RSpec's own)"
-  Spec::Rake::SpecTask.new(:plugins => spec_prereq) do |t|
+  Spec::Rake::SpecTask.new() do |t|
+      #TODO ensure db:test:prepare if necessary
     t.spec_opts = ['--options', "\"#{RAILS_ROOT}/spec/spec.opts\""]
     t.spec_files = FileList['vendor/plugins/**/spec/**/*_spec.rb'].exclude('vendor/plugins/rspec/*').exclude("vendor/plugins/rspec-rails/*")
   end

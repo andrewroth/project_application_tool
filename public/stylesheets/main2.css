@@ -198,7 +198,7 @@ div#student_view, div#support_received, div#travel_itinerary, div#cost_items {
 	margin-bottom: 10px;
 }
 
-#loading {
+#loading, #saving {
   background-color: red;
   padding:10px;
   right:20px;

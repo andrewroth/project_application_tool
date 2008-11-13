@@ -1,5 +1,4 @@
-class CrisisInformation < Element
-
+class CrisisInformation < CustomElement
   def text()
     "Crisis Information Form"
   end
@@ -9,20 +8,6 @@ class CrisisInformation < Element
     @emerg = @person.emerg
 
     CrisisInformation.save_from_params(@person, params)
-  end
-
-  def validate!(page, instance)
-    @person = instance.viewer.person
-
-    if @person.person_legal_fname.nil? || @person.person_legal_fname.empty?
-      page.errors.add_to_base("\"Legal given names\" is required")
-    end
-
-    if @person.person_legal_lname.nil? || @person.person_legal_lname.empty?
-      page.errors.add_to_base("\"Legal last name\" is required")
-    end
-
-    page.add_invalid_element(self)
   end
 
   def self.save_from_params(person, params)
