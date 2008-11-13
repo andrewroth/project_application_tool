@@ -7,9 +7,9 @@ task :fix_permissions do
   www_uid = Etc.getpwnam('www-data').uid
   www_gid = Etc.getgrnam('www-data').gid
 
-  Find.find(Dir.pwd) do |p|
+  Find.find(ENV['path'] || Dir.pwd) do |p|
     if File.lstat(p).uid == uid
-      File.lchown www_uid, www_gid, p
+      File.lchown nil, www_gid, p
     end
   end
 end
