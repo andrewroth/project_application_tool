@@ -19,6 +19,11 @@ describe AssignmentsController do
   it "should allow students to update" do
     setup_all
 
+    @py = mock('py')
+    @person.stub!(:person_year => @py)
+    @py.should_receive(:update_attributes).and_return(true)
+    @py.should_receive(:save!).and_return(true)
+
     post :update, {"commit"=>"Save", "assignment"=>{"new"=>{"1"=>{"campus_id"=>"1", "assignmentstatus_id"=>"0"}, "2"=>{"campus_id"=>"1", "assignmentstatus_id"=>"3"}}, "update"=>{"1708"=>{"campus_id"=>"54", "assignmentstatus_id"=>"1"}}}, "action"=>"update", "appln_person"=>{"grad_date(1i)"=>"2008", "grad_date(2i)"=>"11", "grad_date(3i)"=>"5", "year_in_school_id"=>"1"}, "controller"=>"assignments"}
 
     response.should redirect_to('http://test.host/profiles/campus_info')
