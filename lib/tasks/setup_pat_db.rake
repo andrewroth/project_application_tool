@@ -1,12 +1,12 @@
-require 'config/environment'
 
-def adapter() ActiveRecord::Base.configurations[RAILS_ENV]['adapter'] end
-def dbfile() ActiveRecord::Base.configurations[RAILS_ENV]['dbfile'] end
 
 namespace :db do
-  namespace :setup do
+  namespace :setup => :environment do
     desc "Setup for the pat, to be run while installing.  Loads all schemas in db/schema* and installs some required database rows (ex default user)."
     task :pat do
+      def adapter() ActiveRecord::Base.configurations[RAILS_ENV]['adapter'] end
+      def dbfile() ActiveRecord::Base.configurations[RAILS_ENV]['dbfile'] end
+
       if (adapter == 'sqlite' || adapter == 'sqlite3') && File.exist?(dbfile)
         puts "Hey, looks like there's already a database at #{dbfile}.  Do you want to delete this and start from scratch? (y/n)"
         ans = STDIN.gets.chomp.downcase

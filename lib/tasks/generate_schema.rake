@@ -1,7 +1,3 @@
-require 'config/environment'
-require 'active_record/schema_dumper'
-
-ActiveRecord::Schema.verbose = false
 
 spec = {
   :authservice_production => :all,
@@ -29,7 +25,10 @@ end
 namespace :db do
   namespace :schema do
     desc "Generates a schema from the Power to Change servers.  The databases and tables are specified in this file (#{__FILE__})"
-    task :generate do
+    task :generate => :environment do
+      require 'active_record/schema_dumper'
+      ActiveRecord::Schema.verbose = false
+
       spec.each_pair do |db, tables|
         dump_db2 db, "db/schema_#{db}.rb", tables
       end

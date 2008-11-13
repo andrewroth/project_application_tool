@@ -8,11 +8,6 @@ legacy_dbs = %w(ciministry_development authservice_development)
 
 # datetime needs the same time formats -- some legacy formats
 # might use datetimes..
-load 'environment.rb'
-class DateTime
-  include ActiveSupport::CoreExtensions::Time::Conversions
-end
-
 def prepend(prefix, array)
   array.collect { |item| prefix + item }
 end
@@ -64,6 +59,10 @@ namespace :db do
         legacy_dbs.each do |legacy_db|
           desc "copies #{legacy_db} structure to the RAILS_ENV database" 
           task legacy_db => :environment do
+	    class DateTime
+	      include ActiveSupport::CoreExtensions::Time::Conversions
+	    end
+
             puts "Cloning structure of #{legacy_db} database to #{RAILS_ENV} database."
 
             ActiveRecord::Schema.verbose = false
