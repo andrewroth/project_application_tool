@@ -20,10 +20,10 @@ then
   # check out everything locally
   echo "Checking out installer code"
   echo ""
-  #svn co https://svn.ministryapp.com/pat/trunk/installer pat_installer
+  svn co https://svn.ministryapp.com/pat/trunk/installer pat_installer
 
   # now switch to the ruby installer
-  #ruby pat_installer/install.rb
-  ruby installer/install.rb
+  ruby pat_installer/install.rb
+  #ruby installer/install.rb
 fi
 
