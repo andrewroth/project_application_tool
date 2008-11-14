@@ -21,19 +21,6 @@ def find(f)
   !%x[which #{f}].empty?
 end
 
-puts %|
-This PAT installer requires a debian system.
-
-It will install apache2 using apt.
-It will use mod_rails to run the PAT.
-
-PAT files will go in /var/www/{name_of_domain}
-
-You will be prompted along the way for various options.
-
-|
-abort unless decision('Continue?')
-
 def run(cmd)
   puts "\nRun> #{cmd}"
   go = confirm
@@ -73,7 +60,7 @@ end
 # apache2
 printf "Looking for apache2.. "
 unless find('apache2')
-  puts 'not found'
+  puts "not found"
   run "apt-get install apache2 apache2-utils"
 else puts('found')
 end
