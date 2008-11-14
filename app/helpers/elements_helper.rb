@@ -15,7 +15,8 @@ module ElementsHelper
   end
 
   def custom_element_item(txt, m, c)
-    reqd_section = @element.custom_element_required_sections.detect{ |s| s.name == m.to_s && s.attribute == c.to_s }
+    reqd_section = @element && 
+                   @element.custom_element_required_sections.detect{ |s| s.name == m.to_s && s.attribute == c.to_s }
 
     %|
 <P>
