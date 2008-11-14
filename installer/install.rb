@@ -1,8 +1,7 @@
 require 'erb'
 
-RUBYGEMS_URL = "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz"
-FUSION_URL   = "http://rubyforge.org/frs/download.php/41040/ruby-enterprise-1.8.6-20080810.tar.gz"
-RUBY_EE_URL  = "http://rubyforge.org/frs/download.php/41040/ruby-enterprise-1.8.6-20080810.tar.gz"
+RUBYGEMS_URL  = "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz"
+RUBY_EE_URL   = "http://rubyforge.org/frs/download.php/41040/ruby-enterprise-1.8.6-20080810.tar.gz"
 
 Dir.chdir('installer')
 
@@ -75,7 +74,7 @@ unless find('apache2')
 else puts('found')
 end
 
-# gems -- passenger depends on having apache2
+# gems -- note passenger depends on having apache2
 required_gems = %w(rdoc rails passenger capistrano soap4r)
 puts ""
 puts "Looking for required gems: #{required_gems.join(', ')}"
@@ -99,18 +98,38 @@ else puts "found"
 end
 
 # ruby ee
+printf "Looking for ruby ee.. "
 if Dir['/opt/*'].empty?
+  puts "not found"
   run "apt-get install zlib1g-dev libssl-dev"
   ee_name = File.basename(RUBY_EE_URL)
   ee_expanded_name = ee_name[0,ee_name.length-'.tar.gz'.length]
   run "wget #{RUBY_EE_URL}" unless File.exists?(ee_name)
   run "tar vxfz #{ee_name}" unless File.exists?(ee_expanded_name)
   run "cd #{ee_expanded_name}; ./installer"
+else puts "found"
 end
 
-# use the latest passenger install
+# use the latest passenger install in apache2.conf
+printf "Looking for ruby ee line in apache2.conf.. "
 ruby_ee_path = Dir['/opt/*'].sort.last
-@ruby_ee_line = "PassengerRuby #{ruby_ee_path}/bin/ruby"
+ruby_ee_line = "PassengerRuby #{ruby_ee_path}/bin/ruby"
+if %x[grep PassengerRuby /etc/apache2/apache2.conf | grep opt].empty?
+  puts "not found"
+  append = decision("\nDo you want to append\n" + 
+               "    #{ruby_ee_line}\nto #{apache2_conf}?")
+  run "echo '#{ruby_ee_line}' >> /etc/apache2/apache2.conf" if append
+else puts "found"
+end
+
+# gems -- note passenger depends on having apache2
+required_gems = %w(soap4r)
+puts ""
+puts "Looking for ruby ee required gems: #{required_gems.join(', ')}"
+for gem in required_gems
+  found_gem = !%x[#{ruby_ee_path}/bin/gem list --local | grep #{gem}].empty? # -i doesn't work?
+  run "#{ruby_ee_path}/bin/gem install #{gem}" unless found_gem
+end
 
 # install sites
 printf "\n\nWhat is your domain (ex site.com)? "
@@ -203,7 +222,8 @@ for prefix, options in config
     @settings, @dbs = options[:settings], options[:dbs]
 
     # get pass from user so we don't have passwords in svn
-    @settings[:pass] = 'password' # stub
+    printf "What's the password for db access to #{site}? "
+    @settings[:pass] = gets.chomp
 
     f.write(sub('database.yml.erb'))
   end
@@ -220,9 +240,7 @@ end
 # need a user in www-data group
 printf "\nwhat user will be used to do deploys? "
 user = gets.chomp
-run "usermod -G www-data #{user}"
-run "chmod g+rw /var/www -R"
-run "chgrp www-data /var/www -R"
+run "usermod -G www-data #{user}; chmod g+rw /var/www -R; chown www-data.www-data /var/www -R"
 
 # check out the source and do one deploy to get it in there
 unless File.exists? 'pat'
@@ -236,7 +254,12 @@ end
 
 Dir.chdir('pat')
 for prefix, options in config
-  run "cap deploy host=127.0.0.1 user=#{user} target=prod domain=#{prefix}.#{domain}"
+  rails_env = options[:env]
+  deploy_to = "/var/www/#{prefix}.#{domain}"
+  run "cap deploy host=127.0.0.1 user=#{user} deploy_to=#{deploy_to} env=#{rails_env}"
 end
 
 # TODO: make it install a clean version of mysql
+
+# restart apache to get it to pick up the new rails domains
+run "/etc/init.d/apache2 restart"

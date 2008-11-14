@@ -2,8 +2,7 @@
   ServerName <%= @site %>
   DocumentRoot /var/www/<%= @site %>/current/public
   RailsEnv <%= @env %>
-  <%= @ruby_ee_line %>
 <% if @anything_extra %>
-    <%= @anything_extra %>
+  <%= @anything_extra %>
 <% end %>
 </VirtualHost>
