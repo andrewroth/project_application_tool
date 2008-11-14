@@ -10,6 +10,8 @@ begin
   require 'spec/rake/spectask'
 
 def is_db_prepared?
+  require File.join(RAILS_ROOT, 'config', 'environment')
+
   ActiveRecord::Base.establish_connection(:test)
   r = EventGroup.table_exists?
   ActiveRecord::Base.establish_connection(RAILS_ENV)
