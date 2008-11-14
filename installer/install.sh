@@ -20,12 +20,14 @@ if [ $answer == "y" ]
 then
 
   # install required packages
-  echo "\nFirst making sure required packages (ruby, subversion, mysql client) are installed..\n"
+  echo
+  echo "First making sure required packages (ruby, subversion, mysql client) are installed.."
+  echo
   apt-get install ruby irb ruby1.8-dev subversion libmysqlclient15-dev
 
   # check out everything locally
-  echo "\nChecking out installer code and resource"
-  echo ""
+  echo
+  echo "Checking out installer code and resource"
   svn co https://svn.ministryapp.com/pat/trunk/installer pat_installer
 
   # now switch to the ruby installer
