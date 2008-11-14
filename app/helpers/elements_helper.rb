@@ -15,11 +15,13 @@ module ElementsHelper
   end
 
   def custom_element_item(txt, m, c)
+    reqd_section = @element.custom_element_required_sections.detect{ |s| s.name == m.to_s && s.attribute == c.to_s }
+
     %|
 <P>
  #{error_wrap(@current_page, "#{m}_#{c}", %|
    #{custom_element_item_header(m,c)}
-   #{txt} #{yield m, c, ''}
+   #{txt} #{yield m, c, if reqd_section then 'required' else '' end}
    #{custom_element_item_footer(m,c)}
  |)}
 </P>
