@@ -57,13 +57,17 @@ if !found_gem && !found_gem1_8
   run "wget #{RUBYGEMS_URL}" unless File.exists?(tgz_name)
   run "tar vxfz #{tgz_name}" unless File.exists?(tgz_expanded_name)
   run "cd #{tgz_expanded_name}; ruby setup.rb --no-rdoc --no-ri"
-elsif !found_gem1_8
-  puts "found gem1.8 but not gem, make ln"
-  run "ln -s /usr/bin/gem1.8 /usr/bin/gem"
 else
   puts %|found
      Note: It is recommended that rubygems be installed from tarball 
            since the debian package is quite old|
+end
+
+found_gem = find('gem')
+found_gem1_8 = find('gem1.8')
+if !found_gem && found_gem1_8
+  puts "found gem1.8 but not gem, make ln"
+  run "ln -s /usr/bin/gem1.8 /usr/bin/gem"
 end
 
 # apache2
@@ -196,6 +200,8 @@ end
 def ensure_dir_exists(p)
   run "mkdir #{p}" unless File.exists?(p)
 end
+
+ensure_dir_exists "/var/www"
 
 for prefix, options in config
   site = "#{prefix}.#{domain}"

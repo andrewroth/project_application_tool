@@ -15,7 +15,7 @@ then
   # install required packages
   echo "First making sure ruby and subversion are installed.."
   echo ""
-  apt-get install ruby irb subversion
+  apt-get install ruby irb ruby1.8-dev subversion
 
   # check out everything locally
   echo "Checking out installer code"
