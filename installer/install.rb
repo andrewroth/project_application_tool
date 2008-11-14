@@ -3,7 +3,7 @@ require 'erb'
 RUBYGEMS_URL  = "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz"
 RUBY_EE_URL   = "http://rubyforge.org/frs/download.php/41040/ruby-enterprise-1.8.6-20080810.tar.gz"
 
-Dir.chdir('installer')
+Dir.chdir(File.dirname(__FILE__))
 
 def decision(m)
   printf "#{m} (Y/n) "
