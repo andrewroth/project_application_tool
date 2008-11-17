@@ -12,11 +12,17 @@ What do you normally go by?
     end
 %>
 
+<%= custom_element_text_field('Cell phone (include area code): ', :appln_person, :cell_phone) %>
 <%= custom_element_text_field('Email: ', :appln_person, :person_email) %>
 
 <HR/>
 <P><STRONG> Current Address </STRONG></P>
 <%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Current ', :mid => 'local_' } %>
+
+<%= custom_element_item("Current address valid until: ", :appln_person, :local_valid_until) do |m,c,classes|
+      date_select m, c, :start_year => Time.now.year, :end_year => 10.years.from_now.year, :class => classes
+    end
+%>
 
 <HR>
 <P><STRONG> Permanent Address </STRONG></P>

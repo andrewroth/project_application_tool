@@ -5,13 +5,6 @@ class ReportElementModelMethodsController < ReportElementsController
     config.show.columns.exclude :position
   end
 
-  def before_create_save(record)
-    super
-  end
-  def before_update_save(record)
-    super
-  end
-
   protected
 
 end

@@ -34,16 +34,6 @@ class ReportElementQuestionsController < ReportElementsController
     @page = Page.find params[:page_id]
   end
 
-  def before_update_save(record)
-    super
-    logger.info "XYZ: ReportElementQuestionsController::before_update_save #{record.inspect}"
-  end
-
-  def before_create_save(record)
-    super
-    logger.info "XYZ: ReportElementQuestionsController::before_create_save #{record.inspect}"
-  end
-
   protected
 
 end
