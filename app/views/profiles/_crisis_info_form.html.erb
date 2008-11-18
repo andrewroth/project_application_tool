@@ -47,9 +47,14 @@
 <%= custom_element_text_field("Doctor's phone (include area code): ", :emerg, :doctor_phone) %>
 <%= custom_element_text_field("Dentist's name: ", :emerg, :dentist_name) %>
 <%= custom_element_text_field("Dentist's phone (include area code): ", :emerg, :dentist_phone) %>
-<%= custom_element_text_field("Blood type: ", :emerg, :blood_type) %>
-<%= custom_element_text_field("Blood rh factor: ", :emerg, :blood_rh_factor) %>
-
+<%= custom_element_item("Blood type: ", :emerg, :blood_type) do |m,c,classes|
+      select(m, c, Emerg::BLOOD_TYPES)
+    end
+%>
+<%= custom_element_item("Blood rh factor: ", :emerg, :blood_rh_factor) do |m,c,classes|
+      select(m, c, Emerg::BLOOD_TYPE_RH)
+    end
+%>
 <P>
 
 <HR>
