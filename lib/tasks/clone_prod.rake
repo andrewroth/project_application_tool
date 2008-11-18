@@ -41,7 +41,7 @@ end
 
 namespace "db:clone" do
   desc "clones the power to change ciministry and summerprojectool dbs to dev_campusforchrist and spt_dev respectively, and removes all answer to confidential qs from spt_dev"
-  task :p2c do
+  task :p2c => :environment do
 
     prod_spt = 'summerprojecttool'
     dev_spt = 'spt_dev'
