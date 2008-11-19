@@ -4,7 +4,12 @@ class MigrateCampusQuestionnaireCrisisInfoToCimHrdb < ActiveRecord::Migration
   end
 
 def self.loop_answers_for_element(id)
-  e = Element.find id # current address valid until
+  begin
+    e = Element.find id # current address valid until
+  rescue
+    return
+  end
+
   cnt = 0
   for a in e.answers
     next if a.answer.empty? || a.answer == 'unknown'
@@ -89,30 +94,42 @@ cnt = loop_answers_for_element(18467) { |a, app, viewer, person, emerg|
 puts "#{cnt})"
 
 p = Person.find 7307
-p.province_id = Province.find_by_province_shortDesc('CO').id
-p.save!
+p.province_id = Province.find_by_province_shortDesc('CO').id if p
+p.save! if p
 
 # DELETE  Current address valid until
-e = Element.find 17579
-e.page_elements.first.destroy
+begin
+  e = Element.find 17579
+  e.page_elements.first.destroy
+rescue
+end
 
 # DELETE  Provincial/State Medical Insurance 
-a = Answer.find 336315
-if a && a.answer = 'Plot 34253, Block 8'
-  p = Person.find 8296
-  p.person_addr += ", #{a.answer}" if p.person_addr == "380 Assiniboine Rd (apt 1802)"
-  p.save!
+begin
+  a = Answer.find 336315
+  if a && a.answer = 'Plot 34253, Block 8'
+    p = Person.find 8296
+    p.person_addr += ", #{a.answer}" if p.person_addr == "380 Assiniboine Rd (apt 1802)"
+    p.save!
+  end
+rescue
 end
 
 # DELETE  Blood Type etc.. group
-e = Element.find 18458
-e.page_elements.first.destroy
-e = Element.find 18462
-e.page_elements.first.destroy
+begin
+  e = Element.find 18458
+  e.page_elements.first.destroy if e
+  e = Element.find 18462
+  e.page_elements.first.destroy if e
+rescue
+end
 
 # DELETE  Permanent Address Additional Information
-e = Element.find 17592
-e.page_elements.first.destroy
+begin
+  e = Element.find 17592
+  e.page_elements.first.destroy if e
+rescue
+end
 
   end
 end
