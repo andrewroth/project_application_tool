@@ -10,4 +10,9 @@ describe Person, "testing" do
     s7.campus.should_not be_nil
     s7.campus_longDesc.should == "Never never land"
   end
+
+  it "should not crash on an invalid date assignment" do
+    p = Person.find :first
+    p.update_attributes( { "local_valid_until(3i)" => "31", "local_valid_until(1i)" => "2013", "local_valid_until(2i)" => "4" } )
+  end
 end
