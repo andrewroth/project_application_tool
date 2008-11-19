@@ -470,6 +470,42 @@ input#submit {
   color: #88bbff;
 }
 
+#scope_c .event_group_has_logo, #scope_c .event_group_top_level {
+  float: left;
+  width: 250px;
+}
+
+.event_group_logo {
+  height: 50px;
+}
+
+.event_group_has_logo > a > .ajax_tree_img {
+  position: relative;
+  bottom: 18px;
+}
+
+#scope_c .event_group_has_logo > a > .ajax_tree_img {
+  display: none;
+}
+
+.event_group_text_with_logo {
+  padding-left: 12px;
+}
+
+#event_group_links .box {
+  border: 0px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#event_group_links {
+  width: 900px;
+}
+
+#event_group_remember {
+  clear: both;
+}
+
 .event_group_editing {
   background-color: #00aa88;
 }
