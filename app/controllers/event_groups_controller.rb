@@ -15,6 +15,17 @@ class EventGroupsController < AjaxTreeController
 
   def views() [ 'scope' ] end
 
+  def update
+    delete_logo = params.delete :delete_logo
+
+    super
+
+    if delete_logo
+      @node[:filename] = nil
+      @node.save!
+    end
+  end
+
   def scope
     @view = 'scope'
     @show_hidden = !params[:show_hidden].nil? && params[:show_hidden] # hide by default

@@ -23,11 +23,14 @@ Choose your event group for this session:
     (<%= link_to 'Show hidden event groups', '/event_groups/scope?show_hidden=true' %>)
   <% end %>
 
+<%= if params[:columns] then "<div id='scope_c'>" end %>
 
-<div id="event_group_links">
+<div id="event_group_links" class="<%= if params[:columns] then "centerblock" end %>">
   <% cache(:controller => 'event_groups', :action => 'index') do %>
     <%= render :partial => 'ajax_tree/tree' %>
   <% end %>
 </div>
 
-<p><%= check_box_tag 'remember', 'true', false, :onClick => "update_links();" %>Remember my choice for next time.</p>
+<p id="event_group_remember"><%= check_box_tag 'remember', 'true', false, :onClick => "update_links();" %>Remember my choice for next time.</p>
+
+<%= if params[:columns] then "</div>" end %>

@@ -42,6 +42,20 @@
     <b>Has Your Campuses Page</b>
   </p>
 
-</td></tr></table>
+</td></tr>
+
+<tr><td>
+
+  <p><b>Upload a logo: </b><%= f.file_field :uploaded_data %></p>
+
+</td><td>
+
+  <% if @event_group && @event_group.has_logo? -%>
+    <p><%= check_box_tag :delete_logo %><b>Delete logo?</b></p>
+  <% end %>
+
+</td></tr>
+
+</table>
 
 

@@ -4,7 +4,7 @@
 
 <% form_for :event_group, @event_group, 
     :url => event_group_path(@event_group), 
-    :html => {:method => :put} do |f| %>
+    :html => {:multipart => true, :method => :put} do |f| %>
 
   <%= render :partial  => 'form', :locals => { :f => f } %>
 

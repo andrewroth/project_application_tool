@@ -15,10 +15,24 @@ class EventGroup < Node
 
   acts_as_tree
 
+  has_attachment :content_type => :image, 
+                 :storage => :file_system
+
   attr :filter_hidden, true
 
-  def classes
-    "#{hidden ? 'event_group_hidden' : ''}"
+  def has_logo?() !filename.nil? end
+
+  def classes(section = nil)
+    classes = []
+
+    if section == :a
+      classes << 'event_group_hidden' if hidden
+    elsif section == :li
+      classes << 'event_group_has_logo' if filename
+      classes << 'event_group_top_level' if parent.nil?
+    end
+
+    classes.join(' ')
   end
 
   def children_with_hidden_check
