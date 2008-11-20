@@ -29,6 +29,8 @@ class EventGroupsController < AjaxTreeController
   def scope
     @view = 'scope'
     @show_hidden = !params[:show_hidden].nil? && params[:show_hidden] # hide by default
+    @columns = true
+
     unless read_fragment({:action => 'index'})
       if @show_hidden
         @nodes = EventGroup.find_all_by_parent_id(nil, :include => :projects)
