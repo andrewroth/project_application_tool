@@ -57,7 +57,7 @@ class ProfilesController < ApplicationController
     success = @profile.manual_update(params[:profile], @user)
     @profile.reload
 
-    flash[:notice] = "Created new profile: #{@profile.attributes.inspect}"
+    flash[:notice] = "Created new profile for #{@profile.viewer.name}."
 
     redirect_to :controller => :tools
   end
