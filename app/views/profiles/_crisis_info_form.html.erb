@@ -36,7 +36,7 @@
 
 <%= custom_element_item("Health care province: ", :emerg, :health_province_id) do |m,c,classes|
         collection_select(m, c, Province.find(:all), :id, :province_desc, 
-            {}, { :class => classes })
+            { :include_blank => true }, { :class => classes })
     end
 %>
 
@@ -48,11 +48,11 @@
 <%= custom_element_text_field("Dentist's name: ", :emerg, :dentist_name) %>
 <%= custom_element_text_field("Dentist's phone (include area code): ", :emerg, :dentist_phone) %>
 <%= custom_element_item("Blood type: ", :emerg, :blood_type) do |m,c,classes|
-      select(m, c, Emerg::BLOOD_TYPES)
+      select(m, c, Emerg::BLOOD_TYPES, { :include_blank => true }, :class => classes)
     end
 %>
 <%= custom_element_item("Blood rh factor: ", :emerg, :blood_rh_factor) do |m,c,classes|
-      select(m, c, Emerg::BLOOD_TYPE_RH)
+      select(m, c, Emerg::BLOOD_TYPE_RH, { :include_blank => true }, :class => classes)
     end
 %>
 <P>
@@ -70,7 +70,8 @@
 <%= custom_element_text_field('Passport #: ', :emerg, :emerg_passportNum) %>
 
 <%= custom_element_item("Passport Expiry: ", :emerg, :emerg_passportExpiry) do |m,c,classes|
-      date_select :emerg, :emerg_passportExpiry, :end_year => 10.years.from_now.year, :class => classes
+      date_select :emerg, :emerg_passportExpiry, { :end_year => 10.years.from_now.year,
+                     :include_blank => true, :class => classes }
     end
  %>
 

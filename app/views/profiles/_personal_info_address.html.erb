@@ -3,7 +3,8 @@
 <%= custom_element_text_field("#{label_prefix} City: ", :appln_person, :"person_#{mid}city") %>
 
 <%= custom_element_item("#{label_prefix} Province: ", :appln_person, :"person_#{mid}province_id") do |m,c,classes|
-        collection_select(m, c, Province.find(:all), :id, :province_desc, {}, { :class => classes })
+        collection_select(m, c, Province.find(:all), :id, :province_desc, 
+	  { :include_blank => true }, { :class => classes })
     end
 %>
 

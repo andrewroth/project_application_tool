@@ -20,12 +20,23 @@ What do you normally go by?
 <%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Current ', :mid => 'local_' } %>
 
 <%= custom_element_item("Current address valid until: ", :appln_person, :local_valid_until) do |m,c,classes|
-      date_select m, c, :start_year => Time.now.year, :end_year => 10.years.from_now.year, :class => classes
+      date_select m, c, :start_year => Time.now.year, :end_year => 10.years.from_now.year, :class => classes, :include_blank => true
     end
 %>
 
 <HR>
 <P><STRONG> Permanent Address </STRONG></P>
+
+<p><%= check_box :appln_person, :permanent_same_as_local, :onClick => %|
+  if ($('appln_person_permanent_same_as_local').checked) {
+    $('permanent_address').hide();
+  } else {
+    $('permanent_address').show();
+  }
+|%> Same as local address.</p>
+
+<div id='permanent_address' style='<%= 'display:none;' if @appln_person.permanent_same_as_local %>'>
 <%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Permanent ', :mid => '' } %>
+</div>
 
 <P> 
