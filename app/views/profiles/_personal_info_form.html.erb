@@ -35,7 +35,7 @@ What do you normally go by?
   }
 |%> Same as local address.</p>
 
-<div id='permanent_address' style='<%= 'display:none;' if @appln_person.permanent_same_as_local %>'>
+<div id='permanent_address' style='<%= 'display:none;' if @appln_person && @appln_person.permanent_same_as_local %>'>
 <%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Permanent ', :mid => '' } %>
 </div>
 

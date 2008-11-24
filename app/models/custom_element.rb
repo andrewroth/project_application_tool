@@ -5,6 +5,8 @@ class CustomElement < Element
 
   def after_create_with_params(params)
     for model in [:appln_person, :emerg]
+      next unless params[:required][model]
+
       for c in params[:required][model].keys
         section = custom_element_required_sections.new
         section.name = model.to_s
