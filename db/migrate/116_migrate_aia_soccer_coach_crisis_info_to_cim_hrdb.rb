@@ -1,7 +1,9 @@
 class MigrateAiaSoccerCoachCrisisInfoToCimHrdb < ActiveRecord::Migration
 
   def self.loop_answers_for_element(id)
-    e = Element.find id # current address valid until
+    e = Element.find_by_id id # current address valid until
+    return unless e
+
     cnt = 0
     for a in e.answers
       next if a.answer.empty? || a.answer == 'unknown'
