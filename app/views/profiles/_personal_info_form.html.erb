@@ -1,7 +1,12 @@
 <% @appln_person ||= @instance.viewer.person if @instance %>
 
 <P>
-What do you normally go by?
+What do you normally go by?<BR/>
+
+<%= custom_element_item('Title: ', :appln_person, :title_id) do |m,c,classes|
+      collection_select :appln_person, :title_id, Title.find(:all), :id, :desc, { :include_blank => true }, { :class => classes }
+    end
+%>
 
 <%= custom_element_text_field('First name: ', :appln_person, :person_fname) %>
 
@@ -27,6 +32,7 @@ What do you normally go by?
 <HR>
 <P><STRONG> Permanent Address </STRONG></P>
 
+<% unless @readonly %>
 <p><%= check_box :appln_person, :permanent_same_as_local, :onClick => %|
   if ($('appln_person_permanent_same_as_local').checked) {
     $('permanent_address').hide();
@@ -34,6 +40,7 @@ What do you normally go by?
     $('permanent_address').show();
   }
 |%> Same as local address.</p>
+<% end %>
 
 <div id='permanent_address' style='<%= 'display:none;' if @appln_person && @appln_person.permanent_same_as_local %>'>
 <%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Permanent ', :mid => '' } %>
