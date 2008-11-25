@@ -14,7 +14,22 @@ module ElementsHelper
     end
   end
 
+  MAP_ID = { 
+    :person_local_province_id => :local_province,
+    :province_id => :permanent_province,
+    :gender_id => :gender
+  }
+
   def custom_element_item(txt, m, c)
+    if @readonly
+      if MAP_ID[c] then c = MAP_ID[c] end
+
+      return %|
+<span class="readonly_question_text">#{txt}</span><br />
+<span class="blue">#{instance_variable_get("@#{m}").send(c)}</span><br />
+|
+    end
+
     reqd_section = @element && 
                    @element.custom_element_required_sections.detect{ |s| s.name == m.to_s && s.attribute == c.to_s }
 

@@ -1,33 +1,6 @@
-<TR><TD class="app">&nbsp;</TD><TD class="app">
-
-<% @appln_person ||= @instance.viewer.person %>
-<% @emerg = @appln_person.emerg %>
-
-<%= q 'Birthdate: ', @emerg.emerg_birthdate %>
-
-<%= q 'What are the names on your passport?', '' %>
-
-<%= q 'Surname: ', @appln_person.person_legal_lname %>
-<%= q 'Given names: ', @appln_person.person_legal_fname %>
-<%= q 'Do you have any medical conditions that could potentially become an emergency?  If so, please explain.: ', @emerg.emerg_medicalNotes %>
-
-<%= q 'Medication(s) Needed:  Will you be traveling with this medication on project? ', @emerg.emerg_meds %>
-
-<HR>
-
-<P> Emergency Contact 1: </P><%= render :partial => 'readonly/crisis_info_emerg_contact', :locals => { :prefix => 'emerg_contact' } %>
-
-<HR>
-
-<P> Emergency Contact 2: </P><%= render :partial => 'readonly/crisis_info_emerg_contact', :locals => { :prefix => 'emerg_contact2' } %>
-
-<HR>
-
-<P><STRONG>Passport Info:</STRONG> complete if going on an international project.</P>
-
-<%= q 'Passport #: ', @emerg.emerg_passportNum %>
-<%= q 'Passport Exp: ', @emerg.emerg_passportExpiry %>
-<%= q 'Passport Nationality: ', @emerg.emerg_passportOrigin %>
-
-</TD></TR>
+<% @readonly = true %>
+<td class="app"> </td>
+<td class="app">
+<%= render :partial => '/profiles/crisis_info_form' %>
+</td>
 

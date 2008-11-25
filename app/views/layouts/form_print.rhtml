@@ -7,7 +7,7 @@
 
 <body>
   <h2><%= @form_title %></h2>
-  <% @pages.sort.uniq.each_with_index do | this_page, i | %>
+  <% @pages.uniq.each_with_index do | this_page, i | %>
     <% next if this_page.hidden? %>
     
     <span class='readonly_page_header'><%= this_page.title %></span>
