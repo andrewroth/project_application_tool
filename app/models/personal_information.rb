@@ -17,7 +17,6 @@ class PersonalInformation < CustomElement
       # copy local address info to permanent if requested
       copy = params[:appln_person].delete :permanent_same_as_local
       if copy == '1'
-        throw "copy: #{copy}"
         for suffix in %w(city addr pc phone)
 	  params[:appln_person][:"person_#{suffix}"] = params[:appln_person][:"person_local_#{suffix}"]
         end
