@@ -402,3 +402,14 @@ function LimitText(fieldObj,maxChars) {
 	window.event.returnValue = result;
   return result;
 }
+
+function update_province_select(mid) {
+  province_id = 'appln_person_person_'+mid+'province_id'
+  country_province_id = province_id+'_'+$('appln_person_person_'+mid+'country_id').value
+  if ($(country_province_id) == null) {
+    //console.log("Couldn't find element with id " + country_province_id)
+  } else {
+    $(province_id).innerHTML = $(country_province_id).innerHTML;
+  }
+}
+

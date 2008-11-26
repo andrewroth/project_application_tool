@@ -20,6 +20,7 @@
         r += collection_select(m, c, country.provinces, :id, :province_desc, 
           { :include_blank => true }, { 
             :class => classes + ' hidden',
+	    :style => "display:none;",
             :name => id,
             :id => id
           })
@@ -30,6 +31,8 @@
 %>
 
 <script>
+  // NOTE: function also defined in questionnaire.js since this is loaded in a remote request
+  //         which doesn't let you defined functions
   function update_province_select(mid) {
     province_id = 'appln_person_person_'+mid+'province_id'
     country_province_id = province_id+'_'+$('appln_person_person_'+mid+'country_id').value
