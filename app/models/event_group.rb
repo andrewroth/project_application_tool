@@ -22,6 +22,12 @@ class EventGroup < Node
 
   def has_logo?() !filename.nil? end
 
+  def logo()
+    if has_logo? then return public_filename end
+    if parent then return parent.logo end
+    nil
+  end
+
   def classes(section = nil)
     classes = []
 

@@ -238,7 +238,7 @@ HK1 = booking status - can be dropped
     airport = Airport.find_by_code_with_lookup(code)
     return code unless airport
 
-    country = Country.find_by_code(airport.country_code)
+    country = PatCountry.find_by_code(airport.country_code)
     country_name = if country then country.name else airport.country_code end
     extra_info = if ['US','CA'].include?(airport.country_code) then airport.area_code else
                           country_name end

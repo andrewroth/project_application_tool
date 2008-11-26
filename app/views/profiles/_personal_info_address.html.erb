@@ -2,11 +2,45 @@
 
 <%= custom_element_text_field("#{label_prefix} City: ", :appln_person, :"person_#{mid}city") %>
 
-<%= custom_element_item("#{label_prefix} Province: ", :appln_person, :"person_#{mid}province_id") do |m,c,classes|
-        collection_select(m, c, Province.find(:all), :id, :province_desc, 
-	  { :include_blank => true }, { :class => classes })
+<%= custom_element_item("#{label_prefix} Country: ", :appln_person, :"person_#{mid}country_id") do |m,c,classes|
+      r = collection_select(m, c, Country.find(:all), :id, :country_desc, 
+                 { :include_blank => true }, { :class => classes })
+      r += observe_field "#{m}_#{c}", :function => "update_province_select('#{mid}')"
+      r
     end
 %>
+
+<%= custom_element_item("#{label_prefix} Province: ", :appln_person, :"person_#{mid}province_id") do |m,c,classes|
+
+      r = collection_select(m, c, Province.find(:all), :id, :province_desc,
+ 	  { :include_blank => true }, { :class => classes })
+
+      for country in Country.find(:all)
+        id = "#{m}_#{c}_#{country.id}"
+        r += collection_select(m, c, country.provinces, :id, :province_desc, 
+          { :include_blank => true }, { 
+            :class => classes + ' hidden',
+            :name => id,
+            :id => id
+          })
+      end
+
+      r
+    end
+%>
+
+<script>
+  function update_province_select(mid) {
+    province_id = 'appln_person_person_'+mid+'province_id'
+    country_province_id = province_id+'_'+$('appln_person_person_'+mid+'country_id').value
+    if ($(country_province_id) == null) {
+      //console.log("Couldn't find element with id " + country_province_id)
+    } else {
+      $(province_id).innerHTML = $(country_province_id).innerHTML;
+    }
+  }
+  update_province_select('<%= mid %>');
+</script>
 
 <%= custom_element_text_field("#{label_prefix} Postal Code: ", :appln_person, :"person_#{mid}pc") %>
 
