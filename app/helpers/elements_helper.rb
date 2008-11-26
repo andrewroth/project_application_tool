@@ -2,6 +2,7 @@ module ElementsHelper
   include ElementsRouteMaps
   include PagesRouteMaps
   include QuestionnaireRouteMaps
+  include ReadonlyHelper
 
   INITIALLY_REQUIRED = {
     :appln_person => { :person_fname => true, :person_lname => true, :gender_id => true, :person_email => true},
