@@ -24,6 +24,9 @@ class EventGroupsController < AjaxTreeController
       @node[:filename] = nil
       @node.save!
     end
+
+    # clear session cache
+    session[:logo_url] = nil
   end
 
   def scope
@@ -39,11 +42,15 @@ class EventGroupsController < AjaxTreeController
         @nodes.each do |n| n.filter_hidden = true end
       end
     end
+    
+    session[:logo_url] = nil
+
     index
   end
 
   def set_as_scope
     session[:event_group_id] = params[:id]
+    session[:logo_img] = nil
 
     # update cookie
     if params[:remember]

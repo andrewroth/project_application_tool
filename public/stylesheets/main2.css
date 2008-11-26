@@ -5,6 +5,10 @@ body {
 	min-width: 750px;
 }
 
+.hidden {
+	display: none;
+}
+
 fieldset {
 	margin: 5px;
 }
@@ -78,7 +82,7 @@ table#application_status {
 	margin-top: 30px;
 }
 
-#header h1 {
+#header h1, #branding_logo_title {
 	font-size: 18px;
 	margin: 0px;
 	padding: 10px;
@@ -281,6 +285,15 @@ img {
 	border: none;
 }
 
+img.branding_logo {
+	height: 50px;
+	vertical-align: middle;
+}
+
+#branding_logo_title {
+	position: relative;
+	top: 5px;
+}
 
 /* QUESTIONNAIRE ENGINE, STUDENT VIEW */
 

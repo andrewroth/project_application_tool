@@ -157,15 +157,16 @@ class ApplicationController < ActionController::Base
     unless session[:event_group_id] && !EventGroup.find(:all).empty?
       flash.keep :notice
       redirect_to scope_event_groups_url
-      false
     end 
   end
 
   def set_event_group
     begin
       @eg = EventGroup.find session[:event_group_id] if !EventGroup.find(:all).empty?
+      session[:logo_url] = @eg.logo unless session[:logo_url]
     rescue  
       session[:event_group_id] = nil
+      session[:logo_url] = nil
       redirect_to :action => params[:action]
       false
     end

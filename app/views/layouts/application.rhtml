@@ -53,7 +53,12 @@
           </p>
         <% end %>
       </div>
-      <h1>Project Application Tool</h1>
+      <% if session[:logo_url] -%>
+          <%= image_tag session[:logo_url], :class => 'branding_logo' %>
+          <span id='branding_logo_title'>Project Application Tool</span>
+      <% else %> 
+        <h1>Project Application Tool</h1>
+      <% end -%>
     </div>
     
     <% if @user %>
