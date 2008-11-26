@@ -18,6 +18,10 @@ fieldset img {
 	margin-left: 10px;
 }
 
+.hidden {
+	display: none;
+}
+
 #forms fieldset {
 	padding: 1em;
 	margin: 1em;
