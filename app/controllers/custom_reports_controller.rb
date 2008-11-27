@@ -152,6 +152,7 @@ class CustomReportsController < ApplicationController
             result = if valid_eval_str(method_s) && valid_eval_str(class_s)
                 class_o = eval(class_s)
                 res = if class_o then class_o.send(method_s) else "error: '#{class_s}' not defined" end
+                res = if res.nil? then '' else res end 
               else
                 'not allowed'
               end

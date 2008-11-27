@@ -701,6 +701,7 @@ class ReportsController < ApplicationController
   
   def travel_list
     @columns = MyOrderedHash.new [
+    :title, 'string',
     :last_name, 'string', 
     :first_name, 'string',
     @include_pref1_applns ? [ :status, 'string' ] : nil,
@@ -722,6 +723,7 @@ class ReportsController < ApplicationController
       passport_info = get_passport_info(ac, p, a, ec_entry)
 
       gender = if p then p.gender else '?' end
+      title = if p then p.title else '' end
       
       if v && p
         last_name = p.person_lname.capitalize
@@ -732,11 +734,12 @@ class ReportsController < ApplicationController
       elsif !v && !p
         last_name = 'no viewer'
 	first_name = ''
+	first_name = ''
       end
 
       student = if v then (v.is_student? ? '' : 'staff') else '?' end
 
-      @participants << [ last_name, first_name,
+      @participants << [ title, last_name, first_name,
         @include_pref1_applns ? (ac ? 'accepted' : a.status) : nil, 
         @many_projects ? (ac ? ac.project.title : a.preference1.title) : nil, 
         gender, student, birthdate, passport_info, 
