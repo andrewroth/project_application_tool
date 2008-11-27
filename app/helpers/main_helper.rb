@@ -12,7 +12,7 @@ module MainHelper
   end
 
   def edit_always_editable_link(profile_id)
-    link 'edit', "/appln/view_always_editable/?appln_id=#{profile_id}"
+    link 'edit', "/appln/view_always_editable/?profile_id=#{profile_id}"
   end
 
   def manual_donations_link(motv_code)

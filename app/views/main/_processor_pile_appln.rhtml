@@ -45,7 +45,7 @@
               <% end %>
 	      <% @user.set_project @profile.project %>
 	      <% if @user.is_projects_coordinator? || (@profile.project && @user.is_processor?) %>
-	           <%= edit_always_editable_link @appln.id %>
+	           <%= edit_always_editable_link @profile.id %>
 	      <% end %>
           </td>
         </tr>

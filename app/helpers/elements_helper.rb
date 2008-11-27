@@ -20,7 +20,8 @@ module ElementsHelper
     :province_id => :permanent_province,
     :person_local_country_id => :local_country,
     :country_id => :permanent_country,
-    :gender_id => :gender
+    :gender_id => :gender,
+    :health_province_id => :health_province_longDesc
   }
 
   def custom_element_item(txt, m, c)

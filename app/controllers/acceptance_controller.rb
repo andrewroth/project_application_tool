@@ -8,6 +8,7 @@ class AcceptanceController < BaseApplnAndRefsViewer
   before_filter :ensure_view_entire_permission, :only => [ :view_entire, :summary_forms ]
   before_filter :ensure_view_references_permission, :only => [ :view_entire ]
   before_filter :ensure_modify_acceptance_permission, :only => [ :update_support_coach ]
+  before_filter :set_readonly
   skip_before_filter :set_questionnaire, :only => [ :bulk_summary_forms ]
   skip_before_filter :setup, :only => [ :bulk_summary_forms ]
   prepend_before_filter :set_project, :only => [ :bulk_summary_forms ]
@@ -107,4 +108,6 @@ class AcceptanceController < BaseApplnAndRefsViewer
       super
     end
   end
+
+  def set_readonly() @custom_folder = "readonly" end
 end

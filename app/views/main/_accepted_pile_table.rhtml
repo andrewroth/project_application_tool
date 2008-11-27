@@ -112,7 +112,7 @@
 		
 		<% if @user.is_projects_coordinator? || @user.is_processor? %>
 		  <% if appln %>
-                    <%= edit_always_editable_link appln.id %>
+                    <%= edit_always_editable_link acceptance.id %>
 		  <% else %>
 		    Error: no appln for acceptance <%= acceptance.id %>
 		  <% end %>

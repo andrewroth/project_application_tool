@@ -32,6 +32,12 @@ module AcceptancePileFunctionality
 
     if @type == 'ref'
       @ref = @appln.reference_instances.find_by_reference_id params[:ref_id]
+      unless @ref
+        flash[:notice] = "Reference data not found.  Most likely this student hasn't completed the reference page yet."
+	redirect_to :back
+        return
+      end
+
       @pass_params[:ref_id] = params[:ref_id]
       @form_title = "#{name} #{@ref.reference.text}"
     else
