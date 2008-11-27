@@ -254,5 +254,8 @@ end
 
 # TODO: make it install a clean version of mysql
 
+# need to create a few files for debian etch stable
+touch /etc/apache2/httpd.conf
+
 # restart apache to get it to pick up the new rails domains
 run "/etc/init.d/apache2 restart"
