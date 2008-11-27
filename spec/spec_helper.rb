@@ -48,7 +48,11 @@ end
 
 def setup_eg
   session[:event_group_id] = 1
-  @eg = mock("eg", :empty? => false, :default_text_area_length => nil, :id => 1)
+  @eg = mock("eg", :empty? => false, 
+                   :default_text_area_length => nil, 
+                   :id => 1,
+                   :logo => '/logo' 
+            )
   EventGroup.stub!(:find).and_return(@eg)
 end
 

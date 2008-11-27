@@ -11,16 +11,19 @@ event_group_1:
   long_desc: 
   has_your_campuses: 
   hidden: false
+  filename: /filename.png
 
 event_group_2:
   title: hidden eg
   id: 2
   parent_id: 1
   hidden: true
+  filename: /filename.png
 
 event_group_3:
   title: not hidden eg
   id: 3
   parent_id: 1
   hidden: false
+  filename: /filename.png
 
