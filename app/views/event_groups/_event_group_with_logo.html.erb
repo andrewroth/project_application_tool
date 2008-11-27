@@ -1,0 +1,12 @@
+<% if node.has_logo? %>
+  <%= render :partial => 'logo', :locals => { :node => node } %>
+  <br />
+  <div class='event_group_text_with_logo'>
+<% end %>
+
+<%= @content_for_label %>
+<% @content_for_label = '' -%>
+
+<% if node.has_logo? -%>
+  </div>
+<% end -%>

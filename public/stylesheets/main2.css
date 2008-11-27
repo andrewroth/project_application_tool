@@ -642,3 +642,14 @@ img.new_window {
       height:16px;
       z-index: 3;
 }
+
+#mass_email_checks tr {
+	width: 500px;
+}
+#mass_email_checks td {
+	width: 250px;
+}
+#mass_email_results {
+	border: 1px solid blue;
+}
+
