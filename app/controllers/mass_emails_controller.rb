@@ -12,6 +12,10 @@ class MassEmailsController < ApplicationController
     "withdrawn", { :class => "Withdrawn", :txt => "Withdrawn" }
   ])
 
+  def index
+    @submenu_title = "Mass Emails"
+  end
+
   def emails
     # find by type then filter by status as required
     types = []
