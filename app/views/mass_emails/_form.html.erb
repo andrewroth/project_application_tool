@@ -1,0 +1,45 @@
+<div class='centerblock'>
+
+<% form_remote_tag :url => '/mass_emails/emails', 
+                   :update => 'mass_email_results',
+                   :loading => "$('loading').show();",
+                   :loaded => "$('loading').hide();" do %>
+
+<P>This tool will give you a comma-separated list of emails that you can use to send mass emails to applicants who match certain criteria.
+</P>
+
+<div>
+
+    <P>From project: <%= select_tag 'project_id', options_for_select(project_options) %> </P>
+
+    <P>With status:</P>
+
+    <table id='mass_email_checks'>
+    <% check_options = MassEmailsController::EMAIL_CHECK_OPTIONS.collect{ 
+         |id, o| [ id, o[:txt] ] } -%>
+    <% half = (check_options.length / 2.0 + 0.5).to_i -%>
+    <% for i in (0..half-1) %>
+      <% i1 = i; i2 = i + half %>
+
+      <tr><td>
+        <% id, value = check_options[i1] %>
+        <%= check_box_tag id %> <%= value %>
+      </td><td>
+        <% id, value = check_options[i2] %>
+        <% unless id.nil? || id.empty? -%>
+          <%= check_box_tag id %> <%= value %>
+        <% end -%>
+      </td></tr>
+      
+    <% end %>
+    </table>
+
+</div>
+
+<p>
+<%= submit_tag 'Submit' %>
+</p>
+
+<% end -%>
+
+</div>
