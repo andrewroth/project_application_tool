@@ -17,9 +17,9 @@ module ElementsHelper
 
   MAP_ID = { 
     :person_local_province_id => :local_province,
-    :province_id => :permanent_province,
     :person_local_country_id => :local_country,
-    :country_id => :permanent_country,
+    :person_province_id => :permanent_province,
+    :person_country_id => :permanent_country,
     :gender_id => :gender,
     :health_province_id => :health_province_longDesc
   }
