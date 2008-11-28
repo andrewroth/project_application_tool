@@ -265,5 +265,8 @@ end
 # need to create a few files for debian etch stable
 run "touch /etc/apache2/httpd.conf"
 
+# make sure www-data owns everything so that passenger runs as them
+run "chmod g+rw /var/www -R; chown www-data.www-data /var/www -R"
+
 # restart apache to get it to pick up the new rails domains
 run "/etc/init.d/apache2 restart"
