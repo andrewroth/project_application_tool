@@ -254,6 +254,14 @@ end
 
 # TODO: make it install a clean version of mysql
 
+# need 'NameVirtualHost *:80' in apache2.conf
+vhl = "NameVirtualHost *:80"
+file = "/etc/apache2/apache2.conf"
+if %x[grep '#{vhl}' #{file}].empty?
+  puts "need a line '#{vhl}' in config file '#{file}'"
+  run "echo '#{vhl}' >> #{file}"
+end
+
 # need to create a few files for debian etch stable
 run "touch /etc/apache2/httpd.conf"
 
