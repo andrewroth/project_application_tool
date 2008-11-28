@@ -5,7 +5,7 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.0.2'
+RAILS_GEM_VERSION = '2.2.2'
 
 require 'rubygems'
 gem 'soap4r'
@@ -51,7 +51,8 @@ Rails::Initializer.run do |config|
   config.action_mailer.raise_delivery_errors = false
   
   # Load Engines first
-  config.plugins = [:engines, :engines_model_mixins, :questionnaire_engine, :reference_engine, :all]
+  #config.plugins = [:engines, :engines_model_mixins, :questionnaire_engine, :reference_engine, :all]
+  config.plugins = [:engines, :questionnaire_engine, :reference_engine, :all]
 
   # shhhh secret!  apparently this is required in 2.x
   config.action_controller.session = { :secret => "In the beginning was the Word, and the Word was with God, and the Word was God." }
@@ -64,13 +65,13 @@ Rails::Initializer.run do |config|
   # http://dev.rubyonrails.org/ticket/5852
   config.after_initialize {
     Engines.code_mixing_file_types << 'model'
-    Dependencies.load_once_paths = []
+    ActiveSupport::Dependencies.load_once_paths = []
   }
 end
 
 # Add new inflection rules using the following format 
 # (all these examples are active by default):
-Inflector.inflections do |inflect|
+ActiveSupport::Inflector.inflections do |inflect|
 #   inflect.plural /^(ox)$/i, '\1en'
 #   inflect.singular /^(ox)en/i, '\1'
 #   inflect.irregular 'person', 'people'
