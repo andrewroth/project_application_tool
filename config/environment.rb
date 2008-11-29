@@ -16,6 +16,12 @@ require File.join(File.dirname(__FILE__), '../vendor/plugins/engines/boot')
 
 require 'add_plugin_load_paths_after_loading_plugins'
 
+# questionnaire engine config
+module QE
+  mattr_accessor :prefix
+  self.prefix = "form_"
+end
+
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence those specified here
   
@@ -64,8 +70,7 @@ Rails::Initializer.run do |config|
   # http://www.ruby-forum.com/topic/134860#600630
   # http://dev.rubyonrails.org/ticket/5852
   config.after_initialize {
-    Engines.code_mixing_file_types << 'model'
-    ActiveSupport::Dependencies.load_once_paths = []
+    #ActiveSupport::Dependencies.load_once_paths = []
   }
 end
 
@@ -84,12 +89,6 @@ end
 
 ExceptionNotifier.exception_recipients = %w(andrew.roth@c4c.ca helpdesk@c4c.ca)
 ExceptionNotifier.sender_address = %w(spt@campusforchrist.org)
-
-# questionnaire engine config
-module QE
-  mattr_accessor :prefix
-  self.prefix = "form_"
-end
 
 
 # Include formatting methods globally

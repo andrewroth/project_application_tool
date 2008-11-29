@@ -5,7 +5,6 @@ describe SecurityController do
   # specs are for ApplicationController
   it "should at least not crash when when rescues_path is called" do
     get :test_rescues_path
-    response.body.should == "doesn't exist test: /Users/andrewroth/Development/pat.trunk/vendor/rails/actionpack/lib/action_controller/templates/rescues/doesntexist.erb exists test: /Users/andrewroth/Development/pat.trunk/app/views/rescues/layout.rhtml"
   end
 
   it "should set server_url for development/test" do

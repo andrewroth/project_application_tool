@@ -4,6 +4,8 @@ require  'formatting'
 module ApplicationHelper
   include Formatting
   
+  def file_exists?(p) template_exists?(p) end
+
   def new_item(title, controller, action = '')
     item_html = "<li "
     if (title == @page_title)

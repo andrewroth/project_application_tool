@@ -311,7 +311,7 @@ render :partial => "viewer_specifics"
       :select => "#{Campus.table_name}.campus_desc, #{Campus.table_name}.campus_shortDesc, " + 
                  "#{Appln.table_name}.form_id, #{Person.table_name}.person_fname, #{Person.table_name}.person_lname," + 
                  "#{Viewer.table_name}.viewer_userID, #{Profile.table_name}.status, #{Profile.table_name}.type," +
-		 "#{Appln.table_name}.preference1_id, #{Profile.table_name}.project_id",
+		             "#{Appln.table_name}.preference1_id, #{Profile.table_name}.project_id",
       :conditions => "#{Assignment.table_name}.assignmentstatus_id in (#{Assignmentstatus.campus_student_ids.join(',')})" )
 
     if campuses.class == Array then campuses else [ campuses ] end

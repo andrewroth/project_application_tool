@@ -1,5 +1,4 @@
 module CustomReportsHelper
-  include ActiveScaffold::Helpers::Ids
 
   def no_show_existing
     true

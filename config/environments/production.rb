@@ -23,3 +23,7 @@ ActionMailer::Base.smtp_settings = {
   :address => '192.168.250.4',
   :domain => 'granvillehosting.com'
 }
+
+# eager loading messes up active scaffold and a bunch of other things
+config.eager_load_paths = []
+
