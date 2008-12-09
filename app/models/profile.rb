@@ -155,6 +155,12 @@ class Profile < ActiveRecord::Base
     calculate_sums(all_cost_items(eg))
   end
   
+  def update_costing_total_cache(eg = nil, use_project_from_eg = false)
+    eg ||= (project.event_group if project) || (appln.form.event_group if appln && appln.form)
+    self[:cached_costing_total] = if eg then funding_target(eg, use_project_from_eg) else nil end
+    save!
+  end
+
   # returns an array
   # 
   #    [ <big_total>, [ 
@@ -192,10 +198,10 @@ class Profile < ActiveRecord::Base
     donations(params).inject(0.0) { |received, donation| received + donation.amount.to_f }
   end
   
-  def funding_target(eg)
+  def funding_target(eg, use_project_from_eg = false)
     optin_cost_item_ids = Hash[*optin_cost_items.inject([]) {|a,oci| a + [oci.cost_item_id, true ]}]
 
-    all_cost_items(eg).inject(0.0){ |t,ci| 
+    all_cost_items(eg, use_project_from_eg).inject(0.0){ |t,ci| 
       if !ci.optional || optin_cost_item_ids[ci.id]
         t + ci.amount.to_f
       else
@@ -204,7 +210,13 @@ class Profile < ActiveRecord::Base
     }
   end
   
-  def all_cost_items(eg)
-    project.all_cost_items(eg) + profile_cost_items
+  def all_cost_items(eg, use_project_from_eg = false)
+    project_to_use = if use_project_from_eg
+        eg.projects.detect{ |p| p.id == project.id if project }
+      else
+        project
+      end
+
+    project_to_use.all_cost_items(eg) + profile_cost_items
   end
 end
