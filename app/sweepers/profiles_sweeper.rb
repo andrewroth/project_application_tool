@@ -50,7 +50,7 @@ class ProfilesSweeper < ActionController::Caching::Sweeper
           #expire_fragment(:controller => 'main', :action => 'your_projects', 
           #            :section => profile.orig_atts['type'], 
           #            :project_id => profile.orig_atts['project_id'])
-	  logger.info "fragment: special case hit (project_id changed)" if logger
+          logger.info "fragment: special case hit (project_id changed)" if logger
           expire_fragment(%r{your_projects.project_id=#{profile.orig_atts['project_id']}&role=.*&section=#{profile.orig_atts['type']}})
         end
 
