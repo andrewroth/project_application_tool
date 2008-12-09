@@ -1,6 +1,6 @@
 class AddCostingCacheToProfiles < ActiveRecord::Migration
   def self.up
-    add_column :profiles, :cached_costing_total, :double
+    add_column :profiles, :cached_costing_total, :decimal, :precision => 8, :scale => 2
   end
 
   def self.down
