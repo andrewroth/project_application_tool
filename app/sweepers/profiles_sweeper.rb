@@ -30,7 +30,7 @@ class ProfilesSweeper < ActionController::Caching::Sweeper
     #   being considered right now is different than the section the profile is
     #   in
     return false if profile.class.name != section
-    logger.info "  checking atts #{PROFILE_ATTS_USED_BY_SECTIONS[section].inspect}"
+    logger.info "  checking atts #{PROFILE_ATTS_USED_BY_SECTIONS[section].inspect}" if logger
 
     # no obvious cases above triggered then go through each attribute
     for att in PROFILE_ATTS_USED_BY_SECTIONS[section]
