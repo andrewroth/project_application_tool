@@ -36,10 +36,14 @@ class Profile < ActiveRecord::Base
   end
 
   def write_attribute(att, val)
-    #puts "  write_attribute #{att}=#{val}"
     @orig_atts ||= { }
     @orig_atts[att.to_s] ||= self[att]
-    #puts "  #{@orig_atts.inspect}"
+
+    # special case for remembering when the costing total needs to be recalculated
+    if %w(type project_id).include?(att.to_s)
+      @update_costing_total_cache = true
+    end
+
     super
   end
 
@@ -216,7 +220,20 @@ class Profile < ActiveRecord::Base
       else
         project
       end
+    return [ ] unless project_to_use
 
     project_to_use.all_cost_items(eg) + profile_cost_items
+  end
+
+  after_create do |profile|
+    profile.update_costing_total_cache
+  end
+
+  def after_save
+    if @update_costing_total_cache
+      @update_costing_total_cache = false
+      project.reload
+      update_costing_total_cache
+    end
   end
 end
