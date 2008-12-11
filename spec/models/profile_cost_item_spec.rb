@@ -46,6 +46,11 @@ describe ProfileCostItem, "testing" do
     profile.project_id = nil
     profile.save!
     profile.cached_costing_total.should be_nil
+
+    # and set it back to a project
+    profile.project_id = Project.find(:first).id
+    profile.save!
+    profile.cached_costing_total.should == Project.find(:first).all_cost_items.inject(0) { |t,ci| t += ci.amount }
   end
 
 end
