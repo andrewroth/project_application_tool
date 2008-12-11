@@ -37,4 +37,15 @@ describe ProfileCostItem, "testing" do
     profile.cached_costing_total.should == orig_amount + 50 # the one from fixtures already is 50
   end
 
+  it "should set the cached_costing_total on a new profile and project_id/type changing" do
+    # create
+    profile = Acceptance.create :project_id => Project.find(:first).id, :viewer_id => Viewer.find(:first).id
+    profile.cached_costing_total.should == Project.find(:first).all_cost_items.inject(0) { |t,ci| t += ci.amount }
+
+    # save
+    profile.project_id = nil
+    profile.save!
+    profile.cached_costing_total.should be_nil
+  end
+
 end
