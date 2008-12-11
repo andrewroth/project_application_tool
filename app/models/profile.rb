@@ -232,8 +232,10 @@ class Profile < ActiveRecord::Base
   def after_save
     if @update_costing_total_cache
       @update_costing_total_cache = false
-      project.reload
-      update_costing_total_cache
+      if project
+        project.reload
+        update_costing_total_cache
+      end
     end
   end
 end
