@@ -40,6 +40,7 @@ describe "/main/_viewer_specifics" do
                  :funding_target => 123,
                  :support_coach_str => 'john doe',
                  :status => 'started',
+                 :cached_costing_total => 1000,
                  :id => 1
     )
 
