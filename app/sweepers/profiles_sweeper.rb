@@ -15,8 +15,9 @@ class ProfilesSweeper < ActionController::Caching::Sweeper
 
   def profile_changed_wrt_section(profile, section)
     # check for moving from one section to another (both orig & new sections change)
+    logger.info "sweeper checking section #{section} (profile's class #{profile.class.name}, type #{profile[:type]}, orig type #{profile.orig_atts['type']})" if logger
     return true if profile.att_changed(:type) && 
-               ( [ profile.class.name, profile.orig_atts['type'] ].include?(section) )
+               ( [ profile[:type], profile.class.name, profile.orig_atts['type'] ].include?(section) )
     # check for moving project, if so then only the current section should be updated
     #   (though see special case which will clear out the original section
     #     for the original project)
@@ -28,8 +29,8 @@ class ProfilesSweeper < ActionController::Caching::Sweeper
     #   then we know that the cache does not need to be cleared if the section
     #   being considered right now is different than the section the profile is
     #   in
-    logger.info "sweeper checking section #{section} (profile's section is #{profile.class.name}" if logger
     return false if profile.class.name != section
+    logger.info "  checking atts #{PROFILE_ATTS_USED_BY_SECTIONS[section].inspect}"
 
     # no obvious cases above triggered then go through each attribute
     for att in PROFILE_ATTS_USED_BY_SECTIONS[section]

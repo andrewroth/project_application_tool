@@ -75,6 +75,7 @@ class Profile < ActiveRecord::Base
 
     # special case for withdrawing so we remember which class it was for the class_when_withdrawn
     #  and state_when_withdrawn
+    profile.orig_atts['type'] = self[:type]
     if params[:type] == 'Withdrawn'
       init_params, profile = manual_update_withdraw_helper
     elsif Profile.types.include? params[:type]
