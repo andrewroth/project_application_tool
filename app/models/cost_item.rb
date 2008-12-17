@@ -1,5 +1,6 @@
 class CostItem < ActiveRecord::Base
   has_many :optins, :class_name => 'OptinCostItem'
+  belongs_to :project
 
   def shortDesc
     "#{description} #{self.class == YearCostItem ? '(year-item)' : ''} " + 
@@ -46,4 +47,12 @@ class CostItem < ActiveRecord::Base
         2
     end
   end  
+
+  after_destroy { |record|
+    record.update_costing_total_cache
+  }
+
+  after_save { |record|
+    record.update_costing_total_cache
+  }
 end

@@ -15,8 +15,9 @@ class ProfilesSweeper < ActionController::Caching::Sweeper
 
   def profile_changed_wrt_section(profile, section)
     # check for moving from one section to another (both orig & new sections change)
+    logger.info "sweeper checking section #{section} (profile's class #{profile.class.name}, type #{profile[:type]}, orig type #{profile.orig_atts['type']})" if logger
     return true if profile.att_changed(:type) && 
-               ( [ profile.class.name, profile.orig_atts['type'] ].include?(section) )
+               ( [ profile[:type], profile.class.name, profile.orig_atts['type'] ].include?(section) )
     # check for moving project, if so then only the current section should be updated
     #   (though see special case which will clear out the original section
     #     for the original project)
@@ -28,8 +29,8 @@ class ProfilesSweeper < ActionController::Caching::Sweeper
     #   then we know that the cache does not need to be cleared if the section
     #   being considered right now is different than the section the profile is
     #   in
-    logger.info "sweeper checking section #{section} (profile's section is #{profile.class.name}" if logger
     return false if profile.class.name != section
+    logger.info "  checking atts #{PROFILE_ATTS_USED_BY_SECTIONS[section].inspect}" if logger
 
     # no obvious cases above triggered then go through each attribute
     for att in PROFILE_ATTS_USED_BY_SECTIONS[section]
@@ -50,7 +51,7 @@ class ProfilesSweeper < ActionController::Caching::Sweeper
           #expire_fragment(:controller => 'main', :action => 'your_projects', 
           #            :section => profile.orig_atts['type'], 
           #            :project_id => profile.orig_atts['project_id'])
-	  logger.info "fragment: special case hit (project_id changed)" if logger
+          logger.info "fragment: special case hit (project_id changed)" if logger
           expire_fragment(%r{your_projects.project_id=#{profile.orig_atts['project_id']}&role=.*&section=#{profile.orig_atts['type']}})
         end
 

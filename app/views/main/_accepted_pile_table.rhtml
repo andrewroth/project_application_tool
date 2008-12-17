@@ -63,7 +63,7 @@
             <% if @full_view %>
                 <td><%= format_currency acceptance.support_claimed %><br /><%= format_date acceptance.support_claimed_updated_at %></td>
                 <td><%= format_currency acceptance.donations_total(:cache => @cache) %></td>
-                <td><%= format_currency acceptance.funding_target(@eg) %></td>
+                <td><%= format_currency acceptance.cached_costing_total %></td>
                 <td>
                     <% if @user.can_modify_profile_in_project @project %>
                         <% name = "support_coach_#{acceptance.id}" %>

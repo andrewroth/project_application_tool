@@ -1,0 +1,4 @@
+profile_1:
+  type: Acceptance
+  viewer: student_seven_viewer
+  project: project_1

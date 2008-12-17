@@ -21,9 +21,8 @@ class Project < ActiveRecord::Base
     return start.year
   end
   
-  def all_cost_items(eg)
-    year_cost_items = CostItem.yearly(year) 
+  def all_cost_items(eg = event_group)
     eg_cost_items = eg.cost_items.select{|ci| ci.class == YearCostItem }
-    (year_cost_items + eg_cost_items + cost_items).uniq
+    (eg_cost_items + cost_items).uniq
   end
 end

@@ -1,0 +1,17 @@
+project_1_cost_item:
+  project: project_1
+  amount: 50
+  type: ProjectCostItem
+  optional: false
+
+eg_1_cost_item:
+  amount: 50
+  type: YearCostItem
+  optional: false
+  event_group: event_group_1
+
+profile_1_cost_item:
+  amount: 50
+  type: ProfileCostItem
+  optional: false
+  profile: profile_1

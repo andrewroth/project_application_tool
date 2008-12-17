@@ -36,10 +36,14 @@ class Profile < ActiveRecord::Base
   end
 
   def write_attribute(att, val)
-    #puts "  write_attribute #{att}=#{val}"
     @orig_atts ||= { }
     @orig_atts[att.to_s] ||= self[att]
-    #puts "  #{@orig_atts.inspect}"
+
+    # special case for remembering when the costing total needs to be recalculated
+    if %w(type project_id).include?(att.to_s)
+      @update_costing_total_cache = true
+    end
+
     super
   end
 
@@ -71,6 +75,7 @@ class Profile < ActiveRecord::Base
 
     # special case for withdrawing so we remember which class it was for the class_when_withdrawn
     #  and state_when_withdrawn
+    profile.orig_atts['type'] = self[:type]
     if params[:type] == 'Withdrawn'
       init_params, profile = manual_update_withdraw_helper
     elsif Profile.types.include? params[:type]
@@ -155,6 +160,12 @@ class Profile < ActiveRecord::Base
     calculate_sums(all_cost_items(eg))
   end
   
+  def update_costing_total_cache(eg = nil, use_project_from_eg = false)
+    eg ||= (project.event_group if project) || (appln.form.event_group if appln && appln.form)
+    self[:cached_costing_total] = if eg then funding_target(eg, use_project_from_eg) else nil end
+    save!
+  end
+
   # returns an array
   # 
   #    [ <big_total>, [ 
@@ -192,10 +203,10 @@ class Profile < ActiveRecord::Base
     donations(params).inject(0.0) { |received, donation| received + donation.amount.to_f }
   end
   
-  def funding_target(eg)
+  def funding_target(eg, use_project_from_eg = false)
     optin_cost_item_ids = Hash[*optin_cost_items.inject([]) {|a,oci| a + [oci.cost_item_id, true ]}]
 
-    all_cost_items(eg).inject(0.0){ |t,ci| 
+    all_cost_items(eg, use_project_from_eg).inject(0.0){ |t,ci| 
       if !ci.optional || optin_cost_item_ids[ci.id]
         t + ci.amount.to_f
       else
@@ -204,7 +215,28 @@ class Profile < ActiveRecord::Base
     }
   end
   
-  def all_cost_items(eg)
-    project.all_cost_items(eg) + profile_cost_items
+  def all_cost_items(eg, use_project_from_eg = false)
+    project_to_use = if use_project_from_eg
+        eg.projects.detect{ |p| p.id == project.id if project }
+      else
+        project
+      end
+    return [ ] unless project_to_use
+
+    project_to_use.all_cost_items(eg) + profile_cost_items
+  end
+
+  after_create do |profile|
+    profile.update_costing_total_cache
+  end
+
+  def after_save
+    if @update_costing_total_cache
+      @update_costing_total_cache = false
+      if project
+        project.reload
+        update_costing_total_cache
+      end
+    end
   end
 end

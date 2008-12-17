@@ -128,7 +128,7 @@ class ApplicationController < ActionController::Base
       end
 
       @pass_params ||= {}
-      @pass_params[:profile_id] = @profile.id
+      @pass_params[:profile_id] = @profile.id if @profile
     rescue
       @appln = nil
     end

@@ -3,7 +3,6 @@ event_group_1:
   type: 
   location_type: 
   location_id: 
-  id: 1
   default_text_area_length: 4000
   parent_id: 
   outgoing_email: 
@@ -15,15 +14,13 @@ event_group_1:
 
 event_group_2:
   title: hidden eg
-  id: 2
-  parent_id: 1
+  parent: event_group_1
   hidden: true
   filename: /filename.png
 
 event_group_3:
   title: not hidden eg
-  id: 3
-  parent_id: 1
+  parent: event_group_1
   hidden: false
   filename: /filename.png
 

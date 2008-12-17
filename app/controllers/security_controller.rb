@@ -50,12 +50,9 @@ class SecurityController < ApplicationController
     fn = params[:first_name] || session[:gcx][:firstName]
     ln = params[:last_name] || session[:gcx][:lastName]
     uid = params[:email] || session[:gcx][:email]
+    guid = session[:gcx][:guid]
 
-    v = Viewer.create :guid => session[:gcx][:guid], :viewer_lastLogin => 0, :accountgroup_id => 15, :viewer_userID => uid
-    p = Person.create :person_fname => fn, :person_lname => ln
-    ag_st = Accessgroup.find_by_accessgroup_key '[accessgroup_student]'
-    Vieweraccessgroup.create :viewer_id => v.id, :accessgroup_id => ag_st.id
-    Access.create :viewer_id => v.id, :person_id => p.id
+    v = Viewer.create_new_cim_hrdb_account guid, fn, ln, uid
 
     setup_given_viewer_id v.id
   end
