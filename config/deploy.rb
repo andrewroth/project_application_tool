@@ -12,6 +12,7 @@ elsif %w(p2c pc).include? ENV['system']
   ENV['host'] ||= 'pat.powertochange.org' # NOTE won't work until Brent sets this up
   ENV['domain'] ||= 'pat.powertochange.org'
   ENV['port'] ||= '22'
+  ENV['user'] ||= 'andrew'
 end
 
 ENV['user'] ||= %x[whoami].chomp
