@@ -16,7 +16,7 @@ class User
 #        [ :applns, :accessgroups, :persons ] + 
 #          Viewer.project_role_syms
 #      )
-      @viewer = Viewer.find @id
+      @viewer = Viewer.find @id, :include => { :persons => :staff }
     end
     @viewer
   end
