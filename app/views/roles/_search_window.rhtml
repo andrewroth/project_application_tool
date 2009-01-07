@@ -1,9 +1,17 @@
 
 <!-- based on  http://www.recentrambles.com/pragmatic/view/59 -->
 <!-- this will go in the div "<%=@role%>_search_window" -->
+<% form_remote_tag(:update => "search_#{@role}_results",
+                          :url        =>  { :action => "search",
+                                            :project_id => @project.id,
+                                            :role => @role },
+                          :loading    =>  "search_#{@role}_start();",
+                          :complete   =>  "search_#{@role}_end();") do
+ -%>
+
 <div class="notice">
     Search: 
-    <%= text_field_tag "search_#{@role}_field" %>
+    <%= text_field_tag "search_text" %>
     <div id="search_<%=@role%>_indicator" style="display:none;">
         <%= image_tag("/images/spinner.gif") %>
     </div>
@@ -18,16 +26,9 @@
             Element.show('search_<%=@role%>_results');
         }
     </SCRIPT>    
-    <%= observe_field("search_#{@role}_field",
-                          :frequency  =>  0.5,
-                          :update     =>  "search_#{@role}_results",
-                          :with       =>  "'search_text='+value",
-                          :url        =>  { :action => "search", 
-                                            :project_id => @project.id,
-                                            :role => @role },
-                          :loading    =>  "search_#{@role}_start();",
-                          :complete   =>  "search_#{@role}_end();") %>
-    
+
+    <%= submit_tag 'Search' %>
+
     <div id="search_<%= @role %>_results"></div>
     <div id="search_<%= @role %>_action_response" style="display:none"></div>
 	<div class="search_button">
@@ -44,3 +45,4 @@
    <a class="button" href="javascript:hide_<%=@role%>_search();">Done</a> 
    </div>
 </div>
+<% end %>

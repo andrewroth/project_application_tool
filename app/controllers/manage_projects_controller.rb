@@ -137,17 +137,31 @@ class ManageProjectsController < ApplicationController
     #  to roles) and not already {role}
     # for this project
     
-    role_staff_ids = @project.send(@role).find(:all).collect { |staff| staff.viewer_id }
+    @role_staff_ids = @project.send(@role).find(:all).collect { |staff| staff.viewer_id }
 
-    @phrase = "%" + params[:search_text] + "%" 
-    match_ids_by_userID = [] || Viewer.find(:all, :conditions => ["viewer_userID like ?", @phrase]).collect { |staff| staff.viewer_id }
-    match_ids_by_name = Viewer.find(:all, :include => :persons).delete_if { |v| 
-      v.name.downcase[params[:search_text].downcase].nil? 
-    }.collect{ |v| v.id }
+    @phrase = "%" + params[:search_text].gsub(' ', '%') + "%"
+    select = "#{Viewer.table_name}.viewer_userID, #{Person.table_name}.person_fname, #{Person.table_name}.person_lname"
+
+    match_by_userID = Viewer.find(:all, :include => :persons, :conditions => ["viewer_userID like ?", @phrase], :select => select)
+    match_by_name = Viewer.find(:all, :include => :persons, 
+    	:conditions => [ "person_fname like ? or person_lname like ?", @phrase, @phrase ],
+	:select => select
+    )
     
-    match_ids = match_ids_by_userID | match_ids_by_name
-    
-    @found_viewers = Viewer.find(match_ids - role_staff_ids, :order => "viewer_userID")
+    # remove those that already have roles, and duplicates
+    @have_viewer = {}
+    delete_proc = Proc.new { |v|
+      if @role_staff_ids.include?(v.viewer_id) || @have_viewer[v.viewer_id]
+        true
+      else
+        @have_viewer[v.viewer_id] = true
+        false
+      end
+    }
+    match_by_userID.delete_if &delete_proc
+    match_by_name.delete_if &delete_proc
+
+    @found_viewers = match_by_userID + match_by_name
     
     render :action => "roles/search_results", :layout => "empty"
   end
