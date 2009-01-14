@@ -153,8 +153,9 @@ class ApplicationController < ActionController::Base
   # --------- project group ----------
   def verify_event_group_chosen
     session[:event_group_id] = cookies[:event_group_id] if cookies[:event_group_id]
-
-    unless session[:event_group_id] && !EventGroup.find(:all).empty?
+    
+    unless session[:event_group_id] && !EventGroup.find(:all).empty? && 
+            !(session[:event_group_id].class == String && session[:event_group_id].empty?)
       flash.keep :notice
       redirect_to scope_event_groups_url
     end 
