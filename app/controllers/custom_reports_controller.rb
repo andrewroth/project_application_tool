@@ -130,9 +130,9 @@ class CustomReportsController < ApplicationController
 		   # try to find a reference questionnaire
                    ri = appln.reference_instances.detect { |ri|
                      ri.questionnaire == q
-		   }
+                   }
 
-		   ri || appln # use appln if can't find anything else
+                   ri || appln # use appln if can't find anything else
 		 end
 
               e.get_verbose_answer(instance, :cache => answers_cache, :cache_sorted => sort, :use_cache_only => true).to_s
@@ -157,7 +157,7 @@ class CustomReportsController < ApplicationController
                 'not allowed'
               end
 
-            row << result
+            row << result.to_s
 	  end
         end
       end
