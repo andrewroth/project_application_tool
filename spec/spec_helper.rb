@@ -95,7 +95,8 @@ def setup_viewer(options = {})
     :id => 1
   })
 
-  Viewer.stub!(:find).with(1).and_return(@viewer)
+  #Viewer.stub!(:find).with(1).and_return(@viewer)
+  Viewer.stub!(:find).and_return(@viewer)
 end
 
 def setup_project
