@@ -1,7 +1,9 @@
 student_seven_person:
   person_fname: Student
   person_lname: Seven
+  viewer: student_seven_viewer
 
 staff_bob_person:
   person_fname: Staff
   person_lname: Bob
+  viewer: bob_staff_viewer

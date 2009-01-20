@@ -158,7 +158,7 @@ class MainController < ApplicationController
                             :conditions => ["person_fname like ? OR person_lname like ?", "%#{fname}%", "%#{fname}%"],
                             :order => "person_fname, person_lname")
     end
-    @viewers = @people.collect {|p| p.viewers}.flatten.compact
+    @viewers = @people.collect {|p| p.viewer}.compact
   end
   
   def get_viewer_specifics
@@ -276,18 +276,19 @@ render :partial => "viewer_specifics"
       for person in campus.persons
         @campus_stats[campus].students_cnt += 1
 
-        for viewer in person.viewers
-          for profile in viewer.profiles
-            next unless profile.appln && profile.appln.form_id == @current_projects_form.id
+        viewer = person.viewer
+        next unless viewer
 
-            @campus_stats[campus].student_profiles << StudentProfile.new(person, profile)
-          
-            if profile.class == Acceptance
-              @campus_stats[campus].accepted_cnt += 1
-              @campus_stats[campus].applied_cnt += 1
-            elsif profile.class == Applying
-              @campus_stats[campus].applied_cnt += 1
-	    end
+        for profile in viewer.profiles
+          next unless profile.appln && profile.appln.form_id == @current_projects_form.id
+
+          @campus_stats[campus].student_profiles << StudentProfile.new(person, profile)
+        
+          if profile.class == Acceptance
+            @campus_stats[campus].accepted_cnt += 1
+            @campus_stats[campus].applied_cnt += 1
+          elsif profile.class == Applying
+            @campus_stats[campus].applied_cnt += 1
           end
         end
       end
@@ -307,7 +308,7 @@ render :partial => "viewer_specifics"
       campuses_find = @user.viewer.person.campuses.collect(&:id)
     end
 
-    campuses = Campus.find(campuses_find, :include => { :persons => { :viewers => { :profiles => :appln } } }, 
+    campuses = Campus.find(campuses_find, :include => { :persons => { :viewer => { :profiles => :appln } } }, 
       :select => "#{Campus.table_name}.campus_desc, #{Campus.table_name}.campus_shortDesc, " + 
                  "#{Appln.table_name}.form_id, #{Person.table_name}.person_fname, #{Person.table_name}.person_lname," + 
                  "#{Viewer.table_name}.viewer_userID, #{Profile.table_name}.status, #{Profile.table_name}.type," +
