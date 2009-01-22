@@ -83,9 +83,7 @@ class TravelSegment < ActiveRecord::Base
       end
       
       # don't need to delete this tag at the end since it was in the tags line
-      logger.info 'before'
       to_remove_at_end.delete tag_obj.id
-      logger.info 'after'
     end
     
     # remove all tags that aren't in the tags line
