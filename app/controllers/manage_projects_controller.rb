@@ -6,6 +6,8 @@ require 'permissions'
 class ManageProjectsController < ApplicationController
   include Permissions
 
+  cache_sweeper :roles_sweeper, :only => [ :add, :remove ]
+
   before_filter :set_project, :except => [ :index, :list, :create, :new ]
   before_filter :determine_project_roles, :except => [ :index, :list, :new, :create ]
   before_filter :ensure_is_projects_coordinator, :only => [ :new, :create, :destroy ]
@@ -193,7 +195,7 @@ class ManageProjectsController < ApplicationController
   def remove
     viewer = Viewer.find(params[:viewer_id])
     
-    @success = @role.singularize.camelize.constantize.delete_all [ "viewer_id = ? and project_id = ?",
+    @success = @role.singularize.camelize.constantize.destroy_all [ "viewer_id = ? and project_id = ?",
                               viewer.id, @project.id ]
     unless @success
       flash[:error] = "Sorry, there was an error removing #{viewer.viewer_userID} from \"#{@project.title}\" project staff.  You should let the system administrator know about this."
