@@ -9,7 +9,7 @@ if %w(ma mh).include? ENV['system']
   ENV['domain'] ||= 'pat.ministryapp.com'
   ENV['port'] ||= '40022'
 elsif %w(p2c pc).include? ENV['system']
-  ENV['host'] ||= 'pat.powertochange.org' # NOTE won't work until Brent sets this up
+  ENV['host'] ||= 'mpdtool.powertochange.org' # NOTE won't work until Brent sets this up
   ENV['domain'] ||= 'pat.powertochange.org'
   ENV['port'] ||= '22'
   ENV['user'] ||= 'andrew'
@@ -45,7 +45,7 @@ ssh_options[:port] = ENV['port']
 set :user, ENV['user']
 
 set :application, "Project Application Tool"
-set :repository,  "https://svn.ministryapp.com/pat/trunk"
+set :repository,  "https://svn.ministryapp.com/pat/branches/rails_2.2/"
 set :deploy_to, ENV['deploy_to']
 
 # If you aren't using Subversion to manage your source code, specify

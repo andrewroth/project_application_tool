@@ -94,7 +94,10 @@
     <% flash.discard -%>
    
     <% @notifications.each do |n| -%>
-      <% full_msg = h(n.message) + "<p>"
+      <% full_msg = n.message
+         full_msg = h(full_msg) unless n.allow_html
+         full_msg += "<p>"
+
          unless n.no_hide_button || @user.nil?
            full_msg += link_to_remote('Hide', 
             :url => { :controller => 'notification_acknowledgments', 

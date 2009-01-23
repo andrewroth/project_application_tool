@@ -13,6 +13,7 @@ end
 	<% if @student %>
 	  <p style='font-style: italic;'>You have been accepted to <%= @acceptance.project.title %>
 	   <% if @acceptance.as_intern? %> as an intern<% end %></p>
+  <p>You can use the <A HREF="https://mpdtool.powertochange.org">mpdtool</A> to walk you through the process of support raising (MPD stands for Ministry Partner Development).</p>
 	
 	<p><%= render :partial => "your_apps/always_edit_appln" %>
 	<p><%= render :partial => "your_apps/support_coach" %>
