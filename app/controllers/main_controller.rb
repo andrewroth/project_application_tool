@@ -307,7 +307,7 @@ render :partial => "viewer_specifics"
       campuses_find = @user.viewer.person.campuses.collect(&:id)
     end
 
-    campuses = if Assignmentstatus.campus_student_ids.empty?
+    campuses = unless Assignmentstatus.campus_student_ids.empty?
         Campus.find(campuses_find, :include => { :persons => { :viewers => { :profiles => :appln } } }, 
           :select => "#{Campus.table_name}.campus_desc, #{Campus.table_name}.campus_shortDesc, " + 
                  "#{Appln.table_name}.form_id, #{Person.table_name}.person_fname, #{Person.table_name}.person_lname," + 
