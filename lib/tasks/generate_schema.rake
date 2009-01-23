@@ -3,7 +3,8 @@ spec = {
   :authservice_production => :all,
   :ciministry_production => %w(accountadmin_vieweraccessgroup accountadmin_viewer accountadmin_accessgroup 
       site_multilingual_label cim_hrdb_province cim_hrdb_gender cim_hrdb_emerg cim_hrdb_assignment 
-      cim_hrdb_access cim_hrdb_person cim_hrdb_campus spt_ticket),
+      cim_hrdb_access cim_hrdb_person cim_hrdb_campus spt_ticket cim_hrdb_staff cim_hrdb_assignmentstatus
+      cim_hrdb_title cim_hrdb_country cim_hrdb_person_year cim_hrdb_year_in_school),
   :production => :all
 }
 
