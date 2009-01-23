@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 104) do
+ActiveRecord::Schema.define(:version => 128) do
 
   create_table "airports", :force => true do |t|
     t.string   "code"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(:version => 104) do
   create_table "cost_items", :force => true do |t|
     t.string  "type"
     t.string  "description"
-    t.float   "amount"
+    t.decimal "amount",         :precision => 8, :scale => 2
     t.boolean "optional"
     t.integer "year"
     t.integer "project_id"
@@ -55,6 +55,14 @@ ActiveRecord::Schema.define(:version => 104) do
   create_table "countries", :force => true do |t|
     t.string   "code"
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "custom_element_required_sections", :force => true do |t|
+    t.integer  "element_id"
+    t.string   "name"
+    t.string   "attribute"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -76,6 +84,13 @@ ActiveRecord::Schema.define(:version => 104) do
     t.integer "default_text_area_length", :default => 4000
     t.boolean "has_your_campuses"
     t.string  "outgoing_email"
+    t.boolean "hidden",                   :default => false
+    t.string  "content_type"
+    t.string  "filename"
+    t.string  "thumbnail"
+    t.integer "size"
+    t.integer "width"
+    t.integer "height"
   end
 
   create_table "feedbacks", :force => true do |t|
@@ -168,7 +183,7 @@ ActiveRecord::Schema.define(:version => 104) do
 
   create_table "form_question_options", :force => true do |t|
     t.integer  "question_id"
-    t.string   "option",      :limit => 50
+    t.string   "option",      :limit => 256
     t.string   "value",       :limit => 50
     t.integer  "position"
     t.datetime "created_at"
@@ -213,11 +228,32 @@ ActiveRecord::Schema.define(:version => 104) do
     t.datetime "created_at"
     t.string   "donor_name"
     t.integer  "donation_type_id"
-    t.float    "original_amount"
-    t.float    "amount"
+    t.decimal  "original_amount",  :precision => 8, :scale => 2
+    t.decimal  "amount",           :precision => 8, :scale => 2
   end
 
   add_index "manual_donations", ["motivation_code"], :name => "manual_donations_motivation_code_index"
+
+  create_table "notification_acknowledgments", :force => true do |t|
+    t.integer  "notification_id"
+    t.integer  "viewer_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "notifications", :force => true do |t|
+    t.string   "controller"
+    t.string   "action"
+    t.text     "message"
+    t.datetime "begin_time"
+    t.datetime "end_time"
+    t.boolean  "ignore_begin"
+    t.boolean  "ignore_end"
+    t.boolean  "no_hide_button"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "allow_html",     :default => false
+  end
 
   create_table "optin_cost_items", :force => true do |t|
     t.integer "profile_id"
@@ -285,8 +321,8 @@ ActiveRecord::Schema.define(:version => 104) do
     t.integer  "support_coach_id"
     t.float    "support_claimed"
     t.integer  "accepted_by_viewer_id"
-    t.boolean  "as_intern",                  :default => false
-    t.string   "motivation_code",            :default => "0"
+    t.boolean  "as_intern",                                                :default => false
+    t.string   "motivation_code",                                          :default => "0"
     t.string   "type"
     t.integer  "viewer_id"
     t.string   "status"
@@ -303,6 +339,7 @@ ActiveRecord::Schema.define(:version => 104) do
     t.string   "reason_notes"
     t.datetime "support_claimed_updated_at"
     t.datetime "confirmed_at"
+    t.decimal  "cached_costing_total",       :precision => 8, :scale => 2
   end
 
   add_index "profiles", ["appln_id"], :name => "profiles_appln_id_index"
