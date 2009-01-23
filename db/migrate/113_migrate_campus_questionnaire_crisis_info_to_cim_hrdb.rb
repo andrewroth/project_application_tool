@@ -93,9 +93,12 @@ cnt = loop_answers_for_element(18467) { |a, app, viewer, person, emerg|
 }
 puts "#{cnt})"
 
-p = Person.find 7307
-p.province_id = Province.find_by_province_shortDesc('CO').id if p
-p.save! if p
+begin
+  p = Person.find 7307
+  p.province_id = Province.find_by_province_shortDesc('CO').id if p
+  p.save! if p
+rescue
+end
 
 # DELETE  Current address valid until
 begin
