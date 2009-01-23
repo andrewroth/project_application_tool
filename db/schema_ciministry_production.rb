@@ -56,6 +56,10 @@ ActiveRecord::Schema.define() do
   add_index "cim_hrdb_assignment", ["person_id"], :name => "ciministry.cim_hrdb_assignment_person_id_index"
   add_index "cim_hrdb_assignment", ["campus_id"], :name => "ciministry.cim_hrdb_assignment_campus_id_index"
 
+  create_table "cim_hrdb_assignmentstatus", :primary_key => "assignmentstatus_id", :force => true do |t|
+    t.string "assignmentstatus_desc", :limit => 64, :default => "", :null => false
+  end
+
   create_table "cim_hrdb_campus", :primary_key => "campus_id", :force => true do |t|
     t.string  "campus_desc",          :limit => 128, :default => "", :null => false
     t.string  "campus_shortDesc",     :limit => 50,  :default => "", :null => false
@@ -68,6 +72,11 @@ ActiveRecord::Schema.define() do
 
   add_index "cim_hrdb_campus", ["region_id"], :name => "ciministry.cim_hrdb_campus_region_id_index"
   add_index "cim_hrdb_campus", ["accountgroup_id"], :name => "ciministry.cim_hrdb_campus_accountgroup_id_index"
+
+  create_table "cim_hrdb_country", :primary_key => "country_id", :force => true do |t|
+    t.string "country_desc",      :limit => 50, :default => "", :null => false
+    t.string "country_shortDesc", :limit => 50, :default => "", :null => false
+  end
 
   create_table "cim_hrdb_emerg", :primary_key => "emerg_id", :force => true do |t|
     t.integer "person_id",            :limit => 16, :default => 0,  :null => false
@@ -82,6 +91,23 @@ ActiveRecord::Schema.define() do
     t.string  "emerg_contactEmail",   :limit => 32, :default => "", :null => false
     t.date    "emerg_birthdate",                                    :null => false
     t.text    "emerg_medicalNotes",                 :default => "", :null => false
+    t.string  "emerg_contact2Name",   :limit => 64, :default => "", :null => false
+    t.string  "emerg_contact2Rship",  :limit => 64, :default => "", :null => false
+    t.string  "emerg_contact2Home",   :limit => 64, :default => "", :null => false
+    t.string  "emerg_contact2Work",   :limit => 64, :default => "", :null => false
+    t.string  "emerg_contact2Mobile", :limit => 64, :default => "", :null => false
+    t.string  "emerg_contact2Email",  :limit => 64, :default => "", :null => false
+    t.text    "emerg_meds",                         :default => "", :null => false
+    t.integer "health_province_id"
+    t.string  "health_number"
+    t.string  "medical_plan_number"
+    t.string  "medical_plan_carrier"
+    t.string  "doctor_name"
+    t.string  "doctor_phone"
+    t.string  "dentist_name"
+    t.string  "dentist_phone"
+    t.string  "blood_type"
+    t.string  "blood_rh_factor"
   end
 
   add_index "cim_hrdb_emerg", ["person_id"], :name => "ciministry.cim_hrdb_emerg_person_id_index"
@@ -107,14 +133,44 @@ ActiveRecord::Schema.define() do
     t.string  "person_local_city",        :limit => 50,  :default => "", :null => false
     t.string  "person_local_pc",          :limit => 50,  :default => "", :null => false
     t.integer "person_local_province_id", :limit => 50,  :default => 0,  :null => false
+    t.string  "cell_phone"
+    t.date    "local_valid_until"
+    t.integer "title_id"
+    t.integer "country_id"
+    t.integer "person_local_country_id"
   end
 
   add_index "cim_hrdb_person", ["gender_id"], :name => "ciministry.cim_hrdb_person_gender_id_index"
   add_index "cim_hrdb_person", ["province_id"], :name => "ciministry.cim_hrdb_person_province_id_index"
 
+  create_table "cim_hrdb_person_year", :primary_key => "personyear_id", :force => true do |t|
+    t.integer "person_id", :limit => 50, :default => 0, :null => false
+    t.integer "year_id",   :limit => 50, :default => 0, :null => false
+    t.date    "grad_date",                              :null => false
+  end
+
+  add_index "cim_hrdb_person_year", ["person_id"], :name => "FK_cim_hrdb_person_year"
+  add_index "cim_hrdb_person_year", ["year_id"], :name => "1"
+
   create_table "cim_hrdb_province", :primary_key => "province_id", :force => true do |t|
-    t.string "province_desc",      :limit => 50, :default => "", :null => false
-    t.string "province_shortDesc", :limit => 50, :default => "", :null => false
+    t.string  "province_desc",      :limit => 50, :default => "", :null => false
+    t.string  "province_shortDesc", :limit => 50, :default => "", :null => false
+    t.integer "country_id"
+  end
+
+  create_table "cim_hrdb_staff", :primary_key => "staff_id", :force => true do |t|
+    t.integer "person_id", :limit => 50, :default => 0, :null => false
+    t.integer "is_active", :limit => 1,  :default => 1, :null => false
+  end
+
+  add_index "cim_hrdb_staff", ["person_id"], :name => "ciministry.cim_hrdb_staff_person_id_index"
+
+  create_table "cim_hrdb_title", :force => true do |t|
+    t.string "desc"
+  end
+
+  create_table "cim_hrdb_year_in_school", :primary_key => "year_id", :force => true do |t|
+    t.string "year_desc", :limit => 50, :default => "", :null => false
   end
 
   create_table "site_multilingual_label", :primary_key => "label_id", :force => true do |t|
