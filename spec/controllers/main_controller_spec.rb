@@ -8,13 +8,13 @@ describe MainController do
     setup_eg; setup_form; setup_viewer; setup_project
 
     @campus = mock("campus", :persons => 
-      [ mock('student1', :viewer => 
-        mock('viewer10', :profiles =>
+      [ mock('student1', :viewers => 
+        [ mock('viewer10', :profiles =>
           [ mock('profiles', :appln => 
               mock('appln1', :preference1_id => 1, :form_id => 1),
               :class => Applying
           ) ]
-        )
+        ) ] 
       ) ]
     )
 

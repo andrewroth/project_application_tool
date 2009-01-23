@@ -35,11 +35,11 @@ class ProfilesController < ApplicationController
       end
 
     ps = Person.find :all, :conditions => conditions,
-         :include => :viewer, :order => [ 'person_lname, person_fname' ]
+         :include => :viewers, :order => [ 'person_lname, person_fname' ]
 
     vs = Viewer.find :all, :conditions => [ 'viewer_userID like ? ', "%#{filter_s}%" ]
 
-    @viewers = ps.collect(&:viewer).compact + vs
+    @viewers = ps.collect(&:viewers).flatten + vs
     @viewers.uniq!
   end
 
