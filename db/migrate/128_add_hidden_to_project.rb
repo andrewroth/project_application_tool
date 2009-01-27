@@ -1,9 +1,15 @@
 class AddHiddenToProject < ActiveRecord::Migration
   def self.up
-    add_column :projects, :hidden, :boolean, :default=> false
+    begin
+      add_column :projects, :hidden, :boolean, :default=> false
+    rescue
+    end
   end
 
   def self.down
-    remove_column :projects, :hidden
+    begin
+      remove_column :projects, :hidden
+    rescue
+    end
   end
 end

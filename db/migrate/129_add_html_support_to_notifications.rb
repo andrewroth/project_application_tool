@@ -1,9 +1,15 @@
 class AddHtmlSupportToNotifications < ActiveRecord::Migration
   def self.up
-    add_column :notifications, :allow_html, :boolean, :default => false
+    begin
+      add_column :notifications, :allow_html, :boolean, :default => false
+    rescue
+    end
   end
 
   def self.down
-    remove_column :notifications, :allow_html
+    begin
+      remove_column :notifications, :allow_html
+    rescue
+    end
   end
 end
