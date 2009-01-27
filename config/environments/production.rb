@@ -19,7 +19,7 @@ config.action_controller.perform_caching             = true
 # config.action_mailer.raise_delivery_errors = false
 
 ActionMailer::Base.smtp_settings = {
-  :address => '192.168.250.4',
+  :address => 'smtp.powertochange.org',
   :domain => 'granvillehosting.com'
 }
 
