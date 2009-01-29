@@ -70,9 +70,9 @@
           <% end %>
           <% unless @user.is_student? %>    
             <%= new_item "App Processing", "main", :your_applications %>
-	    <% if @eg && @eg.has_your_campuses %>
+            <% if @eg && @eg.has_your_campuses %>
               <%= new_item "Your Campuses", "main", :your_campuses %>
-	    <% end %>
+	          <% end %>
             <% if @user.is_projects_coordinator? %>
               <%= new_item "Tools", "tools", :index %>
               <%= new_item "Manage Forms", "forms" %>
@@ -151,8 +151,9 @@
         <!-- nix the north border, it looks better. -->
         <b>Non-Technical Inquiries:</b><br />
 				Campus for Christ - projects@campusforchrist.org<br />
-				LeaderImpact Group - danielled@leaderimpactgroup.com<br />
+				LeaderImpact Group - vip@leaderimpactgroup.com<br />
 				Athletes in Action - morgank@athletesinaction.com<br />
+        DRIME - tanya@drime.com <br />
 				<br/>
 			<b>Technical Inquiries:</b>help.pat@powertochange.org<br/>
 			<br/>
