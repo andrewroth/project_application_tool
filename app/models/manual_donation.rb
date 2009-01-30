@@ -1,4 +1,5 @@
 class ManualDonation < ActiveRecord::Base
+  STATUSES = %w(pending received invalid)
   Infinity = 1/0.0
 
   belongs_to :acceptance
@@ -13,6 +14,10 @@ class ManualDonation < ActiveRecord::Base
   #validates_inclusion_of :original_amount, :in => 1..Infinity, :message => " - Please include the amount (at least $1)."
   #validates_inclusion_of :amount, :in => 1..Infinity, :message => " - Please include the amount (at least $1)."
   
+  # this is rails 2.2 specific, since this branch might be merged with trunk
+  # yet, will leave it commented
+  #has_many :profiles, :foreign_key => 'motivation_code', :primary_key => 'motivation_code'
+
   def donation_type
     self[:donation_type]
   end
@@ -31,5 +36,4 @@ class ManualDonation < ActiveRecord::Base
       super
     end
   end
-  
 end

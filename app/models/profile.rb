@@ -200,7 +200,13 @@ class Profile < ActiveRecord::Base
   end
   
   def donations_total(params = {})
-    donations(params).inject(0.0) { |received, donation| received + donation.amount.to_f }
+    donations(params).inject(0.0) { |received, donation| 
+      if donation.class == ManualDonation && donation.status == 'invalid'
+        received
+      else
+        received + donation.amount.to_f
+      end
+    }
   end
   
   def funding_target(eg, use_project_from_eg = false)

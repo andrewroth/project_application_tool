@@ -617,8 +617,7 @@ class ReportsController < ApplicationController
     claimed = 0
     target = 0
 
-    donations = ac.donations
-    received = donations.inject(0.0) { |received, donation| received + donation.amount.to_f } if donations
+    received = ac.donations_total
     target = ac.funding_target(@eg)
     claimed = ac.support_claimed.to_f.to_s
 
@@ -647,10 +646,14 @@ class ReportsController < ApplicationController
     
     # got an profile , now print all the donations that have come in for that acceptance
     columns = [ 'donor_name',  # from model..
-    [ 'donation_type', 'type' ], 
-    [ 'donation_reference_number', 'reference' ], 
-    [ 'donation_date', 'date'] , [ 'amount', 'currency' ] ]
+      [ 'donation_type', 'type' ], 
+      [ 'donation_reference_number', 'reference' ], 
+      [ 'donation_date', 'date'] , 
+      [ 'amount', 'amount' ],
+      'status'
+    ]
     @columns = columns_from_model AutoDonation, columns # used for client-side javascript sorting
+    @columns['status'] = 'string' # for manual donations
     
     @rows = get_rows(profile.donations, columns)
     
@@ -971,7 +974,7 @@ class ReportsController < ApplicationController
   # Returns a columns ordered hash (which is then used in the javascript sorting)
   # by using the type info in the db already
   # 
-  # Format for columns is array of either (i) model_column_name which uses the same name in the report
+  # Format for columns is array of either model_column_name which uses the same name in the report
   #   or [ model_column_name, report_column_name ]
   # 
   # Example: columns = [ 'donor_name', [ 'donation_type', 'type' ], 'amount' ]
@@ -980,9 +983,9 @@ class ReportsController < ApplicationController
   #       
   # Filters by taking only the columns in columns
   def columns_from_model(model, columns)
-    model_columns = columns.collect { |c| c.class == Array ? c[0] : c }
+    model_columns = columns.collect { |c| c.class == Array ? c.first : c }
     model_columns_to_report_columns = columns.collect { |c| c.class == Array ? c : [ c, c ] }
-    report_columns = model_columns_to_report_columns.collect{ |c| c[1] }
+    report_columns = model_columns_to_report_columns.collect{ |c| c.second }
     
     MyOrderedHash.new( model.columns.collect { |c|
       if model_columns.include? c.name

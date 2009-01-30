@@ -1,0 +1,11 @@
+valid_profile_1:
+  motivation_code: profile_1
+  original_amount: 100
+  amount: 100
+  status: valid
+invalid_profile_1:
+  motivation_code: profile_1
+  original_amount: 25
+  amount: 25
+  status: invalid
+
