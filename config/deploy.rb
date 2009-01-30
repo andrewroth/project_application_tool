@@ -1,7 +1,7 @@
 require 'find'
 require 'etc'
 
-ENV['target'] ||= 'prod'
+ENV['target'] ||= 'dev'
 ENV['system'] ||= 'p2c'
 
 if %w(ma mh).include? ENV['system']
@@ -9,10 +9,10 @@ if %w(ma mh).include? ENV['system']
   ENV['domain'] ||= 'pat.ministryapp.com'
   ENV['port'] ||= '40022'
 elsif %w(p2c pc).include? ENV['system']
-  ENV['host'] ||= 'mpdtool.powertochange.org' # NOTE won't work until Brent sets this up
+  ENV['host'] ||= 'mpdtool.powertochange.org'
   ENV['domain'] ||= 'pat.powertochange.org'
   ENV['port'] ||= '22'
-  ENV['user'] ||= 'andrew'
+  ENV['user'] ||= 'deploy'
 end
 
 ENV['user'] ||= %x[whoami].chomp
