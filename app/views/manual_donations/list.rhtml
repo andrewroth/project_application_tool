@@ -5,23 +5,21 @@
 
 <p><%= sortable_table %>
       <thead><tr>
-      <% for column in ManualDonation.content_columns %>
-        <th><%= column.human_name %></th>
+      <% for column in ManualDonation::LIST_COLUMNS %>
+        <th mochi:format='<%= ManualDonation::LIST_TYPES[column] %>'><%= column.humanize %></th>
       <% end %>
-      <!-- adding in donation type manually, it doesn't get grabbed in the content_columns method-->
-      <th>Donation Type</th>
       </tr></thead>
     
     <tbody> 
         <% for manual_donation in @manual_donations %>
           <tr>
-            <% for column in ManualDonation.content_columns %>
-              <% val = manual_donation.send(column.name) %>
-              <% val = format_datetime(val) if column.name == 'created_at' %>
-              <td><%=h val %></td>
+            <% for column in ManualDonation::LIST_COLUMNS %>
+              <% send_column = %w(original_amount conversion_rate).include?(column) ? "#{column}_display" : column %>
+              <% val = manual_donation.send(send_column) %>
+              <% val = format_datetime(val) if column == 'created_at' %>
+              <% val = number_to_currency(val) if val != '' && ManualDonation::LIST_TYPES[column] %>
+              <td><%= h val %></td>
             <% end %>
-            <!-- donation type code-->
-            <td><%= manual_donation.donation_type %></td>
             <td><%= link_to 'Edit', :action => 'edit', :id => manual_donation %></td>
             <td><%= link_to 'Destroy', { :action => 'destroy', :id => manual_donation }, :confirm => 'Are you sure?', :method => :post %></td>
           </tr>

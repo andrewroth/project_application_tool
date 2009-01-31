@@ -139,9 +139,10 @@ update(SortableManager.prototype, {
                     case 'int':
                     case 'currency':
 			try {
-				val = obj.match(/\d+\.?\d*/);
+        
+				val = obj.replace(/\$?(\-?\d+\.?\d*)/,"$1");
 				if (val.length > 0) {
-					obj = Number(val[0]);
+					obj = Number(val.gsub(',',''));
 				} else {
 					obj = 0;
 				}

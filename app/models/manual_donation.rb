@@ -1,5 +1,8 @@
 class ManualDonation < ActiveRecord::Base
   STATUSES = %w(pending received invalid)
+  LIST_COLUMNS = %w(motivation_code created_at donor_name donation_type original_amount conversion_rate amount status)
+  LIST_TYPES = { 'original_amount' => 'currency', 'amount' => 'currency' }
+
   Infinity = 1/0.0
 
   belongs_to :acceptance
@@ -8,7 +11,6 @@ class ManualDonation < ActiveRecord::Base
   validates_presence_of :motivation_code
   validates_presence_of :donor_name
   validates_presence_of :donation_type_id
-  validates_presence_of :original_amount
   validates_presence_of :amount 
   # following two checks removed per Russ and Susan's request, so that they can input negative numbers
   #validates_inclusion_of :original_amount, :in => 1..Infinity, :message => " - Please include the amount (at least $1)."
@@ -26,6 +28,26 @@ class ManualDonation < ActiveRecord::Base
     self[:donation_date]
   end
   
+  def conversion_rate_display
+    donation_type == 'USDMANUAL' ? conversion_rate : (conversion_rate == 1.0 ? '' : conversion_rate)
+  end
+
+  def original_amount_display
+    donation_type == 'USDMANUAL' ? original_amount : (original_amount == amount ? '' : original_amount)
+  end
+
+  #def amount
+  #  donation_type == 'USDMANUAL' ? original_amount * conversion_rate : self[:amount]
+  #end
+
+  def uses_conversion?
+    self[:original_amount] != self[:amount]
+  end
+
+  def status
+    donation_type == 'USDMANUAL' ? self[:status] : ''
+  end
+
   def [](key)
     key = key.to_s
     if key == "donation_type"
@@ -35,5 +57,10 @@ class ManualDonation < ActiveRecord::Base
     else
       super
     end
+  end
+
+  def before_save
+    original_amount ||= amount
+    conversion_rate ||= 1.0
   end
 end
