@@ -146,6 +146,12 @@ update(SortableManager.prototype, {
                                 obj = 0;
                             }
 
+                            // special case for currency columns, float them right
+                            if (this.columns[j].format == 'currency') {
+                                cols[j].className += ' currency';
+                                cols[j].innerHTML = "<span>" + cols[j].innerHTML + "</span>";
+                            }
+                            
                             break;
                        	} catch (err) {
                            	obj = 0;

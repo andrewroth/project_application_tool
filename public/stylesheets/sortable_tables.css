@@ -58,3 +58,5 @@ table.datagrid tfoot th { text-align: left; }
 table.datagrid tfoot td {  }
 
 .invisible { display: none; }
+
+.currency span { float: right; }
