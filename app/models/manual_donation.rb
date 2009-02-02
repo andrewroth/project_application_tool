@@ -41,7 +41,7 @@ class ManualDonation < ActiveRecord::Base
   #end
 
   def uses_conversion?
-    self[:original_amount] != self[:amount]
+    self[:original_amount] != self[:amount] || donation_type == 'USDMANUAL'
   end
 
   def status

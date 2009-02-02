@@ -66,6 +66,8 @@
       function set_usd_visibility() {
         if ($('manual_donation_donation_type_id').options[$('manual_donation_donation_type_id').selectedIndex].text == 'USDMANUAL') {
           $('usdfields').show();
+          $('use_rate').checked = true;
+          set_use_rate_visibility();
         } else {
           $('usdfields').hide();
         }
