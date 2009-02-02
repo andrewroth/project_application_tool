@@ -182,7 +182,7 @@ module ApplicationHelper
   end
   
   def format_currency(val)
-    return nil.to_s if val.nil?
+    return nil.to_s if val.nil? || val == ''
     "%0.2f" % val.to_f
   end
   
