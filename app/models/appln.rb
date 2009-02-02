@@ -14,7 +14,7 @@ class Appln < ActiveRecord::Base
   belongs_to :preference1, :class_name => "Project", :foreign_key => :preference1_id
   belongs_to :preference2, :class_name => "Project", :foreign_key => :preference2_id
   
-  has_one :processor_form
+  has_one :processor_form_ref, :class_name => 'ProcessorForm'
   
   def acceptances
     profiles.reject { |p| p.class != Acceptance }
@@ -90,7 +90,7 @@ class Appln < ActiveRecord::Base
   end
   
   def processor_form
-    ProcessorForm.find_by_appln_id(id) || ProcessorForm.create(:appln_id => id)
+    return processor_form_ref || @processor_form || @processor_form = ProcessorForm.create(:appln_id => id)
   end
   
   def has_paid?

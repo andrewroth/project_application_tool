@@ -115,8 +115,28 @@ function new_window(url) {
         <br/> 
 
         <i>Lists all manual donations for a project.</i>
-        <li><%= project_specific_report 'Manual Donations', 'manual_donations', 
-:include_all => true %></li>
+        <li><%= project_specific_report 'Manual Donations', 'manual_donations',  
+                    :include_blank => true, :include_all => true do |report| 
+                [  %|
+              type #{select_tag 'manual_donations_type', 
+                options_for_select(['all' ] + DonationType.find(:all).collect(&:description), 'USDMANUAL')}
+                #{observe_field 'manual_donations_type', :function => 'set_manual_donation_status_visibility();'}
+                <span id='manual_donations_status_span'>
+                status #{select_tag 'manual_donations_status', options_for_select(['any' ] + ManualDonation::STATUSES, 'all')}
+                </span>
+              |, [ 'type', 'status' ] ]
+                end %></li>
+          <script>
+            function set_manual_donation_status_visibility() {
+              console.debug('got here');
+              if ($('manual_donations_type').options[$('manual_donations_type').selectedIndex].text == 'USDMANUAL') {
+                $('manual_donations_status_span').show();
+              } else {
+                $('manual_donations_status_span').hide();
+              }
+            }
+            set_manual_donation_status_visibility();
+          </script>
         <br/>
 
    </ol>

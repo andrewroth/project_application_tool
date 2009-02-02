@@ -296,7 +296,8 @@ class ReportsController < ApplicationController
   
   def make_answers_cache(instance_list)
     @@form_elements[@eg.id] ||= { :values => [] }
-    Answer.find_all_by_question_id_and_instance_id @@form_elements[@eg.id].values.uniq, instance_list.collect{|ins| ins.id}
+    return if @@form_elements[@eg.id][:values].empty?
+    Answer.find_all_by_question_id_and_instance_id @@form_elements[@eg.id][:values].uniq, instance_list.collect{|ins| ins.id}
   end
   
   # lets me switch from the optimized one and old one quickly
@@ -341,7 +342,7 @@ class ReportsController < ApplicationController
     accepted = Acceptance.find_all_by_project_id(project_ids, :include => [ :project, :appln ])
     viewer_ids = accepted.collect{ |ac| ac.appln.viewer_id }
     viewers_cache, persons_cache = generate_cache(viewer_ids)
-    applns_list = Appln.find :all, :conditions => "viewer_id in (#{viewer_ids.join(',')})"
+    applns_list = Appln.find :all, :conditions => "viewer_id in (#{viewer_ids.join(',')})", :include => :processor_form_ref
     applns = {}
     applns_list.each do |a| applns[a.id] = a end
     
@@ -363,7 +364,7 @@ class ReportsController < ApplicationController
     
     if include_pref1_applns
       # go through everyone who has pref 1
-      pref1s = Appln.find_all_by_preference1_id(project_ids, :include => :preference1)
+      pref1s = Appln.find_all_by_preference1_id(project_ids, :include => :preference1, :include => :processor_form_ref)
       pref1_ids = pref1s.collect{|a| a.id } << -100
       pref1s_acceptances_list = Acceptance.find :all, :conditions => "appln_id in (#{pref1_ids.join(',')})"
       pref1s_a_to_ac = {}
@@ -929,8 +930,24 @@ class ReportsController < ApplicationController
     motivation_codes = projects.collect{ |p|
                       p.profiles.collect(&:motivation_code)
                     }.flatten.reject{ |mc| mc == '0' }
+
+
+    conditions_str = ""; conditions_var = []
+    if params[:type] && params[:type] != 'all'
+      type = DonationType.find_by_description params[:type]
+      if type
+        conditions_str += "donation_type_id = ?" if params[:type]
+        conditions_var << type.id
+      end
+    end
+    if params[:status] && params[:status] != 'any' && type && type.description == 'USDMANUAL'
+      conditions_str += " AND status = ?"
+      conditions_var << params[:status]
+    end
+
     donations = ManualDonation.find_all_by_motivation_code motivation_codes, 
-                   :include => :donation_type_obj
+                   :include => :donation_type_obj,
+                   :conditions => [ conditions_str, *conditions_var ]
 
     @rows = []
     loop_reports_viewers(@projects_ids, @include_pref1_applns) do |ac,a,v,p|
