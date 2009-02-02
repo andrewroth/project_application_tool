@@ -1,11 +1,18 @@
 valid_profile_1:
+  donation_type_obj: usdmanual
   motivation_code: profile_1
-  original_amount: 100
-  amount: 100
-  status: valid
+  original_amount: 50
+  amount: 50
+  status: received
 invalid_profile_1:
+  donation_type_obj: usdmanual
   motivation_code: profile_1
   original_amount: 25
   amount: 25
   status: invalid
+invalid_profile_1:
+  donation_type_obj: cadmanual
+  motivation_code: profile_1
+  original_amount: 50
+  amount: 50
 
