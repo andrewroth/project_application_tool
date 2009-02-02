@@ -11,7 +11,7 @@ class ReportsController < ApplicationController
   before_filter :set_projects, :only => [ :project_participants, :registrants, :crisis_management, :parental_emails, 
     :ticketing_requests, :funding_status, :funding_details, :viewers_with_profile_for_project,
     :funding_details_costing, :funding_details, :travel_list, :project_stats, :funding_costs,
-    :itinerary, :interns, :summary_forms, :cost_items_for_project, :cost_items ]
+    :itinerary, :interns, :summary_forms, :cost_items_for_project, :cost_items, :manual_donations ]
   before_filter :set_viewer, :only => [ :funding_details_costing, :funding_details, :funding_costs ]
   before_filter :set_travel_segment, :only => [ :travel_segment, :custom_itinerary ]
   before_filter :set_cost_items, :only => [ :cost_items ]
@@ -654,6 +654,7 @@ class ReportsController < ApplicationController
     ]
     @columns = columns_from_model AutoDonation, columns # used for client-side javascript sorting
     @columns['status'] = 'string' # for manual donations
+    @columns['amount'] = 'currency'
     
     @rows = get_rows(profile.donations, columns)
     
@@ -667,7 +668,7 @@ class ReportsController < ApplicationController
   def funding_costs_rows
     @columns = MyOrderedHash.new [
         'type', 'string',
-        'amount', 'string',
+        'amount', 'currency',
     ]
     
     # grab the first profile found if multiple projects were passed
@@ -909,6 +910,41 @@ class ReportsController < ApplicationController
             :object   => @travel_segments
   end
   
+  def manual_donations
+    @columns = MyOrderedHash.new( [
+      :last_name, 'string',
+      :first_name, 'string',
+      :project, 'string',
+      :created_at, 'string',
+      :type, 'string',
+      :usd_amount, 'currency',
+      :rate, 'string',
+      :cad_amount, 'currency',
+      :status, 'string'
+    ] )
+
+    projects = Project.find @projects_ids,
+                 :include => :profiles,
+                 :select => "#{Profile.table_name}.motivation_code"
+    motivation_codes = projects.collect{ |p|
+                      p.profiles.collect(&:motivation_code)
+                    }.flatten.reject{ |mc| mc == '0' }
+    donations = ManualDonation.find_all_by_motivation_code motivation_codes, 
+                   :include => :donation_type_obj
+
+    @rows = []
+    loop_reports_viewers(@projects_ids, @include_pref1_applns) do |ac,a,v,p|
+      for d in donations.find_all{ |d| d.motivation_code == ac.motivation_code }
+        @rows << [ p.last_name, p.first_name, ac.project.title,
+                   d.created_at, d.donation_type, d.original_amount_display, 
+                   d.conversion_rate_display, d.amount, d.status ]
+      end
+    end
+
+    @page_title = "Manual Donations"
+    render_report @rows
+  end
+
   protected
   
   def csv_requested
