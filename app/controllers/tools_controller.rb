@@ -3,7 +3,23 @@ require 'lib/add_datetime_extended_new.rb'
 class ToolsController < ApplicationController
   before_filter :ensure_projects_coordinator
   before_filter :set_title
+  before_filter :get_manual_donations_from_criteria, :only => 
+    [ :convert_block_set_manual_donation_rate, :preview_block_set_manual_donation_rate ]
   
+  def convert_block_set_manual_donation_rate
+    @new_conversion_rate = params[:rate].to_f
+    @uid = Time.now.to_i
+
+    @nc = 0
+    for m in @manual_donations
+      m.conversion_rate = @new_conversion_rate
+      m.amount = m.original_amount.to_f * m.conversion_rate.to_f
+      m.status = params[:set_status]
+      m.save!
+      @nc += 1
+    end
+  end
+
   def block_set_manual_donation_rate
   end
 
@@ -12,10 +28,6 @@ class ToolsController < ApplicationController
     end_date = DateTime.new_from_hash params[:end]
 
     @new_conversion_rate = params[:rate].to_f
-
-    @manual_donations = ManualDonation.find :all, :conditions => [ %|
-        status = ? AND created_at > ? and created_at < ?
-      |, params[:find_status], start_date, end_date ]
 
     # profiles
     all_profiles = Profile.find_all_by_motivation_code @manual_donations.collect(&:motivation_code)
@@ -150,4 +162,16 @@ class ToolsController < ApplicationController
     footer = "</BLOCKQUOTE>"
     render :inline => header + event_group.reference_emails.find_by_email_type(type).text + footer, :layout => true
   end
+
+  def get_manual_donations_from_criteria
+    start_date = DateTime.new_from_hash params[:start]
+    end_date = DateTime.new_from_hash params[:end]
+
+    @usd = DonationType.find_by_description 'USDMANUAL'
+    @manual_donations = ManualDonation.find :all, :conditions => [ %|
+           donation_type_id = ? AND status = ? AND created_at > ? and created_at < ?
+             |, @usd.id, params[:find_status], start_date, end_date ],
+      :include => :donation_type_obj
+  end
+
 end
