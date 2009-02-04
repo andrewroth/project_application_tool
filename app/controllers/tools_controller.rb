@@ -1,7 +1,30 @@
+require 'lib/add_datetime_extended_new.rb'
+
 class ToolsController < ApplicationController
   before_filter :ensure_projects_coordinator
   before_filter :set_title
   
+  def block_set_manual_donation_rate
+  end
+
+  def preview_block_set_manual_donation_rate
+    start_date = DateTime.new_from_hash params[:start]
+    end_date = DateTime.new_from_hash params[:end]
+
+    @new_conversion_rate = params[:rate].to_f
+
+    @manual_donations = ManualDonation.find :all, :conditions => [ %|
+        status = ? AND created_at > ? and created_at < ?
+      |, params[:find_status], start_date, end_date ]
+
+    # profiles
+    all_profiles = Profile.find_all_by_motivation_code @manual_donations.collect(&:motivation_code)
+    @profiles = {} # hash of motivation code -> profile for that motv code
+    for p in all_profiles
+      @profiles[p.motivation_code] = p
+    end
+  end
+
   def update_motivation_codes
     # all root nodes, for populating the switch eg dropdown
     @all_nodes = EventGroup.find_all_by_parent_id(nil, :include => :projects)

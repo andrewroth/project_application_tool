@@ -1,0 +1,35 @@
+<p><b>This is a preview.  Hit "Convert" below to make the new conversion rate final.</b></p>
+
+<%= sortable_table %>
+  <thead>
+    <tr>
+    <th>date</th>
+    <th>motv'n_code</th>
+    <th>applicant</th>
+    <th>project</th>
+    <th>donor_name</th>
+    <th mochi:format='currency'>orig_amount</th>
+    <th mochi:format='float'>curr_rate</th>
+    <th mochi:format='currency'>curr_final_amount</th>
+    <th mochi:format='float'>new_rate</th>
+    <th mochi:format='currency'>new_final_amount</th>
+    </tr>
+  </thead>
+
+  <% for d in @manual_donations %>
+    <tr>
+      <td><%= d.created_at %></td>
+      <td><%= d.motivation_code %></td>
+      <td><%= p = @profiles[d.motivation_code]; if p && p.viewer then p.viewer.name else '?' end %></td>
+      <td><%= p = @profiles[d.motivation_code]; if p && p.project then p.project.title else '?' end %></td>
+      <td><%= d.donor_name %></td>
+      <td><span><%= number_to_currency d.original_amount %></span></td>
+      <td><%= d.conversion_rate %></td>
+      <td><span><%= number_to_currency d.amount %></span></td>
+      <td><%= @new_conversion_rate %></td>
+      <td><span><%= number_to_currency d.original_amount.to_f * @new_conversion_rate %></span></td>
+    </tr>
+  <% end %>
+</table>
+
+<%= initialize_sortable_tables %>

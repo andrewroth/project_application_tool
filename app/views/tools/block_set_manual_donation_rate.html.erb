@@ -1,0 +1,16 @@
+<% form_remote_tag(:url => { :action => 'preview_block_set_manual_donation_rate' }, 
+                   :update => :preview,
+                   :loading => "$('loading').show();",
+                   :complete => "$('loading').hide();"
+                   ) do %>
+  From <%= select_date Time.now, :prefix => 'start' %> to <%= select_date Time.now, :prefix => 'end' %><br/>
+  set any USDMANUAL donations with status <%= select_tag 'find_status', options_for_select(ManualDonation::STATUSES, 'pending')%><br/>
+  to conversion rate <%= text_field_tag 'rate' %> and to status <%= select_tag 'set_status', options_for_select(ManualDonation::STATUSES, 'received') %><br/>
+  <%= submit_tag 'Preview' %>
+  <%= observe_field :rate, :url => { :action => 'test' } %>
+<% end %>
+
+<br/>
+
+<div id='preview'>
+</div>
