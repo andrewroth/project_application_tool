@@ -117,6 +117,10 @@ require 'active_record_base_table_name'
 
 $LOAD_PATH.sort!{ |a,b| ag = a['gem']; bg = b['gem']; if ag and bg then a <=> b elsif ag then -1 elsif bg then +1 else 0 end }
 
+# I get a bizarre error (undefined method `create' for #<ActiveScaffold::Config::Core:0x9fd3758>)
+# without this line, which is actually dying on the crud_type= line in active scaffold's create.rb
+ActiveScaffold::Config::Create
+
 # support a command line option --rcov_baseline which will load in all models and controllers, 
 # so that rcov has a baseline of all the files (roughly) that are used.
 if ARGV.include?('--rcov_baseline')
@@ -133,6 +137,4 @@ end
 
 require_library_or_gem "redcloth" unless Object.const_defined?(:RedCloth)
 
-# I get a bizarre error (undefined method `create' for #<ActiveScaffold::Config::Core:0x9fd3758>)
-# without this line, which is actually dying on the crud_type= line in active scaffold's create.rb
-ActiveScaffold::Config::Create
+
