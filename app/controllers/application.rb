@@ -139,10 +139,8 @@ class ApplicationController < ActionController::Base
   def restrict_students
     if (@user && @user.is_student?)
       if @user.is_any_project_staff(@eg)
-        return true
       else
         redirect_to :controller => "your_apps"
-        return false
       end
     end
   end
