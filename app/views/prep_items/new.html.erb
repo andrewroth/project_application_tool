@@ -1,0 +1,10 @@
+<h1>New prep_item</h1>
+
+<% form_for(@prep_item) do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', prep_items_path %>

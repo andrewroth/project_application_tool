@@ -7,7 +7,7 @@ class ProfilesController < ApplicationController
   INFO_ACTIONS = [ :crisis_info, :update_crisis_info, :campus_info, :update_campus_info, :campus_info_new ]
 
   skip_before_filter :restrict_students, :only => [ :index, :list, :view, :update, 
-                                              :travel, :support_received, :costing, :update_support ] + INFO_ACTIONS
+                                              :travel, :support_received, :costing, :prep_items, :update_support ] + INFO_ACTIONS
                                               
   before_filter :set_title
   before_filter :get_profile, :except => [ :index, :list, :set_profile_going, :new, :create ] + INFO_ACTIONS
@@ -91,7 +91,11 @@ class ProfilesController < ApplicationController
   def travel
     @submenu_title = 'travel'
   end
-
+  
+  def prep_items
+    @submenu_title = 'paperwork'
+  end
+  
   def set_profile_going
     viewer = Viewer.find params[:viewer_id]
     project = @eg.projects.find params[:project_id]

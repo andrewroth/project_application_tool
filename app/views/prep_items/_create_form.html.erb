@@ -1,0 +1,11 @@
+<% form_remote_for @prep_item, 
+    :url => "/prep_items.js",
+    :loading => "$('loading').show();",
+    :loaded => "$('loading').hide();" do |f| %>
+
+  <%= render :partial => 'prep_items/form', :locals => { :f => f } %>
+      
+  <%= submit_tag 'Create' %>
+  
+  <% end %>
+<%= link_to_function 'cancel', "$('create').hide(); $('create_link').show();" %>

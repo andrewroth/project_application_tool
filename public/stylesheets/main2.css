@@ -57,6 +57,19 @@ table#cost_items th {
 	padding: 3px;
 }
 
+table#prep_items, table#prep_items td, table#prep_items th {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+table#prep_items td {
+	padding: 5px;
+}
+
+table#prep_items th {
+	padding: 3px;
+}
+
 table#application_status {
 	margin-left: 2em;
 }
@@ -171,8 +184,8 @@ table#application_status {
 	text-align: center;
 }
 
-#list_projects, #list_cost_items, #list_travel_segments, .submenu_container, #view_appln, #processor_actions,
-div#student_view, div#support_received, div#travel_itinerary, div#cost_items {
+#list_projects, #list_cost_items, #list_prep_items, #list_travel_segments, .submenu_container, #view_appln, #processor_actions,
+div#student_view, div#support_received, div#travel_itinerary, div#cost_items, div#prep_items {
 	padding: 20px;
 	border: 2px solid #253940;
 }

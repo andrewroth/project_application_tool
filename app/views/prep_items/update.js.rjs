@@ -1,0 +1,7 @@
+unless @prep_item.errors.empty?
+  page.replace_html "edit_#{@prep_item.id}", :partial => 'edit_form', :locals => {:prep_item => @prep_item}
+else
+  page.replace "wrapper_#{@prep_item.id}", :partial => 'prep_item', :object => @prep_item
+  page.hide("edit_#{@prep_item.id}")
+  page.show("show_#{@prep_item.id}")
+end

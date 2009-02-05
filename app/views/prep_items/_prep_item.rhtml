@@ -1,0 +1,32 @@
+<% if prep_item.applies_to == :event_group %>
+  <% klass = "year_item" %>
+<% elsif prep_item.applies_to == :project %>
+  <% klass = "project_item" %>
+<% end %>
+
+<div id='wrapper_<%= prep_item.id %>' class='<%= klass %> inconspicuous' >
+
+  <div id='error_<%= prep_item.id %>'>
+  </div>
+
+  <div id='show_<%= prep_item.id %>'>
+    <b><%=h prep_item.title %></b> - Due <%=h prep_item.deadline %>
+    <br />
+    Description: <%=h prep_item.description %>
+    <br />
+    Applies to: <%= if prep_item.applies_to == :project then prep_item.project.title else prep_item.event_group.title end %>
+    <br />
+    <%= link_to_function 'edit', "$('edit_#{prep_item.id}').show(); $('show_#{prep_item.id}').hide();"  %>
+    <%= link_to_remote 'delete', :url => "/prep_items/#{prep_item.id}.js",
+      :method => :delete,
+      :loading => "$('loading').show();",
+      :loaded => "$('loading').hide();",
+      :confirm => 'Are you sure?'
+    %>
+  </div>
+
+  <div id='edit_<%= prep_item.id %>' class="" style="display:none;">
+    <%= render :partial => "edit_form", :locals => {:prep_item => prep_item} %>
+  </div>
+  
+</div>

@@ -231,6 +231,15 @@ class Profile < ActiveRecord::Base
 
     project_to_use.all_cost_items(eg) + profile_cost_items
   end
+  
+  def all_prep_items #return a list of all associated prep items
+    #PrepItem.find_by_project_id self.project.id
+    project.prep_items + project.event_group.prep_items
+  end
+  
+  def all_profile_prep_items
+    self.profile_prep_items
+  end
 
   after_create do |profile|
     profile.update_costing_total_cache

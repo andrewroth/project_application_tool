@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+
   map.resources :custom_element_required_sections
 
   map.resources :assignments
@@ -8,6 +9,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :reason_for_withdrawals
 
+  map.resources :prep_items
+  
   # The priority is based upon order of creation: first created -> highest priority.
   
   # Sample of regular route:
