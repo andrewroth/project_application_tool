@@ -146,18 +146,7 @@ class MainController < ApplicationController
   
   def find_people
     name = params[:viewer][:name]
-    name.strip!
-    fname = name.sub(/ +.+/i, '')
-    lname = name.sub(/.+ +/i, '') if name.include? " "
-    if !lname.nil?
-      @people = Person.find(:all, 
-                            :conditions => ["person_fname like ? AND person_lname like ?", "%#{fname}%", "%#{lname}%"],
-                            :order => "person_fname, person_lname")
-    else
-      @people = Person.find(:all, 
-                            :conditions => ["person_fname like ? OR person_lname like ?", "%#{fname}%", "%#{fname}%"],
-                            :order => "person_fname, person_lname")
-    end
+    @people = Person.search_by_name name
     @viewers = @people.collect {|p| p.viewers}.flatten.compact
   end
   
