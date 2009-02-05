@@ -4,6 +4,8 @@ require 'etc'
 ENV['target'] ||= 'dev'
 ENV['system'] ||= 'p2c'
 
+ENV['user'] = 'deploy'
+
 if %w(ma mh).include? ENV['system']
   ENV['host'] ||= 'ministryapp.com'
   ENV['domain'] ||= 'pat.ministryapp.com'
@@ -12,10 +14,8 @@ elsif %w(p2c pc).include? ENV['system']
   ENV['host'] ||= 'mpdtool.powertochange.org'
   ENV['domain'] ||= 'pat.powertochange.org'
   ENV['port'] ||= '22'
-  ENV['user'] ||= 'deploy'
 end
 
-ENV['user'] ||= %x[whoami].chomp
 ENV['deploy_to'] ||= "/var/www/#{if ENV['target'] == 'prod' then 
                        ENV['domain'] else "#{ENV['target']}.#{ENV['domain']}" end}"
 
