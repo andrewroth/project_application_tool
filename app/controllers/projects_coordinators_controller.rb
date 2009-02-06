@@ -96,6 +96,8 @@ class ProjectsCoordinatorsController < ApplicationController
     end
   end
 
+  protected
+
   def can_add_projects_coordinators
     unless SUPERADMIN_VIEWER_IDS.include?(@user.id)
       flash[:notice] = "Sorry, you don't have permission to add projects coordinators."

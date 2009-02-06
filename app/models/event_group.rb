@@ -12,6 +12,7 @@ class EventGroup < Node
   has_many :reason_for_withdrawals
   has_many :reference_emails
   has_many :tags
+  has_many :eventgroup_coordinators
   has_many :prep_items
 
   acts_as_tree
