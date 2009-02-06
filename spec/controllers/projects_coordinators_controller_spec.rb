@@ -63,16 +63,6 @@ describe ProjectsCoordinatorsController do
 
   end
 
-  describe "responding to GET edit" do
-  
-    it "should expose the requested projects_coordinator as @projects_coordinator" do
-      ProjectsCoordinator.should_receive(:find).with("37").and_return(mock_projects_coordinator)
-      get :edit, :id => "37"
-      assigns[:projects_coordinator].should equal(mock_projects_coordinator)
-    end
-
-  end
-
   describe "responding to POST create" do
 
     describe "with valid params" do
