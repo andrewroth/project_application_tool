@@ -44,11 +44,6 @@ class ProjectsCoordinatorsController < ApplicationController
     end
   end
 
-  # GET /projects_coordinators/1/edit
-  def edit
-    @projects_coordinator = ProjectsCoordinator.find(params[:id])
-  end
-
   # POST /projects_coordinators
   # POST /projects_coordinators.xml
   def create
