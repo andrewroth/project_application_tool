@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :projects_coordinators
 
   map.resources :custom_element_required_sections
 
