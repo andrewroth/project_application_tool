@@ -4,6 +4,7 @@ class PrepItem < ActiveRecord::Base
   belongs_to :event_group
   belongs_to :project
   belongs_to :profile
+  has_many :profile_prep_items
 
   def self.find_prep_items
     find(:all, :order => "title")

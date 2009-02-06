@@ -3,6 +3,8 @@ class PrepItemsController < ApplicationController
   in_place_edit_for :prep_item, :title
   in_place_edit_for :prep_item, :description
   
+  before_filter :get_prev_modifieds
+  after_filter :set_prev_modifieds
    
   # GET /prep_items
   # GET /prep_items.xml
@@ -12,30 +14,6 @@ class PrepItemsController < ApplicationController
     @prep_item=PrepItem.new
   end
   
-  def set_applies_to
-    @prep_item = PrepItem.find(params[:id])
-    
-    if params[:value] == ""
-      @prep_item.event_group = @eg
-      @prep_item.project_id = nil
-    else
-      @prep_item.event_group = nil
-      @prep_item.project_id = params[:value].to_i
-    end
-    
-    @prep_item.save!
-    list
-    render :partial => 'list'
-  end
-  
-  def set_date
-    @prep_item = PrepItem.find(params[:id])
-    @prep_item.deadline = params[:value]
-    @prep_item.save!
-    list
-    render :partial => 'list'
-  end
- 
   # GET /prep_items/new
   # GET /prep_items/new.xml
   def new
@@ -64,6 +42,11 @@ class PrepItemsController < ApplicationController
     respond_to do |format|
       if @prep_item.save
         flash[:notice] = 'PrepItem was successfully created.'
+        session[:prev_modified_id] = session[:last_modified_id]
+        @last_modified_id = @prep_item.id
+        if @prev_modified_id != nil
+          @prev_prep_item = PrepItem.find(@prev_modified_id)
+        end
         format.js { render :rjs => 'create' }
         format.html { redirect_to(prep_items_url) }
         format.xml  { render :xml => @prep_item, :status => :created, :location => @prep_item }
@@ -84,7 +67,12 @@ class PrepItemsController < ApplicationController
     
     respond_to do |format|
       if @prep_item.update_attributes(params[:prep_item])
-        
+        session[:prev_modified_id] = session[:last_modified_id]
+        @last_modified_id = @prep_item.id
+        if @prev_modified_id != nil
+          @prev_prep_item = PrepItem.find(@prev_modified_id)
+        end
+
         flash[:notice] = 'PrepItem was successfully updated.'
         format.js { render :rjs => 'update' }
         format.html { redirect_to(prep_items_url) }
@@ -104,6 +92,11 @@ class PrepItemsController < ApplicationController
     @prep_item.destroy
 
     respond_to do |format|
+      session[:prev_modified_id] = session[:last_modified_id]
+        @last_modified_id = nil
+        if @prev_modified_id != nil
+          @prev_prep_item = PrepItem.find(@prev_modified_id)
+        end
       format.js { render :rjs => 'destroy' }
       format.html { redirect_to(prep_items_url) }
       format.xml  { head :ok }
@@ -122,4 +115,12 @@ class PrepItemsController < ApplicationController
     end
   end
 
+  def get_prev_modifieds
+    @prev_modified_id = session[:prev_modified_id]
+  end
+  
+  def set_prev_modifieds
+    session[:prev_modified_id] = @last_modified_id
+  end
+  
 end

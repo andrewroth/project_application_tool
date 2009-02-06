@@ -1,0 +1,10 @@
+unless @profile_prep_item.errors.empty?
+  page.replace_html "edit_#{@profile_prep_item.id}", :partial => 'edit_form', :locals => {:profile_prep_item => @profile_prep_item}
+else
+  page.replace "wrapper_#{@profile_prep_item.id}", :partial => 'profile_prep_item', :object => @profile_prep_item
+  if @prev_modified_id != nil
+    page << %|$('wrapper_#{@prev_modified_id}').className = $('wrapper_#{@prev_modified_id}').className.split(" ").reject(function(n) { return n == 'last_modified' }).join(" ")|
+  end
+  page.hide("edit_#{@profile_prep_item.id}")
+  page.show("show_#{@profile_prep_item.id}")
+end

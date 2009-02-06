@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :reason_for_withdrawals
 
   map.resources :prep_items
-  
+  map.resources :profile_prep_items
   # The priority is based upon order of creation: first created -> highest priority.
   
   # Sample of regular route:
