@@ -37,11 +37,6 @@ class EventgroupCoordinatorsController < ApplicationController
     end
   end
 
-  # GET /eventgroup_coordinators/1/edit
-  def edit
-    @eventgroup_coordinator = EventgroupCoordinator.find(params[:id])
-  end
-
   # POST /eventgroup_coordinators
   # POST /eventgroup_coordinators.xml
   def create
@@ -50,7 +45,7 @@ class EventgroupCoordinatorsController < ApplicationController
     respond_to do |format|
       if @eventgroup_coordinator.save
         flash[:notice] = 'EventgroupCoordinator was successfully created.'
-        format.html { redirect_to(eventgroup_coordinators_url) }
+        format.html { redirect_to :action => :list, :id => @eg2.id }
         format.xml  { render :xml => @eventgroup_coordinator, :status => :created, :location => @eventgroup_coordinator }
       else
         format.html { render :action => "new" }
