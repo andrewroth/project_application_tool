@@ -1,7 +1,7 @@
 <ul id = "list_ul">
 <% for prep_item in @prep_items %>
   <li id = "<%= "list_#{prep_item.id}" %>">
-    <%= render :partial => 'prep_item', :object => prep_item, :locals => { :just_modified => prep_item.id == @just_modified_id } %>
+    <%= render :partial => 'prep_item', :object => prep_item %>
   </li>
 <% end %>
 </ul>

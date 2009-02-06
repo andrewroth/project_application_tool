@@ -5,10 +5,12 @@ else
     <li id = "list_#{@prep_item.id}">
       #{render :partial => 'prep_item', :object => @prep_item}
     </li>|
+  if @prev_modified_id != nil
+    page << %|$('wrapper_#{@prev_modified_id}').className = $('wrapper_#{@prev_modified_id}').className.split(" ").reject(function(n) { return n == 'last_modified' }).join(" ")|
+  end
   page.visual_effect :highlight, "wrapper_#{@prep_item.id}"
   page.hide "create"
   page.show "create_link"
-  
   @prep_item = PrepItem.new
   page.replace_html "create", :partial => 'create_form'
 end

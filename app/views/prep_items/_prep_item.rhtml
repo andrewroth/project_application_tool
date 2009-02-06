@@ -4,7 +4,13 @@
   <% klass = "project_item" %>
 <% end %>
 
-<div id='wrapper_<%= prep_item.id %>' class='<%= klass %> inconspicuous' >
+<% if prep_item.id == @last_modified_id %>
+  <% modified = "last_modified" %>
+<% else %>
+  <% modified = "" %>
+<% end %>
+
+<div id='wrapper_<%= prep_item.id %>' class=' <%= modified %> <%= klass %> inconspicuous' >
 
   <div id='error_<%= prep_item.id %>'>
   </div>
