@@ -3,6 +3,7 @@ class ProjectsCoordinatorsController < ApplicationController
                                            # eventually we will find a better way :|
 
   before_filter :can_add_projects_coordinators
+  before_filter :set_title
 
   def search
     @people = Person.search_by_name params[:name]
@@ -99,4 +100,6 @@ class ProjectsCoordinatorsController < ApplicationController
       redirect_to :controller => :main, :action => :index
     end
   end
+
+  def set_title() @page_title = 'Manage Groups'; @submenu_title = 'Projects Coordinators' end
 end

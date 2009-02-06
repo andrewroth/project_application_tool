@@ -2,7 +2,6 @@ class EventGroupsController < AjaxTreeController
   include Permissions
 
   skip_before_filter :verify_event_group_chosen
-  skip_before_filter :set_event_group
   skip_before_filter :restrict_students
   
   before_filter :set_ministries_options, :only => [ :index, :create, :edit ]
@@ -80,6 +79,7 @@ class EventGroupsController < AjaxTreeController
 
     def set_title
       @page_title = "Manage Groups"
+      @submenu_title = "Event Groups"
     end
 
     def set_ministries_options
@@ -90,4 +90,8 @@ class EventGroupsController < AjaxTreeController
       expire_fragment(:action => 'index')
     end
 
+    def set_event_group
+      @eg = EventGroup.find session[:event_group_id] if !EventGroup.find(:all).empty?
+      session[:logo_url] = @eg.logo unless session[:logo_url]
+    end
 end

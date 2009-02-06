@@ -1,4 +1,6 @@
 class ReasonForWithdrawalsController < ApplicationController
+  before_filter :set_title
+
   # GET /reason_for_withdrawals
   # GET /reason_for_withdrawals.xml
   def index
@@ -77,4 +79,8 @@ class ReasonForWithdrawalsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  protected
+
+    def set_title() @page_title = 'Manage Groups'; @submenu_title = 'Reasons for Withdrawal' end
 end
