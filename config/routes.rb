@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :eventgroup_coordinators, :member => { :list => :get, :new => :get, :create => :post }
+
   map.resources :projects_coordinators
 
   map.resources :custom_element_required_sections
@@ -31,7 +33,7 @@ ActionController::Routing::Routes.draw do |map|
   # questionnaire engine routes
   
   #load 'questionnaire_routes.rb'
-  #ActionController::Routing::Routes.draw do |map|
+
   map.resources :custom_element_required_sections
 
   map.resources :assignments
