@@ -56,6 +56,13 @@
 
 </td></tr>
 
+<% unless @event_group.nil? || @event_group.new_record? %>
+<tr><td colspan='2'>
+<p><b>Eventgroup Coordinators: </b><%= @event_group.eventgroup_coordinators_names %> <%= link_to 'Manage Coordinators', { :controller => :eventgroup_coordinators, :action => :list, :id => @event_group.id }, :target => :blank %> (Opens in new window)</p>
+<p><i>Note: Eventgroup Coordinators for all parent EventGroups are automatically considered coordinators for this group.</i></p>
+</td></tr>
+<% end %>
+
 </table>
 
 
