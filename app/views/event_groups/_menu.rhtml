@@ -1,6 +1,7 @@
 <% content_for "submenu" do %>
   <% if @user.is_projects_coordinator? %>
     <%= sub_menu_item 'Event Groups', :event_groups, nil %>
+    <%= sub_menu_item "Current Event Group's Coordinators", :eventgroup_coordinators, nil %>
     <%= sub_menu_item 'Reasons for Withdrawal', :reason_for_withdrawals, nil %>
     <%= sub_menu_item 'Projects Coordinators', :projects_coordinators, nil %>
   <% end %>

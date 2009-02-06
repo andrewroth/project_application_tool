@@ -4,6 +4,7 @@ class EventgroupCoordinatorsController < ApplicationController
 
   before_filter :can_add_eventgroup_coordinators
   before_filter :set_eg2, :except => :index
+  before_filter :set_title
 
   def search
     @people = Person.search_by_name params[:name]
@@ -96,4 +97,12 @@ class EventgroupCoordinatorsController < ApplicationController
     @eg2 = EventGroup.find params[:id]
   end
 
+  def set_title 
+    @page_title = "Manage Groups"
+    if @eg2 == @eg
+      @submenu_title = "Current Event Group's Coordinators"
+    else
+      @submenu_title = "Event Groups"
+    end
+  end
 end
