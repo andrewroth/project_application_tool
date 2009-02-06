@@ -26,6 +26,12 @@ class EventGroup < Node
     eventgroup_coordinators.collect{ |egc| egc.viewer.name if egc.viewer }.compact.join(', ')
   end
 
+  def eventgroup_coordinators_with_inheritance
+    r = eventgroup_coordinators
+    r += parent.eventgroup_coordinators_with_inheritance if parent
+    r
+  end
+
   def has_logo?() !filename.nil? end
 
   def logo()

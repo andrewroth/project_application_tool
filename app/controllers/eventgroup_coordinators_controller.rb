@@ -14,7 +14,7 @@ class EventgroupCoordinatorsController < ApplicationController
   end
 
   def list
-    @eventgroup_coordinators = @eg2.eventgroup_coordinators
+    @eventgroup_coordinators = @eg2.eventgroup_coordinators_with_inheritance
   end
 
   # GET /eventgroup_coordinators
