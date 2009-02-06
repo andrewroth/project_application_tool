@@ -22,6 +22,10 @@ class EventGroup < Node
 
   attr :filter_hidden, true
 
+  def eventgroup_coordinators_names
+    eventgroup_coordinators.collect{ |egc| egc.viewer.name if egc.viewer }.compact.join(', ')
+  end
+
   def has_logo?() !filename.nil? end
 
   def logo()
