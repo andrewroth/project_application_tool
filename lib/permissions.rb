@@ -26,8 +26,13 @@ module Permissions
     @user.is_projects_coordinator?
   end
 
+  def is_eventgroup_coordinator
+    @user.is_eventgroup_coordinator?
+  end
+
+
   def set_can_view_summary
-    if @user && @user.is_projects_coordinator?
+    if @user && @user.is_eventgroup_coordinator?
       @can_view_summary = true
       return
     end
@@ -38,7 +43,7 @@ module Permissions
     end
 
     @user.set_project @project
-    @can_view_summary = @user.is_projects_coordinator? || @user.is_processor? ||
+    @can_view_summary = @user.is_eventgroup_coordinator? || @user.is_processor? ||
       @user.is_project_staff? || @user.is_project_director? ||
       @user.is_project_administrator?
   end
@@ -50,11 +55,11 @@ module Permissions
     end
 
     @user.set_project @project
-    @can_view_references = @user.is_projects_coordinator? || @user.is_processor?
+    @can_view_references = @user.is_eventgroup_coordinator? || @user.is_processor?
   end
 
   def set_can_view_entire
-    if @user && @user.is_projects_coordinator?
+    if @user && @user.is_eventgroup_coordinator?
       @can_view_entire = true
       return
     end
@@ -65,7 +70,7 @@ module Permissions
     end
 
     @user.set_project(@project)
-    @can_view_entire = @user.is_projects_coordinator? || @user.is_processor? ||
+    @can_view_entire = @user.is_eventgroup_coordinator? || @user.is_processor? ||
       @user.is_project_administrator? || @user.is_project_director?
   end
 
@@ -84,7 +89,7 @@ module Permissions
     return false if @user.is_student?
 
     # first let's check the easy case, projects coordinators can do everything
-    if @user.is_projects_coordinator?
+    if @user.is_eventgroup_coordinator?
       return true
     else
       # this viewer doesn't own this app, see if this viewer is at least ... (determined by yield)
@@ -98,12 +103,12 @@ module Permissions
   end
   
   def is_project_staff
-    return true if @user.is_projects_coordinator?
+    return true if @user.is_eventgroup_coordinator?
     return @user.is_atleast_project_staff(@profile.project)
   end
   
   def is_profile_ownership_or_any_project_staff
-    return true if @user.is_projects_coordinator?
+    return true if @user.is_eventgroup_coordinator?
     return true if @user.id == @profile.viewer_id
     @project = @profile.project
     @user.set_project(@project)
@@ -123,14 +128,14 @@ module Permissions
   end
   
   def is_project_director_or_administrator(project = @project)
-    return true if @user.is_projects_coordinator?
+    return true if @user.is_eventgroup_coordinator?
     @user.set_project(project)
     return false unless project && @user.is_project_director? || @user.is_project_administrator?
     true
   end
   
-  def is_projects_coordinator_or_projects_administrator(project = @project)
-    return true if @user.is_projects_coordinator?
+  def is_eventgroup_coordinator_or_projects_administrator(project = @project)
+    return true if @user.is_eventgroup_coordinator?
     project ||= @profile.project
     @user.set_project(project)
     return false unless project
@@ -154,7 +159,7 @@ module Permissions
   end
 
   def is_project_processor(project)
-    return true if @user.is_projects_coordinator?
+    return true if @user.is_eventgroup_coordinator?
     return false unless project
 
     @user.set_project(project)
@@ -178,10 +183,10 @@ module Permissions
   end
 
   def has_profile_ownership
-    @profile.viewer == @user.viewer || (@user && @user.is_projects_coordinator?)
+    @profile.viewer == @user.viewer || (@user && @user.is_eventgroup_coordinator?)
   end
 
-  def is_profile_ownership_or_projects_coordinator
+  def is_profile_ownership_or_eventgroup_coordinator
     # projects coordinator check already built into is_profile_ownership_or_permission
     is_profile_ownership_or_permission do |profile, project|
       has_profile_ownership
@@ -194,7 +199,7 @@ module Permissions
       return false
     end
 
-    if @user.is_projects_coordinator? then return true end
+    if @user.is_eventgroup_coordinator? then return true end
     if has_profile_ownership then return true end
     
     # April 4 2007 - we are allowing staff to modify other staff's profiles now

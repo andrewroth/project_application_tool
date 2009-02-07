@@ -20,7 +20,7 @@
    <% if @can_view_entire %>
      <%= sub_menu_item 'Processor Form', 'processor_form', nil, params %>
    <% end %>
-   <% if ( (@project && @user.is_processor?) || @user.is_projects_coordinator?) && 
+   <% if ( (@project && @user.is_processor?) || @user.is_eventgroup_coordinator?) && 
    @profile.class == Applying %>
      <%= sub_menu_item 'Actions', 'processor', 'actions', params %>
    <% end %>

@@ -11,7 +11,7 @@
       <%= th 'withdrawn by' %>
       <%= th 'withdrawn at' %>
       <%= th 'reason' %>
-      <% if @user.is_projects_coordinator? %>
+      <% if @user.is_eventgroup_coordinator? %>
         <%= th 'notes' %>
       <% end %>
       <%= th 'other' %>

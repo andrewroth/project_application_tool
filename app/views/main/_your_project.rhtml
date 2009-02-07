@@ -7,7 +7,7 @@
 @user.set_project(your_project)
 
 title = ""
-if @user.is_projects_coordinator?
+if @user.is_eventgroup_coordinator?
     title += ", Projects Coordinator"
 end
 if @user.is_project_director?
@@ -49,7 +49,7 @@ end
   <% end %>
 
     <!-- all staff can see the processor list, but only certain people can actually evaluate -->
-    <% @can_evaluate = @user.is_projects_coordinator? || @user.is_processor? %>
+    <% @can_evaluate = @user.is_eventgroup_coordinator? || @user.is_processor? %>
     <% appln_includes = [ :references, { :viewer => { :persons => :campuses } }, :preference1, :profiles ]
        @processor_list = Applying.find_all_by_project_id your_project.id,
          :include => [
@@ -81,7 +81,7 @@ end
           :project_id => your_project.id, :role => @user.roles_wrt_project(your_project)) do
   %>
     <!-- these piles will now have their own intros which are removed if empty -->
-    <% if @user.is_projects_coordinator? || @user.is_processor? %>
+    <% if @user.is_eventgroup_coordinator? || @user.is_processor? %>
       <p>Withdrawn pile:
       <blockquote>
         <%= render :partial => "withdrawn_pile", :locals => {:project => your_project }%>

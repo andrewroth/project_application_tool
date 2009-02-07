@@ -1,11 +1,13 @@
 class EventGroupsController < AjaxTreeController
   include Permissions
 
+  skip_before_filter :set_event_group, :except => [ :index, :update ]
   skip_before_filter :verify_event_group_chosen
   skip_before_filter :restrict_students
   
+  prepend_before_filter :get_node
   before_filter :set_ministries_options, :only => [ :index, :create, :edit ]
-  before_filter :ensure_projects_coordinator, :except => [ :scope, :set_as_scope ]
+  before_filter :ensure_eventgroup_coordinator, :except => [ :scope, :set_as_scope ]
   before_filter :set_title, :except => [ :scope, :set_as_scope ]
 
   # bug with caching when you edit, it caches the edit screen
@@ -92,6 +94,13 @@ class EventGroupsController < AjaxTreeController
 
     def set_event_group
       @eg = EventGroup.find session[:event_group_id] if !EventGroup.find(:all).empty?
+      @user.eg = @eg
       session[:logo_url] = @eg.logo unless session[:logo_url]
+    end
+
+    def ensure_eventgroup_coordinator
+      unless @user.viewer.is_eventgroup_coordinator?(@node)
+        render :inline => 'no permission'
+      end
     end
 end

@@ -6,7 +6,7 @@ class FeedbacksController < ApplicationController
   verify :method => :post, :only => [ :destroy, :create, :update ],
          :redirect_to => { :action => :list }
   
-  before_filter :ensure_projects_coordinator, :only => [ :list ]
+  before_filter :ensure_eventgroup_coordinator, :only => [ :list ]
   
   def list
     @submenu_title = "List"
@@ -53,6 +53,6 @@ class FeedbacksController < ApplicationController
   end
   
   def ensure_projects_coordinator
-    @user.is_projects_coordinator?
+    @user.is_eventgroup_coordinator?
   end
 end

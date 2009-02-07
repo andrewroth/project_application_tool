@@ -13,7 +13,7 @@ class ProfilesController < ApplicationController
   before_filter :get_profile, :except => [ :index, :list, :set_profile_going, :new, :create ] + INFO_ACTIONS
   before_filter :ensure_profile_ownership, :except => [ :view, :index, :list, :update, :set_profile_going, 
                                                         :class_options, :new, :viewer_id_dropdown, :populate_applications, :create ] + INFO_ACTIONS
-  before_filter :ensure_profile_ownership_or_projects_coordinator, :only => [ :view, :update ]
+  before_filter :ensure_profile_ownership_or_eventgroup_coordinator, :only => [ :view, :update ]
   before_filter :ensure_projects_coordinator, :only => [ :new, :create ]
 
   def viewer_id_dropdown

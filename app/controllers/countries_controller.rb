@@ -5,5 +5,5 @@ class CountriesController < ApplicationController
 
   active_scaffold
 
-  before_filter :ensure_projects_coordinator
+  before_filter :ensure_eventgroup_coordinator
 end

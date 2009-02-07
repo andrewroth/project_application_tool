@@ -33,7 +33,7 @@ class MainController < ApplicationController
     # at this point we know the user is not a student
     # 
     # project directors would like to go to my projects
-    if @user.is_projects_coordinator?
+    if @user.is_eventgroup_coordinator?
       flash.keep(:notice)
       redirect_to :action => :your_projects
     else
@@ -69,7 +69,7 @@ class MainController < ApplicationController
   end
   
   def your_projects
-    if (@user.is_projects_coordinator?)
+    if (@user.is_eventgroup_coordinator?)
       @allowable_projects = @eg.projects.find :all
     else
       @allowable_projects = @user.viewer.current_projects_with_any_role @eg
@@ -114,7 +114,7 @@ class MainController < ApplicationController
   
   def your_applications
     @page_title = "App Processing"
-    if (@user.is_projects_coordinator?)
+    if (@user.is_eventgroup_coordinator?)
       processor_for_project_ids = @eg.projects.collect{ |p| p.id }
     else
       # find which projects @user is a processor for
@@ -289,7 +289,7 @@ render :partial => "viewer_specifics"
   
   def users_campuses(user)
     campuses = nil
-    if (user.is_projects_coordinator? || 
+    if (user.is_eventgroup_coordinator? || 
     user.is_assigned_regional_or_national?)
       campuses_find = :all
     else

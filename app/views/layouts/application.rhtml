@@ -73,7 +73,7 @@
             <% if @eg && @eg.has_your_campuses %>
               <%= new_item "Your Campuses", "main", :your_campuses %>
 	          <% end %>
-            <% if @user.is_projects_coordinator? %>
+            <% if @user.is_eventgroup_coordinator? %>
               <%= new_item "Tools", "tools", :index %>
               <%= new_item "Manage Forms", "forms" %>
               <%= new_item "Manage Groups", "event_groups" %>

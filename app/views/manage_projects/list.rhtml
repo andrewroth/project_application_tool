@@ -1,10 +1,10 @@
 <div id="list_projects">
-  <p><% if !@user.is_projects_coordinator? && @projects.length == 0 %>
+  <p><% if !@user.is_eventgroup_coordinator? && @projects.length == 0 %>
       You haven't been assigned to manage any projects.
       <% view_only = true %>
       <!-- TODO!!! -->
-  <% elsif @user.is_projects_coordinator? %>
-      As projects adminsitrator, you have full functionality.  You can add and remove projects, edit descriptions, and add/remove staff to/from projects.
+  <% elsif @user.is_eventgroup_coordinator? %>
+      As eventgroup coordinator, you have full functionality.  You can add and remove projects, edit descriptions, and add/remove staff to/from projects.
   <% else %>
       You can edit descriptions and details for projects you are projects coordinator or projects administrator.
   <% end %>
@@ -27,10 +27,10 @@
         <% if !view_only %>
           | <%= link_to 'Edit', :action => 'edit', :id => project %>
         <% end %>
-        <% if @user.is_projects_coordinator? || @user.set_project(project) || @user.is_project_administrator? %>
+        <% if @user.is_eventgroup_coordinator? || @user.set_project(project) || @user.is_project_administrator? %>
           | <%= link_to 'Staff', :action => 'staff', :id => project %>
 	<% end %>
-        <% if @user.is_projects_coordinator? %>
+        <% if @user.is_eventgroup_coordinator? %>
           | <%= link_to 'Destroy', { :action => 'destroy', :id => project }, :confirm => 'Are you sure?', :method => :post %>
         <% end %>
       </td>
@@ -40,7 +40,7 @@
   
   <br />
   
-  <% if @user.is_projects_coordinator? %>
+  <% if @user.is_eventgroup_coordinator? %>
       <%= link_to 'New project', :action => 'new' %>
   <% end %>
 </div>

@@ -85,7 +85,7 @@ class AcceptanceController < BaseApplnAndRefsViewer
   def ensure_view_summary_permission
     @user.set_project(@project)
 
-    render :inline => "no permission" unless @user.is_projects_coordinator? || 
+    render :inline => "no permission" unless @user.is_eventgroup_coordinator? || 
       @user.is_processor? || @user.is_project_director? || @user.is_project_administrator? ||
       @user.is_project_staff? || @user.is_support_coach?
   end
@@ -93,7 +93,7 @@ class AcceptanceController < BaseApplnAndRefsViewer
   def ensure_modify_acceptance_permission
     @user.set_project(@project)
     
-    unless @user.is_projects_coordinator? || @user.is_processor? || 
+    unless @user.is_eventgroup_coordinator? || @user.is_processor? || 
       @user.is_project_director? || @user.is_project_administrator?
       render :inline => "No permission"
     end

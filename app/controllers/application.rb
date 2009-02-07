@@ -164,6 +164,7 @@ class ApplicationController < ActionController::Base
   def set_event_group
     begin
       @eg = EventGroup.find session[:event_group_id] if !EventGroup.find(:all).empty?
+      @user.eg = @eg
       session[:logo_url] = @eg.logo unless session[:logo_url]
     rescue  
       session[:event_group_id] = nil

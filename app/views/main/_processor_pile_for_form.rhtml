@@ -28,7 +28,7 @@
     	      <% end %>
     	    <% end %>
             
-          <% if @user.is_projects_coordinator? %>
+          <% if @user.is_eventgroup_coordinator? %>
             <%= th :name => 'pile', :type => 'dropdown' %>
           <% end %>
           <%= th :name => 'other', :type => 'lcase_str' %>
@@ -40,7 +40,7 @@
           <% @project = @profile.project %>
           <% @user.set_project(@project) %>
           <% @appln = @profile.appln %>
-          <% @can_evaluate = @user.is_projects_coordinator? || (@project && @user.is_processor?) %>
+          <% @can_evaluate = @user.is_eventgroup_coordinator? || (@project && @user.is_processor?) %>
 
           <% 
 	  if @profile.status != 'completed'

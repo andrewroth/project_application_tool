@@ -92,7 +92,7 @@
             </td>
             <td><%= render :partial => 'accepted_pile_table_intern', :object => acceptance %></td>
             <td> <!-- other -->
-                <% if @user.is_projects_coordinator? %>
+                <% if @user.is_eventgroup_coordinator? %>
                   <% name = "acceptance_#{acceptance.id}" %>
                     
                   <%= withdraw_move_link acceptance.id %>
@@ -104,13 +104,13 @@
                 <% else %>
                   <% if acceptance.as_intern? %>intern<% end %>
                   
-                  <% if @user.is_projects_coordinator? || @user.is_project_administrator? %>
+                  <% if @user.is_eventgroup_coordinator? || @user.is_project_administrator? %>
                       <!-- link to costing page -->
                       <%= costing_link acceptance.id %>
                   <% end %>
                 <% end %>
 		
-		<% if @user.is_projects_coordinator? || @user.is_processor? %>
+		<% if @user.is_eventgroup_coordinator? || @user.is_processor? %>
 		  <% if appln %>
                     <%= edit_always_editable_link acceptance.id %>
 		  <% else %>

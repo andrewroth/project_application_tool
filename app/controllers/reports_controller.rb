@@ -20,7 +20,7 @@ class ReportsController < ApplicationController
   
   def index
     projects = @eg.projects
-    if @user.is_projects_coordinator?
+    if @user.is_eventgroup_coordinator?
       @project_with_full_view = projects
       @project_director_projects = projects
     else
@@ -763,7 +763,7 @@ class ReportsController < ApplicationController
         next if v.nil?
 
         if !v.is_student?
-          if @user.is_project_director? || @user.is_projects_coordinator? || @user.is_project_administrator? || @user.viewer == v
+          if @user.is_project_director? || @user.is_eventgroup_coordinator? || @user.is_project_administrator? || @user.viewer == v
             @accepted_viewers << v
           end
         else
@@ -1134,12 +1134,12 @@ class ReportsController < ApplicationController
   
   def set_permissions_level
     @is_staff = !@user.is_student?
-    @is_projects_coordinator = @user.is_projects_coordinator?
+    @is_eventgroup_coordinator = @user.is_eventgroup_coordinator?
     true
   end
   
   def ensure_is_general_staff() @is_staff end
-  def ensure_is_projects_coordinator() @is_projects_coordinator end
+  def ensure_is_eventgroup_coordinator() @is_eventgroup_coordinator end
   
   @@reports_layout = 'report'
   
@@ -1333,7 +1333,7 @@ class ReportsController < ApplicationController
     requested_projects.each do |project|
       # ensure the user has permission to access this project
       @user.set_project project
-      if @user.is_projects_coordinator? || @user.is_project_director? || 
+      if @user.is_eventgroup_coordinator? || @user.is_project_director? || 
         @user.is_project_administrator? || @user.is_project_staff?
         @projects << project
       end

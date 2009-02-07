@@ -10,8 +10,8 @@ class ManageProjectsController < ApplicationController
 
   before_filter :set_project, :except => [ :index, :list, :create, :new ]
   before_filter :determine_project_roles, :except => [ :index, :list, :new, :create ]
-  before_filter :ensure_is_projects_coordinator, :only => [ :new, :create, :destroy ]
-  before_filter :ensure_projects_coordinator_or_projects_administrator, :only => [ :staff, :search, :add, :remove ]
+  before_filter :ensure_is_eventgroup_coordinator, :only => [ :new, :create, :destroy ]
+  before_filter :ensure_eventgroup_coordinator_or_projects_administrator, :only => [ :staff, :search, :add, :remove ]
   before_filter :ensure_can_edit, :only => [ :edit, :update ]
   before_filter :set_page_title
   before_filter :set_prefix, :only => [ :search, :add, :remove ]
@@ -25,7 +25,7 @@ class ManageProjectsController < ApplicationController
   NO_PERMISSIONS_MSG = "Sorry, you don't have permissions to do that."
   
   def ensure_can_edit
-    unless (@user.is_projects_coordinator? || @user.is_project_administrator? ||
+    unless (@user.is_eventgroup_coordinator? || @user.is_project_administrator? ||
       @user.is_project_director?)
 
       flash[:message] = NO_PERMISSIONS_MSG
@@ -35,8 +35,8 @@ class ManageProjectsController < ApplicationController
     return true
   end
               
-  def ensure_is_projects_coordinator
-    unless @user.is_projects_coordinator?
+  def ensure_is_eventgroup_coordinator
+    unless @user.is_eventgroup_coordinator?
       flash[:message] = NO_PERMISSIONS_MSG
       redirect_to :controller => "main"
       return false
@@ -73,7 +73,7 @@ class ManageProjectsController < ApplicationController
 
   def list
     @submenu_title = "list"
-    @projects = if (@user.is_projects_coordinator?)
+    @projects = if (@user.is_eventgroup_coordinator?)
         @eg.projects
       else
         @user.viewer.current_projects_with_any_role(@eg).reject{ |p|
@@ -86,7 +86,7 @@ class ManageProjectsController < ApplicationController
   end
 
   def new
-    if (@user.is_projects_coordinator?)
+    if (@user.is_eventgroup_coordinator?)
       @project = Project.new :event_group_id => session[:event_group_id]
     else
       flash[:notice] = "Sorry, you don't have permissions to create a new project."
@@ -95,7 +95,7 @@ class ManageProjectsController < ApplicationController
   end
   
   def create
-    if (@user.is_projects_coordinator?)
+    if (@user.is_eventgroup_coordinator?)
       @project = Project.new(params[:project].merge(:event_group_id => session[:event_group_id]))
       
       if @project.save

@@ -1,7 +1,7 @@
 require 'lib/add_datetime_extended_new.rb'
 
 class ToolsController < ApplicationController
-  before_filter :ensure_projects_coordinator
+  before_filter :ensure_eventgroup_coordinator
   before_filter :set_title
   before_filter :get_manual_donations_from_criteria, :only => 
     [ :convert_block_set_manual_donation_rate, :preview_block_set_manual_donation_rate ]
@@ -97,7 +97,7 @@ class ToolsController < ApplicationController
     
     @possible_viewers.sort!{ |a,b| a.name <=> b.name }
     
-    if (@user.is_projects_coordinator?)
+    if (@user.is_eventgroup_coordinator?)
       processor_for_project_ids = @eg.projects.find(:all).collect{ |p| p.id }
     else
       # find which projects @user is a processor for
@@ -147,8 +147,8 @@ class ToolsController < ApplicationController
 
   protected
   
-  def ensure_projects_coordinator
-    is = @user.is_projects_coordinator?
+  def ensure_eventgroup_coordinator
+    is = @user.is_eventgroup_coordinator?
     render :inline => "Sorry, you don't have permission to view this page." if !is
     is
   end

@@ -201,7 +201,7 @@ class ProfileTravelSegmentsController < ApplicationController
     end
 
     def is_project_staff
-      return @user.is_projects_coordinator? ||
+      return @user.is_eventgroup_coordinator? ||
           @user.is_atleast_project_staff(@profile.project)
     end
 end

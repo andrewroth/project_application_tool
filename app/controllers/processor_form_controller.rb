@@ -38,7 +38,7 @@ class ProcessorFormController < InstanceController
   def get_filter
     @user.set_project @project
     return (if !@pdf && !@for_pdf && !(params[:action] == 'bulk_processor_form') && 
-        (@user.is_projects_coordinator? || @user.is_processor?)
+        (@user.is_eventgroup_coordinator? || @user.is_processor?)
       nil else { :filter => ['confidential'], :default => true } end
       )
   end

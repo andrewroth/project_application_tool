@@ -2,6 +2,10 @@ class User
   require 'logger'
   attr_reader :id
   
+  def eg=(eg)
+    @eg = eg
+  end
+
   def self.columns
     []
   end
@@ -37,15 +41,16 @@ class User
   end
   
   # helper methods for access groups
-  def is_student?() 
+  def is_student?
     if @project
       set_project(@project)
       return false if is_processor?
     end
-    viewer.is_student?
+    viewer.is_student?(@eg)
   end  
 
   def is_projects_coordinator?() viewer.is_projects_coordinator? end
+  def is_eventgroup_coordinator?() viewer.is_eventgroup_coordinator?(@eg) end
   def is_assigned_regional_or_national?() 
     return false if viewer.person.nil?
     !viewer.person.assignments.find_all_by_campus_id(Campus.regional_national_id).empty?

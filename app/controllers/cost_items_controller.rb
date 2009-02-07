@@ -55,7 +55,7 @@ class CostItemsController < ApplicationController
     if !params[:profile_id].nil?
       params[:cost_item][:type]           ||= 'ProfileCostItem'
       params[:cost_item][:acceptance_id]  ||= params[:acceptance_id]
-    elsif @user.is_projects_coordinator?
+    elsif @user.is_eventgroup_coordinator?
       params[:cost_item][:type] ||= 'YearCostItem'
     elsif !@project_access.empty?
       params[:cost_item][:type]       ||= 'ProjectCostItem'
@@ -100,7 +100,7 @@ class CostItemsController < ApplicationController
     def set_project_access_list
       current_projects = @eg.projects
       @project_access = current_projects.collect { |p|
-        if @user.is_projects_coordinator? || (@user.set_project(p) &&
+        if @user.is_eventgroup_coordinator? || (@user.set_project(p) &&
             (@user.is_project_administrator? || @user.is_project_director?))
           p
         else
@@ -108,9 +108,9 @@ class CostItemsController < ApplicationController
         end
       }.compact.collect { |p| [ p.title, p.id ] }
       
-      # only projects coordinator can set yearly cost items
+      # only eventgroup coordinator can set yearly cost items
       all_item = [ @eg.title, 'all' ]
-      @project_access << all_item if @user.is_projects_coordinator?
+      @project_access << all_item if @user.is_eventgroup_coordinator?
       @project_access.sort! { |a,b| a[0] <=> b[0] }
 
       # create @project_titles, also include the all item so that this text can be displayed even

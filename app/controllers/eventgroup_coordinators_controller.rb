@@ -2,8 +2,8 @@ class EventgroupCoordinatorsController < ApplicationController
   SUPERADMIN_VIEWER_IDS = [ 1, 2939, 812 ] # first viewer, Andrew, Russ -- sorry for the magic ids, 
                                            # eventually we will find a better way :|
 
-  before_filter :can_add_eventgroup_coordinators
   before_filter :set_eg2, :except => :index
+  before_filter :can_add_eventgroup_coordinators
   before_filter :set_title
 
   def search
@@ -87,7 +87,7 @@ class EventgroupCoordinatorsController < ApplicationController
   protected
 
   def can_add_eventgroup_coordinators
-    unless SUPERADMIN_VIEWER_IDS.include?(@user.id)
+    unless @user.viewer.is_eventgroup_coordinator?(@eg2) || SUPERADMIN_VIEWER_IDS.include?(@user.id)
       flash[:notice] = "Sorry, you don't have permission to add projects coordinators."
       redirect_to :controller => :main, :action => :index
     end

@@ -28,7 +28,7 @@
             <% end %>
           <% end %>
           <!-- end refs -->
-          <% if @user.is_projects_coordinator? %>
+          <% if @user.is_eventgroup_coordinator? %>
               <td>
                 <% if @appln.status == 'started' || @appln.status == 'unsubmitted' %>
                     <% @pile = "started"; %>
@@ -40,11 +40,11 @@
           <td><% if @appln.as_intern? %>
                  intern
               <% end %>
-              <% if @user.is_projects_coordinator? %>
+              <% if @user.is_eventgroup_coordinator? %>
                 <%= withdraw_move_link @profile.id %>
               <% end %>
 	      <% @user.set_project @profile.project %>
-	      <% if @user.is_projects_coordinator? || (@profile.project && @user.is_processor?) %>
+	      <% if @user.is_eventgroup_coordinator? || (@profile.project && @user.is_processor?) %>
 	           <%= edit_always_editable_link @profile.id %>
 	      <% end %>
           </td>

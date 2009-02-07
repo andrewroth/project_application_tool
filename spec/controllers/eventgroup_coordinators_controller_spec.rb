@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventgroupCoordinatorsController do
   before do
-    setup_eg; setup_viewer
+    setup_eg; setup_viewer(:egc => true)
   end
 
   def mock_eventgroup_coordinator(stubs={})
@@ -21,7 +21,7 @@ describe EventgroupCoordinatorsController do
   describe "responding to GET list" do
 
     it "should expose all eventgroup_coordinators as @eventgroup_coordinators" do
-      @eg.should_receive(:eventgroup_coordinators).with().and_return([mock_eventgroup_coordinator])
+      @eg.should_receive(:eventgroup_coordinators_with_inheritance).with().and_return([mock_eventgroup_coordinator])
       get :list, :id => @eg.id
       assigns[:eventgroup_coordinators].should == [mock_eventgroup_coordinator]
     end
@@ -49,9 +49,9 @@ describe EventgroupCoordinatorsController do
       end
 
       it "should redirect to the eventgroup_coordinators list" do
-        EventgroupCoordinator.stub!(:find_or_create_by_event_group_id_and_viewer_id).with(1,1).and_return(mock_eventgroup_coordinator(:save => true))
-        post :create, :eventgroup_coordinator => { :viewer_id => 1}
-        response.should redirect_to(eventgroup_coordinators_url)
+        EventgroupCoordinator.should_receive(:find_or_create_by_event_group_id_and_viewer_id).with(1,1).and_return(mock_eventgroup_coordinator(:save => true))
+        post :create, :id => 1, :eventgroup_coordinator => { :viewer_id => 1}
+        response.should redirect_to('http://test.host/eventgroup_coordinators/1/list')
       end
       
     end

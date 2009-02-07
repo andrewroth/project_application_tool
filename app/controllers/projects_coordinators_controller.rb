@@ -95,7 +95,7 @@ class ProjectsCoordinatorsController < ApplicationController
   protected
 
   def can_add_projects_coordinators
-    unless SUPERADMIN_VIEWER_IDS.include?(@user.id)
+    unless SUPERADMIN_VIEWER_IDS.include?(@user.id) || @user.is_projects_coordinator?
       flash[:notice] = "Sorry, you don't have permission to add projects coordinators."
       redirect_to :controller => :main, :action => :index
     end

@@ -1,7 +1,7 @@
 # to edit email templates
 # TO DO : make subject line an editable field
 class ReferenceEmailsController < ApplicationController   
-  before_filter :ensure_projects_coordinator
+  before_filter :ensure_eventgroup_coordinator
   before_filter :get_reference_email, :only => [ :update, :edit ]
   
   @@types = { 
@@ -39,8 +39,8 @@ class ReferenceEmailsController < ApplicationController
   
   protected
   
-  def ensure_projects_coordinator
-    if !@user.is_projects_coordinator?
+  def ensure_eventgroup_coordinator
+    if !@user.is_eventgroup_coordinator?
       render :inline => "Sorry, you have to be projects coordinator to edit the reference emails."
       return false
     end
