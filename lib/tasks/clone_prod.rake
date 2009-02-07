@@ -49,10 +49,14 @@ namespace "db:clone" do
     prod_cim = 'ciministry'
     dev_cim = 'dev_campusforchrist'
 
+    sql = ActiveRecord::Base.connection
+    sql.execute "drop database #{dev_spt}"
+    sql.execute "create database #{dev_spt}"
+
     clone_one_db prod_spt, dev_spt
     clone_one_db prod_cim, dev_cim
 
-    sql = ActiveRecord::Base.connection
+    sql.execute "use #{dev_spt}"
     sql.execute "delete from #{dev_spt}.#{Answer.table_name} where (question_id in (#{all_confidential_elements.collect(&:id).join(',')}));"
     puts "deleted confidential answers from #{dev_spt}"
   end
