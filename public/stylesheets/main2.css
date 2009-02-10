@@ -450,7 +450,7 @@ div.fieldWithErrors textarea {
 /* FORM STYLING FOR LOGIN FORM */
 
 form fieldset {
-	width: 400px;
+	width: 300px;
 	margin: auto;
 	padding: 0;
 }
@@ -483,7 +483,7 @@ fieldset label {
 	margin-right: 1em;
 }
 
-div#account_links {
+div#account_links, #login_table {
 	width: 50em;
 	margin: auto;
 	clear: both;
@@ -491,9 +491,12 @@ div#account_links {
 	margin-top: 1.5em;
 }
 
+#login_table {
+	width: 30em;
+}
+
 input#submit {
 	float: right;
-	margin: 0 2.5em 1em 0;
 }
 
 .event_group_hidden {

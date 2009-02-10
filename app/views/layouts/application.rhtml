@@ -41,7 +41,7 @@
         <% if @user %> 
           <p>user: 
             <%= @user.viewer.name %> - 
-            <%= link_to 'logout', :action => :logout, :controller => :security %>
+            <%= link_to "logout#{" of gcx" if session[:login_source] == 'gcx'}", :action => :logout, :controller => :security %>
           </p>
         <% end %>
       </div>
