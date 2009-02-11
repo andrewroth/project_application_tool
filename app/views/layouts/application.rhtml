@@ -20,12 +20,14 @@
 <html>
   <head>
     <title>Project Application Tool</title>
-    <%= stylesheet_link_tag 'main2' %>
+    <%= stylesheet_link_tag 'main2', 'connexion_default' %>
     <%= render :partial => "externs/sortable_tables" %>
     <%= javascript_include_tag "prototype", "effects" %>
     <%= render :partial => "externs/load_extern" %>
   </head>
   <body>
+    <%= connexion_bar if @user && session[:login_source] == 'gcx' %>
+
     <% if RAILS_ENV == 'development' && @debug -%>
       <div>debug: <%= @debug -%></div>
     <% end -%>
@@ -40,8 +42,10 @@
       <div id="user_info">
         <% if @user %> 
           <p>user: 
-            <%= @user.viewer.name %> - 
-            <%= link_to "logout#{" of gcx" if session[:login_source] == 'gcx'}", :action => :logout, :controller => :security %>
+            <%= @user.viewer.name %>
+            <% unless session[:login_source] == 'gcx' -%>
+               - <%= link_to "logout", :action => :logout, :controller => :security %>
+            <% end %>
           </p>
         <% end %>
       </div>
