@@ -397,9 +397,12 @@ class ReportsController < ApplicationController
   
   EmergencyContact = Struct.new(:name, :relation, :home_number, :work_number, :cell_number, :email)
   PassportInfo = Struct.new(:number, :expiry, :country)
-  EmergencyInfo = Struct.new(:have_conditions, :condition_desc, :med_needed, :med_with)
+  EmergencyInfo = Struct.new(:cond, :meds)
   ProjectEmergencyParticipant = Struct.new(:last_name, :first_name, :project, :gender, :staff, :birthdate, :passport, 
                                            :emergency_info, :contact1, :contact2)
+  HealthInfo = Struct.new(:number, :province)
+  InsuranceInfo = Struct.new(:carrier, :number)
+  DoctorsInfo = Struct.new(:doctors_name, :doctors_phone, :dentist_name, :dentist_phone)
   def crisis_management
     
     @columns = MyOrderedHash.new [
@@ -418,52 +421,68 @@ class ReportsController < ApplicationController
     :condition_desc, 'string',
     :med_needed, 'string',
     :med_with, 'string',
+    :health_number, 'string',
+    :health_province, 'string',
+    :ins_carrier, 'string',
+    :ins_number, 'string',
+    :doc_name, 'string',
+    :doc_phone, 'string',
+    :dentist_name, 'string',
+    :dentist_phone, 'string'
     ].compact.flatten
     @columns.merge! emergency_contact_columns('c1_')
     @columns.merge! emergency_contact_columns('c2_')
-    
+
     # index where the sub objects are so they can be referenced directly in the partial
     pp_pos = @columns.position(:passport_number)
-    @index = { :passport => pp_pos, :emerg => pp_pos+1, :c1 => pp_pos+2, :c2 => pp_pos+3 }
+    @index = { :passport => pp_pos, :emerg => pp_pos+1, :c1 => pp_pos+2, :c2 => pp_pos+3, 
+               :hinfo => pp_pos+4, :hins => pp_pos+5, :doctors => pp_pos+6 }
 
     @registrants = []
     
     loop_reports_viewers(@projects_ids, @include_pref1_applns, true) do |ac,a,v,p|
       
       gender = p.gender
+
       ec_entry = nil # used in get_passport_info
-      if v.is_student?
-        emergency_info = EmergencyInfo.new(extract_form_answer(:emergency_conditions, a), 
-        extract_form_answer(:emergency_conditions_description, a),
-        extract_form_answer(:emergency_medication_needed, a),
-        extract_form_answer(:emergency_medication_with, a))
-        birthdate = extract_form_answer(:birthdate, a)
-        emergency_contact_1 = emergency_contact(1, a)
-        emergency_contact_2 = emergency_contact(2, a)
-      else
-        ec_entry = p.emerg
-        emergency_contact_2, empty_wc = EmergencyContact.new('','','','','','')
-        emergency_contact_1 = if ec_entry
-          EmergencyContact.new(ec_entry.emerg_contactName,
+      ec_entry = p.emerg
+
+      empty_wc = EmergencyContact.new('','','','','','')
+
+      emergency_contact_1 = EmergencyContact.new(ec_entry.emerg_contactName,
                               ec_entry.emerg_contactRship,
                               ec_entry.emerg_contactHome,
                               ec_entry.emerg_contactWork,
                               ec_entry.emerg_contactMobile,
                               ec_entry.emerg_contactEmail)
-        else
-          empty_wc
-        end 
-        emergency_info = EmergencyInfo.new('', (ec_entry ? ec_entry.emerg_medicalNotes : '') , '', '')
-        birthdate = ec_entry ? ec_entry.emerg_birthdate : ''
-      end
+
+      emergency_contact_2 = EmergencyContact.new(ec_entry.emerg_contact2Name,
+                              ec_entry.emerg_contact2Rship,
+                              ec_entry.emerg_contact2Home,
+                              ec_entry.emerg_contact2Work,
+                              ec_entry.emerg_contact2Mobile,
+                              ec_entry.emerg_contact2Email)
+
+      emergency_info = EmergencyInfo.new(ec_entry.emerg_medicalNotes, ec_entry.emerg_meds)
+
+      birthdate = ec_entry ? ec_entry.emerg_birthdate : ''
+      birthdate = birthdate.to_s # might be nil
+
       passport_info = get_passport_info(ac, p, a, ec_entry)
       
+      hp = ec_entry.health_province ? ec_entry.health_province.province_shortDesc : ''
+      health_info = HealthInfo.new(ec_entry.health_number, hp)
+      ins_info = InsuranceInfo.new(ec_entry.medical_plan_carrier, ec_entry.medical_plan_number)
+      doc_info = DoctorsInfo.new(ec_entry.doctor_name.to_s, ec_entry.doctor_phone.to_s,
+                                 ec_entry.dentist_name.to_s, ec_entry.dentist_phone.to_s) 
+
       @registrants << [ p.person_lname.capitalize, p.person_fname.capitalize, @many_projects ? ac.project.title : nil, gender,
         v.is_student? ? '' : 'staff', 
-        a ? extract_form_answer(:curr_province, a) : (p && p.loc_province ? p.loc.province_shortDesc : ''),
-        a ? extract_form_answer(:perm_province, a) : (p && p.perm_province ? p.perm_province.province_shortDesc : ''),
+        (p && p.loc_province ? p.loc_province.province_shortDesc : ''),
+        (p && p.perm_province ? p.perm_province.province_shortDesc : ''),
         birthdate, passport_info,
-        emergency_info, emergency_contact_1, emergency_contact_2 ].compact
+        emergency_info, emergency_contact_1, emergency_contact_2,
+        health_info, ins_info, doc_info ].compact
     end
  
     @page_title = "#{@eg.title} #{@project_title} Crisis Management Report"
