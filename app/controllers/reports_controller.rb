@@ -418,9 +418,11 @@ class ReportsController < ApplicationController
     :passport_expiry, 'int',
     :passport_country, 'string',
     :have_conditions, 'string',
-    :condition_desc, 'string',
-    :med_needed, 'string',
-    :med_with, 'string',
+    :have_meds, 'string',
+   ].compact.flatten
+    @columns.merge! emergency_contact_columns('c1_')
+    @columns.merge! emergency_contact_columns('c2_')
+    @columns.merge! MyOrderedHash.new [
     :health_number, 'string',
     :health_province, 'string',
     :ins_carrier, 'string',
@@ -429,9 +431,8 @@ class ReportsController < ApplicationController
     :doc_phone, 'string',
     :dentist_name, 'string',
     :dentist_phone, 'string'
-    ].compact.flatten
-    @columns.merge! emergency_contact_columns('c1_')
-    @columns.merge! emergency_contact_columns('c2_')
+    ]
+ 
 
     # index where the sub objects are so they can be referenced directly in the partial
     pp_pos = @columns.position(:passport_number)
