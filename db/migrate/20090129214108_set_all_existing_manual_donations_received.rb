@@ -1,8 +1,6 @@
 class SetAllExistingManualDonationsReceived < ActiveRecord::Migration
   def self.up
-    for d in ManualDonation.find(:all)
-      execute "update #{ManualDonation.table_name} set status = 'received'"
-    end
+    execute "update #{ManualDonation.table_name} set status = 'received'"
   end
 
   def self.down
