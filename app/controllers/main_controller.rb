@@ -279,7 +279,7 @@ render :partial => "viewer_specifics"
       
       next if @current_projects_form.nil?
 
-      for person in campus.persons
+      for person in campus.students
         @campus_stats[campus].students_cnt += 1
 
         for viewer in person.viewers
