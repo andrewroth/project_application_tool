@@ -65,7 +65,9 @@ end
 unless ENV['target'] == 'demo'
   deploy.task :after_symlink do
     run "cp #{File.join(deploy_to, 'database.yml')} #{File.join(current_path, 'config', 'database.yml')}"
-    run "cd #{current_path}; rake fix_permissions path=#{ENV['deploy_to']};"
+    #run "cd #{current_path}; rake fix_permissions path=#{ENV['deploy_to']};"
+    run "chmod g+w #{current_path}/tmp"
+    run "mkdir #{current_path}/tmp/sessions"
   end
 end
 
