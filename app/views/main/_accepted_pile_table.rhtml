@@ -22,12 +22,12 @@
       <tbody>
         <% for acceptance in @accepted %>
           <% 
-          if acceptance.project != @project
-            @project = acceptance.project
-            @user.set_project @project
+          if acceptance.project != project
+            project = acceptance.project
+            @user.set_project project
 
             @full_view = @user.fullview?
-            @cache = ProfileDonation.cache @project.id
+            @cache = ProfileDonation.cache project.id
           end
           %>
 
@@ -65,10 +65,11 @@
                 <td><%= format_currency acceptance.donations_total(:cache => @cache) %></td>
                 <td><%= format_currency acceptance.cached_costing_total %></td>
                 <td>
-                    <% if @user.can_modify_profile_in_project @project %>
+                    <% if @user.can_modify_profile_in_project project %>
                         <% name = "support_coach_#{acceptance.id}" %>
                         <% support_coach_id = acceptance.support_coach.nil? ? '' : acceptance.support_coach_id %>
-                        <%= render :partial => 'support_coach_choice', :locals => { :name => name, :current => support_coach_id } %>
+                        <%= render :partial => 'support_coach_choice', :locals => { :name => name, 
+                                                :current => support_coach_id, :project => project } %>
 
                   	    <%= observe_field name,
                                    :url => {

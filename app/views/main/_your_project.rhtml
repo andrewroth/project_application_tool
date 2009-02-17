@@ -31,8 +31,7 @@ end
 <h4><%= "#{@user.viewer.name}#{title}" %></h4>
 
 <% if @user.is_support_coach? || @user.is_atleast_project_staff(your_project) %>
-    <%= render :partial => "support_coach_list"
-     %>
+    <%= render :partial => "support_coach_list", :locals => { :project => your_project } %>
 <% end %>
 
 <% if !@user.is_student? %>
@@ -43,7 +42,7 @@ end
 
     <p>Accepted pile:
 	    <blockquote>
-	      <%= render :partial => "accepted_pile", :object => your_project %>
+	      <%= render :partial => "accepted_pile", :locals => { :project => your_project } %>
 	    </blockquote>
     </p>
   <% end %>
@@ -61,7 +60,7 @@ end
     
     <p>Processor's pile:
     <blockquote>
-      <%= render :partial => "processor_pile" %>
+      <%= render :partial => "processor_pile", :locals => { :project => your_project } %>
     </blockquote>
     </p>
 
@@ -71,7 +70,7 @@ end
   %>
     <p>Staff:
       <blockquote>
-        <%= render :partial => "staff_pile" %>
+        <%= render :partial => "staff_pile", :locals => { :project => project } %>
       </blockquote>
     </p>
   <% end %>

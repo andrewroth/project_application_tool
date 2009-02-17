@@ -1,11 +1,11 @@
-<% profiles = StaffProfile.find_all_by_project_id @project, :include => { :viewer => :persons } %>
+<% profiles = StaffProfile.find_all_by_project_id project, :include => { :viewer => :persons } %>
 
 <%= sortable_table %><thead>
   <tr>
     <%= th 'Name' %>
     <%= th 'Username' %>
     <%= th 'Motivation Code' %>
-    <% if @projects%>
+    <% if @projects %>
       <%= th 'Project' %>
     <% end %>
     <th></th>
