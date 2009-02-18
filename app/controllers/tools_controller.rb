@@ -145,6 +145,52 @@ class ToolsController < ApplicationController
     redirect_to :action => :index
   end
 
+  def find_prep_items
+    # set @projects - if no project id is given, use all
+    @projects = if params[:project_id].empty? then @eg.projects else [ @eg.projects.find params[:project_id] ] end
+    
+    # get profiles out of projects
+    @profiles = @projects.collect{ |p| p.acceptances }.flatten
+    
+    # filter by name if requested
+    if params[:name] && !params[:name].empty?
+      people = Person.search_by_name params[:name]
+      @profiles = @profiles.find_all{ |p| people.include?(p.viewer.person) }
+    end
+    
+    # get prep_items from projects
+    @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten
+  end
+  
+  def find_prep_items2
+    @projects = @eg.projects.find_all_by_hidden(false).collect { |p| [ p.title, p.id ] }
+    if params[:name] == "" && params[:project_id] == "" #find all prep items and all ppis for all people
+      @profiles = @eg.projects.collect{ |p| p.acceptances }.flatten
+      @profiles.delete_if {|p| p.project == nil || p.viewer == nil}
+      #@profiles.delete_if {|p| p.project.event_group != @eg}
+      @prep_items = @eg.prep_items + @eg.projects.collect {|p| p.prep_items}.flatten
+    elsif params[:name] != "" && params[:project_id] == "" #find all prep items applicable to individual
+      @profiles = Profile.find(params[:name])
+      @prep_items = @eg.prep_items + @eg.projects.collect {|p| p.prep_items}.flatten
+    elsif params[:name] == "" && params[:project_id].to_s != "" #find all people going on a porject 
+      @profiles = Profile.find_all_by_project_id(params[:project_id])
+      @project = Project.find(params[:project_id])
+      @prep_items = @eg.prep_items + @project.prep_items.flatten
+    else #find all items for an individual going on a specific project
+      @profiles = Profile.find_all_by_project_id(params[:project_id])
+      people = Person.search_by_name{params[:name]}
+      @profiles.delete_if{|p| people.include?(p.viewer.person) }
+      @project = Project.find(params[:project_id])
+      @prep_items = @eg.prep_items + @project.prep_items.flatten
+    end
+    
+    respond_to do |format|
+      format.js { render :rjs => 'search' }
+      format.html {render :action => "index" }
+      format.xml 
+    end
+  end
+  
   protected
   
   def ensure_eventgroup_coordinator
@@ -173,5 +219,4 @@ class ToolsController < ApplicationController
              |, @usd.id, params[:find_status], start_date, end_date ],
       :include => :donation_type_obj
   end
-
 end

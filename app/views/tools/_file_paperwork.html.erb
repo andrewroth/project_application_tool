@@ -1,0 +1,14 @@
+<% form_remote_tag(:url => { :action => 'find_prep_items' }, 
+                   :update => :preview,
+                   :loading => "$('loading').show();",
+                   :complete => "$('loading').hide();"
+                   ) do %>
+  <%= select_tag 'find_project', options_for_select(@projects)%><br/>
+  with name (leave blank to display all names applicable to specific project) <%= text_field_tag 'name' %> <br/>
+  <%= submit_tag 'Search' %>
+<br/>
+
+<div id='search'>
+</div>
+
+<% end %>

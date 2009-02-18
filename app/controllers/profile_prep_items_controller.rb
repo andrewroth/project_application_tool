@@ -1,6 +1,6 @@
 class ProfilePrepItemsController < ApplicationController
   skip_before_filter :restrict_students
-  before_filter :get_profile
+  before_filter :get_profile, :except => :update
   
   # GET /profile_prep_items
   # GET /profile_prep_items.xml
