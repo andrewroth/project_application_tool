@@ -138,8 +138,16 @@ function new_window(url) {
             set_manual_donation_status_visibility();
           </script>
         <br/>
-
-   </ol>
+        
+        <i>Lists the status of paperwork items.</i>
+        <li><%= project_specific_report 'Prep Items', 'prep_items', 
+                     :include_blank => true, :include_all => true, 
+                     :projects_list => 'director' do |report|
+                   prep_items_for_project report
+                 end
+                %>
+         </li>
+      </ol>
     <% end %>
     
 

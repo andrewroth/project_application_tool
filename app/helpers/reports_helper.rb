@@ -165,6 +165,10 @@ module ReportsHelper
     helper_for_project action, 'cost_item', params
   end
 
+  def prep_items_for_project(action, params = {})
+    helper_for_project action, 'prep_item', params
+  end
+
   def helper_for_project(action, sub, params = {})
       params[:formats] ||= default_formats
       params[:include_blank] ||= true

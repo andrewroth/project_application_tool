@@ -11,10 +11,11 @@ class ReportsController < ApplicationController
   before_filter :set_projects, :only => [ :project_participants, :registrants, :crisis_management, :parental_emails, 
     :ticketing_requests, :funding_status, :funding_details, :viewers_with_profile_for_project,
     :funding_details_costing, :funding_details, :travel_list, :project_stats, :funding_costs,
-    :itinerary, :interns, :summary_forms, :cost_items_for_project, :cost_items, :manual_donations ]
+    :itinerary, :interns, :summary_forms, :cost_items_for_project, :cost_items, :manual_donations, :prep_items, :prep_items_for_project ]
   before_filter :set_viewer, :only => [ :funding_details_costing, :funding_details, :funding_costs ]
   before_filter :set_travel_segment, :only => [ :travel_segment, :custom_itinerary ]
   before_filter :set_cost_items, :only => [ :cost_items ]
+  before_filter :set_prep_items, :only => [ :prep_items ]
   before_filter :set_skip_title
   before_filter :try_to_delete_invalid_apps, :only => [ :project_stats ]
   
@@ -623,7 +624,7 @@ class ReportsController < ApplicationController
     claimed = ac.support_claimed.to_f.to_s
 
     gender = if p then p.gender else 'unknown' end
-    staff = if v.nil? then 'missing viewer' elsif v.is_student? then '' else 'staff' end 
+    staff = if v.nil? then 'missing viewer' elsif v.is_student?(@eg) then '' else 'staff' end 
      
     participant = [ p ? p.name : 'unknown' , gender, staff, (@many_projects ? ac.project.title : nil),
     received, claimed, target, target - received, target - claimed.to_f ].compact
@@ -645,7 +646,7 @@ class ReportsController < ApplicationController
       return
     end
     
-    # got an profile , now print all the donations that have come in for that acceptance
+    # got a profile , now print all the donations that have come in for that acceptance
     columns = [ 'donor_name',  # from model..
       [ 'donation_type', 'type' ], 
       [ 'donation_reference_number', 'reference' ], 
@@ -831,8 +832,18 @@ class ReportsController < ApplicationController
     @cost_items = @cost_items.uniq
     @id = params[:dom_id]
   end
+
+  def prep_items_for_project
+    @prep_items = []
+    @projects.each do |p|
+      @prep_items += p.prep_items
+    end
+    @prep_items += @eg.prep_items
+    @prep_items = @prep_items.uniq
+    @id = params[:dom_id]
+  end
   
-    def interns
+  def interns
     @columns = MyOrderedHash.new [
     :last_name, 'string', 
     :first_name, 'string',
@@ -962,6 +973,38 @@ class ReportsController < ApplicationController
     render_report @rows
   end
 
+  
+  def prep_items
+    @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten
+
+    @page_title = "Prep Items for " + if @projects.size == @eg.projects.size then
+        "All Projects"
+      elsif @projects.size == 1
+        @projects[0].title
+      else
+        "Various Projects"
+      end
+
+    @columns = MyOrderedHash.new [
+    :name, 'string',
+    :title, 'string',
+    :recieved, 'boolean'
+    ]
+
+    @participants = []
+    
+    # at this point we are guaranteed to have @projects and @prep_items set as
+    # arrays of projects and prep_items, respectively
+    @profile_prep_items = []
+    for prep_item in @prep_items
+      @profile_prep_items += [ProfilePrepItem.find_by_id(prep_item.id)]
+    end
+    @participants << [ 'name', @prep_items.collect{ |p| p.title }, @profile_prep_items.collect { |p| p.recieved } ]
+
+    render_report @participants, :action => :funding_status
+  end
+  
+  
   protected
   
   def csv_requested
@@ -1364,6 +1407,14 @@ class ReportsController < ApplicationController
       CostItem.find :all
     else
       CostItem.find params[:cost_item_id].split(',')
+    end
+  end
+
+  def set_prep_items
+    @prep_items = if params[:prep_item_id].nil? || params[:prep_item_id] == 'all' then
+      PrepItem.find :all
+    else
+      PrepItem.find params[:prep_item_id].split(',')
     end
   end
 
