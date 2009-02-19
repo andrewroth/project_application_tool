@@ -82,7 +82,7 @@ end
 # Include your application configuration below
 
 ExceptionNotifier.exception_recipients = %w(andrew.roth@c4c.ca helpdesk@c4c.ca)
-ExceptionNotifier.sender_address = %w(spt@campusforchrist.org)
+ExceptionNotifier.sender_address = %w(help.pat@powertochange.org)
 
 # questionnaire engine config
 module QE
@@ -129,3 +129,6 @@ if ARGV.include?('--rcov_baseline')
       require file
   end
 end
+
+# fix for ruby 1.8.7 - see http://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg528878.html
+require 'fix_1_8_7_enumerable'
