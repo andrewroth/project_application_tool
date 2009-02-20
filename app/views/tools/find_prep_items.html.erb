@@ -16,10 +16,8 @@
       <td><%= profile.viewer.name %></td>
       <td><%= profile.project.name %></td>
       <% for prep_item in @prep_items %>
-        <% if prep_item.applies_to == :event_group || (prep_item.applies_to == :project && prep_item.project == profile.project) %>
-          <% profile.profile_prep_items.find_or_create_by_prep_item_id(prep_item.id).save! %>
-          <% profile_prep_item = profile.profile_prep_items.find_by_prep_item_id(prep_item.id) %>
-          
+        <% profile_prep_item = profile.profile_prep_items.find_by_prep_item_id(prep_item.id) %>
+        <% if profile_prep_item %>
           <% id = "prep_id_#{profile_prep_item.id}_profile_id_#{profile.id}_recieved" -%>
           <td mochi:format='input'><%= check_box_tag id, profile_prep_item.recieved, profile_prep_item.recieved, :id => id, :onClick => 
                          remote_function(:url => {:controller => 'profile_prep_items', :action => "update", :id => profile_prep_item.id},

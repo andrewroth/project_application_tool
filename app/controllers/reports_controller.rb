@@ -975,8 +975,8 @@ class ReportsController < ApplicationController
 
   
   def prep_items
-    @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten
-
+    # at this point we are guaranteed to have @projects and @prep_items set as
+    # arrays of projects and prep_items, respectively
     @page_title = "Prep Items for " + if @projects.size == @eg.projects.size then
         "All Projects"
       elsif @projects.size == 1
@@ -985,22 +985,51 @@ class ReportsController < ApplicationController
         "Various Projects"
       end
 
-    @columns = MyOrderedHash.new [
-    :name, 'string',
-    :title, 'string',
-    :recieved, 'boolean'
+    columns_arr = [
+      :name, 'string',
+      :project, 'string'
     ]
-
-    @participants = []
-    
-    # at this point we are guaranteed to have @projects and @prep_items set as
-    # arrays of projects and prep_items, respectively
-    @profile_prep_items = []
     for prep_item in @prep_items
-      @profile_prep_items += [ProfilePrepItem.find_by_id(prep_item.id)]
+     columns_arr += [ (prep_item.title).to_sym, 'string']
     end
-    @participants << [ 'name', @prep_items.collect{ |p| p.title }, @profile_prep_items.collect { |p| p.recieved } ]
+    #for i in 1 .. @prep_items.size
+    #columns_arr += [
+     # ("Form " + i.to_s).to_sym, 'string',
+      #("s" + i.to_s).to_sym, 'boolean',
+      #("r" + i.to_s).to_sym, 'boolean']
+    #end
+    
+    @columns = MyOrderedHash.new columns_arr
 
+    # ensure profile_prep_items is current
+    @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
+    @profiles = []
+    @participants = []
+    @profile_prep_items = []
+    @profile_prep_items = @prep_items.collect { |p| p.profile_prep_items }.flatten
+    @profile_prep_items.delete_if { |p| !@projects.include?(p.profile.project) }
+    @profiles = @profile_prep_items.collect { |p| p.profile }.flatten.uniq
+    
+    for profile in @profiles
+      aray = []
+      aray += [ profile.viewer.name, profile.project.name ]
+      for prep_item in @prep_items
+        if prep_item.applies_to_profile(profile)
+          profile_prep_item = ProfilePrepItem.find_by_prep_item_id_and_profile_id(prep_item.id, profile.id)
+          if csv_requested
+            check_r = if profile_prep_item.recieved then "Y" else "n" end
+            check_s = if profile_prep_item.submitted then "Y" else "n" end
+          else
+            check_r = if profile_prep_item.recieved then "[&#x2713;]" else "[&nbsp;]" end
+            check_s = if profile_prep_item.submitted then "[&#x2713;]" else "[&nbsp;]" end
+          end
+          aray += [ "<pre>#{check_s}#{check_r}</pre>" ]
+        else
+          aray += [ "" ]
+        end
+      end
+      @participants <<  aray
+    end
     render_report @participants, :action => :funding_status
   end
   
