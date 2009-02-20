@@ -1,4 +1,29 @@
 
 <h1><%= @page_title %></h1>
 
+<p class='prep_items_received_column'>received column is in this color</p>
+<p class='prep_items_submitted_column'>submitted column is in this color</p>
+
+<% content_for :header do %>
+  <tr>
+  <%= th @columns.keys.first.to_s %>
+  <%= th @columns.keys[1].to_s %>
+  <% i = 2 -%>
+  <% while i < @columns.length -%>
+    <td colspan='2'><%= @columns.keys[i].to_s %></td>
+    <% i += 1 %>
+  <% end %>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <% i = 2 -%>
+    <% while i < @columns.length -%>
+      <th>rec</th>
+      <th>sub</th>
+      <% i += 1 %>
+    <% end %>
+   </tr>
+<% end %>
+
 <%= render :partial => 'generic_report_from_struct', :locals => { :struct => @participants } %>

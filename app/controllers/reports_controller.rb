@@ -990,7 +990,8 @@ class ReportsController < ApplicationController
       :project, 'string'
     ]
     for prep_item in @prep_items
-     columns_arr += [ (prep_item.title).to_sym, 'string']
+     columns_arr += [ "#{prep_item.title}#{' (rec)' if csv_requested}", 'string']
+     columns_arr += [ "(sub)" ] if csv_requested
     end
     #for i in 1 .. @prep_items.size
     #columns_arr += [
@@ -1019,18 +1020,24 @@ class ReportsController < ApplicationController
           if csv_requested
             check_r = if profile_prep_item.recieved then "Y" else "n" end
             check_s = if profile_prep_item.submitted then "Y" else "n" end
+            aray += [ check_s, check_r ]
           else
             check_r = if profile_prep_item.recieved then "[&#x2713;]" else "[&nbsp;]" end
             check_s = if profile_prep_item.submitted then "[&#x2713;]" else "[&nbsp;]" end
+            check_r_html = "<p class='prep_items_received_column'>#{check_r}</p>"
+            check_s_html = "<p class='prep_items_submitted_column'>#{check_s}</p>"
+
+            aray += [ check_s_html, check_r_html ]
           end
-          aray += [ "<pre>#{check_s}#{check_r}</pre>" ]
         else
-          aray += [ "" ]
+          aray += [ csv_requested ? "" : "&nbsp" ]
         end
       end
-      @participants <<  aray
+
+      @participants << aray
     end
-    render_report @participants, :action => :funding_status
+
+    render_report @participants
   end
   
   
