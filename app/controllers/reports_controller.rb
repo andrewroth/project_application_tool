@@ -1030,7 +1030,7 @@ class ReportsController < ApplicationController
             aray += [ check_s_html, check_r_html ]
           end
         else
-          aray += [ csv_requested ? "" : "&nbsp" ]
+          aray += [ csv_requested ? "" : "&nbsp" ] * 2
         end
       end
 
