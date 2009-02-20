@@ -989,10 +989,14 @@ class ReportsController < ApplicationController
       :name, 'string',
       :project, 'string'
     ]
+
+    i = 1
     for prep_item in @prep_items
-     columns_arr += [ "#{prep_item.title}#{' (rec)' if csv_requested}", 'string']
-     columns_arr += [ "(sub)", 'string' ] if csv_requested
+     columns_arr += [ "#{prep_item.title}#{" (rec#{i})" if csv_requested}", 'string']
+     columns_arr += [ "(sub#{i})", 'string' ] if csv_requested
+     i += 1
     end
+
     #for i in 1 .. @prep_items.size
     #columns_arr += [
      # ("Form " + i.to_s).to_sym, 'string',
@@ -1008,7 +1012,7 @@ class ReportsController < ApplicationController
     @participants = []
     @profile_prep_items = []
     @profile_prep_items = @prep_items.collect { |p| p.profile_prep_items }.flatten
-    @profile_prep_items.delete_if { |p| !@projects.include?(p.profile.project) }
+    @profile_prep_items.delete_if { |p| !@projects.include?(p.profile.project) } # keep only those relevant to projects being reported on
     @profiles = @profile_prep_items.collect { |p| p.profile }.flatten.uniq
     
     for profile in @profiles
@@ -1447,11 +1451,22 @@ class ReportsController < ApplicationController
   end
 
   def set_prep_items
+    includes = [ :project, :event_group ]
+
     @prep_items = if params[:prep_item_id].nil? || params[:prep_item_id] == 'all' then
-      PrepItem.find :all
+      PrepItem.find :all, :include => includes
     else
-      PrepItem.find params[:prep_item_id].split(',')
+      PrepItem.find params[:prep_item_id].split(','), :include => includes
     end
+
+    # ensure @prep_items apply to some project
+    @prep_items.delete_if { |pi|
+       if pi.applies_to == :project
+         !@projects.include?(pi.project)
+       elsif pi.applies_to == :event_group
+         pi.event_group != @eg
+       end
+    }
   end
 
   def set_viewer
