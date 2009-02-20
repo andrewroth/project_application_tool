@@ -991,7 +991,7 @@ class ReportsController < ApplicationController
     ]
     for prep_item in @prep_items
      columns_arr += [ "#{prep_item.title}#{' (rec)' if csv_requested}", 'string']
-     columns_arr += [ "(sub)" ] if csv_requested
+     columns_arr += [ "(sub)", 'string' ] if csv_requested
     end
     #for i in 1 .. @prep_items.size
     #columns_arr += [
