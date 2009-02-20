@@ -70,6 +70,16 @@ table#prep_items th {
 	padding: 3px;
 }
 
+.prep_items_received_column {
+	font-family: courier;
+	color: green;
+}
+
+.prep_items_submitted_column {
+	font-family: courier;
+	color: blue;
+}
+
 table#application_status {
 	margin-left: 2em;
 }
