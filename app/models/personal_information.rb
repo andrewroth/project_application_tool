@@ -26,6 +26,12 @@ class PersonalInformation < CustomElement
 
       person_params = params[:appln_person].clone
       person_params.delete 'email'
+
+      # Grad dates confuse this update.  Grad date is updated in the CampusInfo model anyways.
+      person_params.delete 'grad_date(1i)'
+      person_params.delete 'grad_date(2i)'
+      person_params.delete 'grad_date(3i)'
+
       person.update_attributes(person_params)
       person.save!
     end
