@@ -1020,14 +1020,14 @@ class ReportsController < ApplicationController
           if csv_requested
             check_r = if profile_prep_item.recieved then "Y" else "n" end
             check_s = if profile_prep_item.submitted then "Y" else "n" end
-            aray += [ check_s, check_r ]
+            aray += [ check_r, check_s ]
           else
             check_r = if profile_prep_item.recieved then "[&#x2713;]" else "[&nbsp;]" end
             check_s = if profile_prep_item.submitted then "[&#x2713;]" else "[&nbsp;]" end
             check_r_html = "<p class='prep_items_received_column'>#{check_r}</p>"
             check_s_html = "<p class='prep_items_submitted_column'>#{check_s}</p>"
 
-            aray += [ check_s_html, check_r_html ]
+            aray += [ check_r_html, check_s_html ]
           end
         else
           aray += [ csv_requested ? "" : "&nbsp" ] * 2
