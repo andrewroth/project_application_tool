@@ -246,7 +246,12 @@ class SecurityController < ApplicationController
     logger.debug('login ' + @user.inspect)
 
     #flash[:downtime] ||= "<br />There will be two short periods of downtime (approx 10 mins each) sometime before 9:30 AM EST (6:30 PST) on Tuesday Jan 22, 2007 for maintenance"
-      
+    
+    # update last login stuff
+    v.viewer_isActive = true
+    v.viewer_lastLogin = Time.now
+    v.save!
+
     redirect_to :controller => "main"
   end
 
