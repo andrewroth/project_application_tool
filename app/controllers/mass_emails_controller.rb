@@ -62,10 +62,14 @@ class MassEmailsController < ApplicationController
   end
   
   def find_prep_items
-    if params[:proj_id]!= 'any' 
-      @prep_items = Project.find(params[:proj_id]).prep_items + @eg.prep_items
+    if params[:proj_id] != ''
+      if params[:proj_id]!= 'any'
+        @prep_items = Project.find(params[:proj_id]).prep_items + @eg.prep_items
+      else
+        @prep_items = @eg.prep_items
+      end
     else
-      @prep_items = @eg.prep_items
+    @prep_items = []
     end
   end
   

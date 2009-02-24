@@ -10,7 +10,7 @@
 
   <div>
 
-    <P>From project: <%= select_tag 'project_id', options_for_select(project_options), :include_blank => true %> </P>
+    <P>From project: <%= select_tag 'project_id', options_for_select([''] + project_options, ''), :prompt => 'select a project'%> </P>
     
     <P>With status:</P>
 
@@ -49,7 +49,7 @@
   </div>
 
   <p>
-    <%= submit_tag 'Submit' %>
+    <%= submit_tag 'Submit', :id => 'mass_email_submit', :disabled =>true %>
   </p>
 
   <%= observe_field 'project_id', 
@@ -60,6 +60,15 @@
     %>
   <%= observe_field 'prep_item_unreceived', 
     :function => "$('prep_item_results').toggle();"
+    %>
+  <%= observe_field 'project_id',
+    :function => %|
+    if ($('project_id').value == '') {
+      $('mass_email_submit').disable();
+    } else {
+      $('mass_email_submit').enable();
+    }|
+    
     %>
      
   <% end -%>
