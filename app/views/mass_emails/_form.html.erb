@@ -54,8 +54,10 @@
 
   <%= observe_field 'project_id', 
     :url => {:controller => 'mass_emails', :action => "find_prep_items"},
-    :with => 'proj_id'
-     %>
+    :with => 'proj_id',
+    :loading => "$('loading').show();",
+    :loaded => "$('loading').hide();" 
+    %>
   <%= observe_field 'prep_item_unreceived', 
     :function => "$('prep_item_results').toggle();"
     %>
