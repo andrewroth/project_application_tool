@@ -18,12 +18,12 @@
       <% for prep_item in @prep_items %>
         <% profile_prep_item = profile.profile_prep_items.find_by_prep_item_id(prep_item.id) %>
         <% if profile_prep_item %>
-          <% id = "prep_id_#{profile_prep_item.id}_profile_id_#{profile.id}_recieved" -%>
-          <td mochi:format='input'><%= check_box_tag id, profile_prep_item.recieved, profile_prep_item.recieved, :id => id, :onClick => 
+          <% id = "prep_id_#{profile_prep_item.id}_profile_id_#{profile.id}_received" -%>
+          <td mochi:format='input'><%= check_box_tag id, profile_prep_item.received, profile_prep_item.received, :id => id, :onClick => 
                          remote_function(:url => {:controller => 'profile_prep_items', :action => "update", :id => profile_prep_item.id},
                                           :loading => "$('loading').show();",
                                           :complete => "$('loading').hide();",
-                                          :with => "'profile_prep_item[recieved]='+$('#{id}').checked+'&from_tools=true'",
+                                          :with => "'profile_prep_item[received]='+$('#{id}').checked+'&from_tools=true'",
                                           :method => :put
                                         )
                %>

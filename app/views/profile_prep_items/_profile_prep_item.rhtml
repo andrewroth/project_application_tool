@@ -1,7 +1,7 @@
 <% prep_item = profile_prep_item.prep_item %>
 <% if !profile_prep_item.submitted %>
   <% klass = "unsubmitted_item" %>
-<% elsif !profile_prep_item.recieved %>
+<% elsif !profile_prep_item.received %>
   <% klass = "" %>
 <% else %>
   <% klass = "project_item" %>
@@ -23,7 +23,7 @@
     <br />
     Submitted:  <%=h profile_prep_item.submitted %>
     <br />
-    Received: <%=h profile_prep_item.recieved %>
+    Received: <%=h profile_prep_item.received %>
     <br />
     Notes: <%=h profile_prep_item.notes %>
     <br />

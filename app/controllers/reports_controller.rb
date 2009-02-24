@@ -1022,11 +1022,11 @@ class ReportsController < ApplicationController
         if prep_item.applies_to_profile(profile)
           profile_prep_item = ProfilePrepItem.find_by_prep_item_id_and_profile_id(prep_item.id, profile.id)
           if csv_requested
-            check_r = if profile_prep_item.recieved then "Y" else "n" end
+            check_r = if profile_prep_item.received then "Y" else "n" end
             check_s = if profile_prep_item.submitted then "Y" else "n" end
             aray += [ check_r, check_s ]
           else
-            check_r = if profile_prep_item.recieved then "[&#x2713;]" else "[&nbsp;]" end
+            check_r = if profile_prep_item.received then "[&#x2713;]" else "[&nbsp;]" end
             check_s = if profile_prep_item.submitted then "[&#x2713;]" else "[&nbsp;]" end
             check_r_html = "<p class='prep_items_received_column'>#{check_r}</p>"
             check_s_html = "<p class='prep_items_submitted_column'>#{check_s}</p>"
