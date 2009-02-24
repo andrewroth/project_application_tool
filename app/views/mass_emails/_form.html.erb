@@ -1,17 +1,17 @@
 <div class='centerblock'>
 
-<% form_remote_tag :url => '/mass_emails/emails', 
-                   :update => 'mass_email_results',
-                   :loading => "$('loading').show();",
-                   :loaded => "$('loading').hide();" do %>
+  <% form_remote_tag :url => '/mass_emails/emails', 
+                     :update => 'mass_email_results',
+                     :loading => "$('loading').show();",
+                     :loaded => "$('loading').hide();" do %>
 
-<P>This tool will give you a comma-separated list of emails that you can use to send mass emails to applicants who match certain criteria.
-</P>
+  <P>This tool will give you a comma-separated list of emails that you can use to send mass emails to applicants who match certain criteria.
+  </P>
 
-<div>
+  <div>
 
-    <P>From project: <%= select_tag 'project_id', options_for_select(project_options) %> </P>
-
+    <P>From project: <%= select_tag 'project_id', options_for_select(project_options), :include_blank => true %> </P>
+    
     <P>With status:</P>
 
     <table id='mass_email_checks'>
@@ -29,17 +29,39 @@
         <% unless id.nil? || id.empty? -%>
           <%= check_box_tag id %> <%= value %>
         <% end -%>
-      </td></tr>
+      </td>
+      <td>
+        
+      </tr>
+      
       
     <% end %>
     </table>
 
-</div>
+  </div>
 
-<p>
-<%= submit_tag 'Submit' %>
-</p>
+  <div id="prep_item_results" style="display:none;">
+    <hr>
+    <div id="prep_item_r">
+    Choose a project to see paperwork items.
+    </div>
+    <hr>
+  </div>
 
-<% end -%>
+  <p>
+    <%= submit_tag 'Submit' %>
+  </p>
+
+  <%= observe_field 'project_id', 
+    :url => {:controller => 'mass_emails', :action => "find_prep_items"},
+    :with => 'proj_id'
+     %>
+  <%= observe_field 'prep_item_unreceived', 
+    :function => "$('prep_item_results').toggle();"
+    %>
+     
+  <% end -%>
+
+
 
 </div>
