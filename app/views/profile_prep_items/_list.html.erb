@@ -1,7 +1,9 @@
 <ul id = "list_ul">
 <% for profile_prep_item in @profile_prep_items %>
+  <% if !profile_prep_item.prep_item.individual || profile_prep_item.optional  %>
   <li id = "<%= "list_#{profile_prep_item.id}" %>">
     <%= render :partial => 'profile_prep_item', :object => profile_prep_item %>
   </li>
+  <% end %>
 <% end %>
 </ul>

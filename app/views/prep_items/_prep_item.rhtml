@@ -3,6 +3,7 @@
 <% elsif prep_item.applies_to == :project %>
   <% klass = "project_item" %>
 <% end %>
+<% if prep_item.individual then klass += " individual_item" end %>
 
 <% if prep_item.id == @last_modified_id %>
   <% modified = "last_modified" %>

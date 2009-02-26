@@ -236,7 +236,46 @@ render :partial => "viewer_specifics"
 
     render :inline => "<html><body><pre>#{r}</pre></body></html>"
   end
-
+  
+  def find_prep_items
+   # set @projects - if no project id is given, use all
+    @projects = Project.find(params[:proj_id])
+    #if params[:project_id].empty? then @eg.projects else [ @eg.projects.find params[:project_id] ] end
+    
+    # get profiles out of projects
+    @profiles = @projects.acceptances.flatten
+    
+    # get prep_items from projects
+    @prep_items = @eg.prep_items + @projects.prep_items.flatten
+        
+    # ensure profile_prep_items is current
+    @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
+    
+    for prep_item in @prep_items
+      if prep_item.individual
+        for profile_prep_item in prep_item.profile_prep_items
+          if !profile_prep_item.optional then profile_prep_item.delete end
+        end
+       end
+    end
+    @prep_items.delete_if { |pi| pi.profile_prep_items == [] }
+  end
+  
+  def find_optional_prep_items
+   # set @projects - if no project id is given, use all
+    @projects = Project.find(params[:proj_id])
+      
+    # get profiles out of projects
+    @profiles = @projects.acceptances.flatten
+    
+    # get prep_items from projects
+    @prep_items = @eg.prep_items + @projects.prep_items.flatten
+        
+    # ensure profile_prep_items is current
+    @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
+    
+    @prep_items.delete_if { |pi| !pi.individual }
+  end
   protected
   
   def get_students_profiles_from_sorted_profiles(profiles, viewers)

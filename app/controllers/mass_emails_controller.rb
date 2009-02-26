@@ -49,7 +49,9 @@ class MassEmailsController < ApplicationController
           profile_prep_items = PrepItem.find(i).profile_prep_items
           if params[:project_id]!= 'any' then profile_prep_items.delete_if { |ppi| ppi.profile.project_id != params[:project_id].to_i } end
           for profile_prep_item in profile_prep_items
-            if profile_prep_item.received == false then profiles += [profile_prep_item.profile] end
+            if profile_prep_item.received == false 
+              if !profile_prep_item.prep_item.individual || profile_prep_item.optional then profiles += [profile_prep_item.profile] end
+            end
           end
         end
       end

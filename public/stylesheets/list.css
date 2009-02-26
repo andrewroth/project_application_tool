@@ -7,6 +7,11 @@
     padding: 3px;
 }
 
+.individual_item, .individual_item_modified {
+    border: #7CFC00 solid;
+}
+
+
 
 .project_item, .project_item_modified {
     background-color: #80C9FF;

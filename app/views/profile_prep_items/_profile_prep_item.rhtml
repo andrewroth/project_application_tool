@@ -1,5 +1,5 @@
 <% prep_item = profile_prep_item.prep_item %>
-<% if !profile_prep_item.submitted %>
+<% if !profile_prep_item.submitted  && !profile_prep_item.received %>
   <% klass = "unsubmitted_item" %>
 <% elsif !profile_prep_item.received %>
   <% klass = "" %>

@@ -16,3 +16,6 @@
     <%= f.label :project_id%><br />
     <%= f.select(:project_id, [ [ 'All projects', nil ] ] + @projects) %>
   </p>
+  <p>
+  <%= f.check_box :individual %> <%= f.label "This item applies to select individuals" %>
+  </p>
