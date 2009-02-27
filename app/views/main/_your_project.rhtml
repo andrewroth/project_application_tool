@@ -40,6 +40,11 @@ end
           :project_id => your_project.id, :role => @user.roles_wrt_project(your_project)) do
   %>
 
+    <p>
+      <%= link_to 'File paperwork', :action => 'find_prep_items', :project_id => your_project.id, :command =>'received' %>
+      <%= link_to 'Assign optional paperwork items', :action => 'find_prep_items', :project_id => your_project.id , :command =>'optional' %>
+    </p>
+
     <p>Accepted pile:
 	    <blockquote>
 	      <%= render :partial => "accepted_pile", :locals => { :project => your_project } %>
@@ -47,9 +52,6 @@ end
       
     </p>
   <% end %>
-<%= link_to 'File paperwork', :action => 'find_prep_items', :proj_id => your_project.id, :command =>'received' %> 
-<%= link_to 'Assign optional paperwork items', :action => 'find_prep_items', :proj_id => your_project.id , :command =>'optional' %>
-
     <!-- all staff can see the processor list, but only certain people can actually evaluate -->
     <% @can_evaluate = @user.is_eventgroup_coordinator? || @user.is_processor? %>
     <% appln_includes = [ :references, { :viewer => { :persons => :campuses } }, :preference1, :profiles ]

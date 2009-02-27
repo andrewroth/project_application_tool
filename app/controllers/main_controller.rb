@@ -238,30 +238,39 @@ render :partial => "viewer_specifics"
   end
   
   def find_prep_items
-    if params[:command]=="received" || params[:command]=="optional"
-      if params[:from_tools]=="true"
-        # set @projects - if no project id is given, use all
-        @projects = if params[:project_id].empty? then @eg.projects else [ @eg.projects.find params[:project_id] ] end
-        
-        # get profiles out of projects
-        @profiles = @projects.collect{ |p| p.acceptances }.flatten
-        
-        if params[:name] && !params[:name].empty?
-          people = Person.search_by_name params[:name]
-          @profiles = @profiles.find_all{ |p| people.include?(p.viewer.person) }
-        end
-        # get prep_items from projects
-        @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten
-      else
-        @projects = @eg.projects.find params[:proj_id]
-        # get profiles out of projects
-        @profiles = @projects.acceptances.flatten
-        # get prep_items from projects
-        @prep_items = @eg.prep_items + @projects.prep_items.flatten
+    if %w(received optional).include?(params[:command]) && params[:project_id]
+      # set @projects - if no project id is given, use all if using tools
+      @projects = if params[:project_id].empty?
+                    if params[:from_tools] then @eg.projects else nil end
+                  else @eg.projects.find_all_by_id params[:project_id].split(',') end
+
+      # ensure valid project
+      unless @projects && !@projects.empty?
+        flash[:notice] = 'paperwork: invalid project'
+        redirect_to :back
+        return
       end
-        # ensure profile_prep_items is current
+        
+      # get profiles out of projects
+      @profiles = @projects.collect{ |p| p.acceptances }.flatten
+        
+      # sort by name if they came from tools
+      if params[:from_tools] && params[:name] && !params[:name].empty?
+        people = Person.search_by_name params[:name]
+        @profiles = @profiles.find_all{ |p| people.include?(p.viewer.person) }
+      end
+
+      # get prep_items from projects
+      @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten
+
+      # ensure profile_prep_items is current
       @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
-      if params[:command]=="optional" then @prep_items.delete_if { |pi| !pi.individual } end
+
+      # filter non-individual prep_items if optional command
+      if params[:command] == "optional" then @prep_items.delete_if { |pi| !pi.individual } end
+    else
+      flash[:notice] = 'paperwork: invalid command or options: command should be either received or optional, and project_id should be given'
+      redirect_to :back
     end
   end
 
