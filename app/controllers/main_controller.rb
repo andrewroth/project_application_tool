@@ -238,44 +238,32 @@ render :partial => "viewer_specifics"
   end
   
   def find_prep_items
-   # set @projects - if no project id is given, use all
-    @projects = Project.find(params[:proj_id])
-    #if params[:project_id].empty? then @eg.projects else [ @eg.projects.find params[:project_id] ] end
-    
-    # get profiles out of projects
-    @profiles = @projects.acceptances.flatten
-    
-    # get prep_items from projects
-    @prep_items = @eg.prep_items + @projects.prep_items.flatten
-        
-    # ensure profile_prep_items is current
-    @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
-    
-    for prep_item in @prep_items
-      if prep_item.individual
-        for profile_prep_item in prep_item.profile_prep_items
-          if !profile_prep_item.optional then profile_prep_item.delete end
-        end
-       end
-    end
-    @prep_items.delete_if { |pi| pi.profile_prep_items == [] }
-  end
-  
-  def find_optional_prep_items
-   # set @projects - if no project id is given, use all
-    @projects = Project.find(params[:proj_id])
+   
+    if params[:from_tools]=="true"
+      # set @projects - if no project id is given, use all
+      @projects = if params[:project_id].empty? then @eg.projects else [ @eg.projects.find params[:project_id] ] end
       
-    # get profiles out of projects
-    @profiles = @projects.acceptances.flatten
-    
-    # get prep_items from projects
-    @prep_items = @eg.prep_items + @projects.prep_items.flatten
-        
-    # ensure profile_prep_items is current
+      # get profiles out of projects
+      @profiles = @projects.collect{ |p| p.acceptances }.flatten
+      
+      if params[:name] && !params[:name].empty?
+        people = Person.search_by_name params[:name]
+        @profiles = @profiles.find_all{ |p| people.include?(p.viewer.person) }
+      end
+      # get prep_items from projects
+      @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten
+    else
+      @projects = @eg.projects.find params[:proj_id]
+      # get profiles out of projects
+      @profiles = @projects.acceptances.flatten
+      # get prep_items from projects
+      @prep_items = @eg.prep_items + @projects.prep_items.flatten
+    end
+      # ensure profile_prep_items is current
     @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
-    
-    @prep_items.delete_if { |pi| !pi.individual }
+    if params[:command]=="optional" then @prep_items.delete_if { |pi| !pi.individual } end
   end
+
   protected
   
   def get_students_profiles_from_sorted_profiles(profiles, viewers)

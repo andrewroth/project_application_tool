@@ -18,12 +18,12 @@ Click checkboxes to mark paperwork items as received.
       <% for prep_item in @prep_items %>
         <% profile_prep_item = profile.profile_prep_items.find_by_prep_item_id(prep_item.id) %>
         <% if profile_prep_item %>
-          <% id = "prep_id_#{profile_prep_item.id}_profile_id_#{profile.id}_received" -%>
-          <td mochi:format='input'><%= check_box_tag id, profile_prep_item.received, profile_prep_item.received, :id => id, :onClick => 
+          <% id = "prep_id_#{profile_prep_item.id}_profile_id_#{profile.id}_#{params[:command]}" -%>
+          <td mochi:format='input'><%= check_box_tag id, profile_prep_item.send(params[:command]), profile_prep_item.send(params[:command]), :id => id, :onClick => 
                          remote_function(:url => {:controller => 'profile_prep_items', :action => "update", :id => profile_prep_item.id},
                                           :loading => "$('loading').show();",
                                           :complete => "$('loading').hide();",
-                                          :with => "'profile_prep_item[received]='+$('#{id}').checked+'&from_tools=true'",
+                                          :with => "'profile_prep_item[#{params[:command]}]='+$('#{id}').checked+'&from_tools=true'",
                                           :method => :put
                                         )
                %>
@@ -42,4 +42,8 @@ Click checkboxes to mark paperwork items as received.
 <br />
 
 <%= initialize_sortable_tables %>
-<a href="/main/your_projects">Back</a>
+<% if params[:from_tools]=="true" %>
+  <a href="/tools/index">Back</a>
+<% else %>
+  <a href="/main/your_projects">Back</a>
+<% end %>

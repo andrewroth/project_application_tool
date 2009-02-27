@@ -145,26 +145,6 @@ class ToolsController < ApplicationController
     redirect_to :action => :index
   end
 
-  def find_prep_items
-    # set @projects - if no project id is given, use all
-    @projects = if params[:project_id].empty? then @eg.projects else [ @eg.projects.find params[:project_id] ] end
-    
-    # get profiles out of projects
-    @profiles = @projects.collect{ |p| p.acceptances }.flatten
-    
-    # filter by name if requested
-    if params[:name] && !params[:name].empty?
-      people = Person.search_by_name params[:name]
-      @profiles = @profiles.find_all{ |p| people.include?(p.viewer.person) }
-    end
-    
-    # get prep_items from projects
-    @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten
-    
-    # ensure profile_prep_items is current
-    @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
-  end
-  
   protected
   
   def ensure_eventgroup_coordinator
