@@ -238,30 +238,31 @@ render :partial => "viewer_specifics"
   end
   
   def find_prep_items
-   
-    if params[:from_tools]=="true"
-      # set @projects - if no project id is given, use all
-      @projects = if params[:project_id].empty? then @eg.projects else [ @eg.projects.find params[:project_id] ] end
-      
-      # get profiles out of projects
-      @profiles = @projects.collect{ |p| p.acceptances }.flatten
-      
-      if params[:name] && !params[:name].empty?
-        people = Person.search_by_name params[:name]
-        @profiles = @profiles.find_all{ |p| people.include?(p.viewer.person) }
+    if params[:command]=="received" || params[:command]=="optional"
+      if params[:from_tools]=="true"
+        # set @projects - if no project id is given, use all
+        @projects = if params[:project_id].empty? then @eg.projects else [ @eg.projects.find params[:project_id] ] end
+        
+        # get profiles out of projects
+        @profiles = @projects.collect{ |p| p.acceptances }.flatten
+        
+        if params[:name] && !params[:name].empty?
+          people = Person.search_by_name params[:name]
+          @profiles = @profiles.find_all{ |p| people.include?(p.viewer.person) }
+        end
+        # get prep_items from projects
+        @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten
+      else
+        @projects = @eg.projects.find params[:proj_id]
+        # get profiles out of projects
+        @profiles = @projects.acceptances.flatten
+        # get prep_items from projects
+        @prep_items = @eg.prep_items + @projects.prep_items.flatten
       end
-      # get prep_items from projects
-      @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten
-    else
-      @projects = @eg.projects.find params[:proj_id]
-      # get profiles out of projects
-      @profiles = @projects.acceptances.flatten
-      # get prep_items from projects
-      @prep_items = @eg.prep_items + @projects.prep_items.flatten
+        # ensure profile_prep_items is current
+      @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
+      if params[:command]=="optional" then @prep_items.delete_if { |pi| !pi.individual } end
     end
-      # ensure profile_prep_items is current
-    @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
-    if params[:command]=="optional" then @prep_items.delete_if { |pi| !pi.individual } end
   end
 
   protected
