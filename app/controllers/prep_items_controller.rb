@@ -9,28 +9,12 @@ class PrepItemsController < ApplicationController
   # GET /prep_items
   # GET /prep_items.xml
   def index
-    @prep_items = @eg.prep_items + @eg.projects.collect {|p| p.prep_items}.flatten
+    @prep_items = (@eg.prep_items + @eg.projects.collect {|p| p.prep_items}.flatten).uniq
     @projects = @eg.projects.find_all_by_hidden(false).collect { |p| [ p.title, p.id ] }
     @prep_item=PrepItem.new
-  end
-  
-  # GET /prep_items/new
-  # GET /prep_items/new.xml
-  def new
-    @prep_item = PrepItem.new
-    @projects = @eg.projects.find_all_by_hidden(false).collect { |p| [ p.title, p.id ] }
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @prep_item }
-      #<!--  <%= link_to 'New Paperwork Item', new_prep_item_path %> -->
-    end
+    @checkbox_projects = @eg.projects.find_all_by_hidden(false)
   end
 
-  # GET /prep_items/1/edit
-  def edit
-    @prep_item = PrepItem.find(params[:id])
-    @projects = @eg.projects.find_all_by_hidden(false).collect { |p| [ p.title, p.id ] }
-  end
 
   # POST /prep_items
   # POST /prep_items.xml
@@ -38,6 +22,7 @@ class PrepItemsController < ApplicationController
     @prep_item = PrepItem.new(params[:prep_item])
     @projects = @eg.projects.find_all_by_hidden(false).collect { |p| [ p.title, p.id ] }
     check_prep_item_event_group_all
+    @checkbox_projects = @eg.projects.find_all_by_hidden(false)
     
     respond_to do |format|
       if @prep_item.save
@@ -62,9 +47,10 @@ class PrepItemsController < ApplicationController
   # PUT /prep_items/1.xml
   def update
     @prep_item = PrepItem.find(params[:id])
+    @checkbox_projects = @eg.projects.find_all_by_hidden(false)
     @projects = @eg.projects.find_all_by_hidden(false).collect { |p| [ p.title, p.id ] }
     check_prep_item_event_group_all
-    
+
     respond_to do |format|
       if @prep_item.update_attributes(params[:prep_item])
         session[:prev_modified_id] = session[:last_modified_id]
@@ -108,13 +94,13 @@ class PrepItemsController < ApplicationController
   def set_menu_titles() @page_title = 'Manage Projects'; @submenu_title = 'paperwork' end
   
   def check_prep_item_event_group_all
-    if params[:prep_item][:project_id].empty?
+    if params[:prep_item][:project_ids].empty?
       @prep_item.event_group = @eg
     else
       @prep_item.event_group = nil
     end
   end
-
+  
   def get_prev_modifieds
     @prev_modified_id = session[:prev_modified_id]
   end

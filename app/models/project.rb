@@ -10,7 +10,7 @@ class Project < ActiveRecord::Base
   has_many :acceptances
   has_many :applyings
   has_many :cost_items
-  has_many :prep_items
+  has_and_belongs_to_many :prep_items
   
   has_many :processor_pile
   
