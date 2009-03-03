@@ -8,7 +8,7 @@ class ReportsController < ApplicationController
   before_filter :ensure_is_general_staff
   # they want all staff to be able to see everything..
   #before_filter :ensure_is_projects_coordinator, :except => [ :index, :cm, :crisis_management, :project_stats ]
-  before_filter :set_projects, :only => [ :project_participants, :registrants, :crisis_management, :parental_emails, 
+  before_filter :set_projects, :only => [ :participants, :registrants, :crisis_management, :parental_emails, 
     :ticketing_requests, :funding_status, :funding_details, :viewers_with_profile_for_project,
     :funding_details_costing, :funding_details, :travel_list, :project_stats, :funding_costs,
     :itinerary, :interns, :summary_forms, :cost_items_for_project, :cost_items, :manual_donations, :prep_items, :prep_items_for_project ]
@@ -119,10 +119,56 @@ class ReportsController < ApplicationController
     render_report @rows
   end
   
-  ProjectParticipant = Struct.new(:last_name, :first_name, :gender, :email, :phone, :cell, 
-    :campus, :year, :project, :leadership, :training, :intern)
-  
-  def project_participants
+  def participants
+    @columns = MyOrderedHash.new( [
+      :last_name, 'string',
+      :first_name, 'string',
+      :gender, 'string',
+      :project, 'string',
+      @eg.has_your_campuses ? [ :campus, 'string' ] : nil,
+      @eg.has_your_campuses ? [ :year, 'int' ] : nil,
+      :phone, 'string',
+      :cell, 'string',
+      :email, 'string'
+    ].flatten.compact )
+    @rows = [ ]
+
+    @page_title = @projects.collect(&:title).join(', ') + " Participants"
+
+    acceptances = Acceptance.find_all_by_project_id(@projects_ids, :include => [
+            :project,
+          { :viewer =>
+            { :persons =>
+              { :person_years => :year_in_school, :assignments => :campus
+              }
+            }
+          }
+      ],
+      :select => mk_sel("Person.person_lname, Person.person_fname, Person.gender_id, Campus.campus_shortDesc, Assignment.assignmentstatus_id, YearInSchool.year_desc, Project.title, Profile.status, Profile.type, Person.person_local_phone, Person.cell_phone, Person.person_email")
+    )
+
+    #@rows = [ [  ] ]
+    @rows = acceptances.collect{ |acceptance|
+      viewer = acceptance.viewer
+      person = viewer.person
+
+      [
+        person.person_lname,
+        person.person_fname,
+        person.gender,
+        acceptance.project.title,
+        @eg.has_your_campuses ? person.campus_shortDesc(:search_arrays => true) : :skip,
+        @eg.has_your_campuses ? person.year_in_school.year_desc : :skip,
+        person.person_local_phone,
+        person.cell_phone,
+        person.person_email
+      ].delete_if{ |i| i == :skip }
+    }
+
+    render_report @rows
+  end
+ 
+  def project_participants_old
     @columns = MyOrderedHash.new [
     :last_name, 'string', 
     :first_name, 'string',
