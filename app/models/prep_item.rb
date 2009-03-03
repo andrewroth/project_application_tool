@@ -11,29 +11,11 @@ class PrepItem < ActiveRecord::Base
   end
  
   def applies_to
-    
-    throw "PrepItems should exactly one of event_group_id, project_id or profile_id set" unless refs_set == 1
-    
-    if projects
-      :projects
-    elsif event_group
+    if event_group_id
       :event_group
     else
-      :profile
+      :projects
     end
-  end
-  
-  def refs_set
-    refs = 0
-    refs += 1 if event_group
-    refs += 1 if projects
-    refs += 1 if profile
-    
-    refs
-  end
-  
-  def applies_to_multiple_projects
-    return false unless self.projects.size > 1
   end
   
   def applies_to_profile(profile)

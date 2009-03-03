@@ -5,10 +5,25 @@
   
     <%= render :partial => 'prep_items/form', :locals => { :f => f }  %>
   
-     <% for project in @checkbox_projects %>
-  <%= check_box_tag "prep_item[project_ids][]", project.id, prep_item.projects.include?(project) %> 
-  <%= 'Applies to ' + project.title %> <br />
- <% end %>
+  <p>
+    <% if prep_item.applies_to == :event_group %>
+      <%= check_box_tag "#{prep_item.id}_event_group_prep_item", 1, true %> This item applies to all projects
+    <% else %>
+      <%= check_box_tag "#{prep_item.id}_event_group_prep_item" %> This item applies to all projects
+    <% end %>
+    <br />
+  </p>
+  
+  <div id="<%= prep_item.id %>_projects_list">
+    <p>
+    <% for project in @checkbox_projects %>
+      <%= check_box_tag "prep_item[project_ids][]", project.id, prep_item.projects.include?(project) %> 
+      <%= 'Applies to ' + project.title %> <br />
+    <% end %>
+    </p>
+  </div>
+  
+  <%= observe_field "#{prep_item.id}_event_group_prep_item", :function => "$('#{prep_item.id}_projects_list').toggle();" %>
   
     <%= submit_tag 'Save' %>
     

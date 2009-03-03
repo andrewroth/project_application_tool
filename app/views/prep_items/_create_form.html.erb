@@ -4,6 +4,12 @@
     :loaded => "$('loading').hide();" do |f| %>
 
   <%= render :partial => 'prep_items/form', :locals => { :f => f } %>
+  
+  <% for project in @checkbox_projects %>
+    <%= check_box_tag "prep_item[project_ids][]", project.id, @prep_item.projects.include?(project) %> 
+    <%= 'Applies to ' + project.title %> <br />
+  <% end %>
+  
       
   <%= submit_tag 'Create' %>
   

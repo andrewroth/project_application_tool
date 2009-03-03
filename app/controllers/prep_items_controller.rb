@@ -21,12 +21,12 @@ class PrepItemsController < ApplicationController
   def create
     @prep_item = PrepItem.new(params[:prep_item])
     @projects = @eg.projects.find_all_by_hidden(false).collect { |p| [ p.title, p.id ] }
-    check_prep_item_event_group_all
     @checkbox_projects = @eg.projects.find_all_by_hidden(false)
-    
+    check_prep_item_event_group_all
     respond_to do |format|
       if @prep_item.save
         flash[:notice] = 'PrepItem was successfully created.'
+        
         session[:prev_modified_id] = session[:last_modified_id]
         @last_modified_id = @prep_item.id
         if @prev_modified_id != nil
@@ -94,8 +94,9 @@ class PrepItemsController < ApplicationController
   def set_menu_titles() @page_title = 'Manage Projects'; @submenu_title = 'paperwork' end
   
   def check_prep_item_event_group_all
-    if params[:prep_item][:project_ids].empty?
-      @prep_item.event_group = @eg
+    if params[:prep_item][:project_ids].to_a.empty?
+      @prep_item.event_group_id = @eg.id
+      @prep_item.projects = []
     else
       @prep_item.event_group = nil
     end
