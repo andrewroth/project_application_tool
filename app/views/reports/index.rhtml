@@ -51,8 +51,13 @@ function new_window(url) {
    <b>Standard Reports (for all projects and event groups)</b><br/>
       
       <ol>
-         <i>Lists all people applying for a given project, who indicated this project as their first preference.</i>
+         <i>Lists all registrants -- people applying for a given project, who indicated this project as their first preference.</i>
          <li><%= project_specific_report 'Registrants', 'registrants', :include_all => true %></li>
+      
+         <br/>
+
+         <i>Lists participants -- people accepted for a given project</i>
+         <li><%= project_specific_report 'Accepted', 'participants', :include_all => true %></li>
       
          <br/>
          
