@@ -88,7 +88,7 @@
     <% end %>
     
     <% flash.each do |key, msg| -%>
-      <% full_msg = h(msg) %>
+      <% full_msg = msg %>
       <%= content_tag :div, full_msg, :id => "flash_#{key}", :class => 'error flash' %>
     <% end -%>
     <% flash.discard -%>
