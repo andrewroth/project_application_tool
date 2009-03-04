@@ -261,7 +261,7 @@ render :partial => "viewer_specifics"
       end
 
       # get prep_items from projects
-      @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten
+      @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten.uniq
 
       # ensure profile_prep_items is current
       @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }

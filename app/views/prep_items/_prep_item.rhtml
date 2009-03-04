@@ -23,9 +23,9 @@
     <br />
     Applies to: 
     <% if prep_item.applies_to == :projects %>
-     <%= prep_item.projects.collect{ |p| p.title }.join(", ") %>
+      <%= prep_item.projects.collect{ |p| p.title }.join(", ") %>
     <% else %>
-      " All Projects"
+      All Projects
     <% end %>
     <br />
     <%= link_to_function 'edit', "$('edit_#{prep_item.id}').show(); $('show_#{prep_item.id}').hide();"  %>

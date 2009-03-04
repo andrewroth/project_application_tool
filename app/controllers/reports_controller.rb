@@ -1497,18 +1497,18 @@ class ReportsController < ApplicationController
   end
 
   def set_prep_items
-    includes = [ :project, :event_group ]
+    includes = [ :projects, :event_group ]
 
     @prep_items = if params[:prep_item_id].nil? || params[:prep_item_id] == 'all' then
       PrepItem.find :all, :include => includes
     else
       PrepItem.find params[:prep_item_id].split(','), :include => includes
     end
-
+    
     # ensure @prep_items apply to some project
     @prep_items.delete_if { |pi|
-       if pi.applies_to == :project
-         !@projects.include?(pi.project)
+       if pi.applies_to == :projects
+         (@projects & pi.projects).empty?
        elsif pi.applies_to == :event_group
          pi.event_group != @eg
        end

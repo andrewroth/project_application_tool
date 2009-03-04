@@ -20,12 +20,12 @@ class PrepItem < ActiveRecord::Base
   
   def applies_to_profile(profile)
     return false unless profile.class == Acceptance
-    (applies_to == :event_group && profile.project.event_group == event_group) || (applies_to == :projects && projects == profile.project)
+    (applies_to == :event_group && profile.project.event_group == event_group) || (applies_to == :projects && projects.include?(profile.project))
   end
   
   def ensure_all_profile_prep_items_exist
-    project_ids = if applies_to == :event_group then event_group.projects.collect(&:id) else [ project_id ] end
-    projects = Project.find project_ids, :include => { :acceptances => :profile_prep_items }
+    ensure_project_ids = if applies_to == :event_group then event_group.projects.collect(&:id) else self.project_ids end
+    projects = Project.find ensure_project_ids, :include => { :acceptances => :profile_prep_items }
     
     valid_acceptance_ids_with_ppi = []
     

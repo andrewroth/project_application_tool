@@ -10,7 +10,6 @@ class PrepItemsController < ApplicationController
   # GET /prep_items.xml
   def index
     @prep_items = (@eg.prep_items + @eg.projects.collect {|p| p.prep_items}.flatten).uniq
-    @projects = @eg.projects.find_all_by_hidden(false).collect { |p| [ p.title, p.id ] }
     @prep_item=PrepItem.new
     @checkbox_projects = @eg.projects.find_all_by_hidden(false)
   end
@@ -20,18 +19,17 @@ class PrepItemsController < ApplicationController
   # POST /prep_items.xml
   def create
     @prep_item = PrepItem.new(params[:prep_item])
-    @projects = @eg.projects.find_all_by_hidden(false).collect { |p| [ p.title, p.id ] }
     @checkbox_projects = @eg.projects.find_all_by_hidden(false)
-    check_prep_item_event_group_all
+    
     respond_to do |format|
       if @prep_item.save
         flash[:notice] = 'PrepItem was successfully created.'
-        
         session[:prev_modified_id] = session[:last_modified_id]
         @last_modified_id = @prep_item.id
         if @prev_modified_id != nil
           @prev_prep_item = PrepItem.find(@prev_modified_id)
         end
+        check_prep_item_event_group_all
         format.js { render :rjs => 'create' }
         format.html { redirect_to(prep_items_url) }
         format.xml  { render :xml => @prep_item, :status => :created, :location => @prep_item }
@@ -48,9 +46,7 @@ class PrepItemsController < ApplicationController
   def update
     @prep_item = PrepItem.find(params[:id])
     @checkbox_projects = @eg.projects.find_all_by_hidden(false)
-    @projects = @eg.projects.find_all_by_hidden(false).collect { |p| [ p.title, p.id ] }
-    check_prep_item_event_group_all
-
+    
     respond_to do |format|
       if @prep_item.update_attributes(params[:prep_item])
         session[:prev_modified_id] = session[:last_modified_id]
@@ -58,7 +54,7 @@ class PrepItemsController < ApplicationController
         if @prev_modified_id != nil
           @prev_prep_item = PrepItem.find(@prev_modified_id)
         end
-
+        check_prep_item_event_group_all
         flash[:notice] = 'PrepItem was successfully updated.'
         format.js { render :rjs => 'update' }
         format.html { redirect_to(prep_items_url) }
@@ -94,9 +90,9 @@ class PrepItemsController < ApplicationController
   def set_menu_titles() @page_title = 'Manage Projects'; @submenu_title = 'paperwork' end
   
   def check_prep_item_event_group_all
-    if params[:prep_item][:project_ids].to_a.empty?
+    if params[:prep_item][:project_ids].to_a.empty? || params[(@prep_item.id.to_s + "_event_group_prep_item").to_sym]
       @prep_item.event_group_id = @eg.id
-      @prep_item.projects = []
+      @prep_item.projects.delete_all
     else
       @prep_item.event_group = nil
     end

@@ -1,5 +1,5 @@
 <%= f.error_messages %>
-
+<%= prep_item.title %>
 <p>
   <%= f.label :title %><br />
   <%= f.text_field :title %>
@@ -13,6 +13,29 @@
   <%= f.date_select :deadline %>
 </p>
 <p>
-<%= f.check_box :individual %> <%= f.label "This item applies to select individuals" %>
+  <%= f.check_box :individual %> <%= f.label "This item applies to select individuals" %>
+</p>
+<p>
+  <% if prep_item.applies_to == :event_group %>
+    <%= check_box_tag "#{prep_item.id}_event_group_prep_item", 1, true %> This item applies to all projects
+  <% else %>
+    <%= check_box_tag "#{prep_item.id}_event_group_prep_item" %> This item applies to all projects
+  <% end %>
+  <br />
 </p>
 
+<% if prep_item.applies_to == :event_group %>
+<div id="<%= prep_item.id %>_projects_list" class="" style="display:none;">
+<% else %>
+<div id="<%= prep_item.id %>_projects_list">
+<% end %>
+<p>
+  <% for project in @checkbox_projects %>
+    <%= check_box_tag "prep_item[project_ids][]", project.id, prep_item.projects.include?(project) %> 
+    <%= 'Applies to ' + project.title %> <br />
+  <% end %>
+  </p>
+</div>
+
+<%= observe_field "#{prep_item.id}_event_group_prep_item", :function => "$('#{prep_item.id}_projects_list').toggle();" %>
+  
