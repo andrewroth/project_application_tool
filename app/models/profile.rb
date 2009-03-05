@@ -42,7 +42,6 @@ class Profile < ActiveRecord::Base
 
     # special case for remembering when the costing total needs to be recalculated
     if !@in_save && %w(type project_id).include?(att.to_s)
-      debugger
       @update_costing_total_cache = true
     end
 
@@ -250,8 +249,6 @@ class Profile < ActiveRecord::Base
   end
 
   def after_save
-    debugger
-
     if @update_costing_total_cache
       @update_costing_total_cache = false
       if project
