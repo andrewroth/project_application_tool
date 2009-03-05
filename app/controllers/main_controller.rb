@@ -82,8 +82,10 @@ class MainController < ApplicationController
     
     @allowable_projects_array << ["All", "all"]
     
-    params[:project_id] ||= if @first_allowable_project then @first_allowable_project.id.to_s 
+    params[:project_id] ||= session[:project_id] ||= if @first_allowable_project then @first_allowable_project.id.to_s 
                              else '' end
+    session[:project_id] = params[:project_id]
+    
     if params[:project_id] == 'all'
       @show_projects = @allowable_projects
     else
