@@ -41,7 +41,8 @@ class Profile < ActiveRecord::Base
     @orig_atts[att.to_s] ||= self[att]
 
     # special case for remembering when the costing total needs to be recalculated
-    if %w(type project_id).include?(att.to_s)
+    if !@in_save && %w(type project_id).include?(att.to_s)
+      debugger
       @update_costing_total_cache = true
     end
 
@@ -49,9 +50,11 @@ class Profile < ActiveRecord::Base
   end
 
   def save!
+    @in_save = true # fix infinite loop (see 1661)
     success = super
     @orig_atts = nil if success
     success
+    @in_save = false
   end
 
   def att_changed(att) orig_atts[att.to_s] != self[att] end
@@ -247,6 +250,8 @@ class Profile < ActiveRecord::Base
   end
 
   def after_save
+    debugger
+
     if @update_costing_total_cache
       @update_costing_total_cache = false
       if project
