@@ -1,0 +1,26 @@
+event_group_1:
+  title: Campus for Christ
+  type: 
+  location_type: 
+  location_id: 
+  default_text_area_length: 4000
+  parent_id: 
+  outgoing_email: 
+  ministry_id: 
+  long_desc: 
+  has_your_campuses: 
+  hidden: false
+  filename: /filename.png
+
+event_group_2:
+  title: hidden eg
+  parent: event_group_1
+  hidden: true
+  filename: /filename.png
+
+event_group_3:
+  title: not hidden eg
+  parent: event_group_1
+  hidden: false
+  filename: /filename.png
+

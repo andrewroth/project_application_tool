@@ -1,0 +1,12 @@
+<%= @title %>
+<%= render :partial => 'fix_include_profiles' -%>
+<%  i = 0 -%>
+<%  @travel_segments_hash.each_pair do |ts,p| -%>    
+<%  if !@include_profiles -%>
+<%=   ts.long_desc %>
+<%  else -%>
+<%=   ts.short_desc %>
+<%  end -%>
+
+<%= render :partial => 'itinerary_profiles_csv', :object => p -%>
+<%  end -%>

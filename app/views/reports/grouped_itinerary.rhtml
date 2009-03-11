@@ -1,0 +1,34 @@
+<h1><%= @page_title %> </h1>
+
+<style>
+ul {
+  margin: 0px;
+  padding: 0px;
+  padding-left: 10px;
+}
+li {
+  margin-top: 10px;
+}
+.item {
+  padding-left: 20px;
+}
+
+</style>
+<%= render :partial => 'fix_include_profiles' %>
+<%  i = 0 
+    @highlight_ts_ids = @travel_segments.to_a.collect{ |ts| ts.id }
+%>
+<% @travel_segments_hash.each_pair do |ts,p| %>
+      
+    <% if !@include_profiles %>
+      <%= ts.long_desc %>
+    <% else %>
+      <%= ts.short_desc %>
+      <% @highlight_ts_id = ts.id %>
+    <% end %>
+
+    <%= render :partial => 'itinerary_profiles', :object => p %>
+<br />
+<% end -%>
+
+

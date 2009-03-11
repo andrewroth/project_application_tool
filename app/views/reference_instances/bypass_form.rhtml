@@ -1,0 +1,9 @@
+<h2>Bypass <%= @reference_instance.instance.viewer.name %>'s <%= @reference_instance.reference.text %></h2>
+
+<%= form_tag bypass_reference_instance_path(@reference_instance) %>
+
+<p>In the future, there will be a text box here for you to write a reason.  For now, please write an entry in the processor form about why you're bypassing this reference.</p>
+
+<p><%= submit_tag 'Bypass' %></p>
+
+</form>

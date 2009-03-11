@@ -1,0 +1,43 @@
+ul {
+	list-style: none;
+}
+
+h3 {
+	margin: 2px;
+	font-size: 18px;
+}
+.drag_me, .element_type, .element_type_select {
+	float: right;
+	margin-right: 15px;
+	border: 1px solid black;
+	background-color: Yellow;
+	padding: 1px;
+}
+td.drag_me {
+    float: none;
+    margin-right: 0px;
+}
+
+.element_type, .element_type_select {
+	background-color: Aqua;
+	width: 80px;
+	padding-left: 2px;
+}
+.element_type_select {
+	width: 120px;
+}
+.question_option {
+	border:1px solid black;
+	padding-left: 2px;
+}
+#page {
+	border: 1px solid black;
+}
+.draggable {
+	margin: 6px;
+	padding-bottom: 10px;
+	border-bottom: 1px dashed black;
+}
+.inplaceeditor-form input[type="text"] {
+	width: 350px;
+}

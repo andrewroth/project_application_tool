@@ -1,0 +1,63 @@
+
+<% @cost_item = cost_item %>
+<% just_modified = false if just_modified.nil? %>
+
+<% type = cost_item.class.name.underscore.split('_')[0] + "_item" %>
+<div class='<%= just_modified ? type+'_modified' : 'inconspicuous' %>' >
+<div class='<%= type %>'>
+
+<label>Applies to: </label><%= 
+current_project_value = case cost_item.class.name
+  when 'YearCostItem'
+    "all"
+  when 'ProjectCostItem'
+    cost_item.project.id
+  when 'ProfileCostItem'
+    cost_item.profile.appln.viewer.name + " for " + cost_item.profile.project.title + " " + cost_item.year.to_s
+  else
+    "er.."
+  end
+
+can_edit = !@project_access.rassoc(current_project_value).nil?
+
+if cost_item.class.name != "ProfileCostItem"
+    can_edit ? select_tag('applies_to_'+cost_item.id.to_s, 
+        options_for_select(@project_access, current_project_value)) : 
+        @project_titles.rassoc(current_project_value)[0]
+else
+    current_project_value
+end
+%>
+<br />
+
+<label>Description: </label><%= can_edit ? in_place_editor_field(:cost_item, :description) : cost_item.description %> <br />
+<label>Amount: </label><%= can_edit ? in_place_editor_field(:cost_item, :amount) : cost_item.amount %> <br />
+
+<%= check_box :cost_item, :optional, :id => 'optional_' + cost_item.id.to_s, :disabled => !can_edit %> optional<br />
+
+<% if can_edit %>
+<%= observe_field 'optional_' + cost_item.id.to_s, 
+        :url => {:controller => 'cost_items', :action => "update", :id => cost_item.id},
+        :loading => "$('spinner_#{cost_item.id}').show();",
+        :loaded => "$('spinner_#{cost_item.id}').hide();",
+        :with => 'cost_item[optional]' %>
+
+<%= observe_field 'applies_to_' + cost_item.id.to_s, 
+        :update => 'list',
+	:url => {:controller => 'cost_items', :action => "set_applies_to", :id => cost_item.id},
+	:loading => "$('loading').show();",
+	:loaded => "$('loading').hide();",
+	:with => 'value' %>
+
+<%= link_to_remote 'Delete', :url => { :controller => 'cost_items', :action => 'destroy', :id => cost_item.id },
+      :update => 'list',
+      :loading => "$('loading').show();",
+      :loaded => "$('loading').hide();",
+      :confirm => 'Are you sure?' %>
+      
+<% end %>
+
+<%= image_tag 'spinner.gif', :id => 'spinner_' + cost_item.id.to_s, 
+       :style => 'display:none; position:absolute; top:0; right:0;' %>
+
+</div></div>

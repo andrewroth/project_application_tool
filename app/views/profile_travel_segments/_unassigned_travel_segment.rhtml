@@ -1,0 +1,17 @@
+    <%= render :partial => 'travel_segments/view_in_row_with_actions', 
+            :object => unassigned_travel_segment,
+            :locals => { :widths => widths, 
+                         :reload_page_on_action => true,
+                         :edit_update_prefix => 'unassigned',
+                         :editors => @editors
+                       }
+         %>
+    <%= td_tag :width => widths[@td_index] %>
+        <%= link_to_remote 'Add', 
+            :url => { :action => 'new', :profile_id => @profile.id, 
+              :travel_segment_id => unassigned_travel_segment.id },
+            :loading => "$('loading').show(); $('unassigned_loading_#{id}').show();",
+            :complete => "$('loading').hide(); $('unassigned_loading_#{id}').hide();"
+         %>
+    </td>
+        

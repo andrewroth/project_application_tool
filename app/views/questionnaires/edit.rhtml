@@ -1,0 +1,29 @@
+<h2>Edit <%=@questionnaire.title%></h2>
+Pages: Click-and-drag on "drag me" to change the order, or click on a page title to change it.
+<%= image_tag "spinner.gif", :id => 'spinner', :style => 'display:none' %>
+<ul id="questionnaire">
+	<% @questionnaire.pages.each do |@page| -%>
+		<%= render :partial => 'pages/page'%>
+	<% end -%>
+</ul>
+<%= sortable_element 'questionnaire',
+	:url => reorder_questionnaire_url(@questionnaire),
+	:loading => "Element.show('spinner')",
+	:loaded => "Element.hide('spinner')",
+	:complete => visual_effect(:highlight, 'questionnaire'),
+	:handle => 'drag_me'
+%>
+<%= link_to_remote("Add another page", :url => pages_url(@questionnaire)) %>&nbsp;&nbsp;
+<%= link_to "Back to managing forms", :controller => :forms %>&nbsp;&nbsp;
+<SPAN onClick="javascript:$('import').show();" style="button">Import questionnaire.</SPAN>
+<DIV id="import" style="display:none">
+  <form method="post" enctype="multipart/form-data" 
+    action="<%=import_pages_url(@questionnaire)%>">
+  <p>
+    <b>File:</b> 
+    <input type="file" size="50" name="xml" id="xml"/>    
+    <%= submit_tag "Import" %>
+  </p>
+  
+  </form>
+</DIV>

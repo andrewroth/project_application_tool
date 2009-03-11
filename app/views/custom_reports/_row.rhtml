@@ -1,0 +1,15 @@
+<% if @format == 'csv' -%>
+<%= row.collect{ |v| "\"#{v}\"" }.join(",") %>
+<% else -%>
+<tr>
+<% for column_value in row %>
+  <td>
+    <% if [ Date, DateTime, Time ].include?(column_value.class) %>
+      <%= format_datetime column_value %>
+    <% else %>
+      <%= column_value %>
+    <% end %>
+  </td>
+<% end %>
+</tr>
+<% end -%>

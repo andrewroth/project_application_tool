@@ -1,0 +1,52 @@
+<% v = @appln.viewer %>
+
+<% # very strange -- seems there is at least 1 appln with a viewer that doesn't exist... 
+   if !v.nil? %>
+        <tr>
+          <td><%= v.name %></td>
+          <td><%= v.viewer_userID %></td>
+          <td><%= v.person.campus_shortDesc %>
+          <td><%= @profile.status %></td>
+	  <td><%= @profile.project ? @profile.project.title : 'not chosen' %></td>
+          <td><%= format_datetime(@appln.submitted_at) %></td>
+          <td><%= format_datetime(@appln.completed_at) %></td>
+          <% if @can_evaluate %>
+              <td><%= @evaluate %>
+              <td><%= @view %>
+	  <% elsif @always_show_can_evaluate_headers %>
+	      <td></td>
+	      <td></td>
+          <% end %>
+          <!-- refs -->
+          <% if @appln.reference_instances.empty? %>
+            <% for ref in @appln.form.questionnaire.references %>
+              <td>&nbsp;</td>
+            <% end %>
+          <% else %>
+            <% for ref_elem in @appln.reference_instances %>
+              <td><%= ref ref_elem %></td>
+            <% end %>
+          <% end %>
+          <!-- end refs -->
+          <% if @user.is_eventgroup_coordinator? %>
+              <td>
+                <% if @appln.status == 'started' || @appln.status == 'unsubmitted' %>
+                    <% @pile = "started"; %>
+                <% else %>
+                    <% @pile = "processor"; %>
+                <% end %>
+              </td>
+          <% end %>
+          <td><% if @appln.as_intern? %>
+                 intern
+              <% end %>
+              <% if @user.is_eventgroup_coordinator? %>
+                <%= withdraw_move_link @profile.id %>
+              <% end %>
+	      <% @user.set_project @profile.project %>
+	      <% if @user.is_eventgroup_coordinator? || (@profile.project && @user.is_processor?) %>
+	           <%= edit_always_editable_link @profile.id %>
+	      <% end %>
+          </td>
+        </tr>
+<% end %>

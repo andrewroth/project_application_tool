@@ -1,0 +1,9 @@
+<% if @reference_emails.length > 0 %>
+  <% for email in @reference_emails %>
+    <li><%= link_to @types[email.email_type], 
+     :controller => 'reference_emails', 
+     :action => 'edit',
+     :email_type => email.email_type,
+     :year => email.year %></li>
+  <% end %>
+<% end %>

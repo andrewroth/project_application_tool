@@ -1,0 +1,16 @@
+<tr>
+  <td><%= staff_profile.viewer ? staff_profile.viewer.name : 'no viewer' %></td>
+  <td><%= staff_profile.viewer ? staff_profile.viewer.viewer_userID : 'no viewer' %></td>
+  <td><%= staff_profile.motivation_code %></td>
+  <% if @projects %>
+    <td><%= staff_profile.project.title %>
+  <% end %>
+  <td>
+      <%= costing_link staff_profile.id %>
+      <%= travel_link staff_profile.id %>
+      <% if @user.is_eventgroup_coordinator? %>
+        <%= manual_donations_link staff_profile.motivation_code %>
+        <%= withdraw_move_link staff_profile.id, 'move' %>
+      <% end %>
+  </td>
+</tr>

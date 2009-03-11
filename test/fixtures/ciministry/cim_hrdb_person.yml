@@ -1,0 +1,6 @@
+<% Viewer.find(:all).each do |v| %>
+<%= "person#{v.id}:" %>
+  person_id: <%= v.id %>
+  person_fname: <%= "fname_" + v.viewer_userID %>
+  person_lname: <%= "lname_" + v.viewer_userID %>
+<% end %>

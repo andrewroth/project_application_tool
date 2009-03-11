@@ -1,0 +1,10 @@
+<%= form_remote_tag :url => { :controller => 'report_element_questions',
+      :action => 'create', :bulk => true, :report_id => params[:report_id] },
+      :success => 'alert("Elements added to report.  You can add more elements on different pages or click Done to close this window."); refresh();' %>
+
+<%= render :partial => 'elements', :object => @page.elements %>
+
+<%= submit_tag 'Add Selected Elements to Report' %>
+<input type="button" value="Done" onClick="window.close();"/>
+
+</form>

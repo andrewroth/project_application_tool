@@ -1,0 +1,23 @@
+<%
+@assignment_form = assignment_form
+new ||= false
+new_update = if new then 'new' else 'update' end
+%>
+<td>
+<%= collection_select :assignment_form, :campus_id, Campus.find(:all), :id, :campus_desc, {}, :name => "assignment[#{new_update}][#{assignment_form.id}][campus_id]" %>
+</td><td>
+<%= collection_select :assignment_form, :assignmentstatus_id, Assignmentstatus.find(:all), :id, :assignmentstatus_desc, {}, :name => "assignment[#{new_update}][#{assignment_form.id}][assignmentstatus_id]" %>
+</td><td>
+
+<% unless new %>
+  <%= link_to 'Cancel', '#', :onClick => %|
+$('assignment_#{assignment_form.id}_edit').hide();
+$('assignment_#{assignment_form.id}_edit').innerHTML = $('assignment_#{assignment_form.id}_edit').originalHTML;
+$('assignment_#{assignment_form.id}_show').show();
+| %>
+<% else %>
+  <%= link_to 'Cancel', '#', :onClick => %|
+$('assignment_new_#{assignment_form.id}').innerHTML = '';
+| %>
+<% end %>
+

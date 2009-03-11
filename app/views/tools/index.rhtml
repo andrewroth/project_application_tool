@@ -1,0 +1,17 @@
+<div id="list">
+  <ul>
+    <li><%= link_to 'Enter motivation codes', :action => 'update_motivation_codes' %></li>
+    <li><%= link_to 'References: view, bypass or resend', :action => 'reference_resend_or_bypass' %></li>
+    <!--
+    <li><%= link_to 'Input accepted students who applied by paper', :action => 'input_from_paper_index' %></li>
+    -->
+    <li><%= link_to 'Create new profiles (Input applicants who applied by paper or were accepted to another project)', :controller => :profiles, :action => 'new' %></li>
+    <li><%= link_to 'Edit manual donations', :controller => 'manual_donations', :action => 'list' %></li>
+    <li><%= link_to 'Block set manual donation exchange rate and/or status', :action => 'block_set_manual_donation_rate' %></li>
+    <li><%= link_to 'File Paperwork', :controller => 'main', :action => 'search_prep_items', :from_tools =>true %></li>
+    <!-- <li> -->
+    <%= #link_to 'Manage custom reports', :controller => 'custom_reports', :action => 'manage_reports' 
+    %>
+    <!-- </li> -->
+  </ul>
+</div>

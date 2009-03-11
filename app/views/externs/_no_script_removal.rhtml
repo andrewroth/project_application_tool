@@ -1,0 +1,13 @@
+<%
+# don't remove script elements - we use a modified prototype to check this function
+#  the sortable tables need script elements still in there so that they can be re-executed
+#  when the things are sorted (and that is necessary because for some reason the form
+#  observers are lost once a column is re-rsorted)
+%>
+
+<script>
+function keep_script_tags() {
+  return true;
+}
+</script>
+

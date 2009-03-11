@@ -1,0 +1,50 @@
+<% @element = reference
+   @reference = @element.reference_instances.find_or_initialize_by_instance_id(questionnaire_instance) # get ref data linked to element
+   @reference.reference = @element if @reference.new_record?
+-%>
+
+<table>
+	<tr>
+		<td class="cell3" colspan="3">
+		  <strong><%= @reference.name %></strong>
+		</td>
+	</tr>
+	<tr>
+		<td class="app" align="right" width="20%">&nbsp;</td>
+		<td class="app" colspan="2">
+    	    This person is a Campus for Christ member?
+    	    <%= is_true(@reference.is_staff?) ? '[<span class="blue">X</span>]' : "[&nbsp;&nbsp;]" %>
+		</td>
+	</tr>
+	<tr>
+		<td class="app" align="right" width="20%">Name</td>
+		<td class="app" colspan="2">
+		<%= h @reference.title %>
+		<%= h @reference.first_name %>
+		<%= h @reference.last_name %>
+		</td>
+	</tr>
+	<tr>
+		<td class="app" VALIGN="TOP" ALIGN="RIGHT">Email</td>
+		<td class="app" colspan="2">
+    	<%= h @reference.email %>
+		</td>
+	</tr>
+	<tr>
+		<td class="app" align="right" width="20%">&nbsp;</td>
+		<td class="app" colspan="2">
+			Reference will be filling out a paper form and mailing it in: 
+			<%= is_true(@reference.mail?) ? '[<span class="blue">X</span>]' : "[&nbsp;&nbsp;]" %>
+		</td>
+	</tr>
+	
+	<% unless @reference.status.nil? -%>
+  <tr>
+		<td class="app" align="right" width="20%">STATUS</td>
+		<td class="app" colspan="2">
+	    <%=eval("@reference").status.camelize %> on <%=format_date(eval("@reference").updated_at)%><br />
+		</td>
+	</tr>
+	<% end -%>
+	
+</table>

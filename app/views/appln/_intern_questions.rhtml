@@ -1,0 +1,5 @@
+<% if @appln["as_intern"] %>
+    <%= render :partial => 'instance/elements' %>
+<% else %>
+  <p>You're not applying as an intern, so you can skip this page.</p>
+<% end %>

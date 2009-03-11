@@ -1,0 +1,8 @@
+<% for column in ManualDonation::LIST_COLUMNS %>
+<p>
+  <b><%= column.humanize %>:</b> <%=h @manual_donation.send(column) %>
+</p>
+<% end %>
+
+<%= link_to 'Edit', :action => 'edit', :id => @manual_donation %> |
+<%= link_to 'Back', :action => 'list' %>

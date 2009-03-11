@@ -1,0 +1,38 @@
+<script>
+function update_links() {
+	hrefs = $('event_group_links').getElementsByTagName("a");
+	for (i = 0; i < hrefs.length; i++) {
+		if (hrefs[i].href_orig == null) {
+			hrefs[i].href_orig = hrefs[i].href;
+		}
+
+		hrefs[i].href = hrefs[i].href_orig;
+		if ($F('remember') == 'true') {
+			hrefs[i].href = hrefs[i].href + '?remember=true';
+		}
+	}
+
+}
+
+</script>
+
+<%= if @columns then "<div id='scope_c'>" end %>
+
+<div id="event_group_links" class="<%= if @columns then "centerblock" end %>">
+  <% cache(:controller => 'event_groups', :action => 'index') do %>
+    <%= render :partial => 'ajax_tree/tree' %>
+  <% end %>
+</div>
+
+<p id="event_group_remember">
+
+  <p><% if params[:show_hidden] -%>
+    Showing all event groups
+  <% else -%>
+    <%= link_to 'Show hidden event groups', '/event_groups/scope?show_hidden=true' %>
+  <% end %>
+  </p>
+
+<%= check_box_tag 'remember', 'true', false, :onClick => "update_links();" %>Remember my choice for next time.</p>
+
+<%= if @columns then "</div>" end %>

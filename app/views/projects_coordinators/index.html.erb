@@ -1,0 +1,23 @@
+<h1>Listing projects_coordinators</h1>
+
+<p><%= link_to 'New projects_coordinator', new_projects_coordinator_path %></p>
+
+<table>
+  <tr>
+    <th>Viewer ID</th>
+    <th>userid</th>
+    <th>Name</th>
+  </tr>
+
+<% for projects_coordinator in @projects_coordinators %>
+  <tr>
+    <% viewer = projects_coordinator.viewer %>
+    <td><%=h viewer ? projects_coordinator.viewer_id : 'no viewer' %></td>
+    <td><%=h viewer ? projects_coordinator.viewer.viewer_userID : 'no viewer' %></td>
+    <td><%=h viewer ? projects_coordinator.viewer.person.name : 'no viewer' %></td>
+    <td><%= link_to 'Destroy', projects_coordinator, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<p><%= link_to 'New projects_coordinator', new_projects_coordinator_path %></p>

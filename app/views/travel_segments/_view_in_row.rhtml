@@ -1,0 +1,23 @@
+
+<%
+travel_segment = view_in_row
+@travel_segment = travel_segment
+widths = {} if widths.nil?
+pts_id = '' if pts_id.nil?
+editors = 'all_editors' if editors.nil?
+%>
+
+<% @id = 0; TravelSegment.send(editors).each_pair do |k,v| %>
+    <%= td_tag :style => absolute_width_css(widths[@td_index]) %>
+      <% val = travel_segment.send(k) %>
+      <% val = '&nbsp;' if val == '' %>
+
+      <% if val.is_a?(Time) %>
+          <%= format_datetime val, :ts %>
+      <% else %>
+          <%= val %>
+      <% end %>
+
+      <%= yield :"profile_specific_#{k.to_s}_#{travel_segment.id}_#{pts_id}" %>
+   </td>
+<% end %>

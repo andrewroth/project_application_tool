@@ -1,0 +1,10 @@
+<td><%= show.campus.campus_desc %></td>
+<td><%= show.status %></td>
+<td>
+<%= link_to 'Edit', '#', :onClick => %|
+$('assignment_#{show.id}_edit').originalHTML = $('assignment_#{show.id}_edit').innerHTML;
+$('assignment_#{show.id}_edit').show();
+$('assignment_#{show.id}_show').hide();
+| %> 
+<%= link_to_remote 'Delete', :url => "/assignments/delete/#{show.id}", :confirm => 'Are you sure?' %>
+

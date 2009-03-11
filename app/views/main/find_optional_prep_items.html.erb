@@ -1,0 +1,45 @@
+<br/>
+Click checkboxes to assign a form to an applicant
+<%= sortable_table %>
+  <thead><tr>
+    <th>Name</th>  
+    <th>Project</th>
+    <% for prep_item in @prep_items %>
+      <%= th prep_item.title, 'input' %>
+    <% end %>
+  </tr></thead>
+
+  <tbody>
+    
+    <% for profile in @profiles %>
+     <tr>
+      <td><%= profile.viewer.name %></td>
+      <td><%= profile.project.name %></td>
+      <% for prep_item in @prep_items %>
+        <% profile_prep_item = profile.profile_prep_items.find_by_prep_item_id(prep_item.id) %>
+        <% if profile_prep_item %>
+          <% id = "prep_id_#{profile_prep_item.id}_profile_id_#{profile.id}_optional" -%>
+          <td mochi:format='input'><%= check_box_tag id, profile_prep_item.optional, profile_prep_item.optional, :id => id, :onClick => 
+                         remote_function(:url => {:controller => 'profile_prep_items', :action => "update", :id => profile_prep_item.id},
+                                          :loading => "$('loading').show();",
+                                          :complete => "$('loading').hide();",
+                                          :with => "'profile_prep_item[optional]='+$('#{id}').checked+'&from_tools=true'",
+                                          :method => :put
+                                        )
+               %>
+          </td>
+          
+        <% else %>
+          <td>&nbsp;</td>
+        <% end %>
+      <% end %>
+     </tr>
+    <% end %>
+
+  </tbody>
+</table>
+
+<br />
+
+<%= initialize_sortable_tables %>
+<a href="/main/your_projects">Back</a>

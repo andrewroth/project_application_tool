@@ -1,0 +1,6 @@
+<% if !@questionnaire_admin %>
+  <% @questionnaire_admin = true %>
+  <%= stylesheet_link_tag 'admin_styles' %>
+  <%= render :partial => 'externs/controls' %>
+  <%= render :partial => 'externs/dragdrop' %>
+<% end %>

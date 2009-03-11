@@ -1,0 +1,35 @@
+<p>When you accept someone with this tool they will receive an acceptance email.  If you choose an existing application from the list,
+its status will be changed to completed and the acceptance tied to that application.  You can also choose to create a new blank application.
+</p>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th colspan="4">this person has already been accepted on paper to ...</th>
+  </tr>
+  <% @possible_viewers.each do |v| %>
+  <%= 
+#Er this should work but it's putting an &amp; instead of &
+#form_tag({ :controller => 'tools', :action => 'accept_from_paper', :viewer_id => v.id, :appln_id => 'new' })
+ %>
+    <form method="post" action="<%=url_for :action => 'accept_from_paper', :viewer_id => v.id, :appln_id => 'new' %>"
+    <tr>
+        <td><%= v.name %></td>
+        <td>
+        	 <%= select_tag("project_id", 
+        	       options_for_select([''] + @possible_projects.collect {
+        	           |p| [ p.title, p.id ] }, ''
+        	     )) %>
+        </td><td>
+                   create a new application
+        </td><td>
+        	 <%= select_tag("as_intern", 
+        	       options_for_select([['not as intern', false], ['as intern', true]], 'as intern')
+        	     ) %>
+        </td><td>
+             <%= submit_tag "Accept", :confirm => "Are you sure you?" %>
+        <td>
+    </tr>
+    </form>
+  <% end %>
+</table>

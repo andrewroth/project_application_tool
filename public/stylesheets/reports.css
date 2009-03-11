@@ -1,0 +1,25 @@
+span.header {
+  font-weight: bold;
+}
+
+table.person_has_many_rows tr td, table.person_has_many_rows tr th {
+  border-style: solid;
+  border-width: 0 0 0 1px;
+  border-color: #dddddd;
+  padding-left: 2px;
+}
+
+table.person_has_many_rows tr.new_item td {
+  border-width: 2px 0 0 1px;
+  border-top-color: black;
+}
+
+table.person_has_many_rows tr td:first-child {
+  padding: 0px;
+  padding-left: 10px;
+  border-left-width: 0px;
+}
+
+table.person_has_many_rows tr.new_item td:first-child {
+  border-left-width: 1px;
+}

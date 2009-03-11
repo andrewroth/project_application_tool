@@ -1,0 +1,25 @@
+<% if @include_profiles -%>
+<%= (TravelSegment.restricted.keys.collect{ |k|
+  k.to_s
+} + [ 'profile notes', 'eticket' ]).join(',') %>
+<% end -%>
+<% itinerary_profiles_csv.each do |name_project_profile| -%>
+<% name, project, profile = name_project_profile -%>
+<% @pts = profile.profile_travel_segments -%>
+"<%= name %>"<% if @many_projects %>,(<%=project.title%>) <% end %>
+<% if !@include_profiles -%>
+<% next -%>
+<% elsif @pts.empty? -%>
+,none
+<% else -%>
+<% for pts in @pts -%>
+<%   ts = pts.travel_segment -%>
+<%   next if ts.nil? -%>
+<%=  (TravelSegment.restricted.keys.collect{ |k|
+  v = ts.send(k)
+  v = format_datetime(v, :ts) if v.class == Time || v.class == Date
+  "\"#{v}\""
+} + [ "\"#{pts.notes}\"", "\"#{pts.eticket}\"" ]).join(',') %>
+<% end %>
+<% end -%>
+<% end -%>

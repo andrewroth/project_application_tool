@@ -1,0 +1,13 @@
+<%
+editors ||= 'all_editors'
+include_parse_by_line ||= false
+%>
+
+  <%= render :partial => 'travel_segments/form', :locals => { :editors => editors, :include_parse_by_line => include_parse_by_line } %>
+  <label class="profile_item" style="padding: 0px;">notes (attached to the assignment of this cost item to this profile): </label><br />
+    <%= text_area_tag "profile_travel_segment[notes]", @pts.notes %><br />
+  <label class="profile_item" style="padding: 0px;">eticket: </label>
+    <%= text_field_tag "profile_travel_segment[eticket]", @pts.eticket %><br />
+  <label class="profile_item" style="padding: 0px;">confirmation number: </label>
+    <%= text_field_tag "profile_travel_segment[confirmation_number]", @pts.eticket %><br />
+

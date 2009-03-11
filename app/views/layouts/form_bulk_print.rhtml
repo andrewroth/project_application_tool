@@ -1,0 +1,36 @@
+<%
+  def get_references
+    @references = @appln.reference_instances
+  end
+-%>
+<!-- MEDIA LEFT 30mm -->
+<!-- MEDIA RIGHT 10mm -->
+<!-- MEDIA TOP 5mm -->
+<html>
+<head>
+    <%= stylesheet_link_tag 'main2' %>
+</head>
+
+<body>
+    <p><%= yield %></p>
+    <% for instance in @instances %>
+      <h2 align='center'><%= instance[:title] %></h2>
+      <% 
+      @pages.each_with_index do | this_page, i |
+
+        next if this_page.hidden?
+        @questionnaire_instance = instance[:instance]
+        @appln = instance[:appln]
+        params[:appln] = @appln # a hack since @appln's value is lost in controller's questionnaire_instance
+        get_references if @appln
+      %>
+
+        <span class='readonly_page_header'><%= this_page.title %></span>
+        <%= render :partial => 'readonly/page', :object => this_page %>
+
+      <% end %>
+      <!-- NEW PAGE -->
+    <% end %>
+</body>
+
+</html>

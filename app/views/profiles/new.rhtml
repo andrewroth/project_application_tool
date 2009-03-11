@@ -1,0 +1,14 @@
+<% form_tag :action => :create do -%>
+
+<p><strong>Create new profile</strong></p>
+
+<%= render :partial => 'viewer_form' %>
+
+<p>Application: <span id='appln_span'></span></p>
+
+<%= render :partial => 'form' %>
+
+<%= submit_tag 'Create' %>
+
+<% end -%>
+

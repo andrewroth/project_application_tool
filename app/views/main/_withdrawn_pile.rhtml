@@ -1,0 +1,40 @@
+<% @withdrawn ||= project.withdrawns.find :all, :include => [ :reason_for_withdrawal, :project ] %>
+
+<% if !@withdrawn.empty? %>
+  <%= sortable_table %><thead>
+    <tr>
+      <%= th 'Name' %>
+      <%= th 'appln (entire)' %>
+      <%= th 'status' %>
+      <%= th 'class when withdrawn' %>
+      <%= th 'status when withdrawn' %>
+      <%= th 'withdrawn by' %>
+      <%= th 'withdrawn at' %>
+      <%= th 'reason' %>
+      <% if @user.is_eventgroup_coordinator? %>
+        <%= th 'notes' %>
+      <% end %>
+      <%= th 'other' %>
+    </tr>
+  </thead><tbody>
+  <% for withdrawn in @withdrawn
+       viewer = withdrawn.viewer %>
+    <tr>
+      <td><%= viewer ? viewer.name : 'unknown (pid='+withdrawn.id.to_s+')' %></td>
+      <td><%= view_entire_processor_link withdrawn.id %></td>
+      <td><%= withdrawn.status %></td>
+      <td><%= withdrawn.class_when_withdrawn %></td>
+      <td><%= withdrawn.status_when_withdrawn %></td>
+      <td><%= wd = withdrawn.withdrawn_by; wd.name if wd %></td>
+      <td><%= format_datetime withdrawn.withdrawn_at %></td>
+      <td><%= withdrawn.reason%></td>
+      <% if @user.is_projects_coordinator? %>
+        <td><%= withdrawn.reason_notes %></td>
+      <% end %>
+      <td><%= withdraw_move_link withdrawn.id, 'move' %></td>
+    </tr>
+  <% end %>
+  </tbody></table>
+<% else %>
+  <i>empty</i>
+<% end %>

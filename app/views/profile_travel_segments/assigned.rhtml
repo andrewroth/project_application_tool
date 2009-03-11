@@ -1,0 +1,13 @@
+<%
+@page_title ||= @profile.viewer.name + " Travel for  " + @profile.project.title
+%>
+
+<h2><%= @page_title %></h2>
+
+<% if !@pdf %>
+  <%= stylesheet_link_tag 'admin_styles' %>
+
+  <p>Assigned travel segments:</p>
+<% end %>
+
+<%= render :partial => 'assigned_list', :locals => { :sortable => false } %>

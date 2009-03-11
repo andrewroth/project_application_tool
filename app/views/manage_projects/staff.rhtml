@@ -1,0 +1,25 @@
+<h3><%= @project.title %></h3>
+<br>
+<% @role = "project_administrators" %>
+<% @subtitle = "Project Administrators" %>
+<%= render :partial => 'roles/manage_role', :layout => false %>
+
+<% @role = "project_directors" %>
+<% @subtitle = "Project Directors" %>
+<%= render :partial => 'roles/manage_role', :layout => false %>
+
+<% @role = "project_staffs" %>
+<% @subtitle = "Project Staff" %>
+<%= render :partial => 'roles/manage_role', :layout => false %>
+
+<i>Note: project administartors, directors, and general staff are automatically added to support coaches.</i><br />
+
+<% @role = "support_coaches" %>
+<% @subtitle = "Support Coaches" %>
+<%= render :partial => 'roles/manage_role', :layout => false %>
+
+<% @role = "processors" %>
+<% @subtitle = "Processors" %>
+<%= render :partial => 'roles/manage_role', :layout => false %>
+
+<%= link_to 'Back', :action => 'list' %>

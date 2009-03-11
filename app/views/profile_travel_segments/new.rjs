@@ -1,0 +1,4 @@
+page.replace_html 'assigned_list', :partial => 'assigned_list', :locals => { :can_edit => true, :div => false, :sortable => true }
+page.visual_effect :fade, "unassigned_#{@travel_segment.id}"
+page.visual_effect :highlight, 'assigned_list'
+

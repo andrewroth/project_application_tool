@@ -1,0 +1,25 @@
+first:
+  id: 1
+  type: ProfileCostItem
+  profile_id: 1 # john calivin's afghanistan
+  optional: false
+  amount: 30
+  year: 2007
+  event_group_id: 1
+second:
+  id: 2
+  type: ProfileCostItem
+  profile_id: 2 # sean's afghanistan
+  optional: false
+  amount: 40
+  year: 2007
+  event_group_id: 1
+third:
+  id: 3
+  type: YearCostItem
+  profile_id: nil
+  optional: false
+  amount: 40
+  event_group_id: 1
+  description: test
+

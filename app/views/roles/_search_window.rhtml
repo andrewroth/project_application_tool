@@ -1,0 +1,48 @@
+
+<!-- based on  http://www.recentrambles.com/pragmatic/view/59 -->
+<!-- this will go in the div "<%=@role%>_search_window" -->
+<% form_remote_tag(:update => "search_#{@role}_results",
+                          :url        =>  { :action => "search",
+                                            :project_id => @project.id,
+                                            :role => @role },
+                          :loading    =>  "search_#{@role}_start();",
+                          :complete   =>  "search_#{@role}_end();") do
+ -%>
+
+<div class="notice">
+    Search: 
+    <%= text_field_tag "search_text" %>
+    <div id="search_<%=@role%>_indicator" style="display:none;">
+        <%= image_tag("/images/spinner.gif") %>
+    </div>
+
+    <SCRIPT>
+        function search_<%=@role%>_start() {
+            //Element.show('search_<%=@role%>_indicator');
+            $('search_<%=@role%>_indicator').style.display = 'inline';
+        }
+        function search_<%=@role%>_end() {
+            Element.hide('search_<%=@role%>_indicator'); 
+            Element.show('search_<%=@role%>_results');
+        }
+    </SCRIPT>    
+
+    <%= submit_tag 'Search' %>
+
+    <div id="search_<%= @role %>_results"></div>
+    <div id="search_<%= @role %>_action_response" style="display:none"></div>
+	<div class="search_button">
+    <SCRIPT>
+      <%= 
+	      "function hide_#{@role}_search() {" + 
+	      "  Element.hide('search_#{@role}_window');" +
+	      "  Element.hide('search_#{@role}_indicator');" +
+	      "  Element.show('add_#{@role}_link');" +
+	      "}"
+      %>
+    </SCRIPT>
+   <hr>
+   <a class="button" href="javascript:hide_<%=@role%>_search();">Done</a> 
+   </div>
+</div>
+<% end %>

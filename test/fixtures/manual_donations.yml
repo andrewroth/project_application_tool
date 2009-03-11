@@ -1,0 +1,10 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+first:
+  id: 1
+  donation_type_id: 1
+  original_amount: 20
+  amount: 20
+  donor_name: 'bob'
+  motivation_code: 5
+another:
+  id: 2

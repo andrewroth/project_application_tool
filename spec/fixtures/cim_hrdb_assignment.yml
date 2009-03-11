@@ -1,0 +1,9 @@
+student_seven_current_student:
+  person: student_seven_person
+  assignmentstatus: student
+  campus: neverland
+
+bob_staff_staff:
+  person: bob_staff_person
+  assignmentstatus: staff
+  campus: neverland

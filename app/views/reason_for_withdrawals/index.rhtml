@@ -1,0 +1,19 @@
+<h1>Listing reason_for_withdrawals</h1>
+
+<table>
+  <tr>
+  </tr>
+  
+<% for reason_for_withdrawal in @reason_for_withdrawals %>
+  <tr>
+    <td><%= reason_for_withdrawal.blurb %></td>
+    <td><%= link_to 'Show', reason_for_withdrawal_path(reason_for_withdrawal) %></td>
+    <td><%= link_to 'Edit', edit_reason_for_withdrawal_path(reason_for_withdrawal) %></td>
+    <td><%= link_to 'Destroy', reason_for_withdrawal_path(reason_for_withdrawal), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New reason_for_withdrawal', new_reason_for_withdrawal_path %>

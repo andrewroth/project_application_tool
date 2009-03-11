@@ -1,0 +1,21 @@
+<div id="error_messages_for_<%=@active_page.id%>"><%= render :partial => 'instance/error_messages_for_page'%></div>
+
+<% @is_completed = !@current_page.nil? && @current_page.errors.empty? %>
+
+<% if @completion_indicator %>
+    <%= render :partial => 'instance/mark_page_completedness' %>
+<% end %>
+
+<% if @is_completed && params[:go_next_if_valid] %>
+    <script>post_form(current_page+1);
+    </script>
+<% end %>
+
+<% if !params[:script_only] %>
+    <% if file_exists?(controller.controller_name+'/_'+@active_page.url_name) 
+    		template = controller.controller_name+'/'+@active_page.url_name
+    	else
+    		template = 'instance/elements'
+    	end -%>
+    <%= render :partial => template %>
+<% end %>

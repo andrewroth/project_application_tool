@@ -1,0 +1,10 @@
+  <% @appln_person ||= @instance.viewer.person %>
+  <% @assignments ||= (@appln_person ? @appln_person.assignments : []) %>
+
+  <script>next_new_id = 0</script>
+  <table id='assignments'><tr><th style='width:300px'>Campus</th><th style='width:200px'>Status</th><th></th></tr>
+    <%= render :partial => 'readonly/assignment_row', :collection => @assignments %>
+  </table>
+  <BR />
+  <%= render :partial => 'readonly/year' %>
+  <BR />

@@ -1,0 +1,95 @@
+<% @project ||= @show_projects.first -%>
+<h3><%= your_project.title %></h3>
+
+<%= render :remote, :controller => 'reports', :action => :project_stats, :project_id => your_project.id %>
+
+<%
+@user.set_project(your_project)
+
+title = ""
+if @user.is_eventgroup_coordinator?
+    title += ", Projects Coordinator"
+end
+if @user.is_project_director?
+    title += ", Project Director"
+end
+if @user.is_project_administrator?
+    title += ", Project Administrator"
+end
+if @user.is_support_coach?
+    title += ", Support Coach"
+end
+if @user.is_project_staff?
+    title += ", Project Staff"
+end
+if @user.is_processor?
+    title += ", Processor"
+end
+
+%>
+
+<h4><%= "#{@user.viewer.name}#{title}" %></h4>
+
+<% if @user.is_support_coach? || @user.is_atleast_project_staff(your_project) %>
+    <%= render :partial => "support_coach_list", :locals => { :project => your_project } %>
+<% end %>
+
+<% if !@user.is_student? %>
+  <% 
+    cache(:controller => 'main', :action => 'your_projects', :section => 'Acceptance',
+          :project_id => your_project.id, :role => @user.roles_wrt_project(your_project)) do
+  %>
+
+    <p>
+      <%= link_to 'File paperwork', :action => 'find_prep_items', :project_id => your_project.id, :command =>'received' %>
+      <%= link_to 'Assign optional paperwork items', :action => 'find_prep_items', :project_id => your_project.id , :command =>'optional' %>
+    </p>
+
+    <p>Accepted pile:
+	    <blockquote>
+	      <%= render :partial => "accepted_pile", :locals => { :project => your_project } %>
+      </blockquote>
+      
+    </p>
+  <% end %>
+    <!-- all staff can see the processor list, but only certain people can actually evaluate -->
+    <% @can_evaluate = @user.is_eventgroup_coordinator? || @user.is_processor? %>
+    <% appln_includes = [ :references, { :viewer => { :persons => :campuses } }, :preference1, :profiles ]
+       @processor_list = Applying.find_all_by_project_id your_project.id,
+         :include => [
+          :project,
+          :appln,
+          { :locked_by => :persons }
+        ]
+    %>
+    
+    <p>Processor's pile:
+    <blockquote>
+      <%= render :partial => "processor_pile", :locals => { :project => your_project } %>
+    </blockquote>
+    </p>
+
+  <% 
+    cache(:controller => 'main', :action => 'your_projects', :section => 'StaffProfile',
+          :project_id => your_project.id, :role => @user.roles_wrt_project(your_project)) do
+  %>
+    <p>Staff:
+      <blockquote>
+        <%= render :partial => "staff_pile", :locals => { :project => your_project } %>
+      </blockquote>
+    </p>
+  <% end %>
+
+  <% 
+    cache(:controller => 'main', :action => 'your_projects', :section => 'Withdrawn',
+          :project_id => your_project.id, :role => @user.roles_wrt_project(your_project)) do
+  %>
+    <!-- these piles will now have their own intros which are removed if empty -->
+    <% if @user.is_eventgroup_coordinator? || @user.is_processor? %>
+      <p>Withdrawn pile:
+      <blockquote>
+        <%= render :partial => "withdrawn_pile", :locals => {:project => your_project }%>
+      </blockquote>
+    <% end %>
+  <% end %>
+<% end %>

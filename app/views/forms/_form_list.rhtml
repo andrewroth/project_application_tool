@@ -1,0 +1,21 @@
+<table>
+  <tr>
+    <th>name</th>
+    <th>hidden to applicants</th>
+    <th>actions</th>
+  </tr>
+  <% form_list.each do |form| %>
+    <tr>
+      <td><%= form.name %></td>
+      <td align="center"><%= form.hidden ? 'yes' : 'no' %></td>
+      <td><%= link_to_remote 'Edit', :url => { :action => 'edit', :id => form.id }, 
+      :loading => "Element.show('loading')", :complete => "Element.hide('loading')" %> | 
+      <%= link_to 'Configure', url_for(:controller => 'main', :action => 'edit_form', :id => form.id) %> | 
+      <%= link_to_remote 'Clone', :url => {:action => 'clone_form', :id => form.id }, 
+      :loading => "Element.show('loading')", :complete => "Element.hide('loading')" %> | 
+      <%= link_to_remote 'Delete', :url => {:action => 'destroy', :id => form.id }, 
+      :confirm => "Are you sure you want to delete #{form.name}?", 
+      :loading => "Element.show('loading')", :complete => "Element.hide('loading')" %></td>
+    </tr>
+  <% end %>
+</table>

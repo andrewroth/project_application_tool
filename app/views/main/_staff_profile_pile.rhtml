@@ -1,0 +1,19 @@
+          <table>
+            <% if !@staff.empty? %>
+              <%= sortable_table %><thead>
+                <tr>
+                  <%= th 'Name' %>
+                  <% if @projects %>
+                    <%= th 'Project' %>
+                  <% end %>
+                  <th></th>
+                </tr>
+              </thead></tbody><tbody>
+                <%= render :partial => "staff_profile", :collection => @staff %>
+                </tbody>
+              </table>
+            <% else %>
+              <i>empty</i> <br />
+            <% end %>
+          </table>
+

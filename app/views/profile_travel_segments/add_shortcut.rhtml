@@ -1,0 +1,8 @@
+<%= form_remote_tag :loading => "$('loading').show();", :complete => "$('loading').hide();",
+       :url => { :action => 'create_and_assign', :profile_id => @profile.id } %>
+    <%= render :partial => 'form', :locals => { 
+        :editors => 'add_new_ts_editors', 
+        :include_parse_by_line => true }
+    %>
+    <%= submit_tag 'Save travel segment and assign to ' + @profile.viewer.name, :style => "margin-top:5px;" %>
+</form>

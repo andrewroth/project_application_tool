@@ -1,0 +1,22 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+issue:
+  id:             1
+  viewer_id:      2286
+  feedback_type:  "issue"
+  description:    "The description of issue"
+  created_at:   Time.now
+  event_group_id: 1
+comment:
+  id:             2
+  viewer_id:      2286
+  feedback_type:  "comment"
+  description:    "The description of comment"
+  created_at:   Time.now
+  event_group_id: 1
+feature:
+  id:             3
+  viewer_id:      2286
+  feedback_type:  "feature"
+  description:    "The description of feature"
+  created_at:   Time.now
+  event_group_id: 1

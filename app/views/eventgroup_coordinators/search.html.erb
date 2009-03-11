@@ -1,0 +1,6 @@
+<ul>
+<% for person in @people %>
+  <% next unless person.viewer %>
+  <li><%= link_to person.name, { :action => :create, 'eventgroup_coordinator[viewer_id]' => person.viewer.id, :id => @eg2.id }, { :method => :post } %>
+<% end %>
+</ul>

@@ -1,0 +1,8 @@
+<%= form_remote_tag :url => { :action => 'create', :skip_editing => true },
+                     :update => 'list',
+                     :complete => "$('new').hide();"
+%>
+    <%= render :partial => 'form', :locals => { :editor_list => 'add_new_ts_editors', :include_parse_by_line => true } %>
+    <%= submit_tag 'Create', :style => "margin-top:5px;" %>
+    <a href="#" onClick="$('new').hide();">Cancel</a>
+</form>

@@ -1,0 +1,152 @@
+--- 
+reference_emails_001: 
+  text: |-
+    Dear <%= @applicant_name %>,
+    <br /><br />
+    Your application for an exciting missions opportunity this summer with Campus for Christ has been submitted.  We are now waiting on your references to be completed before we will process your application.  You will be notified by email as your references are completed and once again when your application has been reviewed.<br/><br/>
+    Thank you very much.<br /><br />
+    Sincerely,<br />
+    Campus for Christ<br />
+    projects@campusforchrist.org<br/><br /><br />
+  id: "13"
+  year: "2007"
+  email_type: app_submitted
+  event_group_id: 1
+reference_emails_002: 
+  text: |-
+    Dear <%= @applicant_name %>,
+    <br /><br />
+    The reference you requested from <%= @ref_first_name %> <%= @ref_last_name %> has been completed.  Once we have received all your references your application will be reviewed and we will contact you.<br /><br />
+    Thank you very much.<br /><br />
+    Sincerely,<br />
+    Campus for Christ<br />
+    projects@campusforchrist.org<br/><br /><br />
+  id: "14"
+  year: "2007"
+  email_type: ref_completed_confirm
+  event_group_id: 1
+reference_emails_003: 
+  text: |-
+    Dear <%= @applicant_name %>,
+    <br /><br />
+    Your application for an exciting missions opportunity is now being reviewed.  Your application has been submitted and your references completed.  We hope to contact you soon with a decision regarding your acceptance.<br /><br />
+    Thank you very much.<br /><br />
+    Sincerely,<br />
+    Campus for Christ<br />
+    projects@campusforchrist.org<br/><br /><br />
+  id: "15"
+  year: "2007"
+  email_type: app_completed
+  event_group_id: 1
+reference_emails_004: 
+  text: |-
+    Dear <%= @applicant_name %>,
+    <br /><br />
+    Your application for an exciting missions opportunity this 
+    summer with Campus for Christ has been marked incomplete since a reference request from <%= @ref_first_name %> <%= @ref_last_name %> has been deleted.  Please update your application with a new reference request.<br /><br />
+    Thank you very much.<br /><br />
+    Sincerely,<br />
+    Campus for Christ<br />
+    projects@campusforchrist.org<br/><br /><br />
+  id: "16"
+  year: "2007"
+  email_type: app_unsubmitted
+  event_group_id: 1
+reference_emails_005: 
+  text: |-
+    Dear <%= @applicant_name %>,
+    <br /><br />
+    Thank you for applying for an exciting missions opportunity this summer with Campus for Christ.  We wanted to let you know that your reference request to <%= @ref_first_name %> <%= @ref_last_name %> has been sent.  You will be notified when your reference has been completed.
+    <br /><br />
+    Thank you very much.<br /><br />
+    Sincerely,<br />
+    Campus for Christ<br />
+    projects@campusforchrist.org<br/><br /><br />
+  id: "17"
+  year: "2007"
+  email_type: ref_request_confirm
+  event_group_id: 1
+reference_emails_006: 
+  text: |-
+    Dear <%= @applicant_name %>,
+    <br /><br />
+    This is a confirmation that your application for an exciting missions opportunity this summer with Campus for Christ has been withdrawn.<br /><br />
+    Thank you very much.<br /><br />
+    Sincerely,<br />
+    Campus for Christ<br />
+    projects@campusforchrist.org<br/><br /><br />
+  id: "18"
+  year: "2007"
+  email_type: app_withdrawn
+  event_group_id: 1
+reference_emails_007: 
+  text: |-
+    Dear <%= @ref_first_name %> <%= @ref_last_name %>,
+    <br /><br />
+    The reference requested for <%= @applicant_name %> is no longer required.  Please disregard any previous emails you have received about this.<br/><br/>
+    Thank you very much.<br /><br />
+    Sincerely,<br />
+    Campus for Christ<br />
+    projects@campusforchrist.org<br/><br /><br />
+  id: "19"
+  year: "2007"
+  email_type: ref_deleted
+  event_group_id: 1
+reference_emails_008: 
+  text: |-
+    Dear <%= @ref_first_name %> <%= @ref_last_name %>,
+    <br /><br />
+    <%= @applicant_name %> has just applied for an exciting missions opportunity this 
+    summer with Campus for Christ and has suggested that we contact you as a 
+    reference. If you could take some time and fill out a recommendation for this 
+    applicant, we can continue with the application process.  The application 
+    materials will then be reviewed and a decision will be given as soon as possible.
+    <br /><br />
+    In case you don't have time to finish the reference form in one sitting, we allow 
+    you to save and come back to it whenever it is convenient for you to finish.
+    <br /><br />
+    The reference form is on our secure web site.  Just use the link below to go 
+    directly to the reference form for  <%= @applicant_name %>.  Your reference will 
+    be kept confidential, and the applicant will not be able to read the information 
+    you share with us.  The insight that you provide will be very helpful in determining 
+    a decision about this applicant's summer!<br /><br />
+    You may contact the applicant by phone at  (<%=@applicant_phone%>) or by email at (<%=@applicant_email%>).
+    <br /><br />
+    If you would prefer not to participate, please notify the applicant yourself so 
+    that they can take you off of their reference list.  If you would prefer to fill 
+    out a paper reference form, please ask the applicant to provide you one.
+    <br /><br />
+    Please do not forward this email to the applicant, so that they do not receive 
+    the link for editing their own reference form.<br /><br />
+    Thank you very much.<br /><br />
+    Sincerely,<br />
+    Campus for Christ<br />
+    projects@campusforchrist.org<br/><br /><br />
+    
+    
+    Please use the following link.  
+    The link should be all in one line, so if it is split up into more than one line,  
+    you may need to copy the entire address (including both/all of the lines) into 
+    your web browser's address bar.<br /><br />
+    
+    <a href="<%=@url%>"><%=@url %></a> <br /><br />
+    
+    You do not have to fill out the entire form at one time.  After you start filling 
+    out the form, you may exit at any time and return later to finish.  Just use the 
+    same link to return to the form.<br />
+  id: "20"
+  year: "2007"
+  email_type: ref_request
+reference_emails_009: 
+  text: |-
+    Dear <%= @ref_first_name %> <%= @ref_last_name %>,
+    <br /><br />
+    The reference requested for <%= @applicant_name %> has been completed.  Thank you for taking the time to complete this reference.  Your reference allows us to make an informed decision about how we can help provide the applicant with a successful project experience this summer.<br/><br/>
+    Thank you very much.<br /><br />
+    Sincerely,<br />
+    Campus for Christ<br />
+    projects@campusforchrist.org<br/><br /><br />
+  id: "21"
+  year: "2007"
+  email_type: ref_completed
+  event_group_id: 1

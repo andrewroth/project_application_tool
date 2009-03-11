@@ -1,0 +1,24 @@
+<% links = link_to("Add an element", new_element_url(@questionnaire, @page)) +'&nbsp;&nbsp;'+
+					 link_to("Back to the page list", edit_questionnaire_url(@questionnaire)) +'&nbsp;&nbsp;'+
+					 link_to("Back to the forms list", :controller => "forms")%>
+<h2>Edit <%=@page.title%></h2>
+<%= links %><br/><br/>
+Elements: Click-and-drag on "drag me" to change the order. 
+<%= image_tag "spinner.gif", :id => 'spinner', :style => 'display:none' %>
+<ul id="page">
+	<% @page.elements.each do |element| %>
+		<%= render :partial => "elements/element", :locals => {:element => element} %>
+	<% end %>
+</ul>
+<%= sortable_element 'page',
+	:url => reorder_page_url(@questionnaire, @page),
+	:loading => "Element.show('spinner')",
+	:loaded => "Element.hide('spinner')",
+	:complete => visual_effect(:highlight, 'page'),
+	:handle => 'drag_me'
+%>
+<%= check_box :page, :hidden %> Hide page<br/><br/>
+<%= observe_field(:page_hidden,
+										:url => {:action => :hide, :id => @page})%>
+<%= render :partial => 'page_flags' %>
+<%= links%>

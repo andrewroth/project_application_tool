@@ -1,0 +1,4 @@
+<p>Reference form: <%= select_tag 'reference[questionnaire_id]',
+     options_for_select([''] + @eg.forms.map {|f| f.questionnaire.nil? ? nil : [f.name, f.questionnaire_id]}.compact,
+        @current_element.questionnaire_id) %>
+

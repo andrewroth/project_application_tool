@@ -1,0 +1,12 @@
+<% if @format == 'csv' -%>
+<%= @report_elements.collect{ |re|
+      "\"#{re.heading || re.name}\""
+  }.join(',')
+%>
+<% else -%>
+<tr>
+<% for re in @report_elements -%>
+  <%= th :name => (re.heading || re.name), :type => 'string' %>
+<% end -%>
+</tr>
+<% end -%>

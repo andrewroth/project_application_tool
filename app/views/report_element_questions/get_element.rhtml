@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <title>Choose Element</title>
+    <%= javascript_include_tag :defaults %>
+    <%= active_scaffold_includes %>
+    <%= stylesheet_link_tag 'main2' %>
+     <%= stylesheet_link_tag 'active_scaffold/default/stylesheet.css' %>
+  </head>
+<body>
+
+<%= javascript_tag %|
+function toggle_more(id) {
+  if ($('long_text_'+id).visible()) {
+    $('long_text_'+id).hide();
+    $('short_text_'+id).show();
+  } else {
+    $('long_text_'+id).show();
+    $('short_text_'+id).hide();
+  }
+}
+
+function value_chosen(id) {
+  opener.document.getElementById('#{params[:js_id]}').value = id;
+  window.close();
+}
+
+function refresh() {
+  //$('custom_reports-edit-51-link').action_link.reload();
+  link = opener.document.getElementById('custom_reports-edit-#{params[:report_id]}-link');
+  link.action_link.reload();
+}
+|
+%>
+
+<div class='active-scaffold'>
+
+<div style='padding:2'>
+
+Form: <%= select_tag 'form_id', 
+           options_for_select([['']] + @eg.forms.collect{ |f|
+               [ f.title, f.id ] }, '')
+	%>
+  <%= image_tag 'spinner.gif', :style => 'display:none', 
+         :id => 'form_spinner' %>
+  <%= observe_field 'form_id', :url => { :action => 'get_pages' },
+         :update => 'pages_select_div',
+	 :loading => "$('form_spinner').show();",
+	 :complete => "$('form_spinner').hide();",
+	 :with => "'form_id='+$('form_id').value+'&report_id=#{params[:report_id]}'#{'+\'&bulk=true\'' if params[:bulk]}"
+   %>
+</div>
+</div>
+
+<div id='pages_select_div' style='padding:2'>
+</div>
+
+</div>
+
+</body>
+</html>

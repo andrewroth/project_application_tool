@@ -1,0 +1,48 @@
+<P><I>Applicants without motivation codes appear first.</I></P>
+
+<!-- event group dropdown -->
+<BR />
+<P>
+  <div id="select_event_Group">
+    <form>
+      <b>Select event group to view: </b>
+      <% event_group_current = params[:event_group_id] %>
+      <% event_group_current = event_group_current.to_i unless event_group_current.to_s.include?('all') %>
+      <%= select_tag 'event_group_id', options_for_select(@all_event_group_titles, event_group_current) %>
+      <%= observe_field 'event_group_id', :url => { }, :with => "window.location.href = '/tools/update_motivation_codes?event_group_id=' + value" %>
+    </form>
+  </div>
+</P>
+
+<BR />
+<div>
+<P>
+<form>
+<%= sortable_table %>
+  <thead>
+    <tr>
+        <%= th :name => 'name' %>
+        <%= th :name => 'profile_id', :type => 'integer' %>
+        <%= th :name => 'status' %>
+        <%= th :name => 'project' %>
+        <% if @eg_column %>
+          <%= th :name => 'event group' %>
+        <% end %>
+        <%= th :name => 'motivation code', :type => 'input', :default => true %>
+        <%= th :name => ('&nbsp'*20) %> <!-- saving -->
+    </tr>
+  </thead><tbody>
+
+    <% @accepted.each do |pe| %>
+        <% next if pe.project.nil? %>
+        <tr><div id="row_<%=pe.id%>">
+        <% v = pe.viewer %>
+        <%= render :partial => "update_motivation_code_for_acceptance", 
+            :locals => { :pe => pe, :v => v } %>
+    </div></tr>
+    <% end %>
+  </tbody>
+</table>
+</form>
+</P>
+</div>

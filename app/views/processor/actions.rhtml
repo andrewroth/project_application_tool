@@ -1,0 +1,62 @@
+<div id="processor_actions">
+  <% locker = @profile.locked_by %>
+  <% if locker != @user.viewer %>
+      <% if @appln.status != 'completed' %>
+        <p>Sorry, you have to wait until the application's status is completed before evaluating.</p>
+      <% elsif locker.nil? %>
+        <p>Nobody has chosen to evaluate this project yet.  If you would like to, <%= link_to "click here", 
+        :controller => "processor", :action => "evaluate", :profile_id => @profile.id %></p>
+      <% else %>
+        <p><%= locker.name %> has already chosen to evaluate this project.  Please contact 
+        him/her if you would like to perform any of the processor actions on this application.</p>
+      <% end %>
+  <% else %>
+  
+  <p>This application is in <b><%= @project.title %></b>'s applications Pile.</p>
+  <p>You are evaluating <b><%= @appln.viewer.name %></b>'s <%= @appln.form.name %> application. </p>
+  You can: 
+  <ul>
+    <li><%= link_to "<B>Release</B> this application to be evaluated by someone else",
+      :controller => 'processor', :action => 'release', :profile_id => @profile.id %></li>
+    <% if !@invalid_pages.empty? %>
+      </ul>
+      <p>For legal reasons, we need processors to fill out a <%= link_to "processor form", 
+      :pile => 'processor', :controller => :processor_form, :profile_id => @profile.id %>
+      before accepting or declining an application. The following pages are missing answers for required
+      fields: </p>
+      <ul>
+        <% @invalid_pages.each do |page|%>
+          <li><%= page.title %></li>
+        <% end %>
+      </ul>
+    <% else %>
+        <li>
+          <%= form_tag :action => 'accept', :profile_id => @profile.id, :project_id => @project.id %>
+            <b>Accept</b> Applicant to <b><%= @project.title %></b> with support coach
+            <%= render :partial => 'main/support_coach_choice', 
+            :locals => { :name => 'support_coach_id', :current => '' } %>
+            <% if @appln.as_intern? %>
+              <%= select_tag("as_intern", 
+              options_for_select([['as intern', true], ['not as intern', false]], 'as intern')) %>
+            <% end %>
+            <%= submit_tag "Accept", :confirm => "Are you sure you?" %>
+          </form>
+        </li>
+        <%= form_tag :action => 'decline', :profile_id => @profile.id, :project_id => @project.id %>
+          <b>Decline</b> applicant from all of this year's summer projects.
+          <%= submit_tag "Decline" %>
+        </form>
+        <li>
+          <%= form_tag :action => 'forward', :profile_id => @profile.id, :project_id => @project.id %>
+            <b>Forward</b> this application from <b><%= "#{@project.title}" %></b> to     	 
+            <%= select_tag("forward_to_project_id", 
+            options_for_select(@eg.projects.find(:all, :order => :title).delete_if {
+            |p| p.id == @project.id}.collect {|p| [ p.title, p.id ] })) %>
+            where it will be evaluated by a processor for that project.
+            <%= submit_tag "Forward" %>
+          </form>
+        </li>
+      </ul>
+    <% end %>
+  <% end %>
+</div>

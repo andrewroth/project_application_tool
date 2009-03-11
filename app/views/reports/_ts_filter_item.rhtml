@@ -1,0 +1,6 @@
+<tr class='inconspicuous'>
+  <%= render  :partial    => 'travel_segments/view_in_row', 
+              :object => ts_filter_item 
+              %>
+  <td class='inconspicuous'><%= check_box_tag "custom_itinerary_ts[" + ts_filter_item.id.to_s + "]", 1, false, :class => 'check', :onclick => "$$('#itinerary input.checkall').each(function(box){box.checked=false});"%></td>
+</tr>

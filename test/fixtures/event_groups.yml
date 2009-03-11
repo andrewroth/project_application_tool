@@ -1,0 +1,12 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+c4c:
+  title: Campus for Christ
+  ministry: p2c
+  
+no_ministry:
+  title: Event Group with no Ministry
+  
+missing_ministry:
+  title: Event Group with missing Ministry
+  ministry: missing

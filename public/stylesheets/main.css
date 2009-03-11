@@ -1,0 +1,436 @@
+* {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+}
+
+#list li {
+    padding-top: 10px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#body2 {
+  margin: 0px 5px 5px 5px;
+  padding: 0px 5px 5px 5px;
+}
+
+#user_info {
+  margin: 5px;
+  text-align:left;
+  float:right;
+  clear: both;
+}
+
+#event_group_info {
+  margin: 5px;
+  margin-top: 10px;
+  text-align:	right;
+  float:	right;
+  clear: both;
+}
+
+#banner h1, #banner h4 {
+  padding: 0;
+  margin: 0;
+  color: #292E34;
+}
+
+#banner {
+    font: small-caps;
+    text-align: left;
+}
+
+h1 {
+    font-size: 21px;
+}
+
+h2 {
+    font-size: 14px;
+}
+
+h1, h2 {
+	text-align: center;
+}
+
+label {
+  font-weight: bold;
+}
+
+a, .menuinactive, .menuactive,
+ .submenuinactive, .submenuactive,
+ .hover_incomplete_menuactive, .hover_incomplete_menuinactive, 
+ .hover_completed_menuactive, .hover_completed_menuinactive,
+ .incomplete_menuactive, .incomplete_menuinactive, 
+ .completed_menuactive, .completed_menuinactive {
+    color: #292E34;
+    text-decoration: none;
+    font-weight: bold;
+}
+a:visited { color: blue; }
+a:hover, .hover_menuactive, .hover_menuinactive,
+ .hover_completed_menuactive, .hover_completed_menuinactive,
+ .hover_incomplete_menuactive, .hover_incomplete_menuinactive {
+    color: #292E34;
+    background-color: #afa;
+    cursor: pointer;
+}
+
+table.like_ul {
+    border-collapse: collapse;
+}
+
+div.notice, div.error, 
+.inconspicuous, tr.inconspicuous td, .inconspicuous_window,
+#page_list, #section_list, #form_centercontent {
+    padding: 5px;
+    border-width: 2px;
+    border-style: solid;
+}
+.inconspicuous_window {
+    margin-top: 5px;
+}
+div.inconspicuous_hr, .inconspicuous_hr a {
+	font-size: 10px;
+}
+div.inconspicuous_hr {
+    margin-top: 10px;
+    border-style: solid;
+    border-width: 0px;
+    border-top-width: 1px;
+}
+
+.error {
+    border-color: red;
+    width: 500px;
+    text-align: center;
+    margin: 5px auto;
+}
+.notice {
+    border-color: blue;
+    width: 500px;
+    text-align: center;
+    margin: 5px auto;
+}
+
+.search_none_found {
+    font-style: italic;
+}
+
+.inconspicuous, tr.inconspicuous td, .inconspicuous_hr, .inconspicuous_window, #page_list, #section_list, #form_centercontent, 
+td.app, #controls {
+    border-color: #dddddd;
+}
+
+#banner, .menuinactive, .submenuinactive, .completed_menuinactive {
+    background-color: #CFCABC;
+}
+
+.menuactive, .submenuactive, .incomplete_menuactive, .incomplete_menuactive, .completed_menuactive {
+    background-color: #ddccdd;
+}
+
+#content {
+    padding-top: 1px;
+}
+
+<!- A bunch of elements should remove formatting from lists -->
+.menu ul, .submenu ul, #section_list ul {
+    margin: 0;
+    padding: 0;
+}
+<!-- I like having less spacing for a ul -->
+ul {
+    margin-top: 0.5em;
+}
+
+<!- TOP MENU STUFF -->
+
+.menu, .submenu {
+    text-align: center;
+    padding-left: 0;
+}
+
+.menu ul, .submenu ul {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.menu li, .submenu li {
+    float: left;
+   	padding: 2px 7px;
+    margin: 5px;
+    text-align: center;
+}
+
+.menu a, .submenu a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.submenu a {
+	font-size: 10px;
+}
+
+<!-- for the projects coordinator manage staff add button -->
+.search_button {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+<!-- QUESTIONNAIRE ENGINE STUDENT VIEW -->
+
+#page_list {
+    border-style: solid;
+}
+#section_list {
+    width: 185px;
+    border-style: solid;
+}
+#section_list ul {
+    list-style-type: none;
+    padding-left: 0
+}
+
+#page_list td, #section_list li {
+    border-style: solid;
+    border-color: gray;
+    border-width: 0px;
+}
+
+#page_list td {
+    border-left-width: 1px;
+}
+
+#section_list li {
+    margin: 0;
+    border-top-width: 1px;
+    padding: 1px;
+    max-width: 185px;
+    min-width: 185px;
+    width: expression(document.body.clientWidth > 185? "185px": "auto" );
+    text-align: center;
+}
+
+.app {
+    padding: 3px;
+}
+table.app { 
+    border-collapse:collapse;
+}
+td.app, #controls {
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+#controls {
+    padding: 8px;
+}
+
+#saved_at {
+    margin: 5px;
+}
+#back {
+    margin: 16px;
+}
+form {
+    margin-bottom: 0px;
+}
+
+a.button {
+    border-style: outset;
+    padding: 1px;
+}
+
+a.button:hover {
+    border-style: inset;
+    cursor: pointer;
+}
+
+.required, .incomplete_menuinactive {
+	background-color: #FFFF99;
+}
+
+.reqfilled, .empty {
+	background-color: #EAEAEA;
+}
+
+.reqactive, .active{
+	color: #336699;
+	background: #FFFFFF;
+}
+
+#loading, #validating {
+    margin-bottom: 10px;
+}
+
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
+
+.readonly_question_text {
+/* color: red; */
+}
+
+.readonly_page_header {
+  font-weight: bold;
+  color: red;
+}
+
+div.auto_complete {
+  width:350px;
+  background:#fff;
+}
+
+div.auto_complete ul {
+  border:1px solid #888;
+  margin:0;
+  padding:0;
+  width:100%;
+  list-style-type:none;
+}
+
+div.auto_complete ul li {
+  margin:0;
+  padding:3px;
+}
+
+div.auto_complete ul li.selected {
+  background-color: #ffb;
+}
+
+div.auto_complete ul strong.highlight {
+  color: #800;
+  margin:0;
+  padding:0;
+}
+
+.blue {
+  color: blue;
+}
+
+div.popup_form {
+  position: fixed;
+}
+
+#loading {
+  left: 90%; 
+  position: fixed;
+  z-index: 2; 
+  background-color:FF0000; 
+  padding: 5px; 
+  border: solid 1px;
+}
+
+div.note {
+  background-color:FF0000;
+  border: solid 2px;
+  padding: 10px;
+}
+
+#left_content {
+	float:left;
+}
+#right_content {
+	padding-left: 280px;
+}
+#edit_report {
+	border: dotted grey 2px;
+	padding: 10px;
+}
+
+#list_reports {
+	border: dotted grey 2px;
+	padding: 10px;
+	background:#fff;
+}
+
+#create_report {
+	border: dotted grey 2px;
+	padding: 10px;
+	background:#fff;
+} 
+
+.notice {
+  font-style:italic;
+}
+
+#forms {
+	border: dotted grey 2px;
+	width: 45%;
+	padding: 5px 10px;
+	float: left;
+	margin-left: 20px;
+}
+
+#list_emails {
+	float: right;
+	border: dotted grey 2px;
+	padding: 5px 10px;
+	width: 45%;
+	margin-right: 20px;
+}
+
+#tools {
+	margin: 10px;
+	border: dotted grey 2px;
+	padding: 10px;
+	clear: both;
+}
+
+#footer {
+	text-align: center; 
+	clear: both; 
+	border-top-width: 0px;
+	padding-top: 20px;
+}
+
+#search {
+ 	text-align:center;
+ 	margin: 10px 0px;
+ 	clear: both;
+}
+
+#select_project {
+	float: right;
+	border: dotted grey 2px;
+	margin: 10px;
+	padding: 10px;
+}

@@ -1,0 +1,33 @@
+<script>
+lastEdited = null;
+
+function editing(el) {
+  el.classNameOrig = el.className;
+  el.className += ' event_group_editing';
+
+  if (lastEdited != null) {
+    lastEdited.className = lastEdited.classNameOrig;
+  }
+  lastEdited = el;
+}
+</script>
+
+<% node_label = if node.has_logo? then render(:partial => 'logo', :locals => { :node => node }) else 
+    node.to_s end %>
+
+<% if @user.is_eventgroup_coordinator? %>
+  <%= link_to_remote node_label, { 
+       :update => 'create',
+       :url => edit_event_group_url(node.id),
+       :method => :get,
+       :loading => "$('loading').show();",
+       :complete => "$('loading').hide(); editing($('link_#{node.id}'));"
+      }, {
+       :id => "link_#{node.id}",
+       :class => node.classes(:a)
+      }
+   %>
+<% else %>
+  <%= node_label %>
+<% end %>
+

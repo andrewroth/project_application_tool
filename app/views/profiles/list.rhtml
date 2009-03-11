@@ -1,0 +1,13 @@
+<% if @profiles.empty? %>
+  Sorry, no profiles found.
+<% else %>
+  You have profiles for the following projects:
+
+  <ul>
+  <% @profiles.each do |p| %>
+    <li><%= link_to p.project.title, :action => :view, :id => p.id %></li>
+  <% end %>
+  </ul>
+
+<% end %>
+

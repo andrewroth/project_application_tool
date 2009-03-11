@@ -1,0 +1,11 @@
+<html>
+  <head>
+    <title>Access Denied</title>
+  </head>
+  <body>
+    <%= "views/references/no_access.rhtml" %>
+    The reference you tried to access could not be found. If you got here by clicking
+    on a link in an email, please email the link, and the applicant's name, to 
+    <%= mail_to $tech_email_only %>
+  </body>
+</html>

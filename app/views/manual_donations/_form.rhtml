@@ -1,0 +1,88 @@
+<%= error_messages_for 'manual_donation' %>
+
+<!-- form.manual_donation -->
+    <p><label for="manual_donation_motivation_code">Motivation code</label><br/>
+    <%= text_field 'manual_donation', :motivation_code %></p>
+    
+    <p><label for="manual_donation_donor_name">Donor name</label><br/>
+    <%= text_field 'manual_donation', :donor_name %></p>
+    
+    <p><label for="manual_donation_donation_type_id">Donation type</label><br/>
+    <%= select 'manual_donation', :donation_type_id, get_donation_types %>
+    <%= observe_field :manual_donation_donation_type_id, :function => 'set_usd_visibility();' %>
+    
+    <div id='usdfields'>
+      <p>The following statuses are intended for US donations only.<p>
+      <ul>
+        <li>pending: received record of funds form, waiting for confirmation from US</li>
+        <li>confirmed: confirmation of US donation received</li>
+        <li>invalid: US indicated that donation is invalid, it won't be included in any donation totals</li>
+      </ul>
+      <p><label for="manual_donation_status">Donation status</label><br/>
+      <%= select 'manual_donation', :status, ManualDonation::STATUSES %>
+     </div>
+
+    <p><%= check_box_tag 'use_rate', '1', @manual_donation.uses_conversion? %> Use conversion rate</p>
+     
+    <div id="ratefields">
+      <p><label for="manual_donation_original_amount">Original amount</label><br/>
+      <%= text_field 'manual_donation', :original_amount %></p>
+      
+      <p><label for="manual_donation_conversion_rate">Conversion Rate</label><br/>
+      <%= text_field 'manual_donation', :conversion_rate %></p> 
+    </div>
+
+    <p><label id="manual_donation_amount_label" for="manual_donation_amount">Converted Amount</label><br/>
+    <%= text_field 'manual_donation', :amount %></p>
+
+    <%= observe_field :use_rate, :function => 'set_use_rate_visibility();' %>
+    <%= observe_field :manual_donation_original_amount, :function => 'set_usd_from_rate();' %>
+    <%= observe_field :manual_donation_conversion_rate, :function => 'set_usd_from_rate();' %>
+    <%= observe_field :manual_donation_amount, :function => 'set_rate_from_usd();' %>
+ 
+    <script>
+      function set_usd_from_rate() {
+        if ($F('manual_donation_conversion_rate') == '') {
+          return;
+        }
+        $('manual_donation_amount').value = parseFloat($F('manual_donation_original_amount')) * parseFloat($F('manual_donation_conversion_rate'));
+        set_fields_format();
+      }
+      function set_rate_from_usd() {
+        if ($F('manual_donation_original_amount') == '') {
+          return;
+        }
+        $('manual_donation_conversion_rate').value = parseFloat($F('manual_donation_amount')) / parseFloat($F('manual_donation_original_amount'));
+        set_fields_format();
+      }
+      function set_fields_format() {
+        set_element_precision('manual_donation_original_amount', 2);
+        set_element_precision('manual_donation_amount', 2);
+        set_element_precision('manual_donation_conversion_rate', 3);
+      }
+      function set_element_precision(id, precision) {
+        $(id).value = parseFloat($F(id)).toFixed(precision)
+      }
+      function set_usd_visibility() {
+        if ($('manual_donation_donation_type_id').options[$('manual_donation_donation_type_id').selectedIndex].text == 'USDMANUAL') {
+          $('usdfields').show();
+          $('use_rate').checked = true;
+          set_use_rate_visibility();
+        } else {
+          $('usdfields').hide();
+        }
+      }
+      function set_use_rate_visibility() {
+        if ($('use_rate').checked == true) {
+          $('ratefields').show();
+          $('manual_donation_amount_label').innerHTML = 'Converted Amount';
+        } else {
+          $('ratefields').hide();
+          $('manual_donation_amount_label').innerHTML = 'Amount';
+        }
+      }
+      set_use_rate_visibility();
+      set_usd_visibility();
+    </script>
+ 
+<!-- eoform.manual_donation -->

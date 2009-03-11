@@ -1,0 +1,8 @@
+<% form_remote_tag :url => {:action => 'clone_form'}, 
+:loading => "Element.show('loading')", :complete => "Element.hide('loading')" do -%>
+  <fieldset>
+    <legend>Clone External Form</legend>
+    <%= select_tag :id, options_for_select(clone_form) %>
+    <%= submit_tag 'Clone' %>
+  </fieldset>
+<% end -%>

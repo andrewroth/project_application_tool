@@ -1,0 +1,9 @@
+page.visual_effect :shake, "wrapper_#{@prep_item.id}"
+page.visual_effect :switch_off, "wrapper_#{@prep_item.id}"
+if @prev_modified_id != nil
+    page << %|$('wrapper_#{@prev_modified_id}').className = $('wrapper_#{@prev_modified_id}').className.split(" ").reject(function(n) { return n == 'last_modified' }).join(" ")|
+end
+
+page.delay(3) do
+  page.remove "list_#{@prep_item.id}"
+end

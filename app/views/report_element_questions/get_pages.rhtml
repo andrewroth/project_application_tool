@@ -1,0 +1,13 @@
+Page: <%= select_tag 'page_id', options_for_select([['']] + @pages.collect{ |p| 
+                         [ p.title, p.id ] }, '') %>
+  <%= image_tag 'spinner.gif', :style => 'display:none',
+         :id => 'page_spinner' %>
+  <%= observe_field 'page_id', :url => { :action => 'get_elements' },
+         :update => 'elements_select_div',
+         :loading => "$('page_spinner').show();",
+         :complete => "$('page_spinner').hide();",
+         :with => "'page_id='+$('page_id').value+'&report_id=#{params[:report_id]}'#{'+\'&bulk=true\'' if params[:bulk]}"
+   %>
+<div id='elements_select_div' style='padding:2'>
+</div>
+

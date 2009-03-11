@@ -1,0 +1,17 @@
+<% if @sortable %>
+  <%= sortable_table %>
+<% else %>
+  <table class="datagrid">
+<% end %>
+
+    <thead>
+        <%= render :partial => 'table_headers', :locals => { :prefix => '' } -%>
+    </thead>
+    <tbody>
+        <%= render :partial => 'values_array_to_rows', :locals => { :struct => struct } -%>
+    </tbody>
+</table>
+
+<!-- init any sortable tables made on this page -->
+<%= initialize_sortable_tables %>
+

@@ -1,0 +1,7 @@
+<% if !@skip_title %>
+<h1><%= @page_title %></h1>
+<p><i>Each student is in exactly one column.  For example, although all accepted students have a completed application, they are not counted in the completed column.  Think of each column as a "pile" and an application can only be in one pile.
+</i></p>
+<% end %>
+
+<%= render :partial => 'generic_report_from_struct', :locals => { :struct => @stats } %>

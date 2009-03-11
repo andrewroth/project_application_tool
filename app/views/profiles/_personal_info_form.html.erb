@@ -1,0 +1,49 @@
+<% @appln_person ||= @instance.viewer.person if @instance %>
+
+<P>
+What do you normally go by?<BR/>
+
+<%= custom_element_item('Title: ', :appln_person, :title_id) do |m,c,classes|
+      collection_select :appln_person, :title_id, Title.find(:all), :id, :desc, { :include_blank => true }, { :class => classes }
+    end
+%>
+
+<%= custom_element_text_field('First name: ', :appln_person, :person_fname) %>
+
+<%= custom_element_text_field('Last name: ', :appln_person, :person_lname) %>
+
+<%= custom_element_item('Gender: ', :appln_person, :gender_id) do |m,c,classes|
+      collection_select :appln_person, :gender_id, Gender.find(:all), :id, :gender_desc, {}, { :class => classes }
+    end
+%>
+
+<%= custom_element_text_field('Cell phone (include area code): ', :appln_person, :cell_phone) %>
+<%= custom_element_text_field('Email: ', :appln_person, :person_email) %>
+
+<HR/>
+<P><STRONG> Current Address </STRONG></P>
+<%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Current ', :mid => 'local_' } %>
+
+<%= custom_element_item("Current address valid until: ", :appln_person, :local_valid_until) do |m,c,classes|
+      date_select m, c, :start_year => Time.now.year, :end_year => 10.years.from_now.year, :class => classes, :include_blank => true
+    end
+%>
+
+<HR>
+<P><STRONG> Permanent Address </STRONG></P>
+
+<% unless @readonly %>
+<p><%= check_box :appln_person, :permanent_same_as_local, :onClick => %|
+  if ($('appln_person_permanent_same_as_local').checked) {
+    $('permanent_address').hide();
+  } else {
+    $('permanent_address').show();
+  }
+|%> Same as Current Address above.</p>
+<% end %>
+
+<div id='permanent_address' style='<%= 'display:none;' if @appln_person && @appln_person.permanent_same_as_local %>'>
+<%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Permanent ', :mid => '' } %>
+</div>
+
+<P> 

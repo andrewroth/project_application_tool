@@ -1,0 +1,16 @@
+<% if @profile && !@profile.new_record? %>
+  <% content_for "submenu" do %>
+    <%= sub_menu_item 'misc', :profiles, :view, :id => @profile.id %>
+    <%= sub_menu_item 'support received', :profiles, :support_received, :id => @profile.id %>
+    <%= sub_menu_item 'costing', :profiles, :costing, :id => @profile.id %>
+    <%= sub_menu_item 'paperwork', :profiles, :prep_items, :id => @profile.id %>
+    <%= sub_menu_item 'travel', :profiles, :travel, :id => @profile.id %>
+  <% end %>
+<% else %>
+  <% content_for "submenu" do %>
+    <%= sub_menu_item 'Your Profiles', :profiles, :list %>
+    <%= sub_menu_item 'Campus Info', :profiles, :campus_info %>
+    <%= sub_menu_item 'Personal Info and Crisis Info', :profiles, :crisis_info %>
+  <% end %>
+<% end %>
+

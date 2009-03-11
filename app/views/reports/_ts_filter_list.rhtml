@@ -1,0 +1,47 @@
+<%= javascript_include_tag "update_view_links" %>
+
+<% 
+  @init_js = ""
+%>
+
+<%= form_tag "custom_itinerary", { :id => 'itinerary' }%>
+  <table>
+    <thead>
+      <tr>
+        <%= render  :partial  => 'travel_segments/list_headers' %>
+        <th class='inconspicuous'>select</th>
+      </tr>
+    </thead>
+    <tbody id="<%=prefix%>_tbody">
+      <% if !ts_filter_list.nil? %>
+        <%= render  :partial    => 'ts_filter_item', 
+                    :collection => ts_filter_list 
+                    %>
+      <% end %>
+      <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+      <td class='inconspicuous'>
+        <%= check_box_tag "select_all", 1, false,
+                          :class => "checkall", 
+                          :onclick => "$$('#itinerary input.check').each(function(box){box.checked=document.getElementById('select_all').checked});"
+        %>  
+        Select All
+      </td>
+    </tbody>
+  </table>
+  <%= check_box_tag "custom_itinerary_include_profiles" %> Include each person's entire profile, and highlight the selected travel segments <br />
+</form>
+
+<%= report("Generate ", "custom_itinerary" ) %>
+
+<%= observe_form 'itinerary',    
+          :function   => %|
+            update_view_links('reports', 'custom_itinerary',
+              #{ ruby_array_to_js_array(
+                    ts_filter_list.collect{ |ts| 'ts[' + ts.id.to_s + ']' } + 
+                    %w(include_profiles) 
+                 )
+              }, 
+              #{formats_js_array}
+            );
+           |
+%>

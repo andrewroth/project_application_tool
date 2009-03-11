@@ -1,0 +1,1 @@
+page.replace_html "#{params[:js_id]}_text", (if params[:element_id] && !params[:element_id].empty? then h(Element.find(params[:element_id]).text_summary(:include_type => true)) else '' end)

@@ -1,0 +1,37 @@
+
+<h1>Listing Manual Donations</h1>
+
+<% unless @user.is_student? then %>
+
+<p><%= sortable_table %>
+      <thead><tr>
+      <% for column in ManualDonation::LIST_COLUMNS %>
+        <th mochi:format='<%= ManualDonation::LIST_TYPES[column] %>'><%= column.humanize %></th>
+      <% end %>
+      </tr></thead>
+    
+    <tbody> 
+        <% for manual_donation in @manual_donations %>
+          <tr>
+            <% for column in ManualDonation::LIST_COLUMNS %>
+              <% send_column = %w(original_amount conversion_rate).include?(column) ? "#{column}_display" : column %>
+              <% val = manual_donation.send(send_column) %>
+              <% val = format_datetime(val) if column == 'created_at' %>
+              <% val = number_to_currency(val) if val != '' && ManualDonation::LIST_TYPES[column] %>
+              <td><%= h val %></td>
+            <% end %>
+            <td><%= link_to 'Edit', :action => 'edit', :id => manual_donation %></td>
+            <td><%= link_to 'Destroy', { :action => 'destroy', :id => manual_donation }, :confirm => 'Are you sure?', :method => :post %></td>
+          </tr>
+        <% end %> 
+    </tbody>
+    </table>
+</p>
+    
+    <br />
+    
+    
+
+<% else %>
+    <p>You are not authorized to access manual donation listings</p>
+<% end %>
