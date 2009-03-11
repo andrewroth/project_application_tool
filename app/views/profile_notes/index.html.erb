@@ -1,0 +1,15 @@
+
+<h1>Notes for <%= @profile.viewer.name %></h1>
+
+<% for profile_note in @profile_notes %>
+  <%= render :partial => "profile_note", :object => profile_note %>
+<% end %>
+
+
+<div id='create' class="" style="display:none;">
+      <%= render :partial => 'create_form' %>
+    </div>
+    
+<div id='create_link'>
+  <%= link_to_function 'New Profile Note', "$('create').show(); $('create_link').hide();"  %>
+</div>

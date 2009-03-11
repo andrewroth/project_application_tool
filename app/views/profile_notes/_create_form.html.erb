@@ -1,0 +1,14 @@
+<h1>New profile_note</h1>
+
+<% form_for(@profile_note) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :content %><br />
+    <%= f.text_area :content %>
+  </p>
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+<%= link_to_function 'cancel', "$('create').hide(); $('create_link').show();" %>
