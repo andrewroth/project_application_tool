@@ -74,6 +74,11 @@ module Permissions
       @user.is_project_administrator? || @user.is_project_director?
   end
 
+  def set_can_perform_actions
+    @can_perform_actions = @profile && ((@project && @user.is_processor?) || @user.is_eventgroup_coordinator?) &&
+           @profile.class == Applying
+  end
+
   def ensure_user_owns_appln
     if !user_owns_appln(@appln)
       halt("Hey, this isn't your application") and return false
@@ -184,6 +189,14 @@ module Permissions
 
   def has_profile_ownership
     @profile.viewer == @user.viewer || (@user && @user.is_eventgroup_coordinator?)
+  end
+
+  def set_view_permissions
+    set_can_view_summary
+    set_can_view_references
+    set_can_view_entire
+    set_can_see_confidential_questions
+    set_can_perform_actions
   end
 
   def is_profile_ownership_or_eventgroup_coordinator
