@@ -28,19 +28,20 @@ end
 <%=
 
 load_externs = {
- :questionnaire_admin => [ :admin, :pages, :elements, :question_options, :questionnaires ],
- :questionnaire => [ :appln, :view_online, :instance, :processor, 
-                     :processor_form, :reference_instances, :acceptance ],
- :lists => [ :prep_items, :cost_items, :optin_cost_items, :profile_travel_segments,
-             { :profiles => [ :costing, :travel, :prep_items ] }, :travel_segments, :event_groups ],
- :controls => [ { :main => :search_people_by_name }, :cost_items, 
-                  :acceptance, :optin_cost_items, :travel_segements, :profiles,
-                  { :reports => :custom_itinerary_report } ],
- :ajax_tree => [ :event_groups ],
- :dragdrop => [ :custom_reports ],
- :update_view_links => [ :custom_reports ],
- :active_scaffold => [ :custom_reports, :report_elements, :report_models, :report_model_methods, :airports, :countries, :notifications ],
- :no_script_removal => [ :main ]
+  :questionnaire_admin => [ :admin, :pages, :elements, :question_options, :questionnaires ],
+  :questionnaire => [ :appln, :view_online, :instance, :processor, 
+    :processor_form, :reference_instances, :acceptance, 
+    :profiles_viewer, :references_viewer, :processor_viewer ],
+  :lists => [ :prep_items, :cost_items, :optin_cost_items, :profile_travel_segments,
+    { :profiles => [ :costing, :travel, :prep_items ] }, :travel_segments, :event_groups ],
+  :controls => [ { :main => :search_people_by_name }, :cost_items, 
+    :acceptance, :optin_cost_items, :travel_segements, :profiles,
+    { :reports => :custom_itinerary_report } ],
+  :ajax_tree => [ :event_groups ],
+  :dragdrop => [ :custom_reports ],
+  :update_view_links => [ :custom_reports ],
+  :active_scaffold => [ :custom_reports, :report_elements, :report_models, :report_model_methods, :airports, :countries, :notifications ],
+  :no_script_removal => [ :main ]
 }
 
 do_load_externs load_externs

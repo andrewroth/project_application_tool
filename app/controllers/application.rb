@@ -8,6 +8,10 @@ class ApplicationController < ActionController::Base
 
   include ExceptionNotifiable
 
+  def local_request?
+    false
+  end
+
   def rescues_path(template_name)
     trypath = "#{RAILS_ROOT}/app/views/rescues/#{template_name}.rhtml"
     if File.exists? trypath
@@ -131,6 +135,7 @@ class ApplicationController < ActionController::Base
 
       @pass_params ||= {}
       @pass_params[:profile_id] = @profile.id if @profile
+      @pass_params[:id] ||= @profile.id if @profile # to support map.resources
     rescue
       @appln = nil
     end

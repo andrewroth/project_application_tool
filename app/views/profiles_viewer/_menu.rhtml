@@ -1,0 +1,13 @@
+<% content_for "submenu" do %>
+   <%= sub_menu_item('View Appln', :url => entire_profiles_viewer_url(@profile.id)) if @can_view_entire %>
+   <%= sub_menu_item('View Appln Summary', :url => summary_profiles_viewer_url(@profile.id)) %>
+
+   <% if @can_view_references %>
+     <% for ref in @references -%>
+         <%= sub_menu_item ref[:text], :url => references_viewer_url(ref[:instance_id]) %>
+       <% end -%>
+   <% end -%>
+
+   <%= sub_menu_item('Processor Form', :url => processor_viewer_url(@profile.id)) if @can_view_entire %>
+   <%= sub_menu_item('Actions', :url => 'url') if @can_perform_actions %>
+<% end %>

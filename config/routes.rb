@@ -14,6 +14,13 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :prep_items
   map.resources :profile_prep_items
+
+  QUESTIONNAIRE_ACTIONS = { :get_page => [ :get, :post ], :validate_page => :post }
+
+  map.resources :profiles_viewer, :member => { :entire => :get, :summary => :get }.merge(QUESTIONNAIRE_ACTIONS)
+  map.resources :references_viewer, QUESTIONNAIRE_ACTIONS
+  map.resources :processor_viewer, QUESTIONNAIRE_ACTIONS
+
   # The priority is based upon order of creation: first created -> highest priority.
   
   # Sample of regular route:

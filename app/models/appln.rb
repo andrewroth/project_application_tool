@@ -171,4 +171,18 @@ class Appln < ActiveRecord::Base
     acceptance = acceptance_obj ? acceptance_obj.project.title : ''
   end
   
+  # returns an array of hashes with :text and :instance_id
+  #
+  #   [ { :text => 'Reference Text', :instance_id => <ReferenceInstance id> } ... ]
+  #
+  # the list of references is taken from the form, so there may not be an instances
+  # yet of that reference, in which case the instance_id is nil
+  #   
+  def references_text_list
+    form.questionnaire.references.collect{ |ref|
+      ri = reference_instances.detect{ |ri| ri.reference_id == ref.id }
+      
+      { :text => ref.text, :instance_id => (ri ? ri.id : nil) }
+    }
+  end
 end

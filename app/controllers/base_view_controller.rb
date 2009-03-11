@@ -11,11 +11,23 @@ class BaseViewController < ApplicationController
   include BulkPrinting
   include FormPrinting
 
-  before_filter :set_can_view_entire
-  before_filter :set_can_view_summary
-  before_filter :set_can_view_references
-  
-  def set_project
-    @project = Project.find params[:project_id]
-  end
+  protected
+
+    def set_references() @references = @appln.references_text_list end
+    
+    # finds a good page to redirect to after denying permission
+    def redirect_after_denied
+      # go back to the next best spot
+      if @profile
+        redirect_to profiles_viewer_url(@profile.id)
+      else
+        redirect_to :controller => :main
+      end
+    end
+
+    def get_profile
+      @profile = Profile.find params[:id]
+      @project = @profile.project
+      @appln = @profile.appln
+    end
 end

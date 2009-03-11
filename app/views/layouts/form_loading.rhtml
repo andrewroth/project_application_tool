@@ -19,15 +19,14 @@
   <div id="loading_form">
     <p>Your application is being constructed this very moment.  This should only take a minute. <%=image_tag('spinner.gif')%> </p>
     <script>
-      <% pass_params = ""; (@pass_params || {}).each_pair do |k,v| pass_params += "&#{k}=#{v}" end %>
-      new Ajax.Updater('form_holder', "/<%= params[:controller] %>/<%= params[:action] %>?<%= pass_params %>", { 
-          asynchronous: true, 
-          method: 'get', 
-          evalScripts: true, 
-          onFailure: function(request){ $('error').show(); },
-          onComplete: function(request){ $('loading_form').hide(); $('form_holder').show(); },
-          parameters: 'load_all_pages=true'
-       });
+      new Ajax.Updater('form_holder', "<%= url_for @pass_params.merge(:escape => false) %>", {
+           asynchronous: true, 
+           method: 'get', 
+           evalScripts: true, 
+           onFailure: function(request){ $('error').show(); },
+           onComplete: function(request){ $('loading_form').hide(); $('form_holder').show(); },
+           parameters: 'load_all_pages=true'
+         });
     </script>
   </div>
 </div>

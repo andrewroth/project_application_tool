@@ -33,10 +33,9 @@ module FormLoadingIndicator
         @layout = 'form_print'
       else
         @layout ||= true
-        @content = ''
       end
       
-      render :inline => @content, :layout => @layout
+      render :text => '', :layout => @layout
     end
   end
   

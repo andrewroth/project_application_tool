@@ -65,7 +65,13 @@ module ApplicationHelper
     r += ">"
   end
   
-  def sub_menu_item(title, controller, action, params = {})
+  def sub_menu_item(title, *params)
+    if params.length == 1 && params.first.class == Hash
+      params = params.first
+    else
+      controller, action, params = params
+    end
+
     item_html = "<li "
     if (title == @submenu_title)
       item_html += " class=\"submenuactive\""
@@ -79,8 +85,14 @@ module ApplicationHelper
 #	  :loading => "$('loading').show();",
 #	  :loaded => "$('loading').hide();"
     # removed ajax version (above) since it was causing sorting to mess up and also doesn't get into browser history
-    params_html = params.collect{ |kv| k,v = kv; "#{k}=#{v}" }.join("&")
-    item_html += "<a href='/#{controller}/#{action}?#{params_html}'>#{title}</a>"
+    if params[:url]
+      url = params[:url]
+    else
+      params_html = params.collect{ |kv| k,v = kv; "#{k}=#{v}" }.join("&")
+      url = "/#{controller}/#{action}?#{params_html}"
+    end
+            
+    item_html += "<a href='#{url}'>#{title}</a>"
     # link_to title, params
     
     item_html += "</li>"
