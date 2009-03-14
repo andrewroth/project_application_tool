@@ -5,13 +5,15 @@ class ReferencesViewerController < BaseViewController
 
   ProjectsCoordinator
 
+  prepend_before_filter :set_view_permissions # run this before ensure_permission
   prepend_before_filter :get_reference_instance # prepend so that QE methods don't fail
-  prepend_before_filter :set_view_permissions # run this before any permissions
   prepend_before_filter :set_user # run this before set_view_permissions since permissions depend on user
   before_filter :ensure_permission
+  before_filter :set_references
 
   def show
     @submenu_title = @reference.text
+    index
   end
 
   protected
@@ -25,8 +27,7 @@ class ReferencesViewerController < BaseViewController
     end
 
     def ensure_permission
-      @debug = @can_view_reference.inspect
-      unless @can_view_reference
+      unless @can_view_references
         flash[:notice] = "Sorry, you don't have permission to view references."
         redirect_after_denied
       end
