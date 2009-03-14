@@ -31,11 +31,6 @@ class AcceptanceController < BaseApplnAndRefsViewer
     end
   end
 
-  def delete_reference
-    flash[:error] = "Sorry, only the student can delete references.  If you really want this done, email the technical inquiries email below."
-    redirect_to :back
-  end
-
   def view_summary
     @submenu_title = submenu_title + " Summary"
     @pass_params ||= {}

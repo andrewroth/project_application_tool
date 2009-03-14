@@ -26,6 +26,11 @@ class ProfilesViewerController < ViewOnlineController
     index
   end
 
+  def delete_reference
+    flash[:error] = "Sorry, only the student can delete references.  If you really want this done, email the technical inquiries email below."
+    redirect_to :back
+  end
+
   protected
 
     def ensure_permission
