@@ -309,10 +309,9 @@ class ReportsController < ApplicationController
   end
 
   def processor_forms
-    redirect_to :controller => :processor_form, 
+    redirect_to :controller => :projects, 
                 :action => :bulk_processor_forms, 
-                :project_id => params[:project_id],
-                :viewer_id => params[:viewer_id],
+                :id => params[:project_id],
                 :view => 'print',
                 :print => params[:format]
   end

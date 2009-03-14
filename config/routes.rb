@@ -22,7 +22,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :references_viewer, QUESTIONNAIRE_ACTIONS
   map.resources :processor_viewer, QUESTIONNAIRE_ACTIONS
 
-  map.resources :projects, :member => { :bulk_summary_forms => :get }
+  map.resources :projects, :member => { :bulk_summary_forms => :get, :bulk_processor_forms => :get }
 
   # The priority is based upon order of creation: first created -> highest priority.
   
