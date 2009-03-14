@@ -18,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
   QUESTIONNAIRE_ACTIONS = { :get_page => [ :get, :post ], :validate_page => :post }
 
   map.resources :profiles_viewer, :member => { :entire => :get, :summary => :get, 
-    :delete_reference => :get }.merge(QUESTIONNAIRE_ACTIONS)
+    :delete_reference => :get, :submit => :post }.merge(QUESTIONNAIRE_ACTIONS)
   map.resources :references_viewer, QUESTIONNAIRE_ACTIONS
   map.resources :processor_viewer, QUESTIONNAIRE_ACTIONS
 
