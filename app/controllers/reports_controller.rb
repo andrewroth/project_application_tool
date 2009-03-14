@@ -318,10 +318,9 @@ class ReportsController < ApplicationController
   end
 
   def summary_forms
-    redirect_to :controller => :acceptance, 
+    redirect_to :controller => :projects, 
                 :action => :bulk_summary_forms, 
-                :project_id => params[:project_id],
-                :viewer_id => params[:viewer_id],
+                :id => params[:project_id],
                 :view => 'print',
                 :print => params[:format]
   end
@@ -809,7 +808,7 @@ class ReportsController < ApplicationController
       loop_reports_viewers(p, false, true) do |ac,a,v,p|
         next if v.nil?
 
-        if !v.is_student?
+        if !v.is_student? @eg
           if @user.is_project_director? || @user.is_eventgroup_coordinator? || @user.is_project_administrator? || @user.viewer == v
             @accepted_viewers << v
           end

@@ -18,6 +18,10 @@ module Permissions
     end
   end
 
+  def is_project_staff
+    @user.is_atleast_project_staff(@project)
+  end
+
   def is_any_project_staff
     @user.is_any_project_staff
   end

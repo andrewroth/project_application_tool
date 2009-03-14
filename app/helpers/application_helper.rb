@@ -72,6 +72,8 @@ module ApplicationHelper
       controller, action, params = params
     end
 
+    params = {} if params.nil?
+
     item_html = "<li "
     if (title == @submenu_title)
       item_html += " class=\"submenuactive\""

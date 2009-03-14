@@ -9,6 +9,18 @@ class ProfilesViewerController < ViewOnlineController
   before_filter :ensure_permission, :only => [ :entire, :summary ]
   before_filter :set_references
 
+  def bulk_summary_forms
+    @page_title = "Acceptance Summary Forms"
+
+    params[:summary] = true
+    bulk_acceptance_forms([ :appln, { :viewer => :persons } ]) do |acc|
+      @instances << { :instance => acc.appln,
+        :appln => acc.appln,
+        :title => "#{acc.viewer.name} Summary Form"
+      }
+    end
+  end
+
   def show
     # go somewhere appropriate
     redirect_to @can_view_entire ? 
