@@ -36,7 +36,7 @@
       </thead>
       <tbody>
         <% for @profile in @processor_list %>
-	  <% next if @profile.appln.form != form %>
+          <% next if @profile.appln.form != form %>
           <% project = @profile.project %>
           <% @user.set_project(project) %>
           <% @appln = @profile.appln %>

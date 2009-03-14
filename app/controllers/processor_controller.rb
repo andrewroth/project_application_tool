@@ -1,13 +1,13 @@
-require 'appln_admin/modules/acceptance_pile_functionality.rb'
-require 'appln_admin/modules/processor_pile_functionality.rb'
+require_dependency 'permissions'
 
-class ProcessorController < BaseApplnAndRefsViewer
-  include AcceptancePileFunctionality
-  include ProcessorPileFunctionality
+class ProcessorController < ApplicationController
+  include Permissions
   
-  before_filter :ensure_evaluate_permission
+  before_filter :get_profile_and_project
+  before_filter :set_view_permissions
   
   def actions
+    @project = @profile.project
     @questionnaire = @eg.forms.find_by_name("Processor Form").questionnaire
     @invalid_pages = []
     @questionnaire.pages.each do |page|
@@ -22,17 +22,7 @@ class ProcessorController < BaseApplnAndRefsViewer
     @profile[:locked_by] = @user.viewer.id
     @profile.save!
     
-    view_entire
-  end
-  
-  def view_summary
-    redirect_to params.merge({ :controller => :acceptance, 
-                               :action => :view_summary })
-  end
-
-  def view_entire
-    redirect_to params.merge({ :controller => :acceptance, 
-                               :action => :view_entire })
+    redirect_to :controller => :profiles_viewer, :action => :entire, :id => @profile.id
   end
   
   def release
@@ -81,4 +71,20 @@ class ProcessorController < BaseApplnAndRefsViewer
   protected
   
   def set_title() @page_title = "App Processing" end
+
+  def ensure_evaluate_permission
+    @user.set_project(@project)
+    unless (@user.is_eventgroup_coordinator? || @user.is_processor?)
+      flash[:notice] = "Sorry, you don't have permissions to evaluate applications."
+      render :text => "", :layout => true
+      return false
+    end
+    return true
+  end
+
+  def get_profile_and_project
+    @profile = Profile.find params[:profile_id]
+    @project = @profile.project
+    @user.set_project @project
+  end
 end
