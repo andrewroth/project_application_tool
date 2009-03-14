@@ -5,6 +5,7 @@ class ProcessorController < ApplicationController
   
   before_filter :get_profile_and_project
   before_filter :set_view_permissions
+  before_filter :set_references
   
   def actions
     @project = @profile.project
@@ -87,4 +88,6 @@ class ProcessorController < ApplicationController
     @project = @profile.project
     @user.set_project @project
   end
+
+  def set_references() @references = @appln.references_text_list end
 end
