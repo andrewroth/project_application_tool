@@ -313,6 +313,7 @@ class ReportsController < ApplicationController
                 :action => :bulk_processor_forms, 
                 :id => params[:project_id],
                 :view => 'print',
+                :viewer_id => params[:viewer_id],
                 :print => params[:format]
   end
 
@@ -321,6 +322,7 @@ class ReportsController < ApplicationController
                 :action => :bulk_summary_forms, 
                 :id => params[:project_id],
                 :view => 'print',
+                :viewer_id => params[:viewer_id],
                 :print => params[:format]
   end
   
@@ -802,20 +804,8 @@ class ReportsController < ApplicationController
   
   # returns a select list with viewers who are accepted to the projects given
   def viewers_with_profile_for_project
-    @accepted_viewers = []
-    @projects.each do |p|
-      loop_reports_viewers(p, false, true) do |ac,a,v,p|
-        next if v.nil?
-
-        if !v.is_student? @eg
-          if @user.is_project_director? || @user.is_eventgroup_coordinator? || @user.is_project_administrator? || @user.viewer == v
-            @accepted_viewers << v
-          end
-        else
-          @accepted_viewers << v
-        end
-      end
-    end
+    acceptances = Acceptance.find_all_by_project_id @projects_ids, :include => { :viewer => :persons }
+    @accepted_viewers = acceptances.collect &:viewer
     @accepted_viewers.sort!{ |a,b| a.name <=> b.name }
     @id = params[:dom_id]
     render :layout => !request.xml_http_request?

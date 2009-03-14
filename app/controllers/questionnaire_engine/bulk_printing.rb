@@ -3,7 +3,7 @@ module BulkPrinting
     project_title = @project.title.to_s
     page_title = @page_title.to_s
 
-    render :inline => "#{project_title} #{page_title}, Generated at #{format_datetime(Time.now)}", :layout => "form_bulk_print" unless RAILS_ENV == 'test'
+    render :inline => "#{project_title} #{page_title}, Generated at #{Time.now}", :layout => "form_bulk_print" unless RAILS_ENV == 'test'
   end
 
   def bulk_acceptance_forms(includes = {})
