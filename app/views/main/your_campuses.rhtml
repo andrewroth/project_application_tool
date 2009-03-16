@@ -1,0 +1,56 @@
+<P>Here you can see some statistics for campuses you're assigned to.
+
+<% if @campuses == nil%>
+<P>Sorry, you're not assigned to any campuses.
+<% else %>
+    <P>Your campuses:
+        <BLOCKQUOTE>
+            <%= sortable_table %>
+            
+            <thead><TR>
+                <TH mochi:format="str">Campus</TH>
+                <TH mochi:format="int">applied</TH>
+                <TH mochi:format="int" mochi:default='true' mochi:default_direction='descending'>accepted</TH>
+            </TR></thead>
+            
+            <tbody>
+            <% for campus in @campuses %>
+                <TR>
+                    <TD align="center"><%= campus.campus_desc %> (<%= campus.campus_shortDesc%>)</TD>
+                    <TD align="center"><%= @campus_stats[campus].applied_cnt %></TD>
+                    <TD align="center"><%= @campus_stats[campus].accepted_cnt %></TD>
+                </TR>
+            <% end %>
+            </tbody>
+        </TABLE></BLOCKQUOTE>
+    <P>Your students:
+    <BLOCKQUOTE>
+        <%= sortable_table %>
+            <thead><TR>
+                <TH>Name</TH>
+                <TH>User ID</TH>
+                <TH>Campus</TH>
+                <TH>Status</TH>
+                <TH>Preference1</TH>
+                <TH>Accepted</TH>
+            </TR></thead>
+            <tbody>
+            <% def title(pid) pid.nil? ? "" : @projects_cache[pid] end %>
+            <% for campus in @campuses %>
+                <% for student_profile in @campus_stats[campus].student_profiles %>
+                    <% person = student_profile.student; profile = student_profile.profile %>
+                    <TR>
+                        <TD align="center"><%= person.name %></TD>
+                        <TD align="center"><%= person.viewer.viewer_userID %></TD>
+                        <TD align="center"><%= campus.campus_shortDesc %></TD>
+                        <TD align="center"><%= profile.status %></TD>
+                        <TD align="center"><%= title(profile.appln.preference1_id) %></TD>
+                        <TD align="center"><%= title(if profile.class == Acceptance then profile.project_id else nil end) %></TD>
+                    </TR>
+                <% end %>
+            <% end %>
+            </tbody>
+        </TABLE>
+    </BLOCKQUOTE>
+    </P>    
+<% end %>

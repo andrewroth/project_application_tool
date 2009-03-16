@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+first:
+  id: 1
+  title: Afghanistan Project
+  start: 2007-10-27
+  end: 2007-11-27
+  event_group_id: 1
+<% (2..30).each { |i| %>
+another<%=i%>:
+  title: <%=i%>
+  id: <%=i%>
+  start: 2007-10-27
+  end: 2007-11-27
+  event_group_id: 1
+<%}%>

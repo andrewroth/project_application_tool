@@ -1,0 +1,1 @@
+<%= select_tag 'profile[appln_id]', options_for_select(['', ['Create new application', 'new']] + @applns.collect{ |a| [ "app[#{a.id}] status=#{a.status}", a.id ] }) %>

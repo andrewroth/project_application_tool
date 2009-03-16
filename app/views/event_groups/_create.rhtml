@@ -1,0 +1,12 @@
+<h2>New Group</h2>
+
+<%= error_messages_for :event_group %>
+
+<% form_for(:event_group, :url => event_groups_path) do |f| %>
+
+  <%= render :partial  => 'form', :locals => { :f => f } %>
+
+  <p>
+    <%= submit_tag 'Create' %>
+  </p>
+<% end %>

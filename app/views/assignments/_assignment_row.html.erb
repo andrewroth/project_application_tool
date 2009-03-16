@@ -1,0 +1,6 @@
+<tr id="assignment_<%= assignment_row.id %>_show">
+  <%= render :partial => 'assignments/show', :object => assignment_row %>
+</tr>
+<tr id="assignment_<%= assignment_row.id %>_edit" style="display:none;">
+  <%= render :partial => 'assignments/assignment_form', :object => assignment_row %>
+</tr>

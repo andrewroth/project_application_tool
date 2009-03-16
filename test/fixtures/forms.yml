@@ -1,0 +1,29 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+2007app:
+  id: 1
+  name: Project Application
+  category: projects
+  year: 2007
+  questionnaire_id: 1
+  event_group_id: 1
+2007staff_ref:
+  id: 2
+  name: Staff Reference
+  category: projects
+  year: 2007
+  questionnaire_id: 2
+  event_group_id: 1
+2007pastor_ref:
+  id: 3
+  name: Pastor Reference
+  category: projects
+  year: 2007
+  questionnaire_id: 3
+  event_group_id: 1
+2007peer_ref:
+  id: 4
+  name: Peer Reference
+  category: projects
+  year: 2007
+  questionnaire_id: 4
+  event_group_id: 1

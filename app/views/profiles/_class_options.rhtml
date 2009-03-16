@@ -1,0 +1,3 @@
+<% if %w(applying withdrawn acceptance staffprofile).include? params[:type].downcase %>
+  <%= render :partial => params[:type].downcase + '_options' %>
+<% end %>

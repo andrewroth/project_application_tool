@@ -1,0 +1,38 @@
+.year_item, .year_item_modified {
+    background-color: #0066B3;
+    padding: 3px;
+}
+.unsubmitted_item, .unsubmitted_item_modified {
+    background-color: #8B0000;
+    padding: 3px;
+}
+
+.individual_item, .individual_item_modified {
+    border: #7CFC00 solid;
+}
+
+
+
+.project_item, .project_item_modified {
+    background-color: #80C9FF;
+    padding: 3px;
+}
+
+.profile_item, .profile_item_modified, .acceptance_item, .acceptance_item_modified {
+    background-color: #BFE4FF;
+    padding: 3px;
+}
+
+.primary_highlight,  tr.primary_highlight td,
+.last_modified, tr.last_modified td, 
+.year_item_modified, .project_item_modified {
+    border: 3px darkred solid;
+}
+
+.secondary_highlight, tr.secondary_highlight td {
+    border: 3px bisque  solid;
+}
+
+li {
+    list-style-type: none;
+}

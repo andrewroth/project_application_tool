@@ -1,0 +1,28 @@
+<div id="intern_<%=accepted_pile_table_intern.id%>">
+  <% if !accepted_pile_table_intern.as_intern? %>
+    <%= link_to_remote "Make Intern", { :url => {
+                                      :controller => :acceptance, 
+                                      :action => :update_intern_status,
+                                      :profile_id => accepted_pile_table_intern.id },
+                                      :before => "Element.show('loading');",
+                                      :complete => "Element.hide('loading');", 
+                                      :confirm => "Are you sure you would like to make this person an intern?" }, 
+                                      {:href => url_for(
+                                        :controller => :acceptance,
+                                        :action => :update_intern_status, 
+                                        :profile_id => accepted_pile_table_intern.id) } %>
+  <% else %>
+    <%= link_to_remote "Intern", {  :url => {
+                                    :controller => :acceptance, 
+                                    :action => :update_intern_status,
+                                    :profile_id => accepted_pile_table_intern.id },
+                                    :before => "Element.show('loading');",
+                                    :complete => "Element.hide('loading');",   
+                                    :confirm => "Are you sure you would like to remove this applicant's intern status?"}, 
+                                    {:href => url_for(
+                                      :controller => :acceptance,
+                                      :action => :update_intern_status,
+                                      :profile_id => accepted_pile_table_intern.id) } %>
+
+  <% end  %>
+</div>

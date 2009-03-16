@@ -1,0 +1,30 @@
+<label><%=@subtitle%></label>
+
+<div id="<%=@role%>_list" class="inconspicuous">
+    <%= render :partial => "roles/list" %>
+</div>
+
+<div id="search_<%=@role%>_window" style="display:none">
+    <%= render :partial => "roles/search_window", :layout => false %>
+</div>
+
+<div id="<%=@role%>_msg">
+</div>
+
+<div id="add_<%=@role%>_link" class="search_button">
+    
+    <SCRIPT>
+        <%= 
+            "function show_#{@role}_search() {" + 
+            "   Element.show('search_#{@role}_window');" +
+            "   Element.hide('add_#{@role}_link');" +
+            "   Element.hide('search_#{@role}_results');" +
+            "}"
+        %>
+    </SCRIPT>
+   
+    <a class="button" href="javascript:show_<%=@role%>_search();">Add <%=@subtitle%></a>
+</div>
+
+<br>
+</p>

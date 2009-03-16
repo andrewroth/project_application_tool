@@ -1,0 +1,22 @@
+<h1><%= @page_title %> </h1>
+
+<%= stylesheet_link_tag 'list' %>
+
+<style>
+ul {
+  margin: 0px;
+  padding: 0px;
+  padding-left: 10px;
+}
+li {
+  margin-top: 10px;
+}
+.item {
+  padding-left: 20px;
+}
+
+</style>
+
+<%= render :partial => 'fix_include_profiles' %>
+
+<%= render :partial => 'itinerary_profiles', :object => @profiles %>

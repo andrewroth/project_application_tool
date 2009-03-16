@@ -1,0 +1,1 @@
+State: <%= select_tag 'profile[status]', options_for_select(Acceptance.states, (@profile ? @profile.status : '')) %>

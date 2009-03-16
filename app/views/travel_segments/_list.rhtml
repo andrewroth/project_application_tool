@@ -1,0 +1,19 @@
+<table class="like_ul">
+    <tr class='inconspicuous'>
+    	<%= render :partial => 'list_headers' %>
+    	<th>&nbsp</th> <!-- for edit -->
+    	<th>&nbsp</th> <!-- for delete -->
+    </tr>
+
+    <% for travel_segment in @travel_segments %>
+        <% just_modified = travel_segment.id == @just_modified_id %>
+
+        <tr id='travel_segment_<%= travel_segment.id %>'
+            class='<%= just_modified ? 'last_modified' : 'inconspicuous' %>'>
+            
+            <% action = (@edit_id == travel_segment.id) ? 'edit' : 'view' %>
+            <%= render :partial => "#{action}_in_row_with_actions", :object => travel_segment %>
+        </tr>
+        
+    <% end %>
+</table>

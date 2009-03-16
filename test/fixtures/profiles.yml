@@ -1,0 +1,33 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+first:
+  id: 1
+  appln_id: 1
+  project_id: 1
+  support_coach_id: 6 # sean
+  support_claimed: 0
+  type: Acceptance
+  viewer_id: 1
+  status: started
+oex:
+  id: 2
+  appln_id: 0
+  project_id: 1 # afghanistan
+  support_coach_id: 0
+  support_claimed: 0
+  type: StaffProfile
+  viewer_id: <%= $viewers['sean'] %>
+  status: completed
+keener_afgh:
+  id: 3
+  appln_id: 2
+  project_id: 1
+  type: Applying
+  viewer_id: <%= $viewers['keener'] %>
+  status: started
+bob:
+  id: 4
+  appln_id: 4
+  project_id: 3
+  type: Applying
+  viewer_id: <%= $viewers['bob'] %>
+  status: completed

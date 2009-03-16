@@ -1,0 +1,13 @@
+<% 
+div = true if div.nil?
+headers = true if headers.nil?
+ %>
+
+<%= render :partial => 'list', :locals => { 
+    :prefix => 'unassigned',
+    :list => @unassigned_ts,
+    :sortable => false,
+    :div => div,
+    :headers => headers,
+    :eticket => false
+  } %>

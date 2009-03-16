@@ -1,0 +1,9 @@
+<% form_for :person, :url => { :action => 'update_crisis_info' } do |p| %>
+
+  <%= render :partial => 'personal_info_form' %>
+  <HR />
+  <%= render :partial => 'crisis_info_form' %>
+  <P><BR />
+  <%= submit_tag 'Save' %>
+
+<% end %>

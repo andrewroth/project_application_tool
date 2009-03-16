@@ -1,0 +1,8 @@
+<% 
+widths = {} if widths.nil? 
+editors = 'all_editors' if editors.nil?
+%>
+
+<% @id = 0; TravelSegment.send(editors).each_pair do |k,v| %>
+    <%= th :name => k.to_s.gsub('_',' '), :class => 'inconspicuous', :style => absolute_width_css(widths[@td_index]) %>
+<% end %>

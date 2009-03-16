@@ -1,0 +1,7 @@
+<% Viewer.find(:all).each_with_index do |v, i| %>
+<% i2 = i+1 %>
+<%= "access_viewer#{v.id}:" %>
+  access_id: <%= v.id %>
+  viewer_id: <%= v.id %>
+  person_id: <%= v.id %>
+<% end %>

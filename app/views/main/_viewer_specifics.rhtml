@@ -1,0 +1,38 @@
+<%
+def output_profiles_list(profiles, partial, var, title)
+  eval("@#{var} = profiles")
+  "#{title}<blockquote>#{render :partial => partial}</blockquote>"
+end
+
+@always_show_can_evaluate_headers = true
+%>
+
+<% if !@viewer.nil? %>
+  <hr />
+  <h2> Specifics for <%= @viewer.name %></h2>
+
+  <% found_something = false %>
+  <% @profiles_by_eg.each do |eg, profiles| %>
+    <% if profiles.empty? then next else found_something = true end %>
+
+    <strong><%= eg.to_s_with_ministry_and_eg_path %></strong>
+    <blockquote>
+      <% @projects = true %>
+      <%= output_profiles_list profiles.find_all{|p| p.class == Acceptance }, 
+            'accepted_pile_table', 'accepted', 'Acceptances:' %>
+      <%= output_profiles_list profiles.find_all{|p| p.class == Applying }, 
+            'processor_pile', 'processor_list', 'Processor Pile:' %>
+      <%= output_profiles_list profiles.find_all{|p| p.class == StaffProfile }, 
+            'staff_profile_pile', 'staff', 'Staff:' %>
+      <%= output_profiles_list profiles.find_all{|p| p.class == Withdrawn }, 
+            'withdrawn_pile', 'withdrawn', 'Withdrawn:' %>
+    </blockquote>
+  <% end %>
+
+  <% if !found_something %>
+    No applications or profiles found.
+  <% end %>
+<% end %>
+
+<%= initialize_sortable_tables %>
+

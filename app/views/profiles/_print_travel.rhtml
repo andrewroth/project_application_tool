@@ -1,0 +1,2 @@
+<% render :partial => "travel_set_url" %>
+<%= link_to 'printable itinerary pdf', @url.merge({ :print => "pdf", :filename => "itinerary" }), { :target => "_blank" } %>

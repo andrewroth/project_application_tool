@@ -1,0 +1,9 @@
+<% form_remote_tag :url => {:action => 'update', :id => edit_form.id}, :with => "'id=' + encodedURIedit_form.id", :loading => "Element.show('loading')", :complete => "Element.hide('loading')" do -%>
+  <fieldset>
+		<legend>Edit Form</legend>
+		Name: <%= text_field_tag :name, edit_form.name %>
+  	Hidden to applicants: <%= check_box_tag :hidden, '1', edit_form.hidden %> 
+  	<%= submit_tag 'Update' -%>
+  	<%= link_to_function "Cancel" do |page| page[:new_form].replace_html :partial => 'new_form' end %>
+	</fieldset>
+<% end -%>

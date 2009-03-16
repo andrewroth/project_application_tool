@@ -1,0 +1,61 @@
+<%
+person = crisis_management_person
+
+load 'my_ordered_hash.rb'
+
+def c(s)
+  @columns.position s
+end
+
+def i(s)
+  @index[s]
+end
+
+def h2(s)
+  "<span class='header'>#{h s}</span>"
+end
+
+pp = person[i(:passport)]
+ei = person[i(:emerg)]
+@c1 = person[i(:c1)]
+@c2 = person[i(:c2)]
+
+is_staff = person[c(:staff)].downcase == 'staff'
+
+-%>
+    <tr class='new_item'>
+      <td colspan='<%= @many_projects ? '1' : '2' %>'><%= h2 'Name:' %> <%= person[c(:last_name)] %>, <%= person[c(:first_name)] %><%= ' (staff)' if is_staff %>
+<% if @many_projects %> 
+      <td><%= person[c(:project)] %></td>
+<% end %>
+      <td><%= h2 'Gender:' %> <%= person[c(:gender)] %></td>
+      <td><%= h2 'Curr Prov:' %> <%= person[c(:curr_prov)] %></td>
+      <td><%= h2 'Perm Prov:' %> <%= person[c(:perm_prov)] %></td>
+    </tr>
+    <tr class='inconcpicuous'>
+      <td><%= h2 'Birthdate:' %> <%= person[c(:birthdate)] %></td>
+      <td><%= h2 'PP #:' %> <%= pp[:number] %></td>
+      <td><%= h2 'PP Exp:' %> <%= pp[:expiry] %></td>
+      <td colspan='2'><%= h2 'PP Country:' %>  <%= pp[:country] %></td>
+    </tr>
+    <tr class='inconcpicuous'>
+      <td><%= h2 'Have Cond:' %> <%= ei[:have_conditions] %></td>
+      <td colspan='2'><%= h2 'Cond Desc:' %> <%= ei[:condition_desc] %></td>
+      <td colspan='1'><%= h2 'Med needed:' %> <%= ei[:med_needed] %></td>
+      <td><%= h2 'Have med:' %> <%= ei[:med_with] %></td>
+    </tr>
+    <tr class='inconcpicuous'><td colspan='5'><%= h2 'Emergency Contacts' %>
+      <table><tr class='inconcpicuous'>
+        <% for m in @c1.members -%>
+          <th><%= m %></th>
+        <% end %>
+        </tr>
+        <% for c in %w(c1 c2) -%>
+          <tr class='inconcpicuous'>
+            <% for v in (c=='c1' ? @c1 : @c2).to_a %>
+              <td><%= v %></td>
+            <% end %>
+          </tr>
+        <% end -%>
+      </table></td>
+    </tr>

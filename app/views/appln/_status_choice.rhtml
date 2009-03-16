@@ -1,0 +1,33 @@
+<!-- from any status you can go to withdrawn.. -->
+<% @user.set_project @project %>
+<% if @user.is_eventgroup_coordinator? || (@project && appln.status != 'withdrawn' && @user.is_processor?) %>
+    <%= select_tag('status_'+appln.id.to_s, options_for_select(
+            [ appln.status, 'withdrawn' ], appln.status
+        ))
+    %>
+    <!-- Not yet working will wait until high priority stuff is done
+    <div id=<%= "popup_form_"+appln.id.to_s %> style="display:none">
+        <p>Reason for Withdrawl<%= 
+#text_area "appln", "withdrawl_reason", :cols => 12, :rows => 3 
+%></p>
+        <%= 
+#hidden_field "appln", "id"
+ %>
+        <p><%= 
+#submit_to_remote "submit_"+appln.id.to_s, "Withdraw", :url => { :controller => :appln, :action => :withdraw }, 
+#                                            :success => "window.location.href=window.location.href;",
+#                                            :applnid => appln.id
+ %></p>
+      <%= link_to_remote "Cancel", :before => "Element.hide('popup_form_#{appln.id.to_s}');" %>
+    </div>
+    -->
+    <%= observe_field 'status_'+appln.id.to_s, 
+          # inverse comment the following lines when implement reason for withdrawl
+          #:before => "Element.show('popup_form_#{appln.id.to_s}');",
+          :url => { :controller => :appln, :action => :withdraw, :appln_id => appln.id },
+        	:success => "window.location.href=window.location.href;",
+        	:cancel => 'alert(\'hi\');'
+    %>
+<% else %>
+    <%= appln.status %>
+<% end %>

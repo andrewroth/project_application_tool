@@ -1,0 +1,47 @@
+<%
+def status_with_link_if_possible(ref)
+  if ref.nil? then "dne"
+  elsif ref.mail?
+    "mailing"
+  else
+    status = ref.status
+    status = "<B>#{status}</B>" if ["started","created"].include?(status)
+    link_to(status, :action => "get_reference_request_email", :ref_id => ref.id)
+  end
+end
+%>
+
+<p><i>Click on the status of a reference to view the reference request email.</i></p>
+
+<p><b>Note: Please do not use the BYPASS feature unless you know what you are doing.  It may not do what you expect.  Please contact russ.martin@c4c.ca for help with this feature.</b></p>
+
+<% if @eg.forms.find_by_hidden(false).nil? %>
+	All forms are hidden, make one not hidden to see this list.
+<% else %>
+	<table class='inconspicuous' style='border-collapse: collapse'>
+	  <tr>
+	    <th>name</th>
+	    <th>status</th>
+	    <% for reference in @eg.forms.find_by_hidden(false).questionnaire.references -%>
+	      <th colspan='3'><%= reference.text %></th>
+	    <% end -%>
+	  </tr>
+		<% @submitted_apps.each do |app| %>
+		  <tr class='inconspicuous'>
+		    <td><%= app.viewer.nil? ? "Unknown (app #{app.id})" : app.viewer.name %></td>
+		    <td><%= app.status %></td>
+		    <% for reference_instance in app.reference_instances -%>
+		      <td><%= status_with_link_if_possible reference_instance %></td>
+		      <% if app.profile.class == Applying && !reference_instance.mail? && (reference_instance.status != 'completed' && reference_instance.status != 'bypassed') %>
+		        <td><%= link_to 'bypass', bypass_form_reference_instance_path(reference_instance) %></td>
+		        <td><%= link_to 'resend', :action => 'resend_reference_email', :ref_id => reference_instance.id %></td>
+                      <% else %>
+		        <td>&nbsp;</td>
+		        <td>&nbsp;</td>
+		      <% end %>
+                      </td>
+		    <% end -%>
+		  </tr>
+		<% end %>
+	</table>
+<% end %>

@@ -1,0 +1,44 @@
+<% 
+# this is useful for helpers which are anal about having an object 
+@travel_segment = TravelSegment.new
+%>
+
+<form id="advanced_filter_form">
+  <table>
+    <tr>
+      <td align="right">Flight #: </td>
+      <td><input id="flight_num" name="flight_num" type="text" value=""></td>
+      <td align="right">Arrival Time: </td>
+      <td><input id="arrival_time" name="arrival_time" type="text" value=""></td>
+      <td><a onclick="$('advanced_filter').hide();$('simple_filter').show();">Simple Filter</a></td>
+    </tr>
+    <tr>
+      <td align="right">Departure City: </td>
+      <td><input id="departure_city" name="departure_city" type="text" value=""></td>
+      <td align="right">Carrier: </td>
+      <td><input id="carrier" name="carrier" type="text" value=""></td>
+    </tr>
+    <tr>
+      <td align="right">Departure Time: </td>
+      <td><input id="departure_date" name="departure_date" type="text" value=""></td>
+      <td align="right">Notes: </td>
+      <td><input id="notes" name="notes" type="text" value=""></td>
+    </tr>
+    <tr>
+      <td align="right">Arrival City: </td>
+      <td><input id="arrival_city" name="arrival_city" type="text" value=""></td>
+      <td align="right">Tags: </td>
+      <td><%= text_field_with_auto_complete 'travel_segment', 'tags', { :size => 45 }, :skip_style => true %></td>
+    </tr>
+    <tr>
+      <td colspan='2' align='center'><input type="checkbox" name="include_old" value="true">include old travel segments<br></td>
+    </tr>
+  </table>
+</form>
+
+<%= observe_form 'advanced_filter',  
+          :frequency  => 1, 
+          :update     => update_id,
+          :url        => { :action=> 'filter_travel_segments', :profile_id => params[:profile_id] },
+          :before     => "Element.show('loading');",
+          :complete   => "Element.hide('loading');" %>

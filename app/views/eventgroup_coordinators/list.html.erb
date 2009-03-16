@@ -1,0 +1,32 @@
+<h1>Listing <%= @eg2.to_s_with_eg_path %> Coordinators</h1>
+
+<p><%= link_to 'New eventgroup_coordinator', :action => :new, :id => @eg2.id %></p>
+
+<%= sortable_table %>
+  <thead>
+    <tr>
+      <th>Viewer ID</th>
+      <th>userid</th>
+      <th>Name</th>
+      <th mochi:default='true' mochi:default_direction='descending'>Inherited From</th>
+      <th></th>
+    </tr>
+  </thead>
+
+<% for eventgroup_coordinator in @eventgroup_coordinators %>
+  <tr>
+    <% viewer = eventgroup_coordinator.viewer %>
+    <td><%=h viewer ? eventgroup_coordinator.viewer_id : 'no viewer' %></td>
+    <td><%=h viewer ? eventgroup_coordinator.viewer.viewer_userID : 'no viewer' %></td>
+    <td><%=h viewer ? eventgroup_coordinator.viewer.person.name : 'no viewer' %></td>
+    <td><%=h(eventgroup_coordinator.event_group.to_s_with_eg_path) if eventgroup_coordinator.event_group != @eg %></td>
+    <% if eventgroup_coordinator.event_group == @eg %>
+      <td><%= link_to 'Destroy', eventgroup_coordinator, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% else %>
+      <td></td>
+    <% end %>
+  </tr>
+<% end %>
+</table>
+
+<p><%= link_to 'New eventgroup_coordinator', :action => :new, :id => @eg2.id %></p>

@@ -1,0 +1,12 @@
+<h2>Custom Itinerary Report</h2>
+
+<div id="simple_filter" style="display:none">
+  <%= render :partial => 'travel_segments/basic_travel_segments_filter', :locals => { :update_id => 'travel_segment_pool' } %>
+</div>
+<div id="advanced_filter">
+  <%= render :partial => 'travel_segments/advanced_travel_segments_filter', :locals => { :update_id => 'travel_segment_pool' } %>
+</div>
+<div id='travel_segment_pool'>
+  <%= render  :partial => 'ts_filter_list', :object => @travel_segments %>
+</div>
+

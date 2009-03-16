@@ -1,0 +1,10 @@
+<% form_tag :action => (@login_action || :login) do -%>
+  <fieldset>
+    <legend><%= @login_title || 'Login' %></legend>
+    <ol>
+      <li><label>Username: </label><%= text_field_tag 'username', {} %></li>
+      <li><label>Password: </label><%= text_field_tag 'password', {}, :type => 'password' %></li>
+      <li><%= submit_tag 'Login', :id => 'submit' %></li>
+    </ol>
+  </fieldset>
+<% end -%>

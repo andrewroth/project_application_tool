@@ -1,0 +1,4 @@
+<h1><%= @page_title %></h1>
+
+<%= render :partial => 'profiles/manual_donations_statuses_explanation' %>
+<%= render :partial => 'generic_report_from_struct', :locals => { :struct => @rows } %>

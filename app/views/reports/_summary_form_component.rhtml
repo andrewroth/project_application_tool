@@ -1,0 +1,5 @@
+<%= 
+render_component(:controller => 'acceptance', :action => 'view_summary', :params => {
+                 :view => 'print', :pile => 'acceptance', :pile_entry_id => summary_form_component.id.to_s,
+                 :load_all_pages => true })
+%>

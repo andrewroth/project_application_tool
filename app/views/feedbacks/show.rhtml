@@ -1,0 +1,23 @@
+<% for column in Feedback.columns %>
+    <% unless column.human_name == "Id" then %>
+        <% if column.human_name == "Viewer" then %>
+            <p>
+              <b>User Name:</b> <%= h @feedback.send('viewer').name %>
+            </p>
+            <p>
+              <b>Staff:</b> 
+                <% if @feedback.send('viewer').is_student? then %>
+                    No
+                <% else %>
+                    Yes
+                <% end %>
+            </p>
+        <% else %>
+            <p>
+              <b><%= column.human_name %>:</b> <%=h @feedback.send(column.name) %>
+            </p>
+        <% end %>
+    <% end %>
+<% end %>
+
+<%= link_to 'Back', :action => 'list' %>

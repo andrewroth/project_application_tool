@@ -1,0 +1,21 @@
+<% if @format == 'html' -%>
+<html>
+<head>
+  <%= render :partial => 'externs/sortable_tables' %>
+</head>
+<body>
+  <%= sortable_table %>
+    <thead>
+  <% end -%>
+<%= render :partial => 'header' %>
+<% if @format == 'html' -%>
+    </thead>
+    <tbody>
+<% end %>
+<%= render :partial => 'row', :collection => @results %>
+<% if @format == 'html' -%>
+    </tbody>
+  </table>
+  <%= initialize_sortable_tables %>
+</body>
+<% end -%>

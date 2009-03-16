@@ -1,0 +1,32 @@
+<% @attribute = params[:attribute]
+   url = { :action => :update,
+           :profile_id => @profile.id, 
+           :travel_segment_id => @travel_segment.id,
+           :return => @attribute
+   }
+   ts = @travel_segment
+   @editor ||= :text_area
+
+   complete_js = %|
+Element.hide('loading_#{@attribute}_#{ts.id}'); 
+new Effect.Appear('#{@attribute}_view_#{ts.id}'); 
+new Effect.Fade('#{@attribute}_edit_#{ts.id}');
+|
+ %>
+
+<%= form_remote_tag :update => "#{@attribute}_value_#{ts.id}",
+      :url => url,
+      :loading => "Element.show('loading_#{@attribute}_#{ts.id}');",
+      :complete => complete_js
+ %>
+
+  <% if @editor == :text_area %>
+    <%= text_area :pts, :"#{@attribute}", :rows => 5 %> <br />
+  <% elsif @editor == :text_field %>
+    <%= text_field :pts, :"#{@attribute}" %> <br />
+  <% end %>
+ 
+  <%= submit_tag 'save' %>
+  <a onClick="<%=complete_js%>">cancel</a>
+
+</form>

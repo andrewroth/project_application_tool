@@ -1,0 +1,25 @@
+Please note: This file was created Friday Nov 3rd, 2006.  It was put on a wiki at http://spt.schtuff.com/questionnaire_engine_types.  That page should be used if possible.  This version is being included in case the wiki page is lost.
+
+--------
+
+Heading: This text will show up formatted as a section heading. 
+
+Instruction: Instructions can be a fair bit longer. This type of field would also be appropriate for an FAQ entry.
+
+Selectfield: A dropdown, students choose one of the dropdown options.
+
+Textfield: This is a short answer field. You can give some text that will be displayed right before the field.  The box they get to type in is one line, whereas the textarea box is much bigger.
+
+Textarea: This type of question will show up as a text box where people can enter large amounts of information. This type of field has a 4000 character limit. 
+
+Datefield: This type of element will allow the user to pick a date as the answer to whatever question you ask. 
+
+Radiofield: Each option will be displayed as a radio field.  The chooses one of the items.  This is similar to a selectfield, but displays the choices right on the web page as opposed to a dropdown.  If you have lots of options, a selectfield is probably preferred.
+
+Yes/No: This element type will create a question that can only be answered one of two ways: "yes" or "no". 
+
+Group: Allows you to make a bunch of elements (ie any of the types listed here) in a group.  You can put lots of related questions in one group.  The user will see the group text (which acts like a header) then all the elements in the group under that header.  You can choose the order of the group elements.
+
+Checkboxfield: this option will create text with a checkbox beside it
+
+Multicheckbox: you can enter a question text followed by any number of options.  Each option will have a checkbox beside it.  The user can choose all or none or any other combination of options.  You can choose the order of the options to appear.

@@ -1,0 +1,1 @@
+page.insert_html :bottom, 'assignments', render(:partial => 'assignments/new', :object => @new)

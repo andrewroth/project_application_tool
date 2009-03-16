@@ -1,0 +1,10 @@
+<div id="simple_filter">
+  <%= render :partial => 'travel_segments/basic_travel_segments_filter', :locals => { :update_id => update_id } %>
+</div>
+<div id="advanced_filter" style="display:none">
+  <%= render :partial => 'travel_segments/advanced_travel_segments_filter', :locals => { :update_id => update_id } %>
+</div>
+<span id="search_spinner" style="clear:both; display:none; float:right">
+   <%=image_tag('spinner.gif')%>
+</span>
+

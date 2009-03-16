@@ -1,0 +1,11 @@
+<% form_remote_for prep_item,
+      :url => "/prep_items/#{prep_item.id}.js",
+      :loading => "$('loading').show();",
+      :loaded => "$('loading').hide();" do |f| %>
+  
+    <%= render :partial => "form", :locals => { :f => f, :prep_item => prep_item }  %>
+
+    <%= submit_tag 'Save' %>
+    
+    <%= link_to_function 'cancel', "$('edit_#{prep_item.id}').hide(); $('show_#{prep_item.id}').show();" %>
+<% end %>

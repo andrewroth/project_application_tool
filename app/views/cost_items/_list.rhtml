@@ -1,0 +1,7 @@
+<ul>
+<% for cost_item in @cost_items %>
+  <li>
+    <%= render :partial => 'cost_item', :object => cost_item, :locals => { :just_modified => cost_item.id == @just_modified_id } %>
+  </li>
+<% end %>
+</ul>

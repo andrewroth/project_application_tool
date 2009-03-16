@@ -1,0 +1,46 @@
+<table border="0" cellpadding="0" cellspacing="0">
+  <%
+  remove_action = "remove_#{@role}"
+  staff_viewers_in_role = @project.send(@role)
+  # legacy databases means I can't do an :include statement
+  viewers = staff_viewers_in_role.collect{ |staff| staff.viewer }
+  viewers.sort!{ |x,y| x.viewer_userID <=> y.viewer_userID }
+  
+  i = 0
+  for viewer in viewers
+    i = i + 1
+     %>
+    <tr>
+      <td width="200"><%= viewer.name %></td>
+      <td width="150"><%= viewer.viewer_userID %></td>
+      <td width="200"><%= viewer.email %></td>
+      <td width="75">
+        <div id="list_<%=@role%>_<%=i%>">
+          <%= link_to_remote("drop", 
+              :url => { :action => "remove", 
+                  :role => @role,
+                  :viewer_id => viewer.id,
+                  :project_id => @project.id },
+              :update   => "#{@role}_list",
+              :loading  => "Element.show('list_#{@role}_indicator_#{i}');Element.hide('list_#{@role}_#{i}')",
+              :complete => "Element.show('#{@role}_msg');") %>
+        </div>
+        <div id="list_<%=@role%>_indicator_<%=i%>" style="display:none;">
+            <%= image_tag("/images/spinner.gif") %>
+        </div>
+    </td><td>
+        <% has_staff_profile = StaffProfile.find_by_viewer_id_and_project_id viewer.id, @project.id
+           profile_field_id = "viewer_#{viewer.id}_profile_going"
+         %>
+        <div>
+            <%= check_box_tag profile_field_id, 1, has_staff_profile %> going
+            <%= observe_field profile_field_id,
+                 :url => { :controller => :profiles, :action => :set_profile_going, 
+                           :viewer_id => viewer.id, :project_id => @project.id },
+                 :with => profile_field_id,
+                 :complete => visual_effect(:highlight, "#{@role}_list") + ";window.location.reload();"
+            %>
+        </div>
+    </td></tr>
+  <% end %>
+</table>

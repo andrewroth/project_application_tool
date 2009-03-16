@@ -1,0 +1,2 @@
+page.replace_html('saved_at', "#{@appln.updated_at}")
+page.visual_effect(:highlight, 'saved_at')

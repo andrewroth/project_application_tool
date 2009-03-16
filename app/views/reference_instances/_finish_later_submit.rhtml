@@ -1,0 +1,18 @@
+<% unless questionnaire_instance.frozen? -%>
+<%= render :partial => 'instance/elements' %>
+<table>
+  <tr>
+  	<td class="app" valign="middle" colspan="2">
+      <table cellspacing="0" cellpadding="0">
+        <tr>
+  				<td class="app" width="33%" align="center" valign="middle">
+  					<a class="button" href="javascript:submit_instance()">Submit Reference</a>
+  				</td>
+  			</tr>
+  		</table>
+  	</td>
+  </tr>
+</table>
+<% else -%>
+	This reference has already been submitted. Thank you!
+<% end -%>

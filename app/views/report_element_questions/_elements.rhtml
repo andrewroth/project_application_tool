@@ -1,0 +1,9 @@
+<% @i = (@i ? @i+1 : 2) %>
+<table>
+  <% for element in elements %>
+    <tr class="record <%= 'even-record' if @i % 2 == 0 %>">
+      <%= render :partial => 'element', :object => element %>
+    </tr>
+  <% end %>
+</table>
+

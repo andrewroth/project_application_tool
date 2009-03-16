@@ -1,0 +1,12 @@
+<% if @content_for_header %>
+    <%= yield :header %>
+<% elsif @columns.nil? %>
+    <TR><I>no column specified</I></TR>
+<% else %>
+    <TR>
+    <% @columns.each_pair do |name,type| %>
+        <% default = (@default_sort == name) ? ", mochi:default='true'" : "" %>
+        <%= th prefix.to_s + name.to_s, type, @default_sort == name %>
+    <% end %>
+    </TR>
+<% end %>

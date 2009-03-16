@@ -1,0 +1,35 @@
+<!-- intro text -->
+
+<% if !@user.is_eventgroup_coordinator? && @show_projects.empty? %>
+  Sorry, you haven't been assigned to any projects.
+<% elsif @user.is_eventgroup_coordinator? %>
+  As Projects Coordinator, you have full functionality.  You can see and modify everyone's status, for all projects.
+<% else %>
+  You can see details for your project(s) here.
+<% end %>
+
+<!--
+<P><I>Sorry for the loading display and restarts -- things should stable out soon.</I></p> 
+
+
+<!-- stats if there is more than one project being shown -->
+
+<% if @show_projects.size > 1 %>
+  <%= render :remote, :controller => 'reports', :action => :project_stats, :project_id => @show_projects.collect{|p| p.id.to_s}.join(',') %>
+<% end %>
+
+<!-- show all projects that should be shown -->
+<% for @project in @show_projects %>
+  <hr>
+  <div id="select_project">
+    <form>
+      <b>Select project to view: </b>
+      <%= select_tag 'project_id', options_for_select(@allowable_projects_array, @project.id) %>
+      <%= observe_field 'project_id', :url => {:action => 'your_projects' }, :with => "'project_id=' + value",
+      :loading => "Element.show('loading')", :complete => "Element.hide('loading')" %>
+    </form>
+  </div>
+  <div id="your_project">
+    <%= render :partial => "your_project", :object => @project %>
+  </div>
+<% end %>

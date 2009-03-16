@@ -1,0 +1,12 @@
+<% form_tag(:action => 'do_link_gcx_new') do -%>
+  <fieldset>
+    <legend>Info</legend>
+    <ol>
+      <li><label>Email: </label><%= text_field_tag 'email', session[:gcx][:email] %></li>
+      <li><label>First Name: </label><%= text_field_tag 'first_name', session[:gcx][:firstName] %></li>
+      <li><label>Last Name: </label><%= text_field_tag 'last_name', session[:gcx][:lastName] %></li>
+      <li><%= submit_tag 'Submit' %></li>
+    </ol>
+  </fieldset>
+<% end %>
+

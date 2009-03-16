@@ -1,0 +1,12 @@
+<p>Editing <%= @reference_email.year %> <%= @type_desc %>: </p>
+<p>Please note this email is in HTML.  
+You can also tell it where to substitute things like the person's name.  
+You will see examples of this in the sample text when you see "<%="<%="%>"
+and "<%="%\>"%>". </p>
+
+<%= form_tag :action => 'update', :id => @reference_email %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Save' %>
+</form>
+
+<%= link_to 'Back', :controller => "forms" %>

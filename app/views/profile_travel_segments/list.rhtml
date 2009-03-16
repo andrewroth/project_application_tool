@@ -1,0 +1,34 @@
+<h2><%= @profile.viewer.name %> Travel for <%= @profile.project.title %></h2>
+
+
+<%= stylesheet_link_tag 'admin_styles' %>
+
+<p class="profile_item">Fields that pertain to this profile appear in this color</p>
+
+<p>Assigned Travel Segments:</p>
+
+<%= render :partial => 'assigned_list' %>
+
+<p><%= link_to_remote 'Add Travel Segment Shortcut', 
+          :update => 'travel_segment_add_shortcut', 
+          :url => { 
+            :action => 'add_shortcut',
+            :profile_id => @profile.id
+          },
+          :loading => "Element.show('loading');",
+          :complete => "Element.hide('loading'); new Effect.BlindDown('travel_segment_add_shortcut')"
+    %>
+<p id="travel_segment_message"></p>
+<div id="travel_segment_add_shortcut" style="display:none;" class="inconspicuous">
+</div>
+</p>
+
+<p>Travel Segment Pool:</p>
+<p style="font-style: italic;">
+These are all the travel segments that are not currently assigned to <%= @profile.viewer.name %>'s profile.  Just click 'add' and it will be added to their profile.   Be careful using 'edit' and 'delete' in the this list because any changes you make will take effect for all students.  In particular, don't delete unassigned travel segments unless you're sure it hasn't been assigned to someone else.  
+</p>
+<%= render :partial => 'travel_segments/filter', :locals => { :update_id => 'travel_segment_pool' } %>
+<br />
+<div id='travel_segment_pool'>
+  <%= render :partial => 'unassigned_list', :locals => { :sortable => true } %>
+</div>

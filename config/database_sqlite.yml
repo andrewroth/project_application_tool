@@ -1,0 +1,28 @@
+defaults: &defaults
+  adapter: sqlite3
+
+development: &development
+  dbfile: db/dev.db
+  <<: *defaults
+
+test: &test
+  dbfile: db/test.db
+  <<: *defaults
+
+production: &production
+  dbfile: db/production.db
+  <<: *defaults
+
+# In the Campus for Christ environment, there are separate dbs for ciministry (which contains the person tables) and authservice (which contains the ministry list tables), but for all other installs not at Campus for Christ I recommend putting it all into one db
+ciministry_development:
+  <<: *development
+
+ciministry_production:
+  <<: *production
+
+authservice_development:
+  <<: *development
+
+authservice_production:
+  <<: *production
+

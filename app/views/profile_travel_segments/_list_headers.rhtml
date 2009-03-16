@@ -1,0 +1,10 @@
+<%= render :partial => 'travel_segments/list_headers', 
+           :locals => { :widths => widths, :editors => @editors }
+            %>
+<% if eticket %>
+  <%= th :name => 'eticket', :class => 'inconspicuous' %>
+<% end %>
+<% if confirmation_number %>
+  <%= th :name => 'conf', :class => 'inconspicuous' %>
+<% end %>
+

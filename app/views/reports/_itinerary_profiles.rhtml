@@ -1,0 +1,26 @@
+<ul>
+
+<%
+  i = 0
+  itinerary_profiles.each do |name_project_profile|
+    name, project, profile = name_project_profile 
+    @assigned_ts = profile.travel_segments
+    @pts = {}
+    profile.profile_travel_segments.find(:all, :include => :travel_segment).each do |pts|
+      ts = pts.travel_segment
+      next if ts.nil?
+      
+      @pts[ts.id] = pts
+    end
+%>
+  <li>
+    <strong><%= name %></strong> <% if profile.class == StaffProfile %> (staff) <% end %> <% if @projects.nil? || @many_projects %> (<%=project.title%>) <% end %>
+<% if @include_profiles -%>
+    <div class="item">
+      <%= render :partial => 'profile_travel_segments/assigned_list', :locals => { :headers => i % 10 == 0 } %>
+    </div>
+  </li>
+  <% i += 1 %>
+<% end -%>
+<% end -%>
+</ul>

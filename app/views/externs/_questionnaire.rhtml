@@ -1,0 +1,9 @@
+<!-- questionnaires javascript -->
+<%= javascript_include_tag "builder" %>
+<%= render :partial => 'externs/controls' %>
+<%= javascript_include_tag "extensions", :plugin => :questionnaire_engine %>
+
+<script type="text/javascript" src="/javascripts/questionnaire2.js?c=<%=params[:controller]%>"></script>
+
+<%= javascript_include_tag "calendar.js","lang/calendar-en.js", "calendar-setup.js", :plugin => :questionnaire_engine %>
+<%= stylesheet_link_tag "calendar/calendar-win2k-1.css", :plugin => :questionnaire_engine %>

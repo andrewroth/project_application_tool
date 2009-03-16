@@ -1,0 +1,34 @@
+defaults: &defaults
+  adapter: mysql
+  username: spt
+  password: 
+  socket: /tmp/mysql.sock
+
+development:
+  database: spt_development
+  <<: *defaults
+
+test:
+  database: spt_test
+  <<: *defaults
+
+production:
+  database: spt_production
+  <<: *defaults
+
+ciministry_development:
+  database: ciministry_development
+  <<: *defaults
+
+ciministry_production:
+  database: ciministry_development
+  <<: *defaults
+
+authservice_development:
+  database: authservice_development
+  <<: *defaults
+
+authservice_production:
+  database: authservice_development
+  <<: *defaults
+

@@ -1,0 +1,7 @@
+student_seven_access:
+  viewer: student_seven_viewer
+  person: student_seven_person
+
+bob_staff_access:
+  viewer_id: bob_staff_viewer
+  person_id: bob_staff_person

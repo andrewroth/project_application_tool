@@ -1,0 +1,18 @@
+<% 
+div = true if div.nil?
+sortable = @can_edit
+can_edit = @can_edit
+headers = true if headers.nil?
+%>
+
+<%= render :partial => 'profile_travel_segments/list', :locals => { 
+    :prefix => 'assigned',
+    :list => @assigned_ts,
+    :sortable => sortable,
+    :can_edit => can_edit,
+    :div => div,
+    :headers => headers,
+    :require_pts => true,
+    :eticket => true,
+    :confirmation_number => true
+  } %>

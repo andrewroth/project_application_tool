@@ -1,0 +1,4 @@
+<% for field in [ 'Name', ['Rship','Relationship'], 'Home', 'Work', 'Mobile', 'Email' ] %>
+  <% if field.class == Array then suffix, label = field else suffix = label = field end %>
+  <%= custom_element_text_field("#{label}: ", :emerg, :"#{prefix}#{suffix}") %>
+<% end %>

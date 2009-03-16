@@ -1,0 +1,6 @@
+<%= q "#{label_prefix} Address: ", @appln_person.send("person_#{mid}addr") %>
+<%= q "#{label_prefix} City: ", @appln_person.send("person_#{mid}city") %>
+<%= q "#{label_prefix} Province: ", @appln_person.send("person_#{mid}province").province_desc %>
+<%= q "#{label_prefix} Postal Code: ", @appln_person.send("person_#{mid}pc")%>
+<%= q "#{label_prefix} Phone: ", @appln_person.send("person_#{mid}phone") %>
+

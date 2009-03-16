@@ -1,0 +1,42 @@
+<h1>Listing feedbacks</h1>
+
+<p><%= sortable_table %>
+<thead><tr>
+    <%= th 'user name' %>
+    <%= th 'staff' %>
+    <%= th 'feedback type' %>
+    <%= th 'description' %>
+    <%= th 'submitted at' %>
+</tr></thead>
+<tbody>
+    <% for feedback in @feedbacks %>
+        <tr>
+            <% for column in Feedback.columns %>
+                <% unless column.human_name == "Id" then %>
+                    <% if column.human_name == "Viewer" then %>
+                        <td><%= h feedback.send('viewer').name %></td>
+                        <td>
+                            <% if feedback.send('viewer').is_student? then %>
+                                No
+                            <% else %>
+                                Yes
+                            <% end %>
+                        </td>
+                    <% elsif column.name == "created_at" %>
+                        <td><%= format_datetime( feedback.send(column.name) ) %></td>
+                    <% elsif column.name == "description" %>
+                        <% email = if feedback.viewer.person then feedback.viewer.person.person_email else '' end %>
+                        <td><%= h feedback.description %> <p><i><%=email%></i></p></td>
+                    <% else %>
+                        <td><%= h feedback.send(column.name) %></td>
+                    <% end %>
+                <% end %>
+            <% end %>
+            <td><%= link_to 'View', { :action => 'show', :id => feedback } %></td>
+            <td><%= link_to 'Delete', { :action => 'destroy', :id => feedback }, :confirm => 'Are you sure?', :method => :post %></td>
+        </tr>
+    <% end %>
+</tbody></table>
+</p>
+
+<br />

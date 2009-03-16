@@ -1,0 +1,22 @@
+<div id="list_travel_segments">
+  <p class='last_modified'><i>the last travel segment you modified or created looks like this</i></p>
+  <p><i>travel segments are sorted by departure date</i></p>
+  
+  <p>
+      <%= link_to_remote 'New Travel Segment', :url => { :controller => 'travel_segments', 
+              :action => 'new' },
+            :update => 'new',
+            :loading => "$('loading').show();",
+            :loaded => "$('loading').hide(); $('new').show();"
+      %>
+      
+      <div id='new' class='inconspicuous' style='display:none;'>
+      </div>
+  </p>
+  
+  <%= render :partial => 'filter', :locals => { :update_id => 'list' } %>
+
+  <div id='list' class='inconspicuous'>
+    <%= render :partial => 'list' %>
+  </div>
+</div>

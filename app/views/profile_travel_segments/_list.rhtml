@@ -1,0 +1,80 @@
+<% 
+div = true if div.nil?
+sortable = false if sortable.nil?
+widths = { 
+    0 => '120px;', # departure city
+    1 => '100px;', # departure time
+    2 => '120px;', # arrival city
+    3 => '100px;', # arrival time
+    4 => '70px;',  # carrier
+    5 => '70px;',  # flight no
+    6 => '120px;', # notes
+    7 => '50px;',  # remove
+    8 => '50px;',  # drag me
+    9 => '30px;'   # remove icon
+ }
+headers = true if headers.nil?
+require_pts = false if require_pts.nil?
+can_edit = false if can_edit.nil?
+eticket = false if eticket.nil?
+confirmation_number = false if confirmation_number.nil?
+@highlight_ts_id ||= params[:travel_segment_id]
+@highlight_ts_ids ||= [ @highlights_ts_id ]
+%>
+
+<% if div %>
+<div id='<%=prefix%>_list' class='inconspicuous'>
+<% end %>
+    <table <% if @pdf %>border="1"<% end %>>
+      
+      <% if headers %>
+      <thead>
+         <% @td_index = 0 %>
+         <tr>
+             <%= render :partial => 'profile_travel_segments/list_headers', :locals => { 
+                :widths => widths, :eticket => eticket, :confirmation_number => confirmation_number } %>
+           <% if !@pdf && can_edit %>
+             <%= td_tag :style => absolute_width_css(widths[@td_index]) %><!-- for 'Remove' -->&nbsp;</td>
+             <%= td_tag :style => absolute_width_css(widths[@td_index]) %><!-- for 'Add' -->&nbsp;</td>
+             <%= td_tag :style => absolute_width_css(widths[@td_index]) %><!-- for 'Spinner' -->&nbsp;</td>
+           <% end %>
+         </tr>
+      </thead>
+      <% end %>
+      
+      <tbody id="<%=prefix%>_tbody">
+        <% list.each do |t| %>
+            <% @td_index = 0 %>
+            <% next if @pts[t.id].nil? && require_pts %>
+                <tr id="<%=prefix%>_<%=t.id%>" class='draggable inconspicuous <% if @highlight_ts_id == t.id %>primary_highlight<% elsif @highlight_ts_ids.include? t.id.to_i %>secondary_highlight<% end %>'>
+                    <%= render :partial => "profile_travel_segments/#{prefix}_travel_segment",
+                        :object => t, :locals => { 
+                            :profile_travel_segment => @pts[t.id],
+                            :id => t.id.to_s,
+                            :widths => widths,
+                            :sortable => sortable,
+                            :can_edit => can_edit
+                        } %>
+                    <% if can_edit %>
+                        <%= td_tag :id=>"#{prefix}_loading_#{t.id}", :style=>'display:none;' + absolute_width_css(widths[@td_index]) %>
+                          <% if !@pdf %><%= image_tag 'spinner.gif' %><% end %>
+                        </td>
+                    <% end %>
+                </tr>
+        <% end %>
+      </tbody>
+    </table>
+<% if div %>
+</div>
+<% end %>
+
+<% if sortable %>
+    <%= sortable_element "#{prefix}_tbody",
+        :tag => 'tr',
+    	:url => { :action => 'reorder', :profile_id => @profile.id },
+    	:loading => "Element.show('loading')",
+    	:loaded => "Element.hide('loading')",
+    	:complete => visual_effect(:highlight, "#{prefix}_tbody"),
+    	:handle => 'drag_me'
+    %>
+<% end %>

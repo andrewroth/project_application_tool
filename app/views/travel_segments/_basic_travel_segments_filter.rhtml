@@ -1,0 +1,18 @@
+<% 
+# this is useful for helpers which are anal about having an object 
+@travel_segment = TravelSegment.new
+%>
+
+<form id="simple_filter_form">
+  Flight #: <input id="flight_num" name="flight_num" type="text" value="">         
+  Departure Time: <input id="departure_date" name="departure_date" type="text" value="">
+  Tags: <%= text_field_with_auto_complete 'travel_segment', 'tags', { :size => 45 }, :skip_style => true %>
+  <a onclick="$('advanced_filter').show();$('simple_filter').hide();">Advanced Filter</a>
+</form>
+
+<%= observe_form 'simple_filter',  
+          :frequency  => 1, 
+          :update     => update_id,
+          :url        => { :action=> 'filter_travel_segments', :profile_id => params[:profile_id] },
+          :before     => "Element.show('loading');",
+          :complete   => "Element.hide('loading');" %>

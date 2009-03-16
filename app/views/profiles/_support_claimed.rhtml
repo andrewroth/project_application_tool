@@ -1,0 +1,7 @@
+<p>You have claimed $<%= @profile.support_claimed %> of support<% if @profile.support_claimed_updated_at %> at <%= format_date @profile.support_claimed_updated_at %><% end %>.</p>
+<p>Note - this is the total amount of money that you have pledged and/or sent in to headquarters.
+<%= form_tag :controller => :profiles, :action => 'update_support', :id => @profile.id %>
+    <p><label>update support claimed: </label><br/>
+    <%= text_field 'profile', 'support_claimed'  %></p>
+    <%= submit_tag 'Update' %>
+</form>

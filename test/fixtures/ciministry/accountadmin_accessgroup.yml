@@ -1,0 +1,7 @@
+student:
+  accessgroup_key: "[accessgroup_student]"
+  accessgroup_id: 1
+projects_coordinator:
+  accessgroup_key: "[accessgroup_projects_coordinator]"
+  accessgroup_id: 2
+  

@@ -1,0 +1,2 @@
+page.replace ("intern_#{@profile.id}", :partial => "main/accepted_pile_table_intern", :object => @profile)
+page.visual_effect :highlight, "intern_#{@profile.id}", {:startcolor => "#94E2FF", :endcolor => "#FFFFFF", :duration => 1.0}

@@ -1,0 +1,72 @@
+<% if !@processor_list.empty? %>
+
+  <% if show_form_header %>
+    <div><i><%= form.name %>:</i></div>
+  <% end %>
+
+  <form>
+    <p><%= sortable_table %>
+      <thead>
+        <tr>
+          <%= th :name => 'name', :type => 'lcase_str' %>
+          <%= th :name => 'user id', :type => 'lcase_str' %>
+          <%= th :name => 'campus', :type => 'lcase_str' %>
+          <%= th :name => 'status', :type => 'lcase_str' %>
+          <%= th :name => 'project', :type => 'lcase_str' %>
+          <%= th :name => 'submitted at', :type => 'lcase_str' %>
+          <%= th :name => 'completed at', :type => 'lcase_str', 
+           :default => (params[:action] == 'your_applications') %>
+
+          <% if @can_evaluate || @always_show_can_evaluate_headers %>
+            <%= th :name => 'evaluate', :type => 'lcase_str' %>
+            <%= th :name => 'view', :type => 'lcase_str' %>
+          <% end %>
+
+    	    <% if form %>
+    	      <% for ref in form.questionnaire.references %> 
+                    <%= th :name => ref.text.underscore.gsub('_',' '), :type => 'lcase_str' %>
+    	      <% end %>
+    	    <% end %>
+            
+          <% if @user.is_eventgroup_coordinator? %>
+            <%= th :name => 'pile', :type => 'dropdown' %>
+          <% end %>
+          <%= th :name => 'other', :type => 'lcase_str' %>
+        </tr>
+      </thead>
+      <tbody>
+        <% for @profile in @processor_list %>
+          <% next if @profile.appln.form != form %>
+          <% project = @profile.project %>
+          <% @user.set_project(project) %>
+          <% @appln = @profile.appln %>
+          <% @can_evaluate = @user.is_eventgroup_coordinator? || (project && @user.is_processor?) %>
+
+          <% 
+	  if @profile.status != 'completed'
+	    if @profile.status == 'started'
+	      @evaluate = ''
+	    else
+              @evaluate = 'waiting for refs'
+	    end
+          elsif @profile.locked_by.nil?
+            @evaluate = evaluate_link @profile.id, @profile.project_id
+          else
+            you = (@profile.locked_by == @user.viewer) ? "<br>(you! -- click to continue evaluating)" : ""
+            @evaluate = "<I>being evaluated by #{@profile.locked_by.name} #{you}</I>"
+            if !you.empty?
+              @evaluate = continue_evaluate_link @evaluate, @profile.id, @profile.project_id
+            end
+          end 
+	  %>
+
+          <% @view = view_entire_processor_link @profile.id %>
+          <%= render :partial => "processor_pile_appln" %>
+        <% end %>
+      </tbody>
+    </table>
+  </form>
+
+<% else %>
+  <p><i>empty</i></p>
+<% end %>

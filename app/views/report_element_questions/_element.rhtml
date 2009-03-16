@@ -1,0 +1,34 @@
+<td>
+
+<style>
+.type {
+  color: red;
+}
+.eltext {
+  color: blue;
+}
+.add {
+  color: gray;
+}
+</style>
+
+<span class='type'><%= element.class.name %></span>: 
+<% cut_length = 50; if element.text.length > cut_length -%>
+  <% short_text = element.text[0,50] + " .. <a class='button' onClick='toggle_more(#{element.id});'}>more</a>" -%>
+  <% long_text = element.text + " <a class='button' onClick='toggle_more(#{element.id});'>less</a>" -%>
+  <div class='eltext' id='short_text_<%=element.id%>'><%= short_text %></div>
+  <div class='eltext' id='long_text_<%=element.id%>'style='display:none' ><%= long_text %></div>
+<% else -%>
+  <div class='eltext' ><%= h element.text %></div>
+<% end -%>
+
+<% if element.is_a?(Question) %>
+ <% if params[:bulk] %>
+  <input type="checkbox" name="check[<%=element.id%>]" value="checked"/><span class='add'>Add this element</span>
+ <% else %>
+  <input type="button" value="choose" onClick="value_chosen(<%=element.id%>)"/>
+ <% end %>
+<% end %>
+
+<%= render :partial => 'elements', :object => element.elements %>
+</td>

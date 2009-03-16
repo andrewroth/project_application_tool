@@ -1,0 +1,1 @@
+<%= select_tag 'viewers', options_for_select(@accepted_viewers.collect { |v| [v.name, v.id ] } ), :id => @id %>

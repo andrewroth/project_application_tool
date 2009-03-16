@@ -1,0 +1,3 @@
+module ReportElementsHelper
+end
+

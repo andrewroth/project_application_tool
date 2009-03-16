@@ -1,0 +1,20 @@
+<% if !@processor_list.empty? %>
+
+
+<% show_form_header = (@eg.forms.find_all_by_hidden(false).size > 1) %>
+
+<% forms = @processor_list.collect{ |p| 
+              if p.appln && p.appln.form
+	        p.appln.form
+              else
+	        nil
+              end
+           }.compact.uniq
+%>
+             
+<% for form in forms %>
+  <%= render :partial => 'processor_pile_for_form', :locals => { :form => form, 
+        :show_form_header => show_form_header } %>
+<% end %>
+
+<% end %>

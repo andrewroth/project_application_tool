@@ -1,0 +1,17 @@
+<div id="list_cost_items">
+  <p><i>yearly cost items show up first in the list, then project cost items which are sorted by project title</i></p>
+  <p class='year_item'><i>cost items that apply to all <%= $year %> projects are in this color.</i></p>
+  <p class='project_item'><i>cost items that apply to a specific project are in this color.</i></p>
+  <p class='last_modified'><i>the last cost item you modified or created looks like this</i></p>
+  <div id='list' class='inconspicuous'>
+    <%= render :partial => 'list' %>
+  </div>
+  
+  <% if !@project_access.empty? %>
+      <%= link_to_remote 'New Cost Item', :url => { :controller => 'cost_items', :action => 'create' },
+            :update => 'list',
+            :loading => "$('loading').show();",
+            :loaded => "$('loading').hide();"
+      %>
+  <% end %>
+</div>

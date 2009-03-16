@@ -1,0 +1,17 @@
+<h2>Editing <%= @event_group.to_s_with_ministry_and_eg_path %> </h2>
+
+<%= error_messages_for :event_group %>
+
+<% form_for :event_group, @event_group, 
+    :url => event_group_path(@event_group), 
+    :html => {:multipart => true, :method => :put} do |f| %>
+
+  <%= render :partial  => 'form', :locals => { :f => f } %>
+
+  <p>
+    <%= submit_tag 'Save' %>
+    <%= link_to 'Destroy', event_group_path(@event_group), :method => :delete, :confirm => 'Are you sure you want to delete this group?' %>
+  </p>
+
+<% end %>
+

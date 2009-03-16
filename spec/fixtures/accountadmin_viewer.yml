@@ -1,0 +1,5 @@
+student_seven_viewer:
+  viewer_userID: student.seven
+
+bob_staff_viewer:
+  viewer_userID: bob.staff

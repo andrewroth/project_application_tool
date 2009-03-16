@@ -1,0 +1,16 @@
+* session id: <%= @request.session.instance_variable_get(:@session_id).inspect %>
+* data: <%= PP.pp(@request.session.instance_variable_get(:@data),"").gsub(/\n/, "\n  ").strip %>
+* user: <%= 
+user_id = @request.session.instance_variable_get(:@data)[:user_id]
+
+if user_id
+  user = User.new(user_id); 
+  { :name => (if user.viewer.person 
+                 then user.viewer.name 
+		 else '[no person found]' end ), 
+    :userID => user.viewer.viewer_userID, 
+    :id => user_id, 
+    :email => (if user.viewer.person then user.viewer.person.email end) }.inspect 
+else "[no user_id set]" 
+end
+%>
