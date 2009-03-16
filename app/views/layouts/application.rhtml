@@ -127,10 +127,9 @@
       <h3><%=@title%></h3>
     <% end %>
 		
-    <% if file_exists? controller.controller_name + "/_menu" %>
-      <%= render :partial => controller.controller_name + "/menu" %>
-    <% elsif @submenu && file_exists?(@submenu + "/_menu") %>
-      <%= render :partial => @submenu + "/menu" %>
+    <% if render_if_possible(controller.controller_name + "/_menu") %>
+      <%= try_to_render :partial => controller.controller_name + "/menu" %>
+    <% else @submenu && render_if_possible(@submenu + "/_menu") %>
     <% end %>
 
     <% submenu_items_html = yield :submenu %>
@@ -144,7 +143,7 @@
     <div>
       <div id="content">
         <% if @form && params[:controller] != 'forms' %>
-          <%= render "layouts/form_#{@form}.rhtml" %>
+          <%= render :partial => "forms/form_#{@form}.rhtml" %>
         <% else %>
           <%= yield %>
         <% end %>

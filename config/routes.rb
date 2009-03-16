@@ -15,7 +15,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :prep_items
   map.resources :profile_prep_items
 
-  QUESTIONNAIRE_ACTIONS = { :get_page => [ :get, :post ], :validate_page => :post }
+  unless defined?(QUESTIONNAIRE_ACTIONS) == 'constant'
+    QUESTIONNAIRE_ACTIONS = { :get_page => [ :get, :post ], :validate_page => :post }
+  end
 
   map.resources :profiles_viewer, :member => { :entire => :get, :summary => :get, 
     :delete_reference => :get, :submit => :post }.merge(QUESTIONNAIRE_ACTIONS)
@@ -60,15 +62,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :event_groups, :collection => [ :scope ], :member => [ :set_as_scope ]
 
-  #  @qe_routes.call(map)
-  #end
-
-  map.from_plugin :questionnaire_engine
-  
   map.connect 'javascripts/questionnaire2.js', :controller => "main", :action => "questionnaire"
-  
-  map.from_plugin :reference_engine
-  #map.from_plugin :'selenium-on-rails'
   
   # You can have the root of your site routed by hooking up '' 
   # -- just remember to delete public/index.html.

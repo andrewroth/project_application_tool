@@ -4,7 +4,15 @@ require  'formatting'
 module ApplicationHelper
   include Formatting
   
-  def file_exists?(p) template_exists?(p) end
+  def render_if_possible(params = {})
+    begin
+      render(params)
+    rescue ActionView::MissingTemplate
+      return false
+    end
+
+    true
+  end
 
   def new_item(title, controller, action = '')
     item_html = "<li "
