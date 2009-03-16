@@ -80,10 +80,6 @@ end
 
 # Include your application configuration below
 
-ExceptionNotifier.exception_recipients = %w(andrew.roth@c4c.ca helpdesk@c4c.ca)
-ExceptionNotifier.sender_address = %w(spt@campusforchrist.org)
-
-
 # Include formatting methods globally
 require 'formatting'
 module ActiveScaffold::Helpers::ListColumns
@@ -107,7 +103,7 @@ ActiveRecord::Base.table_name_prefix = ActiveRecord::Base.configurations[RAILS_E
 # Add my own override for table_exists
 require 'active_record_base_table_name'
 
-$LOAD_PATH.sort!{ |a,b| ag = a['gem']; bg = b['gem']; if ag and bg then a <=> b elsif ag then -1 elsif bg then +1 else 0 end }
+#$LOAD_PATH.sort!{ |a,b| ag = a['gem']; bg = b['gem']; if ag and bg then a <=> b elsif ag then -1 elsif bg then +1 else 0 end }
 
 # I get a bizarre error (undefined method `create' for #<ActiveScaffold::Config::Core:0x9fd3758>)
 # without this line, which is actually dying on the crud_type= line in active scaffold's create.rb
