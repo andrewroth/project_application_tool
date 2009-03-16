@@ -1,0 +1,16 @@
+<p>
+  <b>Note:</b>
+  <%=h profile_note.content %>
+</p>
+
+<p>
+  <b>Created by:</b>
+  <%= (Viewer.find(profile_note.creator_id)).name %>
+</p>
+
+<%= link_to_remote 'delete', :url => "/profile_notes/#{profile_note.id}.js",
+      :method => :delete,
+      :loading => "$('loading').show();",
+      :loaded => "$('loading').hide();",
+      :confirm => 'Are you sure?'
+    %>

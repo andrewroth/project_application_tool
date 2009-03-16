@@ -1,0 +1,5 @@
+page.visual_effect :switch_off, "profile_note_#{@profile_note.id}"
+
+page.delay(3) do
+  page.remove "profile_note_#{@profile_note.id}"
+end
