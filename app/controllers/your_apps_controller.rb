@@ -1,4 +1,4 @@
-load 'permissions.rb'
+require_dependency 'permissions'
 
 class YourAppsController < ApplicationController
   include Permissions

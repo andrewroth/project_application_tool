@@ -14,7 +14,7 @@ class SecurityController < ApplicationController
   skip_before_filter :set_event_group
 
   before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login
-  before_filter :ensure_gcx_in_session, :only => [ :link_gcx, :do_link_gcx, :link_gcx_new, :do_link_gcx_new ]
+  #before_filter :ensure_gcx_in_session, :only => [ :link_gcx, :do_link_gcx, :link_gcx_new, :do_link_gcx_new ]
 
   # makes a new viewer and person and links them to the gcx logged in
   def do_link_gcx
@@ -59,7 +59,7 @@ class SecurityController < ApplicationController
   end
 
   def link_gcx
-    redirect_to(:action => 'login') if session[:gcx].nil?
+    #redirect_to(:action => 'login') if session[:gcx].nil?
 
     flash.delete :gcx
     @show_contact_emails_override = true

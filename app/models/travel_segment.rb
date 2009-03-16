@@ -1,9 +1,9 @@
 # force my impl of ordered hash, else active_support's will be used
-require 'class_level_formatting'
-require 'formatting'
+require_dependency 'class_level_formatting'
+require_dependency 'formatting'
+require_dependency 'my_ordered_hash.rb'
 
 class TravelSegment < ActiveRecord::Base
-  load 'my_ordered_hash.rb'
   include ClassLevelFormatting
   include Formatting
   
