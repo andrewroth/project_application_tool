@@ -2,7 +2,7 @@
   <h3>Notes for <%= @profile.viewer.name %></h3>
   <p class='own_note'><i>your notes are in this colour</i></p>
   <p class='others_note'><i>notes created by others are in this colour</i></p>
-  <%= render :partial => "acceptance/menu" %>
+
   <div id="list" class="inconspicuous">
     <ul id="list_ul">
       <% for profile_note in @profile_notes %>

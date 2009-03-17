@@ -127,6 +127,7 @@ class ApplicationController < ActionController::Base
       if params[:profile_id]
         @profile = Profile.find(params[:profile_id], :include => :appln)
         @appln = @profile.appln
+        @project = @profile.project
         
         if params[:appln_id] && @appln.id.to_s != params[:appln_id]
           render :inline => "Error: requested appln (#{params[:appln_id]}) doesn't match requested profile's appln (#{@appln.id})"
