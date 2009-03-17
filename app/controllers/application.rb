@@ -29,6 +29,8 @@ class ApplicationController < ActionController::Base
   # let's just sweep everything, it's easier :P
   cache_sweeper :profiles_sweeper
 
+  before_filter :redirect_to_pat2
+
   # Ensures that the user came from the campus intranet to
   # the login page.
   before_filter :verify_user, :except => [ :logout, :login, :motd, :read_login_message_confirm, 
@@ -62,6 +64,11 @@ class ApplicationController < ActionController::Base
   before_filter :get_notifications
 
   protected
+
+  # now that pat2 is out on the new server, redirect there 
+  def redirect_to_pat2
+    redirect_to "https://pat2.powertochange.org#{request.request_uri}"
+  end
 
   # prevent Internet Explorer from caching Ajax GET request with Cache-Control:
   #  "max-age=0, private, must-revalidate"
