@@ -70,6 +70,7 @@ end
 
 unless ENV['target'] == 'demo'
   deploy.task :after_symlink do
+<<<<<<< HEAD:config/deploy.rb
     # set up tmp dir
     run "mkdir -p -m 770 #{shared_path}/tmp/{cache,sessions,sockets,pids}"
     run "rm -Rf #{release_path}/tmp"
@@ -82,6 +83,15 @@ unless ENV['target'] == 'demo'
     # other shared files
     link_shared 'config/database.yml'
     link_shared 'public/event_groups'
+=======
+    run "cp #{File.join(deploy_to, 'database.yml')} #{File.join(current_path, 'config', 'database.yml')}"
+    #run "cd #{current_path}; rake fix_permissions path=#{ENV['deploy_to']};"
+    run "chmod g+w #{current_path}/tmp"
+    run "mkdir #{current_path}/tmp/sessions"
+
+    run "cp -r /var/www/dev.pat.powertochange.org/shared/public/summerprojecttool.event_groups #{current_path}/public/summerprojecttool.event_groups"
+    run "chmod 775 #{current_path}/public/summerprojecttool.event_groups"
+>>>>>>> _rails_2.2:config/deploy.rb
   end
 end
 
