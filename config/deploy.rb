@@ -70,7 +70,6 @@ end
 
 unless ENV['target'] == 'demo'
   deploy.task :after_symlink do
-<<<<<<< HEAD:config/deploy.rb
     # set up tmp dir
     run "mkdir -p -m 770 #{shared_path}/tmp/{cache,sessions,sockets,pids}"
     run "rm -Rf #{release_path}/tmp"
