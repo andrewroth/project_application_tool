@@ -1,5 +1,6 @@
 # my extensions to the QE
 require_dependency 'questionnaire_engine/completion_indicator.rb'
+require_dependency 'vendor/plugins/questionnaire_engine/app/controllers/instance_controller.rb'
 
 class InstanceController < BaseViewController
   include CompletionIndicator

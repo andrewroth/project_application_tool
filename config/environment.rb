@@ -128,6 +128,10 @@ end
 
 require_library_or_gem "redcloth" unless Object.const_defined?(:RedCloth)
 
+# I get a bizarre error (undefined method `create' for #<ActiveScaffold::Config::Core:0x9fd3758>)
+# without this line, which is actually dying on the crud_type= line in active scaffold's create.rb
+ActiveScaffold::Config::Create
+
 module QE
   mattr_accessor :prefix
   self.prefix = "form_"
