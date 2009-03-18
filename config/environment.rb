@@ -5,23 +5,15 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.2.2'
+RAILS_GEM_VERSION = '2.3.2'
 
 require 'rubygems'
 gem 'soap4r'
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
-require File.join(File.dirname(__FILE__), '../vendor/plugins/engines/boot')
-
-require 'add_plugin_load_paths_after_loading_plugins'
 
 # questionnaire engine config
-module QE
-  mattr_accessor :prefix
-  self.prefix = "form_"
-end
-
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence those specified here
   
@@ -58,7 +50,7 @@ Rails::Initializer.run do |config|
   
   # Load Engines first
   #config.plugins = [:engines, :engines_model_mixins, :questionnaire_engine, :reference_engine, :all]
-  config.plugins = [:engines, :questionnaire_engine, :reference_engine, :all]
+  config.plugins = [:questionnaire_engine, :reference_engine, :all]
   config.reload_plugins = true
 
   # shhhh secret!  apparently this is required in 2.x
@@ -89,8 +81,7 @@ end
 # Include your application configuration below
 
 ExceptionNotifier.exception_recipients = %w(andrew.roth@c4c.ca helpdesk@c4c.ca)
-ExceptionNotifier.sender_address = %w(spt@campusforchrist.org)
-
+ExceptionNotifier.sender_address = %w(help.pat@powertochange.org)
 
 # Include formatting methods globally
 require 'formatting'
@@ -115,7 +106,7 @@ ActiveRecord::Base.table_name_prefix = ActiveRecord::Base.configurations[RAILS_E
 # Add my own override for table_exists
 require 'active_record_base_table_name'
 
-$LOAD_PATH.sort!{ |a,b| ag = a['gem']; bg = b['gem']; if ag and bg then a <=> b elsif ag then -1 elsif bg then +1 else 0 end }
+#$LOAD_PATH.sort!{ |a,b| ag = a['gem']; bg = b['gem']; if ag and bg then a <=> b elsif ag then -1 elsif bg then +1 else 0 end }
 
 # I get a bizarre error (undefined method `create' for #<ActiveScaffold::Config::Core:0x9fd3758>)
 # without this line, which is actually dying on the crud_type= line in active scaffold's create.rb
@@ -137,4 +128,10 @@ end
 
 require_library_or_gem "redcloth" unless Object.const_defined?(:RedCloth)
 
+module QE
+  mattr_accessor :prefix
+  self.prefix = "form_"
+end
 
+# fix for ruby 1.8.7 - see http://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg528878.html
+require 'fix_1_8_7_enumerable'
