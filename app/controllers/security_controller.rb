@@ -32,13 +32,13 @@ class SecurityController < ApplicationController
     end
 
     v = Viewer.find result[:viewer_id]
-    if v.guid && !v.guid.empty? && v.guid != session[:cas_extra_attributes]['ssoGuid']
+    if v.guid && !v.guid.empty? && v.guid != session[:cas_extra_attributes]['sso_guid']
       flash[:notice] = "Error: Account '#{params[:username]}' already linked with a different gcx account."
       redirect_to :action => 'link_gcx', :try_again => true, :username => params[:username]
       return
     end
 
-    v.guid = session[:cas_extra_attributes]['ssoGuid']
+    v.guid = session[:cas_extra_attributes]['sso_guid']
     v.save!
 
     flash[:notice] = "Connected old user '#{params[:username]}' with gcx user '#{session[:cas_user]}'.  Now you can log in with your gcx user."
@@ -51,7 +51,7 @@ class SecurityController < ApplicationController
     fn = params[:first_name] || session[:cas_extra_attributes]['firstName']
     ln = params[:last_name] || session[:cas_extra_attributes]['lastName']
     uid = params[:email] || session[:cas_user]
-    guid = session[:cas_extra_attributes]['ssoGuid']
+    guid = session[:cas_extra_attributes]['sso_guid']
 
     v = Viewer.create_new_cim_hrdb_account guid, fn, ln, uid
 
@@ -177,7 +177,7 @@ class SecurityController < ApplicationController
 
   def login_by_gcx
     return { :keep_trying => true } unless session[:cas_user]
-    viewer = Viewer.find_by_guid session[:cas_extra_attributes]['ssoGuid']
+    viewer = Viewer.find_by_guid session[:cas_extra_attributes]['sso_guid']
 
     if viewer
       session[:login_source] = 'gcx'
