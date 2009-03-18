@@ -110,7 +110,7 @@ require 'active_record_base_table_name'
 
 # I get a bizarre error (undefined method `create' for #<ActiveScaffold::Config::Core:0x9fd3758>)
 # without this line, which is actually dying on the crud_type= line in active scaffold's create.rb
-#ActiveScaffold::Config::Create
+ActiveScaffold::Config::Create
 
 # support a command line option --rcov_baseline which will load in all models and controllers, 
 # so that rcov has a baseline of all the files (roughly) that are used.
