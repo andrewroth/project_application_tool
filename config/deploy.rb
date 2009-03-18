@@ -75,9 +75,12 @@ unless ENV['target'] == 'demo'
     run "rm -Rf #{release_path}/tmp"
     link_shared 'tmp'
 
+    # log
+    run "rm -Rf #{release_path}/log"
+    link_shared 'log'
+
     # other shared files
     link_shared 'config/database.yml'
-    link_shared 'log'
     link_shared 'public/event_groups'
   end
 end
