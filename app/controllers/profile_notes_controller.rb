@@ -8,6 +8,7 @@ class ProfileNotesController < ApplicationController
   before_filter :set_view_permissions
   before_filter :ensure_profile_ownership_or_any_project_staff
   before_filter :set_references, :except => [:create, :destroy]
+  before_filter :set_menu_titles
   
   def index
     @profile_notes = @profile.profile_notes
@@ -50,6 +51,8 @@ class ProfileNotesController < ApplicationController
   
   protected
 
+  def set_menu_titles() @submenu_title = 'Notes' end
+  
   def set_references
     @references = @appln.references_text_list
   end
