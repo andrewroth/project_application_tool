@@ -78,7 +78,7 @@ unless ENV['target'] == 'demo'
     # other shared files
     link_shared 'config/database.yml'
     link_shared 'log'
-    link_shared 'public/summerprojecttool.event_groups'
+    link_shared 'public/event_groups'
   end
 end
 
