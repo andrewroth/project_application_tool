@@ -80,6 +80,9 @@ end
 
 # Include your application configuration below
 
+ExceptionNotifier.exception_recipients = %w(andrew.roth@c4c.ca helpdesk@c4c.ca)
+ExceptionNotifier.sender_address = %w(help.pat@powertochange.org)
+
 # Include formatting methods globally
 require 'formatting'
 module ActiveScaffold::Helpers::ListColumns
@@ -129,3 +132,6 @@ module QE
   mattr_accessor :prefix
   self.prefix = "form_"
 end
+
+# fix for ruby 1.8.7 - see http://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg528878.html
+require 'fix_1_8_7_enumerable'

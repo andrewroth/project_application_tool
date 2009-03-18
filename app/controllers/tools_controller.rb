@@ -132,7 +132,8 @@ class ToolsController < ApplicationController
   end
   
   def reference_resend_or_bypass
-    @submitted_apps = Appln.find_all_by_status 'submitted', :include => [ 'form' ]
+    @submitted_profiles = Profile.find_all_by_status 'submitted', :include => { :appln => :form }
+    @submitted_apps = @submitted_profiles.collect(&:appln).flatten
     @submitted_apps.reject! { |app| app.form.event_group != @eg }
     @submitted_apps.sort! { |a,b| (a.viewer.nil? ? nil.to_s : a.viewer.name) <=> (b.viewer.nil? ? nil.to_s : b.viewer.name) }
   end

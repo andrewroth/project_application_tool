@@ -10,7 +10,7 @@ module BulkPrinting
     if params[:viewer_id] && params[:viewer_id] != 'all'
       @items = Acceptance.find_all_by_viewer_id_and_project_id params[:viewer_id], @project.id, :include => includes
     else
-      @items = Acceptance.find_all_by_project_id @project.id, :include => includes
+      @items = Acceptance.find_all_by_project_id @project.id #, :include => includes # seems to give an error
     end
     
     @instances = []

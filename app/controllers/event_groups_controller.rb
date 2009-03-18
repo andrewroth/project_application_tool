@@ -50,6 +50,7 @@ class EventGroupsController < AjaxTreeController
   end
 
   def set_as_scope
+    debugger
     session[:event_group_id] = params[:id]
     session[:logo_img] = nil
 

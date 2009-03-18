@@ -2,8 +2,8 @@ unless @prep_item.errors.empty?
   page.replace_html "edit_#{@prep_item.id}", :partial => 'edit_form', :locals => {:prep_item => @prep_item}
 else
   page.replace "wrapper_#{@prep_item.id}", :partial => 'prep_item', :object => @prep_item
-  if @prev_modified_id != nil
-    page << %|$('wrapper_#{@prev_modified_id}').className = $('wrapper_#{@prev_modified_id}').className.split(" ").reject(function(n) { return n == 'last_modified' }).join(" ")|
+  if @prep_item_id_to_clear
+    page << %|$('wrapper_#{@prep_item_id_to_clear}').removeClassName('last_modified');|
   end
   page.hide("edit_#{@prep_item.id}")
   page.show("show_#{@prep_item.id}")

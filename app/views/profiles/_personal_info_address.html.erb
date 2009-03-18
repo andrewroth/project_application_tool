@@ -12,15 +12,13 @@
 
 <%= custom_element_item("#{label_prefix} Province: ", :appln_person, :"person_#{mid}province_id") do |m,c,classes|
 
-      r = collection_select(m, c, Province.find(:all), :id, :province_desc,
- 	  { :include_blank => true }, { :class => classes })
-
+      r = ''
       for country in Country.find(:all)
         id = "#{m}_#{c}_#{country.id}"
         r += collection_select(m, c, country.provinces, :id, :province_desc, 
           { :include_blank => true }, { 
-            :class => classes + ' hidden',
-	    :style => "display:none;",
+            :class => classes,
+            :style => "display:none;",
             :name => id,
             :id => id
           })
@@ -34,12 +32,22 @@
   // NOTE: function also defined in questionnaire.js since this is loaded in a remote request
   //         which doesn't let you defined functions
   function update_province_select(mid) {
-    province_id = 'appln_person_person_'+mid+'province_id'
-    country_province_id = province_id+'_'+$('appln_person_person_'+mid+'country_id').value
-    if ($(country_province_id) == null) {
-      //console.log("Couldn't find element with id " + country_province_id)
-    } else {
-      $(province_id).innerHTML = $(country_province_id).innerHTML;
+    last_province_id = 'appln_person_person_'+mid+'province_id';
+    country_province_id = last_province_id+'_'+$('appln_person_person_'+mid+'country_id').value;
+
+    // set visibility before ids get switched around
+    if ($(last_province_id) != null) { $(last_province_id).hide(); }
+    if ($(country_province_id) != null) { $(country_province_id).show(); }
+
+    // update names so currently chosen country's province list is the value used in assigning province_id
+    if ($(last_province_id) != null) { $(last_province_id).name = ''; }
+    if ($(country_province_id) != null) { $(country_province_id).name = 'appln_person[person_'+mid+'province_id]'; }
+
+    // update ids so the chosen country's province list is identifiable as $(province_id)
+    if ($(last_province_id) != null) { $(last_province_id).id = $(last_province_id).orig_id; }
+    if ($(country_province_id) != null) {
+      $(country_province_id).orig_id = country_province_id;
+      $(country_province_id).id = last_province_id;
     }
   }
   update_province_select('<%= mid %>');

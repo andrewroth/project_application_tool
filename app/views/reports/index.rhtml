@@ -152,7 +152,15 @@ function new_window(url) {
                  end
                 %>
          </li>
-      </ol>
+
+        <i>Lists crisis information for everyone accepted to a project</i>
+        <li><%= project_specific_report 'Crisis Info', 'crisis_management', :include_all => true,
+                :include_blank => true,
+                :include_pref1s_option => false %>
+        </li>
+
+   </ol>
+
     <% end %>
     
 

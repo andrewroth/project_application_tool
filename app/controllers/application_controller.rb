@@ -1,8 +1,6 @@
 require_dependency 'custom_pages'
 require_dependency 'custom_elements'
 
-puts "In Application Load"
-
 # Filters added to this controller will be run for all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 class ApplicationController < ActionController::Base
@@ -169,7 +167,6 @@ class ApplicationController < ActionController::Base
   def set_event_group
     begin
       @eg = EventGroup.find session[:event_group_id] if !EventGroup.find(:all).empty?
-      @user.eg = @eg
       session[:logo_url] = @eg.logo unless session[:logo_url]
     rescue  
       session[:event_group_id] = nil

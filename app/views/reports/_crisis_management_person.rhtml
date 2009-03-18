@@ -15,8 +15,18 @@ def h2(s)
   "<span class='header'>#{h s}</span>"
 end
 
+def comma_join(a,b)
+  a2 = a.to_s
+  b2 = b.to_s
+  comma = !a2.empty? && !b2.empty?
+  "#{a}#{', ' if comma}#{b}"
+end
+
 pp = person[i(:passport)]
 ei = person[i(:emerg)]
+hinfo = person[i(:hinfo)]
+hins = person[i(:hins)]
+doc = person[i(:doctors)]
 @c1 = person[i(:c1)]
 @c2 = person[i(:c2)]
 
@@ -24,7 +34,7 @@ is_staff = person[c(:staff)].downcase == 'staff'
 
 -%>
     <tr class='new_item'>
-      <td colspan='<%= @many_projects ? '1' : '2' %>'><%= h2 'Name:' %> <%= person[c(:last_name)] %>, <%= person[c(:first_name)] %><%= ' (staff)' if is_staff %>
+      <td colspan='<%= @many_projects ? '1' : '1' %>'><%= h2 'Name:' %> <%= person[c(:last_name)] %>, <%= person[c(:first_name)] %><%= ' (staff)' if is_staff %>
 <% if @many_projects %> 
       <td><%= person[c(:project)] %></td>
 <% end %>
@@ -39,12 +49,18 @@ is_staff = person[c(:staff)].downcase == 'staff'
       <td colspan='2'><%= h2 'PP Country:' %>  <%= pp[:country] %></td>
     </tr>
     <tr class='inconcpicuous'>
-      <td><%= h2 'Have Cond:' %> <%= ei[:have_conditions] %></td>
-      <td colspan='2'><%= h2 'Cond Desc:' %> <%= ei[:condition_desc] %></td>
-      <td colspan='1'><%= h2 'Med needed:' %> <%= ei[:med_needed] %></td>
-      <td><%= h2 'Have med:' %> <%= ei[:med_with] %></td>
+      <td><%= h2 'Cond:' %> <%= ei[:cond] %></td>
+      <td colspan='3'><%= h2 'Meds:' %> <%= ei[:meds] %></td>
     </tr>
-    <tr class='inconcpicuous'><td colspan='5'><%= h2 'Emergency Contacts' %>
+    <tr class='inconcpicuous'>
+      <td><%= h2 'Health Ins:' %> <%= comma_join(hinfo[:number], hinfo[:province]) %></td>
+      <td colspan='3'><%= h2 'Extra Ins:' %> <%= comma_join(hins[:carrier], hinfo[:number]) %></td>
+    </tr>
+    <tr class='inconcpicuous'>
+      <td><%= h2 'Doctor:' %> <%= comma_join(doc[:doctors_name], doc[:doctors_phone]) %></td>
+      <td colspan='3'><%= h2 'Dentist:' %> <%= comma_join(doc[:dentist_name], doc[:dentist_phone]) %></td>
+    </tr>
+     <tr class='inconcpicuous'><td colspan='5'><%= h2 'Emergency Contacts' %>
       <table><tr class='inconcpicuous'>
         <% for m in @c1.members -%>
           <th><%= m %></th>

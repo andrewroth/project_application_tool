@@ -3,8 +3,8 @@ class PrepItem < ActiveRecord::Base
   validates_uniqueness_of :title
   belongs_to :event_group
   has_and_belongs_to_many :projects
-  belongs_to :profile
   has_many :profile_prep_items, :include => :profile
+  has_many :profiles, :through => :profile_prep_items
 
   def self.find_prep_items
     find(:all, :order => "title")
@@ -18,9 +18,23 @@ class PrepItem < ActiveRecord::Base
     end
   end
   
+  def applies_to_profile_check_optional(profile)
+    return false unless applies_to_profile(profile)
+
+    # check individual flag for optional items only
+    if individual
+      ppi = profile.profile_prep_item self
+      return ppi && ppi.optional
+    else
+      return true
+    end
+  end
+
   def applies_to_profile(profile)
     return false unless profile.class == Acceptance
-    (applies_to == :event_group && profile.project.event_group == event_group) || (applies_to == :projects && projects.include?(profile.project))
+
+    (applies_to == :event_group && profile.project.event_group == event_group) || 
+      (applies_to == :projects && projects.include?(profile.project))
   end
   
   def ensure_all_profile_prep_items_exist

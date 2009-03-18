@@ -1,5 +1,13 @@
 <br/>
-Click checkboxes to mark paperwork items as received.
+
+<p>
+<% if params[:command] == 'optional' %>
+  Click checkboxes to require a participant to complete the prep item
+<% else %>
+  Click checkboxes to mark paperwork items as received.
+<% end %>
+</p>
+
 <%= sortable_table %>
   <thead><tr>
     <th>Name</th>  
@@ -16,8 +24,11 @@ Click checkboxes to mark paperwork items as received.
       <td><%= profile.viewer.name %></td>
       <td><%= profile.project.name %></td>
       <% for prep_item in @prep_items %>
-        <% profile_prep_item = profile.profile_prep_items.find_by_prep_item_id(prep_item.id) %>
-        <% if profile_prep_item %>
+        <% profile_prep_item = profile.profile_prep_item prep_item %>
+
+        <% if params[:command] == 'optional' && prep_item.applies_to_profile(profile) || 
+                params[:command] == 'received' && prep_item.applies_to_profile_check_optional(profile) %>
+
           <% id = "prep_id_#{profile_prep_item.id}_profile_id_#{profile.id}_#{params[:command]}" -%>
           <td mochi:format='input'><%= check_box_tag id, profile_prep_item.send(params[:command]), profile_prep_item.send(params[:command]), :id => id, :onClick => 
                          remote_function(:url => {:controller => 'profile_prep_items', :action => "update", :id => profile_prep_item.id},

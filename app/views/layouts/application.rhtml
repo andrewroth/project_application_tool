@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <% if RAILS_ENV == "development" %>
-  <% flash[:error] ||= "You are on our development site -- you should NOT be filling in your app or reference here.  Remove the 'dev.' from your url, and email spt@campusforchrist.org with how you got here"
+  <% flash[:error] ||= "You are on our development site -- you should NOT be filling in your app or reference here.  Remove the 'dev.' from your url, and email #{$tech_email_only} with how you got here"
   %>
 
 <% end %>
@@ -92,7 +92,7 @@
     <% end %>
     
     <% flash.each do |key, msg| -%>
-      <% full_msg = h(msg) %>
+      <% full_msg = msg %>
       <%= content_tag :div, full_msg, :id => "flash_#{key}", :class => 'error flash' %>
     <% end -%>
     <% flash.discard -%>
@@ -127,10 +127,9 @@
       <h3><%=@title%></h3>
     <% end %>
 		
-    <% if render_if_possible(controller.controller_name + "/_menu") %>
-      <%= try_to_render :partial => controller.controller_name + "/menu" %>
-    <% else @submenu && render_if_possible(@submenu + "/_menu") %>
-    <% end %>
+    <%= render_if_possible(controller.controller_name + "/_menu") ||
+           (@submenu && render_if_possible(@submenu + "/_menu"))
+    %>
 
     <% submenu_items_html = yield :submenu %>
     <% if submenu_items_html && !@eg.nil? %>
@@ -143,7 +142,7 @@
     <div>
       <div id="content">
         <% if @form && params[:controller] != 'forms' %>
-          <%= render :partial => "forms/form_#{@form}.rhtml" %>
+          <%= render "qe_forms/form_#{@form}" %>
         <% else %>
           <%= yield %>
         <% end %>
@@ -152,12 +151,12 @@
     <% if @eg || @show_contact_emails_override %>
       <div id="footer" class="inconspicuous_hr">
         <!-- nix the north border, it looks better. -->
-        <b>Non-Technical Inquiries:</b><br />
+        <b>Questions?</b><br />
 				Campus for Christ - projects@campusforchrist.org<br />
 				LeaderImpact Group - vip@leaderimpactgroup.com<br />
 				Athletes in Action - morgank@athletesinaction.com<br />
 				<br/>
-			<b>Technical Inquiries:</b>help.pat@powertochange.org<br/>
+			<b>General Inquiries:</b>help.pat@powertochange.org<br/>
 			<br/>
 			Online help can be found <a href="http://resources.campusforchrist.org/index.php/Project_Application_Tool">here</a>.
         <br/>

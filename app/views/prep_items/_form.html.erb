@@ -25,10 +25,11 @@
 </p>
 
 <% if prep_item.applies_to == :event_group %>
-<div id="<%= prep_item.id %>_projects_list" class="" style="display:none;">
+  <div id="<%= prep_item.id %>_projects_list" class="" style="display:none;">
 <% else %>
-<div id="<%= prep_item.id %>_projects_list">
+  <div id="<%= prep_item.id %>_projects_list">
 <% end %>
+
 <p>
   <% for project in @checkbox_projects %>
     <%= check_box_tag "prep_item[project_ids][]", project.id, prep_item.projects.include?(project) %> 

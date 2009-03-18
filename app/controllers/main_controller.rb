@@ -21,6 +21,12 @@ class MainController < ApplicationController
   CampusStats = Struct.new(:students_cnt, :student_profiles, :accepted_cnt, :applied_cnt, :students_no_profiles)
   StudentProfile = Struct.new(:student, :profile)
   
+  def send_test_email
+    TestMailer.deliver_test(params[:subject], params[:message], params[:to], params[:from])
+    flash[:notice] = 'test email sent'
+    redirect_to :action => :test_email
+  end
+
   def emails
     if RAILS_ENV =~ /test/ || RAILS_ENV == 'development'
       @emails = ActionMailer::Base.deliveries
@@ -300,7 +306,7 @@ render :partial => "viewer_specifics"
       
       next if @current_projects_form.nil?
 
-      for person in campus.persons
+      for person in campus.students
         @campus_stats[campus].students_cnt += 1
 
         for viewer in person.viewers

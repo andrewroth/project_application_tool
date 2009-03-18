@@ -2,15 +2,13 @@
 
 require_dependency 'vendor/plugins/questionnaire_engine/app/controllers/base_view_controller.rb'
 
-=begin
 require_dependency 'questionnaire_engine/form_loading_indicator.rb'
 require_dependency 'questionnaire_engine/bulk_printing.rb'
-=end
 require_dependency 'questionnaire_engine/form_printing.rb'
 
 class BaseViewController < ApplicationController
-  #include FormLoadingIndicator
-  #include BulkPrinting
+  include FormLoadingIndicator
+  include BulkPrinting
   include FormPrinting
 
   protected

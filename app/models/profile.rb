@@ -244,6 +244,10 @@ class Profile < ActiveRecord::Base
     self.profile_prep_items
   end
 
+  def profile_prep_item(pi)
+    profile_prep_items.detect{ |ppi| ppi.prep_item_id == pi.id }
+  end
+
   after_create do |profile|
     profile.update_costing_total_cache
   end

@@ -22,7 +22,7 @@
       <tbody>
         <% for acceptance in @accepted %>
           <% 
-          if acceptance.project != project
+          if defined?(project).nil? || acceptance.project != project
             project = acceptance.project
             @user.set_project project
 

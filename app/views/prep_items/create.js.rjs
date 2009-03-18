@@ -5,8 +5,8 @@ else
     <li id = "list_#{@prep_item.id}">
       #{render :partial => 'prep_item', :object => @prep_item}
     </li>|
-  if @prev_modified_id != nil
-    page << %|$('wrapper_#{@prev_modified_id}').className = $('wrapper_#{@prev_modified_id}').className.split(" ").reject(function(n) { return n == 'last_modified' }).join(" ")|
+  if @prep_item_id_to_clear
+    page << %|$('wrapper_#{@prep_item_id_to_clear}').removeClassName('last_modified');|
   end
   page.visual_effect :highlight, "wrapper_#{@prep_item.id}"
   page.hide "create"

@@ -18,9 +18,10 @@ config.action_controller.perform_caching             = true
 # Disable delivery errors if you bad email addresses should just be ignored
 # config.action_mailer.raise_delivery_errors = false
 
+ActionMailer::Base.delivery_method = :smtp
 ActionMailer::Base.smtp_settings = {
-  :address => 'smtp.powertochange.org',
-  :domain => 'granvillehosting.com'
+  :address => 'smtp.powertochange.local',
+  :domain => 'powertochange.local'
 }
 
 # eager loading messes up active scaffold and a bunch of other things

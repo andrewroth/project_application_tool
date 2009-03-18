@@ -18,7 +18,8 @@ class EventGroup < Node
   acts_as_tree
 
   has_attachment :content_type => :image, 
-                 :storage => :file_system
+                 :storage => :file_system,
+                 :path_prefix => 'public/event_groups'
 
   attr :filter_hidden, true
 

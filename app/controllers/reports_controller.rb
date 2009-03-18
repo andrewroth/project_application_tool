@@ -190,7 +190,7 @@ class ReportsController < ApplicationController
     #    current_acceptances.each do |ac|
     loop_reports_viewers(@projects_ids, @include_pref1_applns) do |ac,a,v,p|
       
-      if !v.is_student? || p.nil?
+      if !v.is_student?(@eg) || p.nil?
         next
       end
       pf = a.processor_form
@@ -257,7 +257,7 @@ class ReportsController < ApplicationController
     
     loop_reports_viewers(@projects_ids, @include_pref1_applns, true) do |ac,a,v,p|
       
-      if v.is_student?
+      if v.is_student?(@eg)
         departure = extract_form_answer(:departure_city, a)
         other = extract_form_answer(:departure_other, a)
         if other =~ /\S/ then departure += " other: " + other end
@@ -283,7 +283,7 @@ class ReportsController < ApplicationController
       
       gender = p.gender
       
-      @participants << [ p.person_lname.capitalize, p.person_fname.capitalize, legal_name, gender, v.is_student? ? '' : 'staff',
+      @participants << [ p.person_lname.capitalize, p.person_fname.capitalize, legal_name, gender, v.is_student?(@eg) ? '' : 'staff',
         @include_pref1_applns ? (ac ? 'accepted' : a.status) : nil, ac ? ac.project.title : a.preference1.title, 
         birthdate, departure, passport_number, passport_country, passport_expiry, cm2007, 
         ((ac && ac.as_intern?) || (ac.nil? && a.as_intern?) ? 'intern' : ''), notes ].compact
@@ -445,9 +445,12 @@ class ReportsController < ApplicationController
   
   EmergencyContact = Struct.new(:name, :relation, :home_number, :work_number, :cell_number, :email)
   PassportInfo = Struct.new(:number, :expiry, :country)
-  EmergencyInfo = Struct.new(:have_conditions, :condition_desc, :med_needed, :med_with)
+  EmergencyInfo = Struct.new(:cond, :meds)
   ProjectEmergencyParticipant = Struct.new(:last_name, :first_name, :project, :gender, :staff, :birthdate, :passport, 
                                            :emergency_info, :contact1, :contact2)
+  HealthInfo = Struct.new(:number, :province)
+  InsuranceInfo = Struct.new(:carrier, :number)
+  DoctorsInfo = Struct.new(:doctors_name, :doctors_phone, :dentist_name, :dentist_phone)
   def crisis_management
     
     @columns = MyOrderedHash.new [
@@ -463,55 +466,72 @@ class ReportsController < ApplicationController
     :passport_expiry, 'int',
     :passport_country, 'string',
     :have_conditions, 'string',
-    :condition_desc, 'string',
-    :med_needed, 'string',
-    :med_with, 'string',
-    ].compact.flatten
+    :have_meds, 'string',
+   ].compact.flatten
     @columns.merge! emergency_contact_columns('c1_')
     @columns.merge! emergency_contact_columns('c2_')
-    
+    @columns.merge! MyOrderedHash.new [
+    :health_number, 'string',
+    :health_province, 'string',
+    :ins_carrier, 'string',
+    :ins_number, 'string',
+    :doc_name, 'string',
+    :doc_phone, 'string',
+    :dentist_name, 'string',
+    :dentist_phone, 'string'
+    ]
+ 
+
     # index where the sub objects are so they can be referenced directly in the partial
     pp_pos = @columns.position(:passport_number)
-    @index = { :passport => pp_pos, :emerg => pp_pos+1, :c1 => pp_pos+2, :c2 => pp_pos+3 }
+    @index = { :passport => pp_pos, :emerg => pp_pos+1, :c1 => pp_pos+2, :c2 => pp_pos+3, 
+               :hinfo => pp_pos+4, :hins => pp_pos+5, :doctors => pp_pos+6 }
 
     @registrants = []
     
     loop_reports_viewers(@projects_ids, @include_pref1_applns, true) do |ac,a,v,p|
       
       gender = p.gender
+
       ec_entry = nil # used in get_passport_info
-      if v.is_student?
-        emergency_info = EmergencyInfo.new(extract_form_answer(:emergency_conditions, a), 
-        extract_form_answer(:emergency_conditions_description, a),
-        extract_form_answer(:emergency_medication_needed, a),
-        extract_form_answer(:emergency_medication_with, a))
-        birthdate = extract_form_answer(:birthdate, a)
-        emergency_contact_1 = emergency_contact(1, a)
-        emergency_contact_2 = emergency_contact(2, a)
-      else
-        ec_entry = p.emerg
-        emergency_contact_2, empty_wc = EmergencyContact.new('','','','','','')
-        emergency_contact_1 = if ec_entry
-          EmergencyContact.new(ec_entry.emerg_contactName,
+      ec_entry = p.emerg
+
+      empty_wc = EmergencyContact.new('','','','','','')
+
+      emergency_contact_1 = EmergencyContact.new(ec_entry.emerg_contactName,
                               ec_entry.emerg_contactRship,
                               ec_entry.emerg_contactHome,
                               ec_entry.emerg_contactWork,
                               ec_entry.emerg_contactMobile,
                               ec_entry.emerg_contactEmail)
-        else
-          empty_wc
-        end 
-        emergency_info = EmergencyInfo.new('', (ec_entry ? ec_entry.emerg_medicalNotes : '') , '', '')
-        birthdate = ec_entry ? ec_entry.emerg_birthdate : ''
-      end
+
+      emergency_contact_2 = EmergencyContact.new(ec_entry.emerg_contact2Name,
+                              ec_entry.emerg_contact2Rship,
+                              ec_entry.emerg_contact2Home,
+                              ec_entry.emerg_contact2Work,
+                              ec_entry.emerg_contact2Mobile,
+                              ec_entry.emerg_contact2Email)
+
+      emergency_info = EmergencyInfo.new(ec_entry.emerg_medicalNotes, ec_entry.emerg_meds)
+
+      birthdate = ec_entry ? ec_entry.emerg_birthdate : ''
+      birthdate = birthdate.to_s # might be nil
+
       passport_info = get_passport_info(ac, p, a, ec_entry)
       
+      hp = ec_entry.health_province ? ec_entry.health_province.province_shortDesc : ''
+      health_info = HealthInfo.new(ec_entry.health_number, hp)
+      ins_info = InsuranceInfo.new(ec_entry.medical_plan_carrier, ec_entry.medical_plan_number)
+      doc_info = DoctorsInfo.new(ec_entry.doctor_name.to_s, ec_entry.doctor_phone.to_s,
+                                 ec_entry.dentist_name.to_s, ec_entry.dentist_phone.to_s) 
+
       @registrants << [ p.person_lname.capitalize, p.person_fname.capitalize, @many_projects ? ac.project.title : nil, gender,
-        v.is_student? ? '' : 'staff', 
-        a ? extract_form_answer(:curr_province, a) : (p && p.loc_province ? p.loc.province_shortDesc : ''),
-        a ? extract_form_answer(:perm_province, a) : (p && p.perm_province ? p.perm_province.province_shortDesc : ''),
+        v.is_student?(@eg) ? '' : 'staff', 
+        (p && p.loc_province ? p.loc_province.province_shortDesc : ''),
+        (p && p.perm_province ? p.perm_province.province_shortDesc : ''),
         birthdate, passport_info,
-        emergency_info, emergency_contact_1, emergency_contact_2 ].compact
+        emergency_info, emergency_contact_1, emergency_contact_2,
+        health_info, ins_info, doc_info ].compact
     end
  
     @page_title = "#{@eg.title} #{@project_title} Crisis Management Report"
@@ -612,7 +632,7 @@ class ReportsController < ApplicationController
       
       gender = p.gender
       
-      @participants << [ p.person_lname.capitalize, p.person_fname.capitalize, gender, v.is_student? ? '' : 'staff', @many_projects ? ac.project.title : nil, ec ].compact
+      @participants << [ p.person_lname.capitalize, p.person_fname.capitalize, gender, v.is_student?(@eg) ? '' : 'staff', @many_projects ? ac.project.title : nil, ec ].compact
     end
         
     @page_title = "#{@eg.title} #{@project_title} Parental Emails"
@@ -789,7 +809,7 @@ class ReportsController < ApplicationController
 	first_name = ''
       end
 
-      student = if v then (v.is_student? ? '' : 'staff') else '?' end
+      student = if v then (v.is_student?(@eg) ? '' : 'staff') else '?' end
 
       @participants << [ title, last_name, first_name,
         @include_pref1_applns ? (ac ? 'accepted' : a.status) : nil, 
@@ -806,6 +826,10 @@ class ReportsController < ApplicationController
   def viewers_with_profile_for_project
     acceptances = Acceptance.find_all_by_project_id @projects_ids, :include => { :viewer => :persons }
     @accepted_viewers = acceptances.collect &:viewer
+    
+    # TODO: do we need to worry about StaffProfiles ?
+    #@user.is_project_director? || @user.is_eventgroup_coordinator? || @user.is_project_administrator? || @user.viewer == v
+    
     @accepted_viewers.sort!{ |a,b| a.name <=> b.name }
     @id = params[:dom_id]
     render :layout => !request.xml_http_request?
@@ -1042,19 +1066,18 @@ class ReportsController < ApplicationController
 
     # ensure profile_prep_items is current
     @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
-    @profiles = []
+    @profiles = @prep_items.collect(&:profiles).flatten.uniq
+    @profiles.delete_if{ |profile| !@projects.include?(profile.project) }
     @participants = []
-    @profile_prep_items = []
-    @profile_prep_items = @prep_items.collect { |p| p.profile_prep_items }.flatten
-    @profile_prep_items.delete_if { |p| !@projects.include?(p.profile.project) } # keep only those relevant to projects being reported on
-    @profiles = @profile_prep_items.collect { |p| p.profile }.flatten.uniq
     
     for profile in @profiles
-      aray = []
-      aray += [ profile.viewer.name, profile.project.name ]
+      row = []
+      row += [ profile.viewer.name, profile.project.name ]
       for prep_item in @prep_items
-        if prep_item.applies_to_profile(profile)
-          profile_prep_item = ProfilePrepItem.find_by_prep_item_id_and_profile_id(prep_item.id, profile.id)
+        profile_prep_item = profile.profile_prep_item prep_item
+
+        if prep_item.applies_to_profile_check_optional(profile) && profile_prep_item
+
           if csv_requested
             check_r = if profile_prep_item.received then "Y" else "n" end
             check_s = if profile_prep_item.submitted then "Y" else "n" end
@@ -1065,14 +1088,14 @@ class ReportsController < ApplicationController
             check_r_html = "<p class='prep_items_received_column'>#{check_r}</p>"
             check_s_html = "<p class='prep_items_submitted_column'>#{check_s}</p>"
 
-            aray += [ check_r_html, check_s_html ]
+            row += [ check_r_html, check_s_html ]
           end
         else
-          aray += [ csv_requested ? "" : "&nbsp" ] * 2
+          row += [ csv_requested ? "" : "&nbsp" ] * 2
         end
       end
 
-      @participants << aray
+      @participants << row
     end
 
     render_report @participants
@@ -1187,7 +1210,7 @@ class ReportsController < ApplicationController
     
     Viewer.find(:all, :include => :persons).each do |v|
       p = v.person
-      if !v.is_student? || p.nil?
+      if !v.is_student?(@eg) || p.nil?
         next
       end
       @as = v.applns.find(:all, :include => :form)

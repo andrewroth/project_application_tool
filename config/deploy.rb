@@ -6,12 +6,15 @@ ENV['system'] ||= 'p2c'
 
 ENV['user'] = 'deploy'
 
+set :application, "Project Application Tool"
+set :repository,  "https://svn.ministryapp.com/pat/branches/rails_2.2/"
+
 if %w(ma mh).include? ENV['system']
   ENV['host'] ||= 'ministryapp.com'
   ENV['domain'] ||= 'pat.ministryapp.com'
   ENV['port'] ||= '40022'
 elsif %w(p2c pc).include? ENV['system']
-  ENV['host'] ||= 'mpdtool.powertochange.org'
+  ENV['host'] ||= 'pat2.powertochange.org'
   ENV['domain'] ||= 'pat.powertochange.org'
   ENV['port'] ||= '22'
 end
@@ -23,6 +26,7 @@ if ENV['env']
   RAILS_ENV = ENV['env']
 elsif ENV['target'] == 'dev'
   RAILS_ENV = 'development'
+  set :repository,  "https://svn.ministryapp.com/pat/branches/rails_2.3_remove_engines/"
 elsif ENV['target'] == 'demo'
   RAILS_ENV = 'production'
 elsif ENV['target'] == 'prod'
@@ -44,8 +48,6 @@ role :db,  ENV['host'], :primary => true
 ssh_options[:port] = ENV['port']
 set :user, ENV['user']
 
-set :application, "Project Application Tool"
-set :repository,  "https://svn.ministryapp.com/pat/branches/rails_2.2/"
 set :deploy_to, ENV['deploy_to']
 
 # If you aren't using Subversion to manage your source code, specify
@@ -62,12 +64,21 @@ deploy.task :before_migrate do
   run "cd #{current_path}; RAILS_ENV=#{RAILS_ENV} rake db:setup:pat"
 end
 
+def link_shared(p)
+  run "ln -s #{shared_path}/#{p} #{release_path}/#{p}"
+end
+
 unless ENV['target'] == 'demo'
   deploy.task :after_symlink do
-    run "cp #{File.join(deploy_to, 'database.yml')} #{File.join(current_path, 'config', 'database.yml')}"
-    #run "cd #{current_path}; rake fix_permissions path=#{ENV['deploy_to']};"
-    run "chmod g+w #{current_path}/tmp"
-    run "mkdir #{current_path}/tmp/sessions"
+    # set up tmp dir
+    run "mkdir -p -m 770 #{shared_path}/tmp/{cache,sessions,sockets,pids}"
+    run "rm -Rf #{release_path}/tmp"
+    link_shared 'tmp'
+
+    # other shared files
+    link_shared 'config/database.yml'
+    link_shared 'log'
+    link_shared 'public/summerprojecttool.event_groups'
   end
 end
 

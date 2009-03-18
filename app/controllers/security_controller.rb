@@ -59,8 +59,6 @@ class SecurityController < ApplicationController
   end
 
   def link_gcx
-    #redirect_to(:action => 'login') if session[:gcx].nil?
-
     flash.delete :gcx
     @show_contact_emails_override = true
   end
@@ -116,6 +114,8 @@ class SecurityController < ApplicationController
       return
     end
 
+    debugger
+
     result = login_by_ticket
     result = login_by_gcx if result[:keep_trying]
     result = login_by_cim if result[:keep_trying]
@@ -127,6 +127,13 @@ class SecurityController < ApplicationController
     elsif !result[:keep_trying]
       setup_given_viewer_id result[:viewer_id]
     end
+
+    # give a warning about intranet logins expiring
+    if session[:login_source] == 'spt'
+      flash[:notice] = "You logged in by your intranet username and password.  Please note that we are phasing out the intranet logins in favor of GCX.  Please see <A HREF='http://docs.google.com/Doc?id=dd7zngd6_4c457j7dx' target='_blank'>this document</A> (link opens in a new window) explaining how you can upgrade to a GCX account."
+      logger.info "Intranet login @ #{Time.now} - viewer #{@user.viewer.viewer_userID if @user} id #{@user.viewer.id if @user}"
+    end
+
   end
 
   def login_by_ticket
@@ -218,15 +225,20 @@ class SecurityController < ApplicationController
     logger.debug('login ' + @user.inspect)
 
     #flash[:downtime] ||= "<br />There will be two short periods of downtime (approx 10 mins each) sometime before 9:30 AM EST (6:30 PST) on Tuesday Jan 22, 2007 for maintenance"
-      
+    
+    # update last login stuff
+    @user.viewer.viewer_isActive = true
+    @user.viewer.viewer_lastLogin = Time.now
+    @user.viewer.save!
+
     redirect_to :controller => "main"
   end
 
   def ensure_gcx_in_session
-    unless session[:gcx]
-      flash[:error] = "Error: No gcx info found in session."
-      redirect_to :action => :login
-    end
+    #unless session[:cas_user]
+    #  flash[:error] = "Error: No gcx info found in session."
+    #  redirect_to :action => :login
+    #end
   end
 
   def is_demo_host

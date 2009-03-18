@@ -1,17 +1,20 @@
 require_dependency  'formatting'
+require_dependency  'vendor/plugins/questionnaire_engine/app/helpers/application_helper'
 
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   include Formatting
   
+  def file_exists?(p)
+    render_if_possible(:template => p) != nil
+  end
+
   def render_if_possible(params = {})
     begin
       render(params)
     rescue ActionView::MissingTemplate
-      return false
+      return nil
     end
-
-    true
   end
 
   def new_item(title, controller, action = '')
