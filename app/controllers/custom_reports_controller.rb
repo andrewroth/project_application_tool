@@ -1,4 +1,4 @@
-require 'permissions'
+require_dependency 'permissions'
 
 class CustomReportsController < ApplicationController
   include Permissions

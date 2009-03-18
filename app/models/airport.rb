@@ -1,5 +1,5 @@
-require 'net/http'
-require 'rexml/document'
+require_dependency 'net/http'
+require_dependency 'rexml/document'
 
 class Airport < ActiveRecord::Base
   include REXML

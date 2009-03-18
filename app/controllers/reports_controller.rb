@@ -1,4 +1,4 @@
-require 'my_ordered_hash.rb'
+require_dependency 'my_ordered_hash.rb'
 
 class ReportsController < ApplicationController
   include TravelSegmentTagsAutocomplete

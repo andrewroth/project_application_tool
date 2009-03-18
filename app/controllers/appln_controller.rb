@@ -1,5 +1,5 @@
-require 'appln_custom_pages.rb'
-require 'permissions.rb'
+require_dependency 'appln_custom_pages.rb'
+require_dependency 'permissions.rb'
 
 class ApplnController < InstanceController
   include ApplnCustomPages

@@ -1,4 +1,4 @@
-require 'lib/add_datetime_extended_new.rb'
+require_dependency 'lib/add_datetime_extended_new.rb'
 
 class ToolsController < ApplicationController
   before_filter :ensure_eventgroup_coordinator

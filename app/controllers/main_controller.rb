@@ -1,7 +1,7 @@
-require 'bsearch'
+require_dependency 'bsearch'
 
-require 'rubygems'
-require 'select_with_include'
+require_dependency 'rubygems'
+require_dependency 'select_with_include'
 
 class MainController < ApplicationController
   before_filter :set_campuses, :only => [ :index, :your_campuses, :your_applications ]

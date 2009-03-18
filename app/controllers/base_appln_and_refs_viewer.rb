@@ -2,7 +2,7 @@
 # should extend this class.  they should be read-only
 # and not modify the appln/ref
 
-require 'appln_admin/modules/view_custom_pages.rb'
+require_dependency 'appln_admin/modules/view_custom_pages.rb'
 
 class BaseApplnAndRefsViewer < ViewOnlineController
   prepend_before_filter :setup

@@ -1,4 +1,4 @@
-require 'date_datetime_conversion'
+require_dependency 'date_datetime_conversion'
 
 class Notification < ActiveRecord::Base
   def begin_datetime() self[:begin_time].to_local_datetime end

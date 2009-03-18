@@ -1,4 +1,4 @@
-require 'permissions.rb'
+require_dependency 'permissions.rb'
 
 class ProfileTravelSegmentsController < ApplicationController
   include Permissions

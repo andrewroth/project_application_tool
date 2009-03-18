@@ -1,4 +1,4 @@
-require 'permission'
+require_dependency 'permission'
 
 class AirportsController < ApplicationController
   include Permissions

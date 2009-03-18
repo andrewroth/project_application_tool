@@ -1,4 +1,4 @@
-require 'appln_admin/modules/acceptance_pile_functionality.rb'
+require_dependency 'appln_admin/modules/acceptance_pile_functionality.rb'
 
 class AcceptanceController < BaseApplnAndRefsViewer
   include Permissions

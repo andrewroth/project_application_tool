@@ -1,4 +1,4 @@
-require 'permissions'
+require_dependency 'permissions'
 
 class ProfilesController < ApplicationController
   include Permissions

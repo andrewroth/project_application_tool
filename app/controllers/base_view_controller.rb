@@ -3,10 +3,10 @@
 require_dependency 'vendor/plugins/questionnaire_engine/app/controllers/base_view_controller.rb'
 
 =begin
-require 'questionnaire_engine/form_loading_indicator.rb'
-require 'questionnaire_engine/bulk_printing.rb'
+require_dependency 'questionnaire_engine/form_loading_indicator.rb'
+require_dependency 'questionnaire_engine/bulk_printing.rb'
 =end
-require 'questionnaire_engine/form_printing.rb'
+require_dependency 'questionnaire_engine/form_printing.rb'
 
 class BaseViewController < ApplicationController
   #include FormLoadingIndicator

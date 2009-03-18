@@ -1,5 +1,5 @@
-require 'custom_pages'
-require 'custom_elements'
+require_dependency 'custom_pages'
+require_dependency 'custom_elements'
 
 puts "In Application Load"
 

@@ -1,6 +1,6 @@
-require 'soap/wsdlDriver'
-require 'soap/mapping'
-require 'defaultDriver'
+require_dependency 'soap/wsdlDriver'
+require_dependency 'soap/mapping'
+require_dependency 'defaultDriver'
 
 class SecurityController < ApplicationController
   require 'digest/md5'

@@ -1,4 +1,4 @@
-require 'permissions'
+require_dependency 'permissions'
 
 # Manage projects gets its own controller cause
 # there's a lot of functionality.
