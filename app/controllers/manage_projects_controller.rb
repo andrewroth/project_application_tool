@@ -76,7 +76,7 @@ class ManageProjectsController < ApplicationController
     @projects = if (@viewer.is_eventgroup_coordinator?)
         @eg.projects
       else
-        @viewer.viewer.current_projects_with_any_role(@eg).reject{ |p|
+        @viewer.current_projects_with_any_role(@eg).reject{ |p|
           !@eg.projects.include?(p)
         }
       end

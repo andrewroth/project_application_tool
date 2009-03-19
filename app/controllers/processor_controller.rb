@@ -20,7 +20,7 @@ class ProcessorController < ApplicationController
   # locks a processor entry, then goes to evaluate view
   def evaluate
     # lock
-    @profile[:locked_by] = @viewer.viewer.id
+    @profile[:locked_by] = @viewer.id
     @profile.save!
     
     redirect_to :controller => :profiles_viewer, :action => :entire, :id => @profile.id
@@ -44,7 +44,7 @@ class ProcessorController < ApplicationController
     profile = Profile.find(@appln.profile.id) # reload to make the new type catch
     profile.accept!
 
-    SpApplicationMailer.deliver_accepted(profile, @viewer.viewer.email)
+    SpApplicationMailer.deliver_accepted(profile, @viewer.email)
 
     flash[:notice] = "#{@appln.viewer.name} accepted to #{@project.title}"
     redirect_to :controller => "main", :action => "your_projects"

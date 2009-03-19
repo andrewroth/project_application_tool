@@ -192,7 +192,7 @@ module Permissions
   end
 
   def has_profile_ownership
-    @profile.viewer == @viewer.viewer || (@viewer && @viewer.is_eventgroup_coordinator?)
+    @profile.viewer == @viewer || (@viewer && @viewer.is_eventgroup_coordinator?(@eg))
   end
 
   def set_view_permissions

@@ -75,7 +75,7 @@ class MainController < ApplicationController
     if (@viewer.is_eventgroup_coordinator?(@eg))
       @allowable_projects = @eg.projects.find :all
     else
-      @allowable_projects = @viewer.viewer.current_projects_with_any_role @eg
+      @allowable_projects = @viewer.current_projects_with_any_role @eg
     end
     
     @allowable_projects_array = []

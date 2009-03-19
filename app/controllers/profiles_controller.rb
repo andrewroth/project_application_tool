@@ -143,7 +143,7 @@ class ProfilesController < ApplicationController
   end
   
   def list
-    @profiles = Profile.find_all_by_viewer_id(@viewer.viewer.id, :include => :project).reject{ |profile|
+    @profiles = Profile.find_all_by_viewer_id(@viewer.id, :include => :project).reject{ |profile|
         profile.project.nil? || profile.project.event_group_id != @eg.id
     }
 
@@ -152,7 +152,7 @@ class ProfilesController < ApplicationController
   
   def campus_info
     @submenu_title = 'Campus Info'
-    @person = @appln_person = @viewer.viewer.person
+    @person = @appln_person = @viewer.person
     @assignments = @person.assignments
 
     render :template => 'assignments/index'
@@ -160,14 +160,14 @@ class ProfilesController < ApplicationController
 
   def crisis_info
     @submenu_title = 'Personal Info and Crisis Info'
-    @person = @appln_person = @viewer.viewer.person
+    @person = @appln_person = @viewer.person
     @emerg = @person.emerg
   end
   
   def update_crisis_info # also updates personal info
     @submenu_title = 'Personal Info and Crisis Info'
 
-    @person = @appln_person = @viewer.viewer.person
+    @person = @appln_person = @viewer.person
 
     success_p = PersonalInformation.save_from_params @person, params
     success_c = CrisisInformation.save_from_params @person, params

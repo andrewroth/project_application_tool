@@ -190,7 +190,7 @@ class ApplicationController < ActionController::Base
         true
       elsif n.matches_controller?(params[:controller]) && n.matches_action?(params[:action])
         # matches controller and action, delete only if acknowledged
-        @viewer && @viewer.viewer && @viewer.viewer.notification_acknowledgments.find_by_notification_id(n.id)
+        @viewer && @viewer && @viewer.notification_acknowledgments.find_by_notification_id(n.id)
       else
         true
       end

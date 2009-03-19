@@ -23,13 +23,13 @@ class FeedbacksController < ApplicationController
     @feedback = Feedback.new
     @feedback.event_group_id = @eg.id
     @type = "Choose a Type"
-    @viewer_id = @viewer.viewer.id
+    @viewer_id = @viewer.id
     render :layout => !request.xml_http_request?
   end
 
   def create
     @feedback = Feedback.new params[:feedback].merge(:event_group_id => session[:event_group_id])
-    @feedback.viewer_id = @viewer.viewer.id
+    @feedback.viewer_id = @viewer.id
     
     if @feedback.save
       email = FeedbackMailer.create_forward(@feedback)

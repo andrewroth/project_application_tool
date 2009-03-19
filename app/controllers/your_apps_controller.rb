@@ -32,7 +32,7 @@ class YourAppsController < ApplicationController
   end
 
   def list
-    profiles = @viewer.viewer.profiles.find :all, :include => [ { :appln => { :form => :questionnaire } }, :project ],
+    profiles = @viewer.profiles.find :all, :include => [ { :appln => { :form => :questionnaire } }, :project ],
        :select => "#{Profile.table_name}.id, #{Form.table_name}.event_group_id," +
                   "#{Profile.table_name}.status, #{Profile.table_name}.type," +
                   "#{Questionnaire.table_name}.title, #{Project.table_name}.title",
@@ -67,7 +67,7 @@ class YourAppsController < ApplicationController
     form = @eg.forms.find params[:form_id]
 
     # look for ane already
-    appln = @viewer.viewer.applns.find_by_form_id(form.id)
+    appln = @viewer.applns.find_by_form_id(form.id)
     if appln
       @profile = appln.profile
     else

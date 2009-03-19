@@ -79,10 +79,10 @@ class ToolsController < ApplicationController
     as_intern = params[:as_intern] == '1' || params[:as_intern] == 'true'    
     acceptance = Acceptance.create :appln_id => @appln.id, :project_id => @project.id, 
       :support_claimed => 0, :support_coach_id => params[:support_coach_id], 
-      :accepted_by_viewer_id => @viewer.viewer.id, :as_intern => as_intern,
+      :accepted_by_viewer_id => @viewer.id, :as_intern => as_intern,
       :viewer_id => @appln.viewer.id
      
-    SpApplicationMailer.deliver_accepted(acceptance, @viewer.viewer.email)
+    SpApplicationMailer.deliver_accepted(acceptance, @viewer.email)
     
     flash[:notice] = "#{@appln.viewer.name} accepted to #{@project.title}.  " + 
         "<a href='/appln/view_always_editable?appln_id=#{@appln.id}'>Edit their always editable fields.</a>"

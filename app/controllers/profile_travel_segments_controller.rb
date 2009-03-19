@@ -51,7 +51,7 @@ class ProfileTravelSegmentsController < ApplicationController
   def assigned
     list
 
-    @page_title = "Itinerary for #{@viewer.viewer.name}"
+    @page_title = "Itinerary for #{@viewer.name}"
 
     if params[:partial]
       render :partial => 'assigned_list', :locals => { :can_edit => true, :div => false }

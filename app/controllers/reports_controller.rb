@@ -827,7 +827,7 @@ class ReportsController < ApplicationController
     @accepted_viewers = acceptances.collect &:viewer
     
     # TODO: do we need to worry about StaffProfiles ?
-    #@viewer.is_project_director? || @viewer.is_eventgroup_coordinator? || @viewer.is_project_administrator? || @viewer.viewer == v
+    #@viewer.is_project_director? || @viewer.is_eventgroup_coordinator? || @viewer.is_project_administrator? || @viewer == v
     
     @accepted_viewers.sort!{ |a,b| a.name <=> b.name }
     @id = params[:dom_id]

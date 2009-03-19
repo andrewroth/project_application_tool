@@ -82,7 +82,7 @@ class MassEmailsController < ApplicationController
     @projects = if @viewer.is_eventgroup_coordinator?
         @eg.projects
       else
-        @viewer.viewer.current_projects_with_any_role(@eg)
+        @viewer.current_projects_with_any_role(@eg)
       end
   end
 

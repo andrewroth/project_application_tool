@@ -26,7 +26,7 @@ if ENV['env']
   RAILS_ENV = ENV['env']
 elsif ENV['target'] == 'dev'
   RAILS_ENV = 'development'
-  set :repository,  "https://svn.ministryapp.com/pat/branches/rails_2.3_remove_engines/"
+  set :repository,  "https://svn.ministryapp.com/pat/branches/rails_2.3_remove_user/"
 elsif ENV['target'] == 'demo'
   RAILS_ENV = 'production'
 elsif ENV['target'] == 'prod'

@@ -5,7 +5,7 @@ class PreferencesController < ApplicationController
   
   def update
     
-    if @viewer.viewer.nil?
+    if @viewer.nil?
       flash[:notice] = %|Strangely, you are missing something needed to save your preferences.  
         Please email #{$tech_email_only} and let know you got this message.|
     else
