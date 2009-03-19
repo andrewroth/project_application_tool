@@ -119,7 +119,7 @@ class MainController < ApplicationController
   
   def your_applications
     @page_title = "App Processing"
-    if (@viewer.is_eventgroup_coordinator?)
+    if (@viewer.is_eventgroup_coordinator?(@eg))
       processor_for_project_ids = @eg.projects.collect{ |p| p.id }
     else
       # find which projects @viewer is a processor for

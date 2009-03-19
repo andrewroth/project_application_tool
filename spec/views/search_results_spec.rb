@@ -13,7 +13,7 @@ describe "/main/_viewer_specifics" do
               :fullview? => o[:fullview],
               :can_modify_profile_in_project => false,
               :is_projects_coordinator? => o[:fullview],
-              :is_eventgroup_coordinator? => o[:fullview],
+              :is_eventgroup_coordinator?(@eg) => o[:fullview],
               :is_project_administrator? => false,
               :is_processor? => false
     )

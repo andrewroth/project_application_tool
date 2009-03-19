@@ -30,7 +30,7 @@ class ProjectsController < ApplicationController
 
     # filter confidential qs out unless user has permission
     @viewer.set_project @project
-    unless @viewer.is_eventgroup_coordinator? || @viewer.is_processor?
+    unless @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor?
       @questionnaire.filter = { :filter => ['confidential'], :default => true }
     end
 

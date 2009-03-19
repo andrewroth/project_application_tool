@@ -34,7 +34,7 @@ class AcceptanceController < BaseApplnAndRefsViewer
   def ensure_modify_acceptance_permission
     @viewer.set_project(@project)
     
-    unless @viewer.is_eventgroup_coordinator? || @viewer.is_processor? || 
+    unless @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor? || 
       @viewer.is_project_director? || @viewer.is_project_administrator?
       render :inline => "No permission"
     end

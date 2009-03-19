@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe ToolsController do
 
   def setup2
-    @viewer.stub!(:is_eventgroup_coordinator? => true)
+    @viewer.stub!(:is_eventgroup_coordinator?(@eg) => true)
 
     ManualDonation.stub!(:find).and_return( [ 
       @d1 = mock_model(ManualDonation, :id => 1, :motivation_code => 1, :original_amount => 30, :conversion_rate => 1.06),

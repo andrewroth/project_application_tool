@@ -87,7 +87,7 @@ class EventgroupCoordinatorsController < ApplicationController
   protected
 
   def can_add_eventgroup_coordinators
-    unless @viewer.is_eventgroup_coordinator?(@eg2) || SUPERADMIN_VIEWER_IDS.include?(@viewer.id)
+    unless @viewer.is_eventgroup_coordinator?(@eg)(@eg2) || SUPERADMIN_VIEWER_IDS.include?(@viewer.id)
       flash[:notice] = "Sorry, you don't have permission to add projects coordinators."
       redirect_to :controller => :main, :action => :index
     end

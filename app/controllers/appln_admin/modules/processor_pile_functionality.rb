@@ -6,7 +6,7 @@ module ProcessorPileFunctionality
   
   def ensure_evaluate_permission
     @viewer.set_project(@project)
-    unless (@viewer.is_eventgroup_coordinator? || @viewer.is_processor?)
+    unless (@viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor?)
       flash[:notice] = "Sorry, you don't have permissions to evaluate applications."
       render :text => "", :layout => true
       return false

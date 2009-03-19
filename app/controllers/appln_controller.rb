@@ -105,7 +105,7 @@ class ApplnController < InstanceController
       @pass_params[:view_always_editable] = true
       
       @viewer.set_project @appln.profile.project
-      filter = if @viewer.is_eventgroup_coordinator?
+      filter = if @viewer.is_eventgroup_coordinator?(@eg)
           [ "processor_always_editable", "always_editable" ]
         elsif @viewer.is_processor?
           [ "processor_always_editable" ]

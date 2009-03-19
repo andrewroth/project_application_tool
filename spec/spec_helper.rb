@@ -92,7 +92,7 @@ def setup_viewer(options = {})
     :processor_projects => [],
     :is_student? => options[:student],
     :is_projects_coordinator? => options[:pc],
-    :is_eventgroup_coordinator? => options[:egc],
+    :is_eventgroup_coordinator?(@eg) => options[:egc],
     :name => 'Bob',
     :id => 1
   })

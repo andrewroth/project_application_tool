@@ -24,7 +24,7 @@ class BaseApplnAndRefsViewer < ViewOnlineController
   
   def get_filter
     @viewer.set_project @project
-    if !( (@project && @viewer.is_processor?) || @viewer.is_eventgroup_coordinator?)
+    if !( (@project && @viewer.is_processor?) || @viewer.is_eventgroup_coordinator?(@eg))
       return { :filter => ['confidential'], :default => true }
     end
     return nil

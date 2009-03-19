@@ -99,7 +99,7 @@ class EventGroupsController < AjaxTreeController
     end
 
     def ensure_eventgroup_coordinator
-      unless @viewer.is_eventgroup_coordinator?(@node)
+      unless @viewer.is_eventgroup_coordinator?(@eg)(@node)
         render :inline => 'no permission'
       end
     end

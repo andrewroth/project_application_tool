@@ -25,7 +25,7 @@ class ManageProjectsController < ApplicationController
   NO_PERMISSIONS_MSG = "Sorry, you don't have permissions to do that."
   
   def ensure_can_edit
-    unless (@viewer.is_eventgroup_coordinator? || @viewer.is_project_administrator? ||
+    unless (@viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_project_administrator? ||
       @viewer.is_project_director?)
 
       flash[:message] = NO_PERMISSIONS_MSG
@@ -36,7 +36,7 @@ class ManageProjectsController < ApplicationController
   end
               
   def ensure_is_eventgroup_coordinator
-    unless @viewer.is_eventgroup_coordinator?
+    unless @viewer.is_eventgroup_coordinator?(@eg)
       flash[:message] = NO_PERMISSIONS_MSG
       redirect_to :controller => "main"
       return false
@@ -86,7 +86,7 @@ class ManageProjectsController < ApplicationController
   end
 
   def new
-    if (@viewer.is_eventgroup_coordinator?)
+    if (@viewer.is_eventgroup_coordinator?(@eg))
       @project = Project.new :event_group_id => session[:event_group_id]
     else
       flash[:notice] = "Sorry, you don't have permissions to create a new project."
@@ -95,7 +95,7 @@ class ManageProjectsController < ApplicationController
   end
   
   def create
-    if (@viewer.is_eventgroup_coordinator?)
+    if (@viewer.is_eventgroup_coordinator?(@eg))
       @project = Project.new(params[:project].merge(:event_group_id => session[:event_group_id]))
       
       if @project.save

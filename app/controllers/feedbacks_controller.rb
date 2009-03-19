@@ -53,6 +53,6 @@ class FeedbacksController < ApplicationController
   end
   
   def ensure_projects_coordinator
-    @viewer.is_eventgroup_coordinator?
+    @viewer.is_eventgroup_coordinator?(@eg)
   end
 end

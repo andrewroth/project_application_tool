@@ -97,7 +97,7 @@ class ToolsController < ApplicationController
     
     @possible_viewers.sort!{ |a,b| a.name <=> b.name }
     
-    if (@viewer.is_eventgroup_coordinator?)
+    if (@viewer.is_eventgroup_coordinator?(@eg))
       processor_for_project_ids = @eg.projects.find(:all).collect{ |p| p.id }
     else
       # find which projects @viewer is a processor for
@@ -149,7 +149,7 @@ class ToolsController < ApplicationController
   protected
   
   def ensure_eventgroup_coordinator
-    is = @viewer.is_eventgroup_coordinator?
+    is = @viewer.is_eventgroup_coordinator?(@eg)
     render :inline => "Sorry, you don't have permission to view this page." if !is
     is
   end
