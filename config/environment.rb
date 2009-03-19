@@ -62,9 +62,10 @@ Rails::Initializer.run do |config|
   # http://weblog.techno-weenie.net/2007/1/26/understanding-the-rails-plugin-initialization-process
   # http://www.ruby-forum.com/topic/134860#600630
   # http://dev.rubyonrails.org/ticket/5852
-  #config.after_initialize {
+  config.after_initialize {
   #  throw ActiveSupport::Dependencies.load_once_paths.inspect
-  #}
+    ActiveSupport::Dependencies.load_once_paths << 'active_scaffold'
+  }
 end
 
 # Add new inflection rules using the following format 
