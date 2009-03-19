@@ -51,7 +51,6 @@ Rails::Initializer.run do |config|
   # Load Engines first
   #config.plugins = [:engines, :engines_model_mixins, :questionnaire_engine, :reference_engine, :all]
   config.plugins = [:questionnaire_engine, :reference_engine, :all]
-  #config.reload_plugins = true
 
   # shhhh secret!  apparently this is required in 2.x
   config.action_controller.session = { :secret => "In the beginning was the Word, and the Word was with God, and the Word was God." }
@@ -62,10 +61,6 @@ Rails::Initializer.run do |config|
   # http://weblog.techno-weenie.net/2007/1/26/understanding-the-rails-plugin-initialization-process
   # http://www.ruby-forum.com/topic/134860#600630
   # http://dev.rubyonrails.org/ticket/5852
-  config.after_initialize {
-    #throw ActiveSupport::Dependencies.load_once_paths.inspect
-    #ActiveSupport::Dependencies.load_once_paths << 'active_record_permissions'
-  }
 end
 
 # Add new inflection rules using the following format 
@@ -136,3 +131,5 @@ end
 
 # fix for ruby 1.8.7 - see http://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg528878.html
 require 'fix_1_8_7_enumerable'
+
+ActiveSupport::Dependencies.load_once_paths.delete_if { |p| p['common_models'] }
