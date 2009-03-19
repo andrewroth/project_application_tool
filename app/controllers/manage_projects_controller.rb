@@ -73,7 +73,7 @@ class ManageProjectsController < ApplicationController
 
   def list
     @submenu_title = "list"
-    @projects = if (@viewer.is_eventgroup_coordinator?)
+    @projects = if (@viewer.is_eventgroup_coordinator?(@eg))
         @eg.projects
       else
         @viewer.current_projects_with_any_role(@eg).reject{ |p|
