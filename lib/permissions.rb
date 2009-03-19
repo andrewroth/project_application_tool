@@ -31,7 +31,7 @@ module Permissions
   end
 
   def is_eventgroup_coordinator
-    @viewer.is_eventgroup_coordinator?
+    @viewer.is_eventgroup_coordinator?(@eg)
   end
 
 
