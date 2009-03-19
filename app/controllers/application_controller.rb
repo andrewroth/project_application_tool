@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
                                            :test_rescues_path ]
   
   # create the session object from the db
-  before_filter :set_viewer
+  before_filter :set_user
 
 
   # ensure they've chosen a project group for the session
@@ -109,7 +109,7 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def set_viewer
+  def set_user
     if session[:user_id]
       @viewer = Viewer.find session[:user_id]
     else
