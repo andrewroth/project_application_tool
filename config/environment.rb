@@ -124,7 +124,6 @@ end
 
 require_library_or_gem "redcloth" unless Object.const_defined?(:RedCloth)
 
-<<<<<<< HEAD:config/environment.rb
 module QE
   mattr_accessor :prefix
   self.prefix = "form_"
