@@ -95,7 +95,6 @@ class EventGroupsController < AjaxTreeController
 
     def set_event_group
       @eg = EventGroup.find session[:event_group_id] if !EventGroup.find(:all).empty?
-      @viewer.eg = @eg
       session[:logo_url] = @eg.logo unless session[:logo_url]
     end
 

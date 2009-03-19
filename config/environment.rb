@@ -133,3 +133,4 @@ end
 require 'fix_1_8_7_enumerable'
 
 ActiveSupport::Dependencies.load_once_paths.delete_if { |p| p['common_models'] }
+ActiveSupport::Dependencies.load_once_paths.delete_if { |p| p['ajax_tree'] }
