@@ -1,7 +1,7 @@
 
 <h1>Listing Manual Donations</h1>
 
-<% unless @user.is_student? then %>
+<% unless @viewer.is_student?(@eg) then %>
 
 <p><%= sortable_table %>
       <thead><tr>

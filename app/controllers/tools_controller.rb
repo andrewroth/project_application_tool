@@ -79,10 +79,10 @@ class ToolsController < ApplicationController
     as_intern = params[:as_intern] == '1' || params[:as_intern] == 'true'    
     acceptance = Acceptance.create :appln_id => @appln.id, :project_id => @project.id, 
       :support_claimed => 0, :support_coach_id => params[:support_coach_id], 
-      :accepted_by_viewer_id => @user.viewer.id, :as_intern => as_intern,
+      :accepted_by_viewer_id => @viewer.viewer.id, :as_intern => as_intern,
       :viewer_id => @appln.viewer.id
      
-    SpApplicationMailer.deliver_accepted(acceptance, @user.viewer.email)
+    SpApplicationMailer.deliver_accepted(acceptance, @viewer.viewer.email)
     
     flash[:notice] = "#{@appln.viewer.name} accepted to #{@project.title}.  " + 
         "<a href='/appln/view_always_editable?appln_id=#{@appln.id}'>Edit their always editable fields.</a>"
@@ -97,11 +97,11 @@ class ToolsController < ApplicationController
     
     @possible_viewers.sort!{ |a,b| a.name <=> b.name }
     
-    if (@user.is_eventgroup_coordinator?)
+    if (@viewer.is_eventgroup_coordinator?)
       processor_for_project_ids = @eg.projects.find(:all).collect{ |p| p.id }
     else
-      # find which projects @user is a processor for
-      processor_for_project_ids = Processor.find_all_by_viewer_id(@user.id, :include => :project).collect { 
+      # find which projects @viewer is a processor for
+      processor_for_project_ids = Processor.find_all_by_viewer_id(@viewer.id, :include => :project).collect { 
         |entry| if entry.project.event_group_id == @eg.id then entry.project_id else nil end }.compact
     end
     @possible_projects = @eg.projects.find processor_for_project_ids
@@ -149,7 +149,7 @@ class ToolsController < ApplicationController
   protected
   
   def ensure_eventgroup_coordinator
-    is = @user.is_eventgroup_coordinator?
+    is = @viewer.is_eventgroup_coordinator?
     render :inline => "Sorry, you don't have permission to view this page." if !is
     is
   end

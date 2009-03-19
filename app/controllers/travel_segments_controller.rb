@@ -111,7 +111,7 @@ class TravelSegmentsController < ApplicationController
     def set_menu_titles() @page_title = 'Manage Projects'; @submenu_title = 'travel segments' end
     
     def ensure_atleast_project_staff
-      return @user.is_eventgroup_coordinator? || @user.is_any_project_staff(@eg)
+      return @viewer.is_eventgroup_coordinator? || @viewer.is_any_project_staff(@eg)
     end
     
     def get_travel_segment

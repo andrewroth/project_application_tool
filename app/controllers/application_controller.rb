@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
                                            :test_rescues_path ]
   
   # create the session object from the db
-  before_filter :set_user
+  before_filter :set_viewer
 
 
   # ensure they've chosen a project group for the session
@@ -109,11 +109,11 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def set_user
+  def set_viewer
     if session[:user_id]
-      @user = User.new(session[:user_id])
+      @viewer = Viewer.find session[:user_id]
     else
-      @user = nil
+      @viewer = nil
     end
   end
 
@@ -140,8 +140,8 @@ class ApplicationController < ActionController::Base
   end
   
   def restrict_students
-    if (@user && @user.is_student?)
-      if @user.is_any_project_staff(@eg)
+    if (@viewer && @viewer.is_student?(@eg))
+      if @viewer.is_any_project_staff(@eg)
       else
         redirect_to :controller => "your_apps"
       end
@@ -149,7 +149,7 @@ class ApplicationController < ActionController::Base
   end
   
   def set_show_your_projects
-    @show_your_project = @user && (!@user.is_student? || @user.is_any_project_staff(@eg))
+    @show_your_project = @viewer && (!@viewer.is_student?(@eg) || @viewer.is_any_project_staff(@eg))
     true
   end
   
@@ -190,7 +190,7 @@ class ApplicationController < ActionController::Base
         true
       elsif n.matches_controller?(params[:controller]) && n.matches_action?(params[:action])
         # matches controller and action, delete only if acknowledged
-        @user && @user.viewer && @user.viewer.notification_acknowledgments.find_by_notification_id(n.id)
+        @viewer && @viewer.viewer && @viewer.viewer.notification_acknowledgments.find_by_notification_id(n.id)
       else
         true
       end

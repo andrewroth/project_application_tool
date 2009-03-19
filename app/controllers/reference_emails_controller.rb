@@ -40,7 +40,7 @@ class ReferenceEmailsController < ApplicationController
   protected
   
   def ensure_eventgroup_coordinator
-    if !@user.is_eventgroup_coordinator?
+    if !@viewer.is_eventgroup_coordinator?
       render :inline => "Sorry, you have to be projects coordinator to edit the reference emails."
       return false
     end

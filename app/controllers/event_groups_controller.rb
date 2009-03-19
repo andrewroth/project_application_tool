@@ -95,12 +95,12 @@ class EventGroupsController < AjaxTreeController
 
     def set_event_group
       @eg = EventGroup.find session[:event_group_id] if !EventGroup.find(:all).empty?
-      @user.eg = @eg
+      @viewer.eg = @eg
       session[:logo_url] = @eg.logo unless session[:logo_url]
     end
 
     def ensure_eventgroup_coordinator
-      unless @user.viewer.is_eventgroup_coordinator?(@node)
+      unless @viewer.viewer.is_eventgroup_coordinator?(@node)
         render :inline => 'no permission'
       end
     end

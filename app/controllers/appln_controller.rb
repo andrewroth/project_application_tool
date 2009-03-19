@@ -32,7 +32,7 @@ class ApplnController < InstanceController
   end
   
   def withdraw
-    @appln.profile.withdraw! :status => 'self_withdrawn', :user => @user
+    @appln.profile.withdraw! :status => 'self_withdrawn', :user => @viewer
     flash[:notice] = 'Your application has been withdrawn.  If you change your mind, please email the appropriate address below.'
     redirect_to :controller => :your_apps, :action => :list
   end
@@ -104,10 +104,10 @@ class ApplnController < InstanceController
       # keep passing always editable to save_page and validate_page can find the right pages
       @pass_params[:view_always_editable] = true
       
-      @user.set_project @appln.profile.project
-      filter = if @user.is_eventgroup_coordinator?
+      @viewer.set_project @appln.profile.project
+      filter = if @viewer.is_eventgroup_coordinator?
           [ "processor_always_editable", "always_editable" ]
-        elsif @user.is_processor?
+        elsif @viewer.is_processor?
           [ "processor_always_editable" ]
 	else
 	  [ "always_editable" ]

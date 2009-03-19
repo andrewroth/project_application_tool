@@ -57,7 +57,7 @@ module MainHelper
     if ref.nil?
       "none"
     elsif ref.status != 'completed' && ref.mail?
-      @user.can_evaluate? ? "mailing (" + link("input", ref.ref_url) + ")" : "mailing"
+      @viewer.can_evaluate? ? "mailing (" + link("input", ref.ref_url) + ")" : "mailing"
     else
       ref.status
     end

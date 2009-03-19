@@ -24,9 +24,9 @@
           <% 
           if defined?(project).nil? || acceptance.project != project
             project = acceptance.project
-            @user.set_project project
+            @viewer.set_project project
 
-            @full_view = @user.fullview?
+            @full_view = @viewer.fullview?
             @cache = ProfileDonation.cache project.id
           end
           %>
@@ -65,7 +65,7 @@
                 <td><%= format_currency acceptance.donations_total(:cache => @cache) %></td>
                 <td><%= format_currency acceptance.cached_costing_total %></td>
                 <td>
-                    <% if @user.can_modify_profile_in_project project %>
+                    <% if @viewer.can_modify_profile_in_project project %>
                         <% name = "support_coach_#{acceptance.id}" %>
                         <% support_coach_id = acceptance.support_coach.nil? ? '' : acceptance.support_coach_id %>
                         <%= render :partial => 'support_coach_choice', :locals => { :name => name, 
@@ -93,7 +93,7 @@
             </td>
             <td><%= render :partial => 'accepted_pile_table_intern', :object => acceptance %></td>
             <td> <!-- other -->
-                <% if @user.is_eventgroup_coordinator? %>
+                <% if @viewer.is_eventgroup_coordinator?(@eg) %>
                   <% name = "acceptance_#{acceptance.id}" %>
                     
                   <%= withdraw_move_link acceptance.id %>
@@ -105,13 +105,13 @@
                 <% else %>
                   <% if acceptance.as_intern? %>intern<% end %>
                   
-                  <% if @user.is_eventgroup_coordinator? || @user.is_project_administrator? %>
+                  <% if @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_project_administrator? %>
                       <!-- link to costing page -->
                       <%= costing_link acceptance.id %>
                   <% end %>
                 <% end %>
 		
-		<% if @user.is_eventgroup_coordinator? || @user.is_processor? %>
+		<% if @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor? %>
 		  <% if appln %>
                     <%= edit_always_editable_link acceptance.id %>
 		  <% else %>

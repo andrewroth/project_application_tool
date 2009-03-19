@@ -36,7 +36,7 @@ class AssignmentsController < ApplicationController
   private
 
   def set_person
-    @person = @user.viewer.person
+    @person = @viewer.viewer.person
     (flash[:error] = 'Need to be logged in') & render(:inline => '') unless @person
   end
 end

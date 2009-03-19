@@ -1,6 +1,6 @@
 <p>
 
-<% @accepted = Acceptance.find_all_by_project_id_and_support_coach_id(project.id, @user.id) %>
+<% @accepted = Acceptance.find_all_by_project_id_and_support_coach_id(project.id, @viewer.id) %>
 
 
 <% if @accepted.length > 0 %>

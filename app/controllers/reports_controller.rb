@@ -12,7 +12,6 @@ class ReportsController < ApplicationController
     :ticketing_requests, :funding_status, :funding_details, :viewers_with_profile_for_project,
     :funding_details_costing, :funding_details, :travel_list, :project_stats, :funding_costs,
     :itinerary, :interns, :summary_forms, :cost_items_for_project, :cost_items, :manual_donations, :prep_items, :prep_items_for_project ]
-  before_filter :set_viewer, :only => [ :funding_details_costing, :funding_details, :funding_costs ]
   before_filter :set_travel_segment, :only => [ :travel_segment, :custom_itinerary ]
   before_filter :set_cost_items, :only => [ :cost_items ]
   before_filter :set_prep_items, :only => [ :prep_items ]
@@ -21,20 +20,20 @@ class ReportsController < ApplicationController
   
   def index
     projects = @eg.projects
-    if @user.is_eventgroup_coordinator?
+    if @viewer.is_eventgroup_coordinator?(@eg)
       @project_with_full_view = projects
       @project_director_projects = projects
     else
       @project_with_full_view = []
       @project_director_projects = []
       projects.each do |p|
-        @user.set_project p
-        if @user.is_project_administrator? || @user.is_project_director?
+        @viewer.set_project p
+        if @viewer.is_project_administrator? || @viewer.is_project_director?
           
           @project_with_full_view << p
           @project_director_projects << p
           
-        elsif @user.is_project_staff?
+        elsif @viewer.is_project_staff?
           @project_with_full_view << p
         end
       end
@@ -554,7 +553,7 @@ class ReportsController < ApplicationController
     
     # special case for people assigned to the regional/national campus
     # they can see everything
-    if @user.viewer.person && @user.viewer.person.campuses.find_by_campus_shortDesc('Reg/Nat')
+    if @viewer.person && @viewer.person.campuses.find_by_campus_shortDesc('Reg/Nat')
       @projects = @eg.projects
     end
 
@@ -828,7 +827,7 @@ class ReportsController < ApplicationController
     @accepted_viewers = acceptances.collect &:viewer
     
     # TODO: do we need to worry about StaffProfiles ?
-    #@user.is_project_director? || @user.is_eventgroup_coordinator? || @user.is_project_administrator? || @user.viewer == v
+    #@viewer.is_project_director? || @viewer.is_eventgroup_coordinator? || @viewer.is_project_administrator? || @viewer.viewer == v
     
     @accepted_viewers.sort!{ |a,b| a.name <=> b.name }
     @id = params[:dom_id]
@@ -1273,13 +1272,18 @@ class ReportsController < ApplicationController
   end
   
   def set_permissions_level
-    @is_staff = !@user.is_student?
-    @is_eventgroup_coordinator = @user.is_eventgroup_coordinator?
+    @is_staff = !@viewer.is_student?(@eg)
+    @is_eventgroup_coordinator = @viewer.is_eventgroup_coordinator?(@eg)
     true
   end
   
-  def ensure_is_general_staff() @is_staff end
-  def ensure_is_eventgroup_coordinator() @is_eventgroup_coordinator end
+  def ensure_is_general_staff
+    render(:inline => 'Must be staff') unless @is_staff
+  end
+
+  def ensure_is_eventgroup_coordinator
+    render(:inline => 'Must be eventgroup coordinator') unless @is_eventgroup_coordinator
+  end
   
   @@reports_layout = 'report'
   
@@ -1472,9 +1476,9 @@ class ReportsController < ApplicationController
     @projects = []
     requested_projects.each do |project|
       # ensure the user has permission to access this project
-      @user.set_project project
-      if @user.is_eventgroup_coordinator? || @user.is_project_director? || 
-        @user.is_project_administrator? || @user.is_project_staff?
+      @viewer.set_project project
+      if @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_project_director?(@eg) || 
+        @viewer.is_project_administrator?(@eg) || @viewer.is_project_staff?(@eg)
         @projects << project
       end
     end
@@ -1526,10 +1530,6 @@ class ReportsController < ApplicationController
     }
   end
 
-  def set_viewer
-    @viewer ||= Viewer.find params[:viewer_id]
-  end
-  
   def to_csv(report_info, headers, rows)
     # add the report info
     csv = report_info + "\r\n\r\n"

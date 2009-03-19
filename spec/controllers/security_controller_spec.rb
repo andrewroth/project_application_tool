@@ -57,7 +57,7 @@ Can't get it to set the env
   it "should allow students assigned as staff" do
     setup_eg; setup_form; setup_viewer(:student => true); setup_project
 
-    @user.stub!(:is_any_project_staff => true)
+    @viewer.stub!(:is_any_project_staff => true)
     post :test_rescues_path # anything that has restrict_students before_filter enabled will do
     response.should_not redirect_to('http://test.hosttest.host/your_apps')
   end

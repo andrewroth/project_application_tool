@@ -8,7 +8,7 @@ end
 
 %>
 <div id="student_view">
-	<h2><%= @user.viewer.name %> <%= @profile.project.title %></h2>
+	<h2><%= @viewer.name %> <%= @profile.project.title %></h2>
 	
 	<% if @student %>
 	  <p style='font-style: italic;'>You have been accepted to <%= @acceptance.project.title %>

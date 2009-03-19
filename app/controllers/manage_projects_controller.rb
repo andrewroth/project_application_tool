@@ -25,8 +25,8 @@ class ManageProjectsController < ApplicationController
   NO_PERMISSIONS_MSG = "Sorry, you don't have permissions to do that."
   
   def ensure_can_edit
-    unless (@user.is_eventgroup_coordinator? || @user.is_project_administrator? ||
-      @user.is_project_director?)
+    unless (@viewer.is_eventgroup_coordinator? || @viewer.is_project_administrator? ||
+      @viewer.is_project_director?)
 
       flash[:message] = NO_PERMISSIONS_MSG
       redirect_to :controller => "main"
@@ -36,7 +36,7 @@ class ManageProjectsController < ApplicationController
   end
               
   def ensure_is_eventgroup_coordinator
-    unless @user.is_eventgroup_coordinator?
+    unless @viewer.is_eventgroup_coordinator?
       flash[:message] = NO_PERMISSIONS_MSG
       redirect_to :controller => "main"
       return false
@@ -54,7 +54,7 @@ class ManageProjectsController < ApplicationController
   end
   
   def determine_project_roles
-    @user.set_project(@project)
+    @viewer.set_project(@project)
     true
   end
   
@@ -73,10 +73,10 @@ class ManageProjectsController < ApplicationController
 
   def list
     @submenu_title = "list"
-    @projects = if (@user.is_eventgroup_coordinator?)
+    @projects = if (@viewer.is_eventgroup_coordinator?)
         @eg.projects
       else
-        @user.viewer.current_projects_with_any_role(@eg).reject{ |p|
+        @viewer.viewer.current_projects_with_any_role(@eg).reject{ |p|
           !@eg.projects.include?(p)
         }
       end
@@ -86,7 +86,7 @@ class ManageProjectsController < ApplicationController
   end
 
   def new
-    if (@user.is_eventgroup_coordinator?)
+    if (@viewer.is_eventgroup_coordinator?)
       @project = Project.new :event_group_id => session[:event_group_id]
     else
       flash[:notice] = "Sorry, you don't have permissions to create a new project."
@@ -95,7 +95,7 @@ class ManageProjectsController < ApplicationController
   end
   
   def create
-    if (@user.is_eventgroup_coordinator?)
+    if (@viewer.is_eventgroup_coordinator?)
       @project = Project.new(params[:project].merge(:event_group_id => session[:event_group_id]))
       
       if @project.save
@@ -179,7 +179,7 @@ class ManageProjectsController < ApplicationController
       if @profile.nil?
         @profile = StaffProfile.create :viewer_id => params[:viewer_id], :project_id => params[:project_id]
       elsif @profile.class != StaffProfile
-        @profile.manual_update :type => StaffProfile, :user => @user
+        @profile.manual_update :type => StaffProfile, :user => @viewer
       end
 
       @success = @success && @profile
@@ -208,7 +208,7 @@ class ManageProjectsController < ApplicationController
         # if 'going' has been unchecked, the staff profile is set to withdrawn
         @profile ||= Withdrawn.find_by_viewer_id_and_project_id viewer.id, @project.id
 
-        @profile.manual_update :type => Withdrawn, :status => :staff_profile_dropped, :user => @user
+        @profile.manual_update :type => Withdrawn, :status => :staff_profile_dropped, :user => @viewer
       end
     end
   

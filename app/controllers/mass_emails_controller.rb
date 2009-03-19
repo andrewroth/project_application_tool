@@ -79,10 +79,10 @@ class MassEmailsController < ApplicationController
   protected
 
   def set_allowed_projects
-    @projects = if @user.is_eventgroup_coordinator?
+    @projects = if @viewer.is_eventgroup_coordinator?
         @eg.projects
       else
-        @user.viewer.current_projects_with_any_role(@eg)
+        @viewer.viewer.current_projects_with_any_role(@eg)
       end
   end
 

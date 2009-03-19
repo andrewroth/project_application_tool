@@ -11,7 +11,7 @@
       <%= th 'withdrawn by' %>
       <%= th 'withdrawn at' %>
       <%= th 'reason' %>
-      <% if @user.is_eventgroup_coordinator? %>
+      <% if @viewer.is_eventgroup_coordinator?(@eg) %>
         <%= th 'notes' %>
       <% end %>
       <%= th 'other' %>
@@ -28,7 +28,7 @@
       <td><%= wd = withdrawn.withdrawn_by; wd.name if wd %></td>
       <td><%= format_datetime withdrawn.withdrawn_at %></td>
       <td><%= withdrawn.reason%></td>
-      <% if @user.is_projects_coordinator? %>
+      <% if @viewer.is_projects_coordinator? %>
         <td><%= withdrawn.reason_notes %></td>
       <% end %>
       <td><%= withdraw_move_link withdrawn.id, 'move' %></td>

@@ -1,7 +1,7 @@
 <% node_label = if node.has_logo? then render(:partial => 'logo', :locals => { :node => node }) else
     node.to_s end %>
 
-<% if (@user.is_eventgroup_coordinator? || !node.projects.empty?) && node.children.empty? %>
+<% if (@viewer.is_eventgroup_coordinator?(@eg) || !node.projects.empty?) && node.children.empty?(@eg) %>
   <%= link_to node_label, set_as_scope_event_group_url(node.id) %>
 <% else %>
   <%= node_label %>

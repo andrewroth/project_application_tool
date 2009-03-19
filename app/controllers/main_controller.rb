@@ -1,7 +1,5 @@
 require_dependency 'bsearch'
-
 require_dependency 'rubygems'
-require_dependency 'select_with_include'
 
 class MainController < ApplicationController
   before_filter :set_campuses, :only => [ :index, :your_campuses, :your_applications ]
@@ -38,13 +36,13 @@ class MainController < ApplicationController
     # at this point we know the user is not a student
     # 
     # project directors would like to go to my projects
-    if @user.is_eventgroup_coordinator?
+    if @viewer.is_eventgroup_coordinator?(@eg)
       flash.keep(:notice)
       redirect_to :action => :your_projects
     else
       # students should go to your projects, that's all they can see -- they might
       #  be interns then they can see support coaches only
-      if @user.is_student?
+      if @viewer.is_student?
         redirect_to :action => :your_projects
       else
         redirect_to :action => :your_campuses
@@ -74,10 +72,10 @@ class MainController < ApplicationController
   end
   
   def your_projects
-    if (@user.is_eventgroup_coordinator?)
+    if (@viewer.is_eventgroup_coordinator?(@eg))
       @allowable_projects = @eg.projects.find :all
     else
-      @allowable_projects = @user.viewer.current_projects_with_any_role @eg
+      @allowable_projects = @viewer.viewer.current_projects_with_any_role @eg
     end
     
     @allowable_projects_array = []
@@ -121,11 +119,11 @@ class MainController < ApplicationController
   
   def your_applications
     @page_title = "App Processing"
-    if (@user.is_eventgroup_coordinator?)
+    if (@viewer.is_eventgroup_coordinator?)
       processor_for_project_ids = @eg.projects.collect{ |p| p.id }
     else
-      # find which projects @user is a processor for
-      processor_for_project_ids = Processor.find_all_by_viewer_id(@user.id).collect { 
+      # find which projects @viewer is a processor for
+      processor_for_project_ids = Processor.find_all_by_viewer_id(@viewer.id).collect { 
         |entry| if entry.project.event_group_id == @eg.id then entry.project_id else nil end }.compact
     end
     
@@ -175,9 +173,9 @@ class MainController < ApplicationController
 
     for profile in profiles
       @project = profile.project
-      @user.set_project @project
+      @viewer.set_project @project
 
-      if @user.fullview?
+      if @viewer.fullview?
         # we know at least one project has a full view
         @restricted_full_view = true
       end
@@ -202,7 +200,7 @@ class MainController < ApplicationController
     :conditions => ["profiles.viewer_id = ? and profiles.type = ?", @viewer.id, "StaffProfile"])
     @applns = Appln.find_all_by_viewer_id @viewer.id, :include => :profiles
     #@applns.reject!{ |a| ![ 'withdrawn', 'declined', 'started', 'unsubmitted' ].include?(a.status) }
-    @full_view = @user.fullview?
+    @full_view = @viewer.fullview?
     @projects = true
 
     # sort the different findings into event groups
@@ -328,16 +326,16 @@ render :partial => "viewer_specifics"
   end
   
   def set_campuses
-    @campuses = @user ? users_campuses(@user) : []
+    @campuses = @viewer ? users_campuses : []
   end
   
-  def users_campuses(user)
+  def users_campuses
     campuses = nil
-    if (user.is_eventgroup_coordinator? || 
-    user.is_assigned_regional_or_national?)
+
+    if (@viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_assigned_regional_or_national?(@eg))
       campuses_find = :all
     else
-      campuses_find = @user.viewer.person.campuses.collect(&:id)
+      campuses_find = @viewer.person.campuses.collect(&:id)
     end
 
     campuses = unless Assignmentstatus.campus_student_ids.empty?

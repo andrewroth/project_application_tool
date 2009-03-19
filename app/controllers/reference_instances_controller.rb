@@ -22,7 +22,7 @@ class ReferenceInstancesController < InstanceController
   end
 
   def clear_user
-    @user = nil
+    @viewer = nil
   end
   
   def set_profile

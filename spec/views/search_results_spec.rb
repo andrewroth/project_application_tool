@@ -9,7 +9,7 @@ describe "/main/_viewer_specifics" do
         :viewer_userID => 'viewer.login',
         :person => @person
     )
-    @user = mock('user', :set_project => nil,
+    @viewer = mock('user', :set_project => nil,
               :fullview? => o[:fullview],
               :can_modify_profile_in_project => false,
               :is_projects_coordinator? => o[:fullview],
@@ -19,7 +19,7 @@ describe "/main/_viewer_specifics" do
     )
 
     assigns[:viewer] = @viewer
-    assigns[:user] = @user
+    assigns[:user] = @viewer
 
     @project = mock('project', :title => 'project', :id => 1)
     @appln = mock('appln', :id => 1, :form => mock('form2', 

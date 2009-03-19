@@ -23,7 +23,7 @@ class CustomReportsController < ApplicationController
 
     # filter out the confidential questions
     #logger.info 'AT FILTER'
-    if true || @user.is_eventgroup_coordinator? # TODO: remove hardcoded true
+    if true || @viewer.is_eventgroup_coordinator? # TODO: remove hardcoded true
       @report_elements = @report.report_elements
     else
       @report_elements = @report.report_elements.reject { |re|

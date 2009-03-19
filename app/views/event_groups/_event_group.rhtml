@@ -15,7 +15,7 @@ function editing(el) {
 <% node_label = if node.has_logo? then render(:partial => 'logo', :locals => { :node => node }) else 
     node.to_s end %>
 
-<% if @user.is_eventgroup_coordinator? %>
+<% if @viewer.is_eventgroup_coordinator?(@eg) %>
   <%= link_to_remote node_label, { 
        :update => 'create',
        :url => edit_event_group_url(node.id),

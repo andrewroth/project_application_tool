@@ -1,8 +1,8 @@
 <!-- intro text -->
 
-<% if !@user.is_eventgroup_coordinator? && @show_projects.empty? %>
+<% if !@viewer.is_eventgroup_coordinator?(@eg) && @show_projects.empty?(@eg) %>
   Sorry, you haven't been assigned to any projects.
-<% elsif @user.is_eventgroup_coordinator? %>
+<% elsif @viewer.is_eventgroup_coordinator?(@eg) %>
   As Projects Coordinator, you have full functionality.  You can see and modify everyone's status, for all projects.
 <% else %>
   You can see details for your project(s) here.

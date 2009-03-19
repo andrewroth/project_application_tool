@@ -29,8 +29,8 @@ class ProjectsController < ApplicationController
     @questionnaire = @eg.forms.find_by_name("Processor Form").questionnaire
 
     # filter confidential qs out unless user has permission
-    @user.set_project @project
-    unless @user.is_eventgroup_coordinator? || @user.is_processor?
+    @viewer.set_project @project
+    unless @viewer.is_eventgroup_coordinator? || @viewer.is_processor?
       @questionnaire.filter = { :filter => ['confidential'], :default => true }
     end
 

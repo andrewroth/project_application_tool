@@ -1,5 +1,5 @@
 <p>
-<strong>Welcome<%= ", "+ @appln.viewer.person.person_fname if !@user.viewer.person.nil? %>!</strong><br />
+<strong>Welcome<%= ", "+ @appln.viewer.person.person_fname if !@viewer.person.nil? %>!</strong><br />
 This is your home page for applying for <%= @appln.form.event_group.long_desc %>.<br />
 </p>
 <p>

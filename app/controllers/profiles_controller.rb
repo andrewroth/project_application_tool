@@ -54,7 +54,7 @@ class ProfilesController < ApplicationController
        params[:profile][:appln_id] = @appln.id
     end
 
-    success = @profile.manual_update(params[:profile], @user)
+    success = @profile.manual_update(params[:profile], @viewer)
     @profile.reload
 
     flash[:notice] = "Created new profile for #{@profile.viewer.name}."
@@ -113,7 +113,7 @@ class ProfilesController < ApplicationController
         Profile.create :viewer_id => viewer.id, :project_id => project.id
       else
         if profile.class != StaffProfile then
-          profile.manual_update :type => StaffProfile, :user => @user
+          profile.manual_update :type => StaffProfile, :user => @viewer
           render :inline => 'already created, changed type to StaffProfile'
        else
           render :inline => 'already created, already a StaffProfile'
@@ -122,7 +122,7 @@ class ProfilesController < ApplicationController
     else
       # remove
       if !profile.nil?
-        profile.manual_update :type => Withdrawn, :status => :staff_profile_dropped, :user => @user
+        profile.manual_update :type => Withdrawn, :status => :staff_profile_dropped, :user => @viewer
         render :inline => 'withdrawn'
       else
         render :inline => 'tried to withdraw, but didn\'t exist'
@@ -131,7 +131,7 @@ class ProfilesController < ApplicationController
   end
 
   def update
-    success = @profile.manual_update(params[:profile], @user)
+    success = @profile.manual_update(params[:profile], @viewer)
     
     if !request.xml_http_request?
       @profile.viewer_id ||= @profile.appln.viewer_id
@@ -143,7 +143,7 @@ class ProfilesController < ApplicationController
   end
   
   def list
-    @profiles = Profile.find_all_by_viewer_id(@user.viewer.id, :include => :project).reject{ |profile|
+    @profiles = Profile.find_all_by_viewer_id(@viewer.viewer.id, :include => :project).reject{ |profile|
         profile.project.nil? || profile.project.event_group_id != @eg.id
     }
 
@@ -152,7 +152,7 @@ class ProfilesController < ApplicationController
   
   def campus_info
     @submenu_title = 'Campus Info'
-    @person = @appln_person = @user.viewer.person
+    @person = @appln_person = @viewer.viewer.person
     @assignments = @person.assignments
 
     render :template => 'assignments/index'
@@ -160,14 +160,14 @@ class ProfilesController < ApplicationController
 
   def crisis_info
     @submenu_title = 'Personal Info and Crisis Info'
-    @person = @appln_person = @user.viewer.person
+    @person = @appln_person = @viewer.viewer.person
     @emerg = @person.emerg
   end
   
   def update_crisis_info # also updates personal info
     @submenu_title = 'Personal Info and Crisis Info'
 
-    @person = @appln_person = @user.viewer.person
+    @person = @appln_person = @viewer.viewer.person
 
     success_p = PersonalInformation.save_from_params @person, params
     success_c = CrisisInformation.save_from_params @person, params

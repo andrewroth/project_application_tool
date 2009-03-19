@@ -1,5 +1,5 @@
 <%
-if @potential_coaches_cached_project != project && @user.can_modify_profile_in_project(project)
+if @potential_coaches_cached_project != project && @viewer.can_modify_profile_in_project(project)
     project_with_staff_loaded1 = Project.find project.id, :include => [
                     { :support_coaches => { :viewer => :persons } },
                     { :project_staffs => { :viewer => :persons } }

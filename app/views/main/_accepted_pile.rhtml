@@ -10,8 +10,8 @@
             #:auto_donations,
             :support_coach
           ]
-@user.set_project project
-@full_view = @user.fullview? 
+@viewer.set_project project
+@full_view = @viewer.fullview? 
 @cache = ProfileDonation.cache project.id
 %>
 

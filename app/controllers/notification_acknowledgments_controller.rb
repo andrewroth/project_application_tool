@@ -1,12 +1,12 @@
 class NotificationAcknowledgmentsController < ApplicationController
   def create
-    if @user.nil?
+    if @viewer.nil?
       render :inline => 'Need to login to remember hidden files'
       return
     end
 
     @notification = Notification.find params[:notification_id]
-    @ack = NotificationAcknowledgment.new :viewer_id => @user.id,
+    @ack = NotificationAcknowledgment.new :viewer_id => @viewer.id,
              :notification_id => @notification.id
     @ack.save!
 

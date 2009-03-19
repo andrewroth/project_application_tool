@@ -131,7 +131,7 @@ class SecurityController < ApplicationController
     # give a warning about intranet logins expiring
     if session[:login_source] == 'spt'
       flash[:notice] = "You logged in by your intranet username and password.  Please note that we are phasing out the intranet logins in favor of GCX.  Please see <A HREF='http://docs.google.com/Doc?id=dd7zngd6_4c457j7dx' target='_blank'>this document</A> (link opens in a new window) explaining how you can upgrade to a GCX account."
-      logger.info "Intranet login @ #{Time.now} - viewer #{@user.viewer.viewer_userID if @user} id #{@user.viewer.id if @user}"
+      logger.info "Intranet login @ #{Time.now} - viewer #{@viewer_userID} id #{@viewer.id}"
     end
 
   end
@@ -190,7 +190,7 @@ class SecurityController < ApplicationController
   end
  
   def logout
-    @user = nil
+    @viewer = nil
     session[:user_id] = nil
     session[:needs_read_login_message_confirm] = true
 
@@ -210,9 +210,9 @@ class SecurityController < ApplicationController
   protected
 
   def setup_given_viewer_id(viewer_id)
-    @user = User.new(viewer_id)
+    @viewer = Viewer.find viewer_id
 
-    session[:user_id] = @user.id
+    session[:user_id] = @viewer.id
     session[:gcx] = nil
 
     # if the secret password was used, we want to reset the session, since
@@ -222,14 +222,14 @@ class SecurityController < ApplicationController
       session[:event_group_id] = nil
     end
 
-    logger.debug('login ' + @user.inspect)
+    logger.debug('login ' + @viewer.inspect)
 
     #flash[:downtime] ||= "<br />There will be two short periods of downtime (approx 10 mins each) sometime before 9:30 AM EST (6:30 PST) on Tuesday Jan 22, 2007 for maintenance"
     
     # update last login stuff
-    @user.viewer.viewer_isActive = true
-    @user.viewer.viewer_lastLogin = Time.now
-    @user.viewer.save!
+    @viewer.viewer_isActive = true
+    @viewer.viewer_lastLogin = Time.now
+    @viewer.save!
 
     redirect_to :controller => "main"
   end
