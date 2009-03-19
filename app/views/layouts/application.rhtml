@@ -127,8 +127,8 @@
       <h3><%=@title%></h3>
     <% end %>
 		
-    <%= render_if_possible(controller.controller_name + "/_menu") ||
-           (@submenu && render_if_possible(@submenu + "/_menu"))
+    <%= render_if_possible(controller.controller_name + "/menu") ||
+           (@submenu && render_if_possible(@submenu + "/menu"))
     %>
 
     <% submenu_items_html = yield :submenu %>
