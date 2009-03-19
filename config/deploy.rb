@@ -64,7 +64,11 @@ deploy.task :before_migrate do
   run "cd #{current_path}; RAILS_ENV=#{RAILS_ENV} rake db:setup:pat"
 end
 
-def link_shared(p)
+def link_shared(p, o = {})
+  if o[:overwrite]
+    run "rm -Rf #{release_path}/#{p}"
+  end
+
   run "ln -s #{shared_path}/#{p} #{release_path}/#{p}"
 end
 
@@ -75,12 +79,10 @@ unless ENV['target'] == 'demo'
     run "rm -Rf #{release_path}/tmp"
     link_shared 'tmp'
 
-    # log
-    run "rm -Rf #{release_path}/log"
-    link_shared 'log'
-
-    # other shared files
+    # other shared files / folders
+    link_shared 'log', :overwrite => true
     link_shared 'config/database.yml'
+    link_shared 'config/environments/development.rb', :overwrite => true
     link_shared 'public/event_groups'
   end
 end
