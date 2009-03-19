@@ -134,7 +134,3 @@ end
 require 'fix_1_8_7_enumerable'
 
 ActiveSupport::Dependencies.load_once_paths.delete_if { |p| p['common_models'] }
-=======
-# fix for ruby 1.8.7 - see http://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg528878.html
-require 'fix_1_8_7_enumerable'
->>>>>>> _rails_2.2:config/environment.rb
