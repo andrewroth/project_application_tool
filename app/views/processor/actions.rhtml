@@ -35,7 +35,7 @@
           <%= form_tag :action => 'accept', :profile_id => @profile.id, :project_id => @project.id %>
             <b>Accept</b> Applicant to <b><%= @project.title %></b> with support coach
             <%= render :partial => 'main/support_coach_choice', 
-            :locals => { :name => 'support_coach_id', :current => '' } %>
+              :locals => { :name => 'support_coach_id', :current => '', :project => @project } %>
             <% if @appln.as_intern? %>
               <%= select_tag("as_intern", 
               options_for_select([['as intern', true], ['not as intern', false]], 'as intern')) %>
