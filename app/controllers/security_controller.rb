@@ -136,11 +136,7 @@ class SecurityController < ApplicationController
     # give a warning about intranet logins expiring
     if session[:login_source] == 'spt'
       flash[:notice] = "You logged in by your intranet username and password.  Please note that we are phasing out the intranet logins in favor of GCX.  Please see <A HREF='http://docs.google.com/Doc?id=dd7zngd6_4c457j7dx' target='_blank'>this document</A> (link opens in a new window) explaining how you can upgrade to a GCX account."
-<<<<<<< HEAD:app/controllers/security_controller.rb
-      logger.info "Intranet login @ #{Time.now} - viewer #{@viewer_userID} id #{@viewer.id}"
-=======
-      logger.info "Intranet login @ #{Time.now} - viewer #{@user.viewer.viewer_userID if @user} id #{@user.viewer.id if @user}"
->>>>>>> _rails_2.2:app/controllers/security_controller.rb
+      logger.info "Intranet login @ #{Time.now} - viewer #{@viewer.viewer_userID} id #{@viewer.id}"
     end
 
   end
@@ -240,15 +236,9 @@ class SecurityController < ApplicationController
     #flash[:downtime] ||= "<br />There will be two short periods of downtime (approx 10 mins each) sometime before 9:30 AM EST (6:30 PST) on Tuesday Jan 22, 2007 for maintenance"
     
     # update last login stuff
-<<<<<<< HEAD:app/controllers/security_controller.rb
     @viewer.viewer_isActive = true
     @viewer.viewer_lastLogin = Time.now
     @viewer.save!
-=======
-    @user.viewer.viewer_isActive = true
-    @user.viewer.viewer_lastLogin = Time.now
-    @user.viewer.save!
->>>>>>> _rails_2.2:app/controllers/security_controller.rb
 
     redirect_to :controller => "main"
   end
