@@ -13,9 +13,7 @@ class SecurityController < ApplicationController
   skip_before_filter :verify_event_group_chosen
   skip_before_filter :set_event_group
 
-  unless RAILS_ENV == 'development'
-    before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login
-  end
+  before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login
 
   before_filter :ensure_gcx_in_session, :only => [ :link_gcx, :do_link_gcx, :link_gcx_new, :do_link_gcx_new ]
 
@@ -35,15 +33,15 @@ class SecurityController < ApplicationController
     end
 
     v = Viewer.find result[:viewer_id]
-    if v.guid && !v.guid.empty? && v.guid != session[:cas_extra_attributes]['sso_guid']
+    if v.guid && !v.guid.empty? && v.guid != cas_sso_guid
       flash[:notice] = "Error: Account '#{params[:username]}' already linked with a different gcx account."
-      logger.info "Link GCX Error: Account '#{params[:username]}' already linked with a different gcx account.  viewer id: #{v.id} guid: #{v.guid} cas guid: #{session[:cas_extra_attributes]['ssoGuid']} session: #{session.inspect}"
+      logger.info "Link GCX Error: Account '#{params[:username]}' already linked with a different gcx account.  viewer id: #{v.id} guid: #{v.guid} cas guid: #{cas_sso_guid} session: #{session.inspect}"
       redirect_to :action => 'link_gcx', :try_again => true, :username => params[:username]
 
       return
     end
 
-    v.guid = session[:cas_extra_attributes]['sso_guid']
+    v.guid = cas_sso_guid
     v.save!
 
     flash[:notice] = "Connected old user '#{params[:username]}' with gcx user '#{session[:cas_user]}'.  Now you can log in with your gcx user."
@@ -52,11 +50,26 @@ class SecurityController < ApplicationController
     setup_given_viewer_id v.id
   end
 
+  def cas_sso_guid
+    session[:cas_extra_attributes]['ssoGuid'] || 
+      session[:cas_extra_attributes]['sso_guid']
+  end
+
+  def cas_last_name
+    session[:cas_extra_attributes]['lastName'] || 
+      session[:cas_extra_attributes]['last_name']
+  end
+
+  def cas_first_name
+    session[:cas_extra_attributes]['firstName'] || 
+      session[:cas_extra_attributes]['first_name']
+  end
+
   def do_link_gcx_new
-    fn = params[:first_name] || session[:cas_extra_attributes]['firstName']
-    ln = params[:last_name] || session[:cas_extra_attributes]['lastName']
+    fn = params[:first_name] || cas_first_name
+    ln = params[:last_name] || cas_last_name
     uid = params[:email] || session[:cas_user]
-    guid = session[:cas_extra_attributes]['sso_guid']
+    guid = cas_sso_guid
 
     v = Viewer.create_new_cim_hrdb_account guid, fn, ln, uid
 
@@ -182,7 +195,7 @@ class SecurityController < ApplicationController
 
   def login_by_gcx
     return { :keep_trying => true } unless session[:cas_user]
-    viewer = Viewer.find_by_guid session[:cas_extra_attributes]['sso_guid']
+    viewer = Viewer.find_by_guid cas_sso_guid
 
     if viewer
       session[:login_source] = 'gcx'

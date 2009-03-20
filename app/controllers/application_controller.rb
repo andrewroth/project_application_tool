@@ -112,6 +112,7 @@ class ApplicationController < ActionController::Base
   def set_user
     if session[:user_id]
       @viewer = Viewer.find session[:user_id]
+      render(:inline => "Missing person for viewer #{@viewer.id}") if @viewer.person.nil?
     else
       @viewer = nil
     end

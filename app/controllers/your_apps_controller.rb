@@ -3,15 +3,10 @@ require_dependency 'permissions'
 class YourAppsController < ApplicationController
   include Permissions
 
-  before_filter :get_viewer
   before_filter :user_owns_profile_with_message, :only => [ :acceptance, :continue ]
   before_filter :set_title
 
   skip_before_filter :restrict_students
-  
-  def get_viewer
-    @viewer = @viewer.viewer
-  end
   
   def index
     redirect_to :action => :list
