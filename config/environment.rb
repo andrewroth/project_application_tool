@@ -61,6 +61,7 @@ Rails::Initializer.run do |config|
   # http://weblog.techno-weenie.net/2007/1/26/understanding-the-rails-plugin-initialization-process
   # http://www.ruby-forum.com/topic/134860#600630
   # http://dev.rubyonrails.org/ticket/5852
+  config.reload_plugins = true
 end
 
 # Add new inflection rules using the following format 
@@ -132,5 +133,6 @@ end
 # fix for ruby 1.8.7 - see http://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg528878.html
 require 'fix_1_8_7_enumerable'
 
-ActiveSupport::Dependencies.load_once_paths.delete_if { |p| p['common_models'] }
-ActiveSupport::Dependencies.load_once_paths.delete_if { |p| p['ajax_tree'] }
+#ActiveSupport::Dependencies.load_once_paths.delete_if { |p| p['common_models'] }
+#ActiveSupport::Dependencies.load_once_paths.delete_if { |p| p['ajax_tree'] }
+#ActiveSupport::Dependencies.load_once_paths << "#{RAILS_ROOT}/vendor/plugins/active_scaffold"
