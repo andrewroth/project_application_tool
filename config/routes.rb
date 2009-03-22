@@ -21,8 +21,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :profiles_viewer, :member => { :entire => :get, :summary => :get, 
     :delete_reference => :get, :submit => :post }.merge(QUESTIONNAIRE_ACTIONS)
-  map.resources :references_viewer, QUESTIONNAIRE_ACTIONS
-  map.resources :processor_viewer, QUESTIONNAIRE_ACTIONS
+  map.resources :references_viewer, :member => QUESTIONNAIRE_ACTIONS
+  map.resources :processor_viewer, :member => QUESTIONNAIRE_ACTIONS
 
   map.resources :projects, :member => { :bulk_summary_forms => :get, :bulk_processor_forms => :get }
 

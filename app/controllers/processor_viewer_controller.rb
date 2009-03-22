@@ -1,6 +1,6 @@
 require_dependency 'permissions'
 
-class ProcessorViewerController < BaseViewController
+class ProcessorViewerController < InstanceController
   include Permissions
 
   ProjectsCoordinator

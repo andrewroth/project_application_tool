@@ -132,8 +132,6 @@ class SecurityController < ApplicationController
       return
     end
 
-    debugger
-
     result = login_by_ticket
     result = login_by_gcx if result[:keep_trying]
     result = login_by_cim if result[:keep_trying]

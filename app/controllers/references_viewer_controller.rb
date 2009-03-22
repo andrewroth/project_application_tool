@@ -6,13 +6,18 @@ class ReferencesViewerController < BaseViewController
   ProjectsCoordinator
 
   prepend_before_filter :set_view_permissions # run this before ensure_permission
-  prepend_before_filter :get_reference_instance # prepend so that QE methods don't fail
+  prepend_before_filter :get_reference_instance # prepend so that QE methods (see below) don't fail
   prepend_before_filter :set_user # run this before set_view_permissions since permissions depend on user
   before_filter :ensure_permission
   before_filter :set_references
 
   def show
     @submenu_title = @reference.text
+
+    # pass the reference_instance, not the profile_id
+    @pass_params[:profile_id] = nil
+    @pass_params[:id] = @reference_instance.id
+
     index
   end
 
