@@ -136,3 +136,5 @@ require 'fix_1_8_7_enumerable'
 #ActiveSupport::Dependencies.load_once_paths.delete_if { |p| p['common_models'] }
 #ActiveSupport::Dependencies.load_once_paths.delete_if { |p| p['ajax_tree'] }
 #ActiveSupport::Dependencies.load_once_paths << "#{RAILS_ROOT}/vendor/plugins/active_scaffold"
+
+require 'mysql_retry_lost_connection'
