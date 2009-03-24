@@ -13,6 +13,10 @@ gem 'soap4r'
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
+module QE
+    def prefix() 'form_' end
+end
+
 # questionnaire engine config
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence those specified here
@@ -124,11 +128,6 @@ if ARGV.include?('--rcov_baseline')
 end
 
 require_library_or_gem "redcloth" unless Object.const_defined?(:RedCloth)
-
-module QE
-  mattr_accessor :prefix
-  self.prefix = "form_"
-end
 
 # fix for ruby 1.8.7 - see http://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg528878.html
 require 'fix_1_8_7_enumerable'
