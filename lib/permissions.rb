@@ -90,7 +90,7 @@ module Permissions
   end
 
   def user_owns_appln(appln)
-    return appln.viewer == @viewer.viewer
+    return appln.viewer == @viewer
   end
 
   def is_appln_ownership_or_permission(appln)
