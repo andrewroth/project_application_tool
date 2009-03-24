@@ -14,7 +14,7 @@ gem 'soap4r'
 require File.join(File.dirname(__FILE__), 'boot')
 
 module QE
-    def prefix() 'form_' end
+  def self.prefix() 'form_' end
 end
 
 # questionnaire engine config
