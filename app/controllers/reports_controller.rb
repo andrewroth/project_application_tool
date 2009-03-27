@@ -342,7 +342,7 @@ class ReportsController < ApplicationController
   
   def make_answers_cache(instance_list)
     @@form_elements[@eg.id] ||= { :values => [] }
-    return if @@form_elements[@eg.id][:values].empty?
+    return if @@form_elements[@eg.id][:values].nil? || @@form_elements[@eg.id][:values].empty?
     Answer.find_all_by_question_id_and_instance_id @@form_elements[@eg.id][:values].uniq, instance_list.collect{|ins| ins.id}
   end
   
