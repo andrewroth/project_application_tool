@@ -1,6 +1,7 @@
 class ReportElementsController < ApplicationController
   active_scaffold do |config|
     config.create.columns.exclude :position
+    config.columns = [ :position, :heading, :type, :report_model_method, :element ]
   end
 
   def toggle_type
