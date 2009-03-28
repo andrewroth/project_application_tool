@@ -42,7 +42,7 @@ class ReasonForWithdrawalsController < ApplicationController
     respond_to do |format|
       if @reason_for_withdrawal.save
         flash[:notice] = 'ReasonForWithdrawal was successfully created.'
-        format.html { redirect_to reason_for_withdrawal_url(@reason_for_withdrawal) }
+        format.html { redirect_to reason_for_withdrawals_url }
         format.xml  { head :created, :location => reason_for_withdrawal_url(@reason_for_withdrawal) }
       else
         format.html { render :action => "new" }
