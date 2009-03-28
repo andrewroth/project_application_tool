@@ -1,6 +1,6 @@
 require_dependency 'appln_admin/modules/acceptance_pile_functionality.rb'
 
-class AcceptanceController < BaseApplnAndRefsViewer
+class AcceptanceController < ApplicationController
   include Permissions
   
   before_filter :ensure_modify_acceptance_permission, :only => [ :update_support_coach ]
