@@ -12,6 +12,7 @@ class ReportsController < ApplicationController
     :ticketing_requests, :funding_status, :funding_details, :viewers_with_profile_for_project,
     :funding_details_costing, :funding_details, :travel_list, :project_stats, :funding_costs,
     :itinerary, :interns, :summary_forms, :cost_items_for_project, :cost_items, :manual_donations, :prep_items, :prep_items_for_project ]
+  before_filter :set_viewer, :only => [ :funding_details_costing, :funding_details, :funding_costs ]
   before_filter :set_travel_segment, :only => [ :travel_segment, :custom_itinerary ]
   before_filter :set_cost_items, :only => [ :cost_items ]
   before_filter :set_prep_items, :only => [ :prep_items ]
@@ -702,11 +703,11 @@ class ReportsController < ApplicationController
   
   def funding_details
     # find profile 
-    profiles = Profile.find_all_by_project_id_and_viewer_id @projects.collect { |p| p.id }, @viewer.id
+    profiles = Profile.find_all_by_project_id_and_viewer_id @projects.collect { |p| p.id }, @report_viewer.id
     profile = profiles[0] # uh take the first one if there are multiple projects requested
     
     if profile.nil?
-      flash[:notice] = "Couldn\'t find a profile for #{@viewer.name}."
+      flash[:notice] = "Couldn\'t find a profile for #{@report_viewer.name}."
       @rows = []
       return
     end
@@ -728,7 +729,7 @@ class ReportsController < ApplicationController
     # some totals at the bottom
     @rows << [ 'total', '', '', '', profile.donations_total ]
     
-    @page_title = "#{@eg.title} #{@project_title} #{@viewer.name} Funding Details Report"
+    @page_title = "#{@eg.title} #{@project_title} #{@report_viewer.name} Funding Details Report"
     render_report @rows
   end
   
@@ -739,7 +740,7 @@ class ReportsController < ApplicationController
     ]
     
     # grab the first profile found if multiple projects were passed
-    profiles = Profile.find_all_by_viewer_id_and_project_id @viewer.id, 
+    profiles = Profile.find_all_by_viewer_id_and_project_id @report_viewer.id, 
                   @projects.collect{|p| p.id}, :include => :optin_cost_items
     profile = profiles[0]
     
@@ -763,7 +764,7 @@ class ReportsController < ApplicationController
   
   def funding_costs
     funding_costs_rows
-    @page_title = "#{@eg.title} #{@project_title} #{@viewer.name} Funding Costs"
+    @page_title = "#{@eg.title} #{@project_title} #{@report_viewer.name} Funding Costs"
     render_report @rows, :sortable => false
   end
   
@@ -1528,6 +1529,10 @@ class ReportsController < ApplicationController
          pi.event_group != @eg
        end
     }
+  end
+
+  def set_viewer
+    @report_viewer ||= Viewer.find params[:viewer_id]
   end
 
   def to_csv(report_info, headers, rows)
