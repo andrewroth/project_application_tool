@@ -9,6 +9,7 @@ class CustomReportsController < ApplicationController
   active_scaffold :report do |config|
     config.columns = [ :title, :include_accepted, :include_applying, :include_staff, :report_elements ]
     config.update.columns.exclude :position
+    config.columns[:report_elements].associated_limit = 1000
   end
 
   def conditions_for_collection
