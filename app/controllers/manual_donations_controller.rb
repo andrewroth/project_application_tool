@@ -29,7 +29,7 @@ class ManualDonationsController < ApplicationController
 
   def create
     @manual_donation = ManualDonation.new(params[:manual_donation])
-    @manual_donations.created_at = Time.now # use local timezone instead of GMT
+    @manual_donation.created_at = Time.now # use local timezone instead of GMT
     check_rate
 
     if @manual_donation.save
