@@ -39,7 +39,7 @@ class ProfilesController < ApplicationController
 
     vs = Viewer.find :all, :conditions => [ 'viewer_userID like ? ', "%#{filter_s}%" ]
 
-    @viewers = ps.collect(&:viewers).flatten + vs
+    @viewers = ps.collect(&:viewers).flatten.compact + vs
     @viewers.uniq!
   end
 
