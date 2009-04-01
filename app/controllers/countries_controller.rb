@@ -1,4 +1,4 @@
-require_dependency 'permission'
+require_dependency 'permissions'
 
 class CountriesController < ApplicationController
   include Permissions
