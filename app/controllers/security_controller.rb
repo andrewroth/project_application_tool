@@ -1,7 +1,3 @@
-require_dependency 'soap/wsdlDriver'
-require_dependency 'soap/mapping'
-require_dependency 'defaultDriver'
-
 class SecurityController < ApplicationController
   require 'digest/md5'
   filter_parameter_logging :password
