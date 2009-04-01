@@ -470,7 +470,7 @@ class ReportsController < ApplicationController
    ].compact.flatten
     @columns.merge! emergency_contact_columns('c1_')
     @columns.merge! emergency_contact_columns('c2_')
-    @columns.merge! MyOrderedHash.new [
+    @columns.merge! MyOrderedHash.new([
     :health_number, 'string',
     :health_province, 'string',
     :ins_carrier, 'string',
@@ -479,7 +479,7 @@ class ReportsController < ApplicationController
     :doc_phone, 'string',
     :dentist_name, 'string',
     :dentist_phone, 'string'
-    ]
+    ])
  
 
     # index where the sub objects are so they can be referenced directly in the partial
