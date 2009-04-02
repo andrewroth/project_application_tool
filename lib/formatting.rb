@@ -1,25 +1,24 @@
 module Formatting
-  def format_date(value=nil)
-    return '' if value.to_s.empty?
-    time = ''
+  def value_to_time(v)
     begin
-      time = value.class == Time ? value : Time.parse(value)
-      return time.strftime('%Y/%m/%d')
+      [ Time, DateTime, ActiveSupport::TimeWithZone ].include?(v.class) ? v : Time.parse(v)
     rescue
+      ""
     end
-    time.to_s
+  end
+
+  def format_date(value=nil)
+    time = value_to_time(value)
+    return time if time == ''
+    return time.strftime('%Y/%m/%d')
   end
   
   def format_datetime(value=nil, style=:default)
     return '' if value.to_s.empty?
     return format_date(value) if value.class == Date
 
-    begin
-      time = (value.class == Time || value.class == DateTime || value.class == ActiveSupport::TimeWithZone) ? 
-        value : Time.parse(value)
-    rescue
-      debugger
-    end
+    time = value_to_time(value)
+    return time if time == ''
 
     if style == :ts
       time.strftime("%b %d %y %H:%M")
