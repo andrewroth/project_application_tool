@@ -1,0 +1,8 @@
+This type of question will show up as a text box where people can enter large amounts of information.
+This type of field has default character limit of <strong><%= @default_text_area_max_length %></strong>.  You can override this limit by entering a value here (leave at 0 to use default size): 
+<% if @controller.action_name == 'show_element_form' %>
+  <%= text_field :element, :max_length %>
+<% else %>
+  <%= in_place_editor_field :current_element, :max_length, {}, 
+   :url => set_element_max_length_element_url(@questionnaire, @page, @current_element) %>
+<% end %>

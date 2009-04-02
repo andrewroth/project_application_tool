@@ -1,0 +1,13 @@
+<li id="questionnaire_<%=@questionnaire.id%>">
+	<%= in_place_editor_field :questionnaire, :title %>
+  <%= link_to 'edit', edit_questionnaire_url(@questionnaire) %>
+  |
+  <%= link_to_remote 'clone', :url => copy_questionnaire_url(@questionnaire),
+															:loading => "Element.show('spinner#{@questionnaire.id}')",
+															:loaded => "Element.hide('spinner#{@questionnaire.id}')" %>
+  |
+  <%= link_to_remote "destroy", :url => questionnaire_url(@questionnaire), :method => :DELETE, :confirm => "Are you sure?" %>
+  |
+  <%= link_to 'export', export_questionnaire_url(@questionnaire) %>
+  <%= image_tag "spinner.gif", :id => "spinner#{@questionnaire.id}", :style => 'display:none' %>
+</li>

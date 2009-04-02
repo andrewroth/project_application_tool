@@ -1,0 +1,49 @@
+This engine adds references to the questionnaire engine.
+
+There's quite a few things with the name 'reference' in it.  To help with that
+confusion here's a list of what they're called:
+
+-> Reference: This is a reference
+
+-> ReferenceInstance: This is an instance with the same requirements as the
+     questionnaire engine's usual intsances (ie has_many :answers). But I 
+     define a default has_many :answers so you don't have to worry about that.
+
+     Extend ReferenceInstance make sure there's an 'instance' method
+     defined that returns the instance this reference belongs to.  There's
+     already an instance_id column on the reference_instance table, so
+     you can make use of that, for example:
+
+class ApplnReference < ReferenceInstance
+  # reference engine requires this
+  belongs_to :instance, :class_name => 'Appln', :foreign_key => :instance_id
+   
+  # now I can define methods specific to this application
+
+  # callback when an application goes to completed status
+  def entered_completed
+    instance.complete(self) # is the whole app complete now?
+  end
+
+  def viewer
+    instance.viewer
+  end
+end
+
+     I also put a state machine into ReferenceInstance to go from created
+     to started to completed, and a callback 'entered_completed' is called
+     when done.
+
+--- That's all the changes you have to make, the rest of the files (in case
+  you want to extend them to add stuff specific to app) are: ---
+
+-> controllers/ReferenceInstanceController: This will let users view/edit their reference form.
+     They get here from the reference request mailed out.
+
+-> models/ReferenceMailer: This mails out various notifications as the references go
+     through various states.  Sorry, no way to not have it send out refs right now,
+     it's on the TODO list.  If you feel ambitious add a way of specifying which
+     notifications get sent out.
+
+-> app/views/* partials for editing the references element, and the reference view
+     itself

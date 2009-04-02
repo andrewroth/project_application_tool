@@ -1,0 +1,6 @@
+<% if @controller.action_name == 'show_element_form' -%>
+	This type of question creates a list of "radio" fields of which user can only choose one. <br />
+	After you create the element you will have the opportunity to define what those options are.
+<% else -%>
+	<%= render :partial => 'question_options_form'%>
+<% end -%>

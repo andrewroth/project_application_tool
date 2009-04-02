@@ -1,0 +1,5 @@
+<div class="<%=checkboxfield.css_class%>">
+<%= render :partial => 'instance/checkbox', :locals => {:checkboxfield => checkboxfield} %>
+<%= error_wrap(@current_page, checkboxfield, @field) %>
+<%=checkboxfield.text%>
+</div>

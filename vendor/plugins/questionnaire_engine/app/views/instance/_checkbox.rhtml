@@ -1,0 +1,11 @@
+<% @field = %|
+<input type="checkbox" name="#{checkboxfield.question_table}_#{checkboxfield.column}_checkbox" 
+		value="1"
+    #{['1','true'].include?(checkboxfield.get_answer(questionnaire_instance).to_s) ? 'checked="checked"' : ""}
+    onClick="set_dirty();$('#{checkboxfield.question_table}_#{checkboxfield.column}').value = $('#{checkboxfield.question_table}_#{checkboxfield.column}_checkbox').checked"
+    #{can_not_edit?(checkboxfield) ? 'disabled="disabled"' : ""}
+    id="#{checkboxfield.question_table}_#{checkboxfield.column}_checkbox">&nbsp;
+| %>
+<input type="hidden" name="<%=checkboxfield.question_table%>[<%=checkboxfield.column%>]"
+	value="<%= ['1','true'].include?(checkboxfield.get_answer(questionnaire_instance).to_s) ? 1 : 0 %>"
+	id="<%=checkboxfield.question_table%>_<%=checkboxfield.column%>" />

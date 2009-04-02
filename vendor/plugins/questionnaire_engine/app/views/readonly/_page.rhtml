@@ -1,0 +1,7 @@
+<% @active_page = page %>
+<% if file_exists?(controller.controller_name+'/_'+page.url_name) 
+		template = controller.controller_name+'/'+page.url_name
+	else
+		template = 'readonly/elements'
+	end -%>
+<%= render :partial => template  %>

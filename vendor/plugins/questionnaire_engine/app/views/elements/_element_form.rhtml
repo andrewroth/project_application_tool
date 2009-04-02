@@ -1,0 +1,10 @@
+<div class="element_type_select">
+	<%= link_to_function(option_text(@element.element_type, ElementsController::TYPES_FOR_SELECT), "new Effect.toggle('type_div', 'appear')")%>
+	<%= image_tag('spinner.gif', :id => 'spinner', :style => 'display:none') %>
+	<div id="type_div" style="display:none"><%= select :element, :element_type, ElementsController::TYPES_FOR_SELECT %></div>
+	<%= observe_field(:element_element_type, :url => change_type_element_url(@questionnaire, @page, @element),
+																					 :with => 'type',
+																					 :loading => "new Effect.SlideUp('type_div');Element.show('spinner');")%>
+</div>
+<br />
+<%=render :partial => @element.template+'_form', :locals => {:element_symbol => "element", :element => @element}%>

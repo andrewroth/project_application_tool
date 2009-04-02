@@ -1,0 +1,26 @@
+	<strong>Options</strong> (click to change):<br/>
+	<i>Note: For drop-down lists you must specify a unique value for each option in order for the values to save properly. (ex. 1,2,3)</i>
+	<%= image_tag "spinner.gif", :id => 'spinner', :style => 'display:none' %><br />
+	<table cellspacing="0">
+		<tbody id="question_options"> 
+		<tr>
+			<th style="border-right: 1px solid black;">Display Text&nbsp;&nbsp;</th>
+			<th style="border-left: 1px solid black;">Value to store</th>
+			<th colspan="2">&nbsp;</th>
+		</tr>
+	<% @element.question_options.each do |@question_option|  -%>
+		<%= render :partial => 'question_options/question_option' %>
+	<% end -%>
+		</tbody>
+	</table><br />
+	<%= sortable_element 'question_options',
+	:url => reorder_question_options_url(:element_id => @element.id),
+	:loading => "Element.show('spinner')",
+	:loaded => "Element.hide('spinner')",
+	:complete => visual_effect(:highlight, 'question_options'),
+	:tag => 'tr',
+	:handle => 'drag_me'
+%>
+<%= link_to_remote("Add another option", :url => question_options_url(:question_id => @element),
+																				 :loading => "Element.show('spinner')",
+																				 :complete => "Element.hide('spinner')") %>&nbsp;&nbsp;

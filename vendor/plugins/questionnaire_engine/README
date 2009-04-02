@@ -1,0 +1,120 @@
+= QuestionnaireEngine
+
+QuestionnaireEngine (QE) is a engine for working with user-defined forms.
+
+This software package is developed using the Engines plugin. To find out more about how to use engines in general, go to Engines[http://rails-engines.org/] for general documentation about the Engines mechanism.
+
+== Installation
+
+1. Create your Rails application.
+
+2. Install Engines plugin and the QE.
+
+2. Set up your databases, modifying database.yml.
+
+4. Edit your application.rb file so it looks something like the following:
+
+    class ApplicationController < ActionController::Base
+      include QE
+    end
+
+5. Edit your application_helper.rb file:
+
+    module ApplicationHelper
+      include QE
+    end
+
+6.  Perform any configuration you might need. You'll probably want to set these values in environment.rb:
+
+    module QE
+      mattr_accessor :prefix
+      self.prefix = "form_"
+    end
+    
+    +prefix+:: This option will set a table name prefix for the questionnaire tables
+			    (elements, answers, etc).
+
+    (also, ModelDefaults module)
+
+7.  If you used form_ as your prefix, you must create a FormQuestionnaire model that extends Questionnaire.
+
+8.  Initialize the database tables.
+
+    script/generate plugin_migration
+    rake db:migrate
+
+9.  The QE includes some javascript you need to make it work.
+	 
+	 Create an application.rhtml layout and add the following lines:
+
+     <%= javascript_include_tag :defaults %>
+     <%= javascript_include_tag "builder","extensions", :plugin => :questionnaire_engine %>
+
+     <%= javascript_include_tag "calendar.js","lang/calendar-en.js", "calendar-setup.js", :plugin => :questionnaire_engine %>
+     <%= stylesheet_link_tag "calendar/calendar-win2k-1.css", :plugin => :questionnaire_engine %>
+
+     <%= stylesheet_link_tag "admin_styles", :media => "all", :plugin => :questionnaire_engine %>
+      
+
+10.  Modify your routes.rb file to include:
+	
+	map.from_plugin :questionnaire_engine
+  
+		
+11. If you start the server, you should now be able to access the administration side:
+        http://127.0.0.1:3000/admin/questionnaires
+
+
+12. Create a "questionnaire instance" model and database table to store records of each questionnaire completed.
+    
+    The (prefix)answers table refers to a specific instance, your model:
+        has_many :answers, :foreign_key => :instance_id
+  
+    A self.questionnaire method is also required to return a questionnaire.
+
+13. FormQuestionnaire has_many :questionnaire_instances
+
+14. InstanceController is used to fill-in an instance of a questionnaire. You should
+	extend InstanceController with your own, and override a few methods:
+
+	class SpApplicationController < InstanceController
+		
+		def questionnaire_instance
+			@person.current_application
+		end
+
+		def get_questionnaire
+	        @questionnaire = Questionnaire.find(3, :include => :pages, :order => :position)
+	        super
+	    end
+
+    end
+    
+
+== Usage
+There is an +after_save_form+ method available for you to add custom save functionality.
+
+== License
+Copyright (c) 2006 Josh Starcher <josh.starcher@uscm.org>
+
+The MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+

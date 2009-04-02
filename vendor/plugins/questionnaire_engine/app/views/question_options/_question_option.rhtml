@@ -1,0 +1,15 @@
+		<tr id="option_<%=@question_option.id%>">
+			<td class="question_option">
+				<%= in_place_editor_field :question_option, :option, {}, :url => set_question_option_option_question_option_url(@question_option) %>&nbsp;&nbsp;
+			</td>
+			<td class="question_option">
+				<%= in_place_editor_field :question_option, :value, {}, :url => set_question_option_value_question_option_url(@question_option) %>
+			</td>
+			<td class="question_option">
+				<%= link_to_remote "remove", :url => question_option_url(@question_option),
+																		 :loading => "Element.show('spinner')",
+																		 :complete => "Element.hide('spinner')", 
+																		 :method => :DELETE, :confirm => "Are you sure?" %>
+			</td>
+			<td class="drag_me" nowrap="nowrap"> drag me </td>
+		</tr>

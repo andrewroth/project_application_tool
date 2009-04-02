@@ -1,0 +1,12 @@
+<table>
+<% @active_page.elements.each_with_index do |element, position| %>
+	<%  if !@custom_folder.nil? && file_exists?(@custom_folder+'/_'+element.template) 
+			template = @custom_folder+'/'+element.template
+	    elsif file_exists?(controller.controller_name+'/_'+element.template)
+	        template = controller.controller_name+'/'+element.template
+		else
+			template = 'instance/' +element.template
+		end -%>
+    <%= render(:partial => template, :object => element, :locals => {:position => position+1}) %>
+<% end %>
+</table>

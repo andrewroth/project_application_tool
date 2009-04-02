@@ -1,0 +1,3 @@
+<%=select(state.question_table, state.column, State::NAMES, {:include_blank => true}, 
+            {:class => state.css_class, :onFocus => "Highlight(this)", 
+            :onBlur => "UnHighlight(this)", :onChange => "set_dirty();"}) %>

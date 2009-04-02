@@ -1,0 +1,40 @@
+Question text
+<% if edit_mode = @controller.action_name == 'show_element_form' 
+		# We set the current element variable for the common form fields below
+		@current_element = @element
+-%>
+: <%= text_field :element, :text%>	
+	<br /><br />
+	<%= render :partial => 'element_flags', :locals => {:element_symbol => "element", :element => element} %>
+<% else 
+# we use the variable @current_element instead of @element to avoid poluting recursion
+@current_element = element -%>
+(click to change): 
+<%= in_place_editor_field :current_element, :text, {}, :url => set_element_text_element_url(@questionnaire, @page, @current_element) %>
+	<br /><br />
+	<%= render :partial => 'element_flags', :locals => {:element_symbol => "current_element", :element => element} %>
+<% end -%>
+<br /><br />
+<%= render(:partial => element.class.to_s.downcase+'_form', :locals => {:element => @element}) %>
+<br /><br />
+<%= link_to_function "Programmer Options","new Effect.toggle('advanced_options', 'slide')" %>
+<div id="advanced_options" style="display:none">
+<div><br />
+<% unless @controller.action_name == 'show_element_form' -%>
+	<% form_remote_tag :url => element_url(@questionnaire, @page, @element),
+							:method => :put,
+							:loading => "Element.show('spinner2')",
+							:loaded => "Element.hide('spinner2')",
+							:complete => visual_effect(:slide_up, 'advanced_options') do %>
+
+Object: <%= text_field_tag 'element[question_table]', element.question_table || "answers" %>
+Method: <%= text_field_tag 'element[question_column]', element.question_column %>
+Max Length: <%= text_field_tag 'element[max_length]', element.max_length %>
+  <%= submit_tag 'Save' %>
+  <%= image_tag "spinner.gif", :id => 'spinner2', :style => 'display:none' %>
+  <% end -%>
+<% end -%>
+
+<br />
+</div>
+</div>

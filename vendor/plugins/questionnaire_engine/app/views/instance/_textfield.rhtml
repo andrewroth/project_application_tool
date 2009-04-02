@@ -1,0 +1,12 @@
+<div><%=textfield.parent_id? && textfield.text ? textfield.text+"<br />" : ""%>
+<% field = %|
+<input class="#{textfield.css_class}" onFocus="Highlight(this)" onBlur="UnHighlight(this)" 
+        type="text" name="#{textfield.question_table}[#{textfield.column}]" 
+        id="#{textfield.question_table}_#{textfield.column}" 
+        onChange="set_dirty();"
+    		 #{can_not_edit?(textfield) ? 'readonly="readonly" disabled="disabled"' : ""}
+        value="#{textfield.get_answer(questionnaire_instance)}" size="30"
+        #{(textfield.max_length != 0) ? 'maxlength="'+textfield.max_length.to_s+'"' : ''} /> 
+| %>
+<%= error_wrap(@current_page, textfield, field) %>
+</div>

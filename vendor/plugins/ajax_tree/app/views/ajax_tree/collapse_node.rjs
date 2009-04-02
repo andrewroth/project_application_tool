@@ -1,0 +1,1 @@
+page.replace("element_#{@node.id}", :partial => "ajax_tree/element", :object => @node)

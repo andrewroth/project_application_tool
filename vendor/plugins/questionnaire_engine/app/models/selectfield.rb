@@ -1,0 +1,2 @@
+class Selectfield < QuestionWithOptions
+end

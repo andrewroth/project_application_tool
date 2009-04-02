@@ -1,0 +1,11 @@
+<%=(multicheckbox.parent_id? and multicheckbox.text?) ? multicheckbox.text+"<br />" : ""%>
+<div class="<%=multicheckbox.css_class%>">
+<% multi_field = '' %>
+<% for checkbox in multicheckbox.checkboxfields %>
+	<%= render :partial => 'instance/checkbox', :locals => {:checkboxfield => checkbox} %>
+  <% @field += %|<label for="#{checkbox.question_table}_#{checkbox.id}">#{checkbox.text}</label><br />|
+    multi_field += error_wrap(@current_page, checkbox, @field)
+    %>
+<% end %>
+<%= error_wrap(@current_page, multicheckbox, multi_field) %>
+</div>

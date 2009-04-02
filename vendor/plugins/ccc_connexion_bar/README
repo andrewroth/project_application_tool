@@ -1,0 +1,30 @@
+Connexion Bar
+==============
+
+Provides a simple helper method that will render a GCX connexion bar in your app.
+
+Dependencies
+============
+
+Hpricot: `gem install hpricot`
+
+To use this helper, you also must have a properly configured cas client that uses mygcx as it's authenticating server.
+Your cas client configuration must also include a valid proxy granting server.
+
+To simplify things I've set up a ccc_rubycas_client plugin that includes a good set of default configurations that *should* 
+work out of the box:
+
+`./script/plugin install git://github.com/twinge/ccc_rubycas_client.git`
+
+Example Usage
+=============
+
+In your layouts just after the <body> tag:
+
+<%= connexion_bar %>
+
+or you can specify the following options: :community, :logout, :css
+
+<%= connexion_bar(:community => 'CampusStaff') %> # Default is the 'Public' community
+
+<%= connexion_bar(:logout => link_to('LOGOUT', '/logout'), :css => 'http://example.com/im_special.css') %>

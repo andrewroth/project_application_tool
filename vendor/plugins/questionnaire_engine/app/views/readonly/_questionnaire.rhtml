@@ -1,0 +1,5 @@
+<% questionnaire.pages.each_with_index do |page, i| -%>
+	<% if !pages || pages.include?(i+1) -%>
+		<%= render :partial => 'readonly/page', :object => page %>
+	<% end -%>
+<% end -%>

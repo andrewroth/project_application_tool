@@ -1,0 +1,2 @@
+page.insert_html :bottom, 'question_options', :partial => 'question_option'
+page.visual_effect :highlight, 'question_options'

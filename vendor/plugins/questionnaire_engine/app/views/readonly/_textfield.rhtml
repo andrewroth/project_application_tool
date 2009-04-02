@@ -1,0 +1,5 @@
+<span class='readonly_question_text'>
+<%=textfield.parent_id? && textfield.text ? textfield.text+"<br />" : ""%>
+</span>
+<span class="blue"><%= textfield.get_answer(@questionnaire_instance) %></span>
+<br />

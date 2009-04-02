@@ -1,0 +1,4 @@
+<p>Reference form: <%= select_tag 'reference[questionnaire_id]',
+     options_for_select([''] + Questionnaire.find_all_by_type('FormQuestionnaire').map {|q| [q.title,q.id]},
+        @current_element.questionnaire_id) %>
+

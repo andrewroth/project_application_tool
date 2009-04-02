@@ -1,0 +1,13 @@
+<span class='readonly_question_text'>
+<%=selectfield.parent_id? ? selectfield.text+"<br />" : ""%>
+</span>
+<span class="blue"><%= 
+option_index = selectfield.get_answer(@questionnaire_instance)
+if option_index
+  option = selectfield.question_options.find_by_value option_index
+  option.nil? ? '' : option.option
+end
+
+%>
+</span>
+<br />

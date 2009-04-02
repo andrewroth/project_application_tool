@@ -1,0 +1,8 @@
+page.insert_html :bottom, 'group', :partial => 'element'
+page.visual_effect :highlight, 'group'
+page.sortable 'group',
+          :url => reorder_element_url(@questionnaire, @page, @element),
+          :loading => "Element.show('spinner')",
+          :loaded => "Element.hide('spinner')",
+          :complete => visual_effect(:highlight, 'group'),
+          :handle => 'drag_me'

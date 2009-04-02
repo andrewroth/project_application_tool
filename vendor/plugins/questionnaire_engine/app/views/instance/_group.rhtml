@@ -1,0 +1,15 @@
+<tr>
+    <td class="app" align="right" valign="top"><%=group.text%>&nbsp;&nbsp;</td><td class="app">
+	    <% field = '' %>
+      <% for question in group.elements
+			 folder = @custom_folder || controller.controller_name
+      		 if file_exists?(folder+'/_'+question.class.to_s.downcase) 
+						 template = folder+'/'+question.class.to_s.downcase
+					 else
+						 template = 'instance/' +question.class.to_s.downcase
+					 end 
+	    	   field += render(:partial => template, :object => question) 
+	       end %>
+	  <%= error_wrap(@current_page, group, field) %>
+    </td>
+</tr>

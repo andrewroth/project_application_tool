@@ -1,0 +1,11 @@
+<tr>
+    <td class="app" align="right" width="40%"><%=question.text%>&nbsp;</td>
+    <td class="app">
+    	<% if file_exists?(controller.controller_name+'/_'+question.class.to_s.downcase) 
+				template = controller.controller_name+'/'+question.class.to_s.downcase
+			else
+				template = 'readonly/' +question.class.to_s.downcase
+			end -%>
+      <%= render(:partial => template, :object => question) %>
+    </td>
+</tr> 

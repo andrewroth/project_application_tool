@@ -1,0 +1,10 @@
+<table>
+<% @active_page.elements.each_with_index do |element, position| %>
+		<% if file_exists?(controller.controller_name+'/_'+element.template) 
+				template = controller.controller_name+'/'+element.template
+			else
+				template = 'readonly/' +element.template
+			end -%>
+    <%= render(:partial => template, :object => element, :locals => {:position => position+1}) %>
+<% end %>
+</table>

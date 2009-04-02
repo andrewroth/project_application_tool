@@ -1,0 +1,9 @@
+Type: <%= select_tag "#{@singular_name}[type]", options_for_select(@type_options, '') %><br />
+
+<%= observe_field "#{@singular_name}[type]",
+  :update => "create_options",
+  :url => { :action => "create_options", :partial => "type" },
+  :with => "#{@singular_name}[type]"
+%>
+<span id="create_options"></span>
+

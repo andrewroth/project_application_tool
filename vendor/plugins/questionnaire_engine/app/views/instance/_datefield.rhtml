@@ -1,0 +1,51 @@
+<% field = %| 
+	<input class="#{datefield.css_class}" onFocus="Highlight(this)" onBlur="UnHighlight(this)" 
+	type="text" name="#{datefield.question_table}[#{datefield.column}]" 
+	id="#{datefield.question_table}_#{datefield.column}" 
+	value="#{format_qe_date(datefield.get_answer(questionnaire_instance))}" 
+	onChange="set_dirty();"/>
+	(MM/DD/YYYY)
+| %>
+
+<%= error_wrap(@current_page, datefield, field) %> 
+
+<% unless can_not_edit? datefield -%>
+
+<script language="javascript">
+	function clear_date(item) {
+		$(item).value='';
+		UnHighlight($(item))
+	}
+</script>
+<!--
+<a class="button" href="#" id="pick_date_<%=datefield.id%>">choose date</a> &nbsp;&nbsp;
+<a class="button" href="javascript:clear_date('<%=datefield.question_table%>_<%=datefield.column%>');">clear date</a>
+ -->
+<script type="text/javascript">
+ // Calendar.setup(
+ //   {
+ //     inputField  : "<%=datefield.question_table%>_<%=datefield.column%>", // ID of the input field
+ //     ifFormat    : "%m/%d/%Y",    													// the date format
+ //     button      : "pick_date_<%=datefield.id%>",       		// ID of the button
+ //     showsTime		: false,
+ //     showOthers	: true 
+ //   }
+ // );
+</script>
+
+<% end -%>
+
+
+<% # this is my attempt at changing to drop downs for the date
+#field = %|
+#	#{date_select "datefield", "birthday", 
+#		:id => datefield.question_table.to_s + "_" + datefield.column.to_s, 
+#		:class => datefield.css_class ,
+#		:order => [:day, :month, :year], 
+#		:start_year => Date.today.year, 
+#		:end_year => Date.today.year - 100,
+#		:include_blank => true,
+#		:value => datefield.get_answer(questionnaire_instance)
+#	}
+#	#{datefield.get_answer(questionnaire_instance)}
+#| %>

@@ -1,0 +1,2 @@
+class Textfield < Question
+end

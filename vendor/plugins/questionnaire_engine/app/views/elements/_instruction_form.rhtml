@@ -1,0 +1,14 @@
+<br />
+Instructions can be a fair bit longer. This type of field would also be appropriate for an FAQ entry.<br /><br />
+Instruction text
+<% if @controller.action_name == 'show_element_form' 
+		# We set the current element variable for the common form fields below
+		@current_element = @element
+-%>
+: <%= text_area :element, :text, :rows => 15, :cols => 60%>
+<% else 
+# we use the variable @current_element instead of @element to avoid poluting recursion
+@current_element = element -%>
+(click to change): 
+<%= in_place_editor_field :current_element, :text, {}, :url => set_element_text_element_url(@questionnaire, @page, @current_element), :rows => 15, :cols => 60 %>
+<% end -%>

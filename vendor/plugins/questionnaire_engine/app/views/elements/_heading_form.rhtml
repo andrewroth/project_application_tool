@@ -1,0 +1,18 @@
+<br />Heading text
+<% if @controller.action_name == 'show_element_form' 
+		# We set the current element variable for the common form fields below
+		@current_element = @element
+-%>
+: <%= text_field :element, :text, :size => 100%>
+<% else 
+# we use the variable @current_element instead of @element to avoid poluting recursion
+@current_element = element -%>
+(click to change): 
+<%= in_place_editor_field :current_element, :text, {}, :url => set_element_text_element_url(@questionnaire, @page, @current_element) %>
+<%= observe_field(:current_element_is_required,
+									:url => {:action => :set_is_required, :id => element.id},
+									:with => 'value')%>
+<% end -%>
+<br /><br />
+This text will show up formatted as a section heading.
+<br /></br/>

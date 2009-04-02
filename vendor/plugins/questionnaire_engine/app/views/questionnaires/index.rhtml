@@ -1,0 +1,8 @@
+<h1>Questionnaires</h1>
+<ul id="questionnaires">
+<% @questionnaires.each do |@questionnaire| -%>
+	<%= render :partial => "questionnaire"%>
+<% end -%>
+</ul>
+<%= link_to_remote("Add another questionnaire.", :url => questionnaires_url) %>&nbsp;&nbsp;
+<%= render :partial => 'import' %>

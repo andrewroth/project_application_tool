@@ -1,0 +1,2 @@
+class LocationGroupNode < LocationGroup
+end

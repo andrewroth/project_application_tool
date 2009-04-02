@@ -1,0 +1,1 @@
+page.insert_html(:bottom, "element_#{@node.id}_children", :partial => "ajax_tree/element", :collection => @children)

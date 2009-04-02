@@ -1,0 +1,8 @@
+<br />
+<span class='readonly_question_text'>
+<%= yesno.parent_id? ? yesno.text+"<br />" : ""%>
+</span>
+<% answer = yesno.get_answer(@questionnaire_instance) -%>
+<%= is_true(answer) ? '[<span class="blue">X</span>]' : "[&nbsp;&nbsp;]" %> Yes&nbsp;
+<%= answer && !is_true(answer) ? '[<span class="blue">X</span>]' : "[&nbsp;&nbsp;]" %> No
+<br />

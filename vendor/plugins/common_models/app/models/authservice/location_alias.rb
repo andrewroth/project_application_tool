@@ -1,0 +1,2 @@
+class LocationAlias < Location
+end

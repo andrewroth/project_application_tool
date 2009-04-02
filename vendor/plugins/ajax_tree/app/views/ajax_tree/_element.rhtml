@@ -1,0 +1,28 @@
+<% domid = "element_#{element.id}" -%>
+
+<li id="<%= domid %>" class="<%= element.classes(:li) %>">
+  <% if element.children.size > 0 -%>
+    <%= link_to_remote(image_tag("#{element.expanded? ? 'expanded' : 'collapsed'}.gif", 
+                                       :class => 'ajax_tree_img'),
+            {
+              :url => { :action => :"#{element.expanded? ? 'collapse' : 'expand'}", :id => element.id, 
+                        :expanded => !element.expanded,
+                        :view => @view
+            }
+          }
+        )
+    -%>
+  <% else -%>
+    <%= image_tag("empty.gif", :style => 'margin: 2px;', :class => 'ajax_tree_img') %>
+  <% end -%>
+  <%= render :partial => @show_partial, :locals => { :node => element } %>
+
+  <ul class="level" id="<%= domid + '_children' %>">
+    <% if element.expanded? -%>
+      <%= render :partial => 'ajax_tree/element', :collection => element.children %>
+    <% end -%>
+  </ul>
+
+</li>
+
+

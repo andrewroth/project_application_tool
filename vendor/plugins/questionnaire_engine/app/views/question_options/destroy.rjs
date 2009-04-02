@@ -1,0 +1,2 @@
+page.remove "question_option_#{@question_option.id}"
+page.visual_effect :highlight, 'question_options'

@@ -1,0 +1,2 @@
+page.insert_html :bottom, 'questionnaires', :partial => 'questionnaire'
+page.visual_effect :highlight, 'questionnaires'

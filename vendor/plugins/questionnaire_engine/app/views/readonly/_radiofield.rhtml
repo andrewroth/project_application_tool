@@ -1,0 +1,6 @@
+<%=radiofield.parent_id? ? radiofield.text+"<br />" : ""%>
+<% for option in radiofield.question_options -%>
+	<%= radiofield.get_answer(@questionnaire_instance) == option.value ? '[<span class="blue">X</span>]' : "[&nbsp;&nbsp;]" %>
+  <%= option.option %>&nbsp;<br />
+<% end -%>
+<br />

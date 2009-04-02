@@ -1,0 +1,2 @@
+page.remove "page_#{@page.id}"
+page.visual_effect :highlight, 'questionnaire'

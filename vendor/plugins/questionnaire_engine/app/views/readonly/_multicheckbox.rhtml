@@ -1,0 +1,9 @@
+<br />
+<span class='readonly_question_text'>
+<%=(multicheckbox.parent_id? and multicheckbox.text?) ? multicheckbox.text+"<br />" : ""%>
+</span>
+<% multi_field = '' %>
+<% for checkbox in multicheckbox.checkboxfields %>
+  <%= is_true(checkbox.get_answer(@questionnaire_instance)) ? '[<span class="blue">X</span>]' : "[&nbsp;&nbsp;]" %>
+  <%= checkbox.text %><br />
+<% end %>

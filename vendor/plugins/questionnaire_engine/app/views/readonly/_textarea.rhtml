@@ -1,0 +1,10 @@
+<br />
+<span class='readonly_question_text'>
+<%=textarea.parent_id? ? textarea.text : ""%><br />
+</span>
+<%
+text = textarea.get_answer(@questionnaire_instance)
+text = text.gsub("\n", "<br />") if text
+%>
+<span class="blue"><%= text %></span>
+<br />

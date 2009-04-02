@@ -1,0 +1,2 @@
+class Radiofield < QuestionWithOptions
+end

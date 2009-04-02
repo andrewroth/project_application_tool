@@ -1,0 +1,14 @@
+<%= error_messages_for :element %>
+
+<% form_tag elements_url(@questionnaire, @page) do -%>
+  <br />Type of element: <%= select_tag :element_type, options_for_select(ElementsController::TYPES_FOR_SELECT)%> 
+  <%= image_tag "spinner.gif", :id => 'spinner', :style => 'display:none' %>
+  <%= render :partial => 'form'%>
+  <br />
+  <%= submit_tag 'Create Element', :id=>"submit_button", :style => "display:none" %>
+
+  <%= observe_field(:element_type, :url => show_element_form_elements_url(@questionnaire, @page),
+  																 :with => 'class',
+  																 :loading => "Element.show('spinner')",
+  																 :complete=> "Element.hide('spinner')")%>
+<% end -%>

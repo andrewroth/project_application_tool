@@ -1,0 +1,126 @@
+<% options = {
+    :onChange => 'set_dirty()',
+    :onBlur => 'UnHighlight(this)',
+    :onFocus => 'Highlight(this)',
+    :class => 'required' } 
+  
+   @element = reference
+   @reference = ApplnReference.find_or_initialize_by_instance_id_and_reference_id(questionnaire_instance.id, @element.id) # get ref data linked to element
+
+   if @reference.new_record?
+     @reference.reference = @element
+     @reference.save!
+   end
+   
+   frozen = @reference && (
+	       @reference.email_sent? ||
+	       (@reference.mail? && @current_page.validated?(questionnaire_instance)) || 
+	       !questionnaire_instance.can_change_references?
+	     )
+   readonly = frozen ? {:disabled => :disabled} : {}
+   options = options.merge(readonly)
+-%>
+
+	<tr>
+		<td class="app" align="left" width="20%" colspan="3">
+      &nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td class="app" align="left" width="20%" colspan="3">
+		  &nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td class="cell3" colspan="3">
+		  <strong><%= @reference.name %></strong>
+		</td>
+	</tr>
+	<tr>
+		<td class="app" align="right" width="20%">&nbsp;</td>
+		<td class="app" colspan="2">
+    	  Is this person a Power to Change (Campus for Christ, Athletes in Action, LeaderImpact Group) staff member?
+    		<%= radio_button("reference", :is_staff, "true", {:checked => @reference.is_staff?, :index => @element.id}.merge(options)) %> Yes
+    		<%= radio_button("reference", :is_staff, "false", {:checked => !@reference.is_staff?, :index => @element.id}.merge(options)) %> No
+		</td>
+	</tr>
+	<tr>
+		<td class="app" align="right" width="20%">Name</td>
+		<td class="app" colspan="2">
+		<%=select("reference", "title", ["Mr.","Mrs.","Ms.","Dr.","Rev."], {:include_blank => true}, options.merge(:index => @element.id)) %>
+		First <%=text_field("reference", "first_name", {:size => "20", :index => @element.id}.merge(options)) %>
+		Last <%=text_field("reference", "last_name", {:size => "20", :index => @element.id}.merge(options)) %>
+		</td>
+	</tr>
+	<tr>
+		<td class="app" VALIGN="TOP" ALIGN="RIGHT">Email</td>
+		<td class="app" colspan="2">
+    	<%=text_field("reference", "email", 
+    	   {:size => "30", :maxlength => "200", :index => @element.id }.merge(options).merge(@reference.mail? ? { :class => 'reqfilled' } : {})) %>
+			<br />
+			<% if !@reference.email_sent? && !@reference.mail? && @appln.status != 'submitted' && @appln.status != 'complete' %>
+  				An email invite will be sent to this reference when you submit your application.
+			<% end %>
+		</td>
+	</tr>
+<!--
+	<tr>
+		<td class="app" align="right" width="20%">&nbsp;</td>
+		<td class="app" colspan="3">
+			If this reference will be filling out a paper form and mailing it in, click here: 
+			<%= check_box "reference", :mail, options.merge(
+			     :onClick => "email = $('reference_#{@element.id}_email'); " +
+			                 "email.className = (this.checked || " +
+			                     "(!this.checked && email.value != '') ? 'reqfilled' : 'required');",
+			     :index => @element.id
+			    ) %>
+		</td>
+	</tr><tr>
+		<td class="app" align="right" width="20%">&nbsp;</td>
+		<td>
+			<a href="/pdfforms/<%= @element.pdf_url %>" target="_blank">Download the <%= @reference.name %> pdf form here</a> (right click on the link and choose 'save as')
+		</td>
+	</tr>
+-->
+	<% if frozen -%>
+  <tr>
+  
+      <td>
+      &nbsp;
+      </td>
+      <td>  <table><tr>
+		<td>
+   <strong>STATUS</strong><br />
+   <%=@reference.status.camelize %> on <%=format_date(eval("@reference").updated_at)%><br />
+		</td>
+	
+	        <td style="padding-left:20px;">
+ <% confirm_text = "REMEMBER if you delete a reference you must replace it and click the Submit Button on the "
+ 	confirm_text += "Submit Application page before the Reference recipient will be notified and your application "
+ 	confirm_text += "will again be submitted.\n\nIf you are sure you want to delete this reference click OK.\n\nIf you "
+	confirm_text += "do not want to delete this reference click Cancel."%>
+
+	<%= link_to("Delete Reference", {:action => :delete_reference, 
+                                                     :ref_id => @reference.id, 
+                                                     :current_page => @position, 
+                                                     :next_page => @position},
+                                                     :class => "button", 
+                                                     :method => :post, 
+                                                     :confirm => confirm_text) unless @reference.completed? %> &nbsp;
+		</td>
+		
+	
+		<td>
+	<div id="email_button_<%= @reference.id %>">
+		<%= link_to_remote("Re-send Email Invitation", 
+		 {:url => {:action => :resend_reference_email, :ref_id => @reference.id},
+		  :confirm => "Are you sure you want to re-send the email?",
+		  :loading => "Element.hide('email_button_#{@reference.id}');Element.show('ref_email_#{@reference.id}')",
+		  :success => "$('ref_email_#{@reference.id}').innerHTML = 'Invitation Sent'",
+                  :failure => "$('ref_email_#{@reference.id}').innerHTML = 'Error resending invitation.  Try again later.  A developer has been notified.'", 
+                 }, {:class => "button"}) unless @reference.completed? || @reference.mail %> &nbsp;
+	</div>
+	<div style="display:none" id="ref_email_<%=@reference.id%>">Sending email <%=image_tag('spinner.gif')%></div>
+               </td>
+	</tr></table></td>
+	<% end -%>

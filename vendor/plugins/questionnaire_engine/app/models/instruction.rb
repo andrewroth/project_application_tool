@@ -1,0 +1,2 @@
+class Instruction < Element
+end

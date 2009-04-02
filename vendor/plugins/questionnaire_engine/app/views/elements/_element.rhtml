@@ -1,0 +1,23 @@
+<li id="element_<%= element.id %>">
+	<div class="draggable">
+	<div class="drag_me">drag me</div>
+	<div class="element_type"><%= option_text(element.element_type, ElementsController::TYPES_FOR_SELECT) %></div>
+	<%= element.text %> 
+	<% if element.respond_to?(:question_options) && !element.question_options.empty? -%>
+		<%= element.question_options.collect {|qo| qo.option}.join(', ')%>
+	<% end -%>
+	<% unless element.elements.empty? -%>
+	<ul>
+	<% element.elements.each do |sub_element| -%>
+		<li><%=sub_element.text%><lis/>
+	<% end -%>
+	</ul>
+	<% end -%>
+  <%= link_to 'edit', edit_element_url(@questionnaire, @page, element) %>
+  |
+  <%= link_to_remote 'clone', :url => copy_element_url(@questionnaire, @page, element) %>
+  |
+  <%= link_to_remote "destroy", :url => element_url(@questionnaire, @page, element), 
+  										:method => :delete, :confirm => "Are you sure?" %>
+  </div>
+</li>

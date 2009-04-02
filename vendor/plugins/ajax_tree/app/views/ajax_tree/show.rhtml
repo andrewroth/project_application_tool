@@ -1,0 +1,9 @@
+<h2>Ajax Tree Application</h2>
+
+<div id="ajaxtree" style="width:40%; float:left;">
+  <%= render :partial => 'ministries/ajax_tree', :object => [@ministry, @ministries] %>
+</div>
+
+<div id="selected_item">
+  <%= render :partial => 'ministries/ministry', :object => @ministry %>
+</div>

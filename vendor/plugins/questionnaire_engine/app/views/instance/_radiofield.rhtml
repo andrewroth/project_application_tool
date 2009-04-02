@@ -1,0 +1,16 @@
+<%=radiofield.parent_id? ? radiofield.text+"<br />" : ""%>
+<% field = '' -%>
+<% for option in radiofield.question_options -%>
+	<% field += %|
+    <input type="radio" name="#{radiofield.question_table}[#{radiofield.column}]" 
+        #{radiofield.get_answer(questionnaire_instance) == option.value ? "checked=\"checked\"" : ""}
+         id="#{radiofield.question_table}_#{radiofield.column}_#{option.option}" 
+    		 #{ can_not_edit?(radiofield) ? 'disabled="disabled"' : "" }
+         onClick="set_dirty();"
+        value="#{option.value}"> #{option.option}&nbsp;<br />
+	| -%>
+<% end -%>
+<div class="<%=radiofield.css_class%>">
+<%= error_wrap(@current_page, radiofield, field) %>
+</div>
+<br />

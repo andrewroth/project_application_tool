@@ -1,0 +1,15 @@
+list_id = @element.parent_id ? 'group' : 'page'
+
+page.insert_html :bottom, list_id, :partial => 'element',  :locals => {:element => @new}
+if @element.parent_id
+  page.visual_effect :highlight, list_id
+else
+  page.visual_effect :highlight, list_id
+end
+
+page.sortable list_id,
+	:url => reorder_page_url(@questionnaire, @page),
+	:loading => "Element.show('spinner')",
+	:loaded => "Element.hide('spinner')",
+	:complete => visual_effect(:highlight, list_id),
+	:handle => 'drag_me'

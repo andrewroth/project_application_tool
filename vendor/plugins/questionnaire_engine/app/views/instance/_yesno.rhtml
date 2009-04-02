@@ -1,0 +1,21 @@
+<%=yesno.parent_id? ? yesno.text+"<br />" : ""%>
+<%answer = yesno.get_answer(questionnaire_instance)%>
+<% field = %|
+<input type="radio" name="#{yesno.question_table}[#{yesno.column}]" 
+    #{[1,'1',true,'t','T'].include?(answer) ? "checked=\"checked\"" : ""}
+     id="#{yesno.question_table}_#{yesno.column}" 
+     #{ can_not_edit?(yesno) ? 'disabled="disabled"' : "" }
+    onClick="set_dirty();"
+    value="1"> Yes&nbsp;
+<input type="radio" name="#{yesno.question_table}[#{yesno.column}]" 
+    #{[0,'0',false,'f','F'].include?(answer) ? "checked=\"checked\"" : ""}
+     id="#{yesno.question_table}_#{yesno.column}" 
+     #{ can_not_edit?(yesno) ? 'disabled="disabled"' : "" }
+		onClick="set_dirty();"
+    value="0"> No&nbsp;
+| -%>
+
+<div class="<%=yesno.css_class%>">
+<%= error_wrap(@current_page, yesno, field) %>
+</div>
+<br />

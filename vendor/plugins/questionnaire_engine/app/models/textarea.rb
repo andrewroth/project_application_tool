@@ -1,0 +1,2 @@
+class Textarea < Question
+end

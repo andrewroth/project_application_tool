@@ -1,0 +1,4 @@
+<% readonly = can_not_edit?(state_field) ? {:disabled => "disabled"} : {} %>
+<%=select(statefield.question_table, statefield.question_column, State::NAMES, {:include_blank => true}, 
+            {:class => statefield.css_class, :onFocus => "Highlight(this)", 
+            :onBlur => "UnHighlight(this)", :onChange => "set_dirty();"}.merge(readonly)) %>

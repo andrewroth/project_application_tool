@@ -1,0 +1,6 @@
+page.remove "element_#{@element.id}"
+if @element.parent_id
+  page.visual_effect :highlight, 'group'
+else
+  page.visual_effect :highlight, 'page'
+end

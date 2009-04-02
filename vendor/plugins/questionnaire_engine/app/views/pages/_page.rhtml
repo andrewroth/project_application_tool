@@ -1,0 +1,19 @@
+<li id="page_<%= @page.id %>">
+	<div class="draggable">
+	<div class="drag_me">drag me</div>
+	<%= in_place_editor_field :page, :title, {}, :url => set_page_title_page_url(@questionnaire, @page) %>
+  <%= link_to 'edit', edit_page_url(@questionnaire, @page) %>
+  |
+  <%= link_to_remote 'clone', :url => copy_page_url(@questionnaire, @page),
+															:loading => "Element.show('spinner')",
+															:loaded => "Element.hide('spinner')" %>
+  |
+  <%= link_to_remote "destroy", :url => page_url(@questionnaire, @page), 
+															  :method => :DELETE, 
+															  :confirm => "Are you sure?",
+																:loading => "Element.show('spinner')",
+																:loaded => "Element.hide('spinner')" %>
+  |
+  <%= link_to 'export', export_page_url(@questionnaire, @page) %>
+  </div>
+</li>

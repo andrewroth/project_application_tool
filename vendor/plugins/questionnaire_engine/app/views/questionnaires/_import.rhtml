@@ -1,0 +1,14 @@
+<A onClick="javascript:$('import').show();">Import questionnaire.</A>
+<DIV id="import" style="display:none">
+  <form method="post" enctype="multipart/form-data"
+    action="<%=import_questionnaires_url()%>">
+  <p>
+    <b>File:</b>
+    <input type="file" size="50" name="xml" id="xml"/>
+    <%= submit_tag "Import" %>
+  </p>
+
+  <i>Please be patient - for large forms, this can take a few minutes.</i>
+  </form>
+</DIV>
+

@@ -1,0 +1,5 @@
+<% if heading.parent_id? -%>
+    <strong><%= heading.text%></strong><br />
+<% else -%>
+    <tr><td class="app" colspan="2"><strong><%= heading.text%></strong></td></tr>
+<% end -%>

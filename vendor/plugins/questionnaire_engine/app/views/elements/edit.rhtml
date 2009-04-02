@@ -1,0 +1,11 @@
+<%= error_messages_for :element %><br />
+<div id="element_div">
+<%= render :partial => 'element_form' %>
+</div>
+<br /><br />
+<% if @element.parent -%>
+<%= link_to("Back to parent element", edit_element_url(@questionnaire, @page, @element.parent))%>&nbsp;&nbsp;
+<% end -%>
+<%= link_to("Back to the \"#{@page.title}\" page", edit_page_url(@questionnaire, @page))%>&nbsp;&nbsp;
+<%= link_to("Back to the page list", edit_questionnaire_url(@questionnaire))%>&nbsp;&nbsp;
+<%= link_to("Back to top level", questionnaires_url)%>

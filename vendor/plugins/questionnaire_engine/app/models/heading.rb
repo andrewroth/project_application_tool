@@ -1,0 +1,2 @@
+class Heading < Element
+end

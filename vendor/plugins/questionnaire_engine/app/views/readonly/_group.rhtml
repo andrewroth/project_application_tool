@@ -1,0 +1,14 @@
+<tr>
+    <td class="app" align="right" valign="top"><%=group.text%>&nbsp;&nbsp;</td><td class="app">
+	    <% field = '' %>
+      <% for question in group.elements
+      		 if file_exists?(controller.controller_name+'/_'+question.class.to_s.downcase) 
+						 template = controller.controller_name+'/'+question.class.to_s.downcase
+					 else
+						 template = 'readonly/' +question.class.to_s.downcase
+					 end 
+	    	   field += render(:partial => template, :object => question) 
+	       end %>
+	  <%= field %>
+    </td>
+</tr>

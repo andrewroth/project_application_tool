@@ -1,0 +1,39 @@
+<br />Group text
+<% if @controller.action_name == 'show_element_form' -%>
+: <%= text_field :element, :text%><br /><br />
+After creating a group element you will be able to add sub-elements to it.<br />
+Groups are good for tying together related questions (e.g. Have you done drugs? If so, when?).
+<% else 
+	@current_element = element -%>
+	(click to change): 
+	<%= in_place_editor_field :current_element, :text, {}, :url => set_element_text_element_url(@questionnaire, @page, @current_element) %>
+	<br /><br />
+	<% unless element.nil?  -%>
+		Elements: Click-and-drag on "drag me" to change the order. 
+		<%= image_tag "spinner.gif", :id => 'spinner', :style => 'display:none' %>
+		<ul id="group">
+			<% element.elements.each do |sub_element| -%>
+				<%= render :partial => "elements/element", :locals => {:element => sub_element} %>
+			<% end %>
+		</ul>
+		<%= sortable_element 'group',
+			:url => reorder_element_url(@questionnaire, @page, element),
+			:loading => "Element.show('spinner')",
+			:loaded => "Element.hide('spinner')",
+			:complete => visual_effect(:highlight, 'group'),
+			:handle => 'drag_me'
+		%>
+	<% end -%>
+	<% form_remote_tag :url => elements_url(@questionnaire, @page),
+											:loading => "Element.show('spinner2')",
+											:loaded => "Element.hide('spinner2')",
+											:complete => visual_effect(:highlight, 'group') do -%>
+  	<%= hidden_field_tag :parent_id, element.id %>
+  	Add an element of type: <%= select_tag :element_type, options_for_select(ElementsController::TYPES_FOR_SELECT)%> 
+  	<%= submit_tag "Go"%>
+  	<%= image_tag "spinner.gif", :id => 'spinner2', :style => 'display:none' %>
+	<% end -%><br />
+<% end -%>
+<br />
+<br />
+<%= render :partial => 'element_flags', :locals => {:element_symbol => "element", :element => element} %>

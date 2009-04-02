@@ -1,0 +1,16 @@
+<%=selectfield.parent_id? ? selectfield.text+"<br />" : ""%>
+<% field = %|
+	<select name="#{selectfield.question_table}[#{selectfield.column}]" 
+	     id="#{selectfield.question_table}_#{selectfield.column}" 
+			 #{ can_not_edit?(selectfield) ? 'disabled="disabled"' : "" }
+	     onChange="set_dirty();" onFocus="Highlight(this)" onBlur="UnHighlight(this)" class="#{selectfield.css_class}">
+	     <option></option>
+| -%>
+<% selectfield.question_options.each do |option| %>
+	<% field += %|
+  	<option value="#{ option.value }" #{ selectfield.get_answer(questionnaire_instance) == option.value ? 'selected="selected"' : ""}>#{ option.option }</option>
+  %|.strip %>
+<% end %>
+<% field += "\n</select>\n" %>
+<%= error_wrap(@current_page, selectfield, field) %>
+<br />

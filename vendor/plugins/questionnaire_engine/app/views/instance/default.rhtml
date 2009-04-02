@@ -1,0 +1,7 @@
+<div id="error_messages_for_<%=@active_page.id%>"><%= render :partial => 'instance/error_messages_for_page'%></div>
+<% if file_exists?(controller.controller_name+'/_'+@active_page.url_name) 
+		template = controller.controller_name+'/'+@active_page.url_name
+	else
+		template = 'instance/elements'
+	end -%>
+<%= render :partial => template %>

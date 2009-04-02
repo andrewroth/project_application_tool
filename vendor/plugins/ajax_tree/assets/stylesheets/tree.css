@@ -1,0 +1,41 @@
+*.tree ul {
+  list-style-type: none;
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+.expanded {
+  list-style-image: url('/images/expanded.gif');
+}
+
+.collapsed {
+  list-style-image: url('/images/collapsed.gif');
+}
+
+a.element:hover {
+  border: solid 2px black;
+  background-color: #FFFF99;
+  cursor: pointer;
+}
+
+a.element {
+
+}
+
+li {
+  padding: 2px;
+}
+
+div.box {
+  border: solid 2px black;
+  padding: 4px;
+  margin: 10px;
+}
+
+.hover {
+	background-color: red;
+}
+
+ul.level {
+	padding-left: 15px;
+}

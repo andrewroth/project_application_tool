@@ -1,0 +1,9 @@
+page.insert_html :bottom, 'questionnaire', :partial => 'page'
+page.visual_effect :highlight, 'questionnaire'
+
+page.sortable 'questionnaire',
+	:url => reorder_questionnaire_url(@questionnaire),
+	:loading => "Element.show('spinner')",
+	:loaded => "Element.hide('spinner')",
+	:complete => visual_effect(:highlight, 'questionnaire'),
+	:handle => 'drag_me'

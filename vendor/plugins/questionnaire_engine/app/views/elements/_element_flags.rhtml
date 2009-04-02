@@ -1,0 +1,18 @@
+    <% if element.class.name == "Group" %>"You must choose at least one."
+    <% else %>"This question is required."<% end %>
+	<%= boolean_select(element_symbol, :is_required) %>
+    <%= observe_field("#{element_symbol}_is_required",
+									:url => {:action => 'set_flag', :flag => 'required', :id => element.id},
+									:with => 'value')%>
+
+<% @flags.each do |flag| %>
+	<BR><% if element.class.name == "Group" %>"<%= flag.group_txt %>"
+    <% else %>"<%= flag.element_txt %>"<% end %>
+	<%= boolean_select(element_symbol, :"is_#{flag.name}?") %>
+    <%= observe_field("#{element_symbol}_is_#{flag.name}",
+									:url => {:action => "set_flag", :id => element.id, :flag => flag.name},
+                  :before => "$('saving').show();",
+                  :complete => "$('saving').hide();",
+									:with => 'value')%>
+    
+<% end %>
