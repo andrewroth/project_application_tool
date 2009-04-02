@@ -1,6 +1,6 @@
 <% form_tag :action => 'send_test_email' do %>
 subject: <%= text_field_tag 'subject', 'pat test email' %><br/>
-from: <%= text_field_tag 'from', @user.viewer.person.email %><br/>
+from: <%= text_field_tag 'from', @viewer.person.email %><br/>
 to: <%= text_field_tag 'to' %><br/>
 cc: <%= text_field_tag 'cc' %><br/>
 bcc: <%= text_field_tag 'bcc' %><br/>

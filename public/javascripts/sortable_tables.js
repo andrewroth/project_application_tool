@@ -73,7 +73,7 @@ update(SortableManager.prototype, {
         if (table == null || table.getAttribute('initialized')) {
             return;
         }
-	table.setAttribute('initialized', true);
+        table.setAttribute('initialized', true);
 
         this.thead = table.getElementsByTagName('thead')[0];
         // get the mochi:format key and contents for each column header
@@ -138,18 +138,24 @@ update(SortableManager.prototype, {
                     case 'float':
                     case 'int':
                     case 'currency':
-			try {
-				val = obj.match(/\d+\.?\d*/);
-				if (val.length > 0) {
-					obj = Number(val[0]);
-				} else {
-					obj = 0;
-				}
+                        try {
+                            val = obj.replace(/\$?(\-?\d+\.?\d*)/,"$1");
+                            if (val.length > 0) {
+                                obj = Number(val.gsub(',',''));
+                            } else {
+                                obj = 0;
+                            }
 
-				break;
-			} catch (err) {
-				obj = 0;
-			}
+                            // special case for currency columns, float them right
+                            if (this.columns[j].format == 'currency') {
+                                cols[j].className += ' currency';
+                                cols[j].innerHTML = "<span>" + cols[j].innerHTML + "</span>";
+                            }
+                            
+                            break;
+                       	} catch (err) {
+                           	obj = 0;
+                        }
 
                     case 'dropdown':
                         try {
@@ -173,7 +179,7 @@ update(SortableManager.prototype, {
                 }
                 // check for this column being the default sort column
                 if (this.columns[j].is_default) {
-		    this.default_sort_column = j
+		                this.default_sort_column = j
                     this.sortkey = j;
                 }
                 
@@ -204,7 +210,7 @@ update(SortableManager.prototype, {
         }
         
         // do initial sort on first column
-	forward = this.columns[this.default_sort_column].default_direction != 'descending'
+        forward = this.columns[this.default_sort_column].default_direction != 'descending'
         this.drawSortedRows(this.sortkey, forward, false);
         
         // it seems that the we have to manually set which items are selected, they get reset to the first one

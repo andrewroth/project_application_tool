@@ -57,7 +57,7 @@ def setup_eg
   @eg = mock("eg", :empty? => false, 
                    :default_text_area_length => nil, 
                    :id => 1,
-                   :logo => '/logo' 
+                   :logo => '/logo'
             )
   EventGroup.stub!(:find).and_return(@eg)
 end
@@ -80,6 +80,7 @@ end
 def setup_viewer(options = {})
   options[:student] ||= false
   options[:pc] ||= false
+  options[:egc] ||= false
 
   session[:user_id] = 1
 
@@ -91,11 +92,13 @@ def setup_viewer(options = {})
     :processor_projects => [],
     :is_student? => options[:student],
     :is_projects_coordinator? => options[:pc],
+    :is_eventgroup_coordinator?(@eg) => options[:egc],
     :name => 'Bob',
     :id => 1
   })
 
-  Viewer.stub!(:find).with(1).and_return(@viewer)
+  #Viewer.stub!(:find).with(1).and_return(@viewer)
+  Viewer.stub!(:find).and_return(@viewer)
 end
 
 def setup_project

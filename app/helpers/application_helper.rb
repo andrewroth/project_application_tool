@@ -1,9 +1,22 @@
-require  'formatting'
+require_dependency  'formatting'
+require_dependency  'vendor/plugins/questionnaire_engine/app/helpers/application_helper'
 
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   include Formatting
   
+  def file_exists?(p)
+    render_if_possible(:template => p) != nil
+  end
+
+  def render_if_possible(params = {})
+    begin
+      render(params)
+    rescue ActionView::MissingTemplate
+      return nil
+    end
+  end
+
   def new_item(title, controller, action = '')
     item_html = "<li "
     if (title == @page_title)
@@ -63,7 +76,15 @@ module ApplicationHelper
     r += ">"
   end
   
-  def sub_menu_item(title, controller, action, params = {})
+  def sub_menu_item(title, *params)
+    if params.length == 1 && params.first.class == Hash
+      params = params.first
+    else
+      controller, action, params = params
+    end
+
+    params = {} if params.nil?
+
     item_html = "<li "
     if (title == @submenu_title)
       item_html += " class=\"submenuactive\""
@@ -77,8 +98,14 @@ module ApplicationHelper
 #	  :loading => "$('loading').show();",
 #	  :loaded => "$('loading').hide();"
     # removed ajax version (above) since it was causing sorting to mess up and also doesn't get into browser history
-    params_html = params.collect{ |kv| k,v = kv; "#{k}=#{v}" }.join("&")
-    item_html += "<a href='/#{controller}/#{action}?#{params_html}'>#{title}</a>"
+    if params[:url]
+      url = params[:url]
+    else
+      params_html = params.collect{ |kv| k,v = kv; "#{k}=#{v}" }.join("&")
+      url = "/#{controller}/#{action}?#{params_html}"
+    end
+            
+    item_html += "<a href='#{url}'>#{title}</a>"
     # link_to title, params
     
     item_html += "</li>"
@@ -180,7 +207,7 @@ module ApplicationHelper
   end
   
   def format_currency(val)
-    return nil.to_s if val.nil?
+    return nil.to_s if val.nil? || val == ''
     "%0.2f" % val.to_f
   end
   

@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe "/profiles/crisis_info" do
 
   before(:each) do
-    @user = mock_model(User)
+    @viewer = mock_model(User)
   end
 
   it "should have passport expiry dates at least 5 and 10 years from now" do

@@ -1,5 +1,5 @@
 <% 
-@accepted = Acceptance.find_all_by_project_id accepted_pile.id, :include => [
+@accepted = Acceptance.find_all_by_project_id project.id, :include => [
             { :viewer => [
                 :vieweraccessgroups,
                 { :persons => :campuses }
@@ -10,11 +10,9 @@
             #:auto_donations,
             :support_coach
           ]
-@user.set_project accepted_pile
-@full_view = @user.fullview? 
-@cache = ProfileDonation.cache accepted_pile.id
-@project = accepted_pile # support coach list requires this
+@viewer.set_project project
+@full_view = @viewer.fullview? 
+@cache = ProfileDonation.cache project.id
 %>
-<%= 
-render :partial => "accepted_pile_table" 
-%>
+
+<%= render :partial => "accepted_pile_table", :locals => { :project => project } %>

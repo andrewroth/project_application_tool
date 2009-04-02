@@ -5,7 +5,6 @@ describe SecurityController do
   # specs are for ApplicationController
   it "should at least not crash when when rescues_path is called" do
     get :test_rescues_path
-    response.body.should == "doesn't exist test: /Users/andrewroth/Development/pat.trunk/vendor/rails/actionpack/lib/action_controller/templates/rescues/doesntexist.erb exists test: /Users/andrewroth/Development/pat.trunk/app/views/rescues/layout.rhtml"
   end
 
   it "should set server_url for development/test" do
@@ -58,7 +57,7 @@ Can't get it to set the env
   it "should allow students assigned as staff" do
     setup_eg; setup_form; setup_viewer(:student => true); setup_project
 
-    @user.stub!(:is_any_project_staff => true)
+    @viewer.stub!(:is_any_project_staff => true)
     post :test_rescues_path # anything that has restrict_students before_filter enabled will do
     response.should_not redirect_to('http://test.hosttest.host/your_apps')
   end

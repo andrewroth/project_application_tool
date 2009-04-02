@@ -9,11 +9,14 @@ class MassEmailsController < ApplicationController
     "applying_unsubmitted", { :class => "Applying", :txt => "Applying - Unsubmitted", :status => 'unsubmitted' }, 
     "accepted", { :class => "Acceptance", :txt => "Accepted" }, 
     "staff", { :class => "StaffProfile", :txt => "Staff" }, 
-    "withdrawn", { :class => "Withdrawn", :txt => "Withdrawn" }
+    "withdrawn", { :class => "Withdrawn", :txt => "Withdrawn" },
+    "prep_item_unreceived", { :class => "PrepItem", :txt => "Paperwork - Not Received"},
+    
   ])
 
   def index
     @submenu_title = "Mass Emails"
+    @prep_items = @eg.prep_items.collect{ |pi| pi.title}
   end
 
   def emails
@@ -38,20 +41,48 @@ class MassEmailsController < ApplicationController
     if classes.include?('Withdrawn') && !classes.include?('StaffProfile')
       profiles.reject!{ |pr| pr.class == Withdrawn && pr.class_when_withdrawn == 'StaffProfile' }
     end
-
+    
+    if params[:prep_item_unreceived]
+    if params[:project_id]!= 'any' then @prep_items = Project.find(params[:project_id]).prep_items + @eg.prep_items else @prep_items = @eg.prep_items end
+      prep_ids = @prep_items.collect { |p| p.id }
+      for i in 1 .. @prep_items.size
+        if params[("prep_item"+ prep_ids.at(i).to_s).to_sym]
+          profile_prep_items = PrepItem.find(prep_ids.at(i)).profile_prep_items
+          if params[:project_id]!= 'any' then profile_prep_items.delete_if { |ppi| ppi.profile.project_id != params[:project_id].to_i } end
+          for profile_prep_item in profile_prep_items
+            if profile_prep_item.received == false 
+              if !profile_prep_item.prep_item.individual || profile_prep_item.optional then profiles += [profile_prep_item.profile] end
+            end
+          end
+        end
+      end
+    end
+    
     emails = profiles.collect{ |pr| pr.viewer.person.email if pr.viewer && pr.viewer.person }.compact.uniq
     @result = if emails.empty? then '<I>Nothing found</I>' else emails.join(', ') end
 
     render :inline => @result
   end
   
+  def find_prep_items
+    if params[:proj_id] != ''
+      if params[:proj_id]!= 'any'
+        @prep_items = (Project.find(params[:proj_id]).prep_items + @eg.prep_items)
+      else
+        @prep_items = @eg.prep_items
+      end
+    else
+    @prep_items = []
+    end
+  end
+  
   protected
 
   def set_allowed_projects
-    @projects = if @user.is_projects_coordinator?
+    @projects = if @viewer.is_eventgroup_coordinator?(@eg)
         @eg.projects
       else
-        @user.viewer.current_projects_with_any_role(@eg)
+        @viewer.current_projects_with_any_role(@eg)
       end
   end
 

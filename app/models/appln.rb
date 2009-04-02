@@ -14,7 +14,7 @@ class Appln < ActiveRecord::Base
   belongs_to :preference1, :class_name => "Project", :foreign_key => :preference1_id
   belongs_to :preference2, :class_name => "Project", :foreign_key => :preference2_id
   
-  has_one :processor_form
+  has_one :processor_form_ref, :class_name => 'ProcessorForm'
   
   def acceptances
     profiles.reject { |p| p.class != Acceptance }
@@ -90,7 +90,7 @@ class Appln < ActiveRecord::Base
   end
   
   def processor_form
-    ProcessorForm.find_by_appln_id(id) || ProcessorForm.create(:appln_id => id)
+    return processor_form_ref || @processor_form || @processor_form = ProcessorForm.create(:appln_id => id)
   end
   
   def has_paid?
@@ -171,4 +171,18 @@ class Appln < ActiveRecord::Base
     acceptance = acceptance_obj ? acceptance_obj.project.title : ''
   end
   
+  # returns an array of hashes with :text and :instance_id
+  #
+  #   [ { :text => 'Reference Text', :instance_id => <ReferenceInstance id> } ... ]
+  #
+  # the list of references is taken from the form, so there may not be an instances
+  # yet of that reference, in which case the instance_id is nil
+  #   
+  def references_text_list
+    form.questionnaire.references.collect{ |ref|
+      ri = reference_instances.detect{ |ri| ri.reference_id == ref.id }
+      
+      { :text => ref.text, :instance_id => (ri ? ri.id : nil) }
+    }
+  end
 end

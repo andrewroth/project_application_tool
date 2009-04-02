@@ -1,8 +1,5 @@
-require 'bsearch'
-
-#require 'rubygems'
-#require 'ruby-prof'
-#require 'select_with_include'
+require_dependency 'bsearch'
+require_dependency 'rubygems'
 
 class MainController < ApplicationController
   before_filter :set_campuses, :only => [ :index, :your_campuses, :your_applications ]
@@ -39,13 +36,13 @@ class MainController < ApplicationController
     # at this point we know the user is not a student
     # 
     # project directors would like to go to my projects
-    if @user.is_projects_coordinator?
+    if @viewer.is_eventgroup_coordinator?(@eg)
       flash.keep(:notice)
       redirect_to :action => :your_projects
     else
       # students should go to your projects, that's all they can see -- they might
       #  be interns then they can see support coaches only
-      if @user.is_student?
+      if @viewer.is_student?
         redirect_to :action => :your_projects
       else
         redirect_to :action => :your_campuses
@@ -75,10 +72,10 @@ class MainController < ApplicationController
   end
   
   def your_projects
-    if (@user.is_projects_coordinator?)
+    if (@viewer.is_eventgroup_coordinator?(@eg))
       @allowable_projects = @eg.projects.find :all
     else
-      @allowable_projects = @user.viewer.current_projects_with_any_role @eg
+      @allowable_projects = @viewer.current_projects_with_any_role @eg
     end
     
     @allowable_projects_array = []
@@ -88,8 +85,10 @@ class MainController < ApplicationController
     
     @allowable_projects_array << ["All", "all"]
     
-    params[:project_id] ||= if @first_allowable_project then @first_allowable_project.id.to_s 
+    params[:project_id] ||= session[:project_id] || if @first_allowable_project then @first_allowable_project.id.to_s 
                              else '' end
+    session[:project_id] = params[:project_id]
+    
     if params[:project_id] == 'all'
       @show_projects = @allowable_projects
     else
@@ -120,11 +119,11 @@ class MainController < ApplicationController
   
   def your_applications
     @page_title = "App Processing"
-    if (@user.is_projects_coordinator?)
+    if (@viewer.is_eventgroup_coordinator?(@eg))
       processor_for_project_ids = @eg.projects.collect{ |p| p.id }
     else
-      # find which projects @user is a processor for
-      processor_for_project_ids = Processor.find_all_by_viewer_id(@user.id).collect { 
+      # find which projects @viewer is a processor for
+      processor_for_project_ids = Processor.find_all_by_viewer_id(@viewer.id).collect { 
         |entry| if entry.project.event_group_id == @eg.id then entry.project_id else nil end }.compact
     end
     
@@ -152,23 +151,12 @@ class MainController < ApplicationController
   
   def find_people
     name = params[:viewer][:name]
-    name.strip!
-    fname = name.sub(/ +.+/i, '')
-    lname = name.sub(/.+ +/i, '') if name.include? " "
-    if !lname.nil?
-      @people = Person.find(:all, 
-                            :conditions => ["person_fname like ? AND person_lname like ?", "%#{fname}%", "%#{lname}%"],
-                            :order => "person_fname, person_lname")
-    else
-      @people = Person.find(:all, 
-                            :conditions => ["person_fname like ? OR person_lname like ?", "%#{fname}%", "%#{fname}%"],
-                            :order => "person_fname, person_lname")
-    end
+    @people = Person.search_by_name name
     @viewers = @people.collect {|p| p.viewers}.flatten.compact
   end
   
   def get_viewer_specifics
-    @viewer = Viewer.find(params[:id], :include => :persons)
+    @viewer = Viewer.find(params[:id])
 
     profiles = Profile.find_all_by_viewer_id(@viewer.id, :include => [ :appln => :form ])
     @profiles_by_eg = EventGroup.find(:all).collect { |eg|
@@ -185,9 +173,9 @@ class MainController < ApplicationController
 
     for profile in profiles
       @project = profile.project
-      @user.set_project @project
+      @viewer.set_project @project
 
-      if @user.fullview?
+      if @viewer.fullview?
         # we know at least one project has a full view
         @restricted_full_view = true
       end
@@ -212,7 +200,7 @@ class MainController < ApplicationController
     :conditions => ["profiles.viewer_id = ? and profiles.type = ?", @viewer.id, "StaffProfile"])
     @applns = Appln.find_all_by_viewer_id @viewer.id, :include => :profiles
     #@applns.reject!{ |a| ![ 'withdrawn', 'declined', 'started', 'unsubmitted' ].include?(a.status) }
-    @full_view = @user.fullview?
+    @full_view = @viewer.fullview?
     @projects = true
 
     # sort the different findings into event groups
@@ -252,6 +240,43 @@ render :partial => "viewer_specifics"
     end
 
     render :inline => "<html><body><pre>#{r}</pre></body></html>"
+  end
+  
+  def find_prep_items
+    if %w(received optional).include?(params[:command]) && params[:project_id]
+      # set @projects - if no project id is given, use all if using tools
+      @projects = if params[:project_id].empty?
+                    if params[:from_tools] then @eg.projects else nil end
+                  else @eg.projects.find_all_by_id params[:project_id].split(',') end
+
+      # ensure valid project
+      unless @projects && !@projects.empty?
+        flash[:notice] = 'paperwork: invalid project'
+        redirect_to :back
+        return
+      end
+        
+      # get profiles out of projects
+      @profiles = @projects.collect{ |p| p.acceptances }.flatten
+        
+      # sort by name if they came from tools
+      if params[:from_tools] && params[:name] && !params[:name].empty?
+        people = Person.search_by_name params[:name]
+        @profiles = @profiles.find_all{ |p| people.include?(p.viewer.person) }
+      end
+
+      # get prep_items from projects
+      @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten.uniq
+
+      # ensure profile_prep_items is current
+      @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
+
+      # filter non-individual prep_items if optional command
+      if params[:command] == "optional" then @prep_items.delete_if { |pi| !pi.individual } end
+    else
+      flash[:notice] = 'paperwork: invalid command or options: command should be either received or optional, and project_id should be given'
+      redirect_to :back
+    end
   end
 
   protected
@@ -301,24 +326,28 @@ render :partial => "viewer_specifics"
   end
   
   def set_campuses
-    @campuses = @user ? users_campuses(@user) : []
+    @campuses = @viewer ? users_campuses : []
   end
   
-  def users_campuses(user)
+  def users_campuses
     campuses = nil
-    if (user.is_projects_coordinator? || 
-    user.is_assigned_regional_or_national?)
+
+    if (@viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_assigned_regional_or_national?(@eg))
       campuses_find = :all
     else
-      campuses_find = @user.viewer.person.campuses.collect(&:id)
+      campuses_find = @viewer.person.campuses.collect(&:id)
     end
 
-    campuses = Campus.find(campuses_find, :include => { :persons => { :viewers => { :profiles => :appln } } }, 
-      :select => "#{Campus.table_name}.campus_desc, #{Campus.table_name}.campus_shortDesc, " + 
+    campuses = unless Assignmentstatus.campus_student_ids.empty?
+        Campus.find(campuses_find, :include => { :persons => { :viewers => { :profiles => :appln } } }, 
+          :select => "#{Campus.table_name}.campus_desc, #{Campus.table_name}.campus_shortDesc, " + 
                  "#{Appln.table_name}.form_id, #{Person.table_name}.person_fname, #{Person.table_name}.person_lname," + 
                  "#{Viewer.table_name}.viewer_userID, #{Profile.table_name}.status, #{Profile.table_name}.type," +
-		 "#{Appln.table_name}.preference1_id, #{Profile.table_name}.project_id",
-      :conditions => "#{Assignment.table_name}.assignmentstatus_id in (#{Assignmentstatus.campus_student_ids.join(',')})" )
+		             "#{Appln.table_name}.preference1_id, #{Profile.table_name}.project_id",
+          :conditions => "#{Assignment.table_name}.assignmentstatus_id in (#{Assignmentstatus.campus_student_ids.join(',')})" )
+      else
+        [ ]
+      end
 
     if campuses.class == Array then campuses else [ campuses ] end
   end

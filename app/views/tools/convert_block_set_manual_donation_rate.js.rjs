@@ -1,0 +1,2 @@
+page.insert_html :before, 'preview', %|<div style='display:none;' id='message_#{@uid}' class="flash error">Successfully updated #{@nc} manual donations.</div>|
+page.visual_effect :appear, "message_#{@uid}" 

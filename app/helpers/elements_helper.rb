@@ -26,6 +26,8 @@ module ElementsHelper
   }
 
   def custom_element_item(txt, m, c)
+    debugger
+
     if @readonly
       if MAP_ID[c] then c = MAP_ID[c] end
 

@@ -1,7 +1,3 @@
-require 'soap/wsdlDriver'
-require 'soap/mapping'
-require 'defaultDriver'
-
 class SecurityController < ApplicationController
   require 'digest/md5'
   filter_parameter_logging :password
@@ -12,6 +8,8 @@ class SecurityController < ApplicationController
   skip_before_filter :ensure_projects_app_created
   skip_before_filter :verify_event_group_chosen
   skip_before_filter :set_event_group
+
+  before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login
 
   before_filter :ensure_gcx_in_session, :only => [ :link_gcx, :do_link_gcx, :link_gcx_new, :do_link_gcx_new ]
 
@@ -31,26 +29,43 @@ class SecurityController < ApplicationController
     end
 
     v = Viewer.find result[:viewer_id]
-    if v.guid && !v.guid.empty? && v.guid != session[:gcx][:guid]
+    if v.guid && !v.guid.empty? && v.guid != cas_sso_guid
       flash[:notice] = "Error: Account '#{params[:username]}' already linked with a different gcx account."
+      logger.info "Link GCX Error: Account '#{params[:username]}' already linked with a different gcx account.  viewer id: #{v.id} guid: #{v.guid} cas guid: #{cas_sso_guid} session: #{session.inspect}"
       redirect_to :action => 'link_gcx', :try_again => true, :username => params[:username]
+
       return
     end
 
-    v.guid = session[:gcx][:guid]
+    v.guid = cas_sso_guid
     v.save!
 
-    flash[:notice] = "Connected old user '#{params[:username]}' with gcx user '#{session[:gcx][:email]}'.  Now you can log in with your gcx user."
+    flash[:notice] = "Connected old user '#{params[:username]}' with gcx user '#{session[:cas_user]}'.  Now you can log in with your gcx user."
     flash.keep
 
     setup_given_viewer_id v.id
   end
 
+  def cas_sso_guid
+    session[:cas_extra_attributes]['ssoGuid'] || 
+      session[:cas_extra_attributes]['sso_guid']
+  end
+
+  def cas_last_name
+    session[:cas_extra_attributes]['lastName'] || 
+      session[:cas_extra_attributes]['last_name']
+  end
+
+  def cas_first_name
+    session[:cas_extra_attributes]['firstName'] || 
+      session[:cas_extra_attributes]['first_name']
+  end
+
   def do_link_gcx_new
-    fn = params[:first_name] || session[:gcx][:firstName]
-    ln = params[:last_name] || session[:gcx][:lastName]
-    uid = params[:email] || session[:gcx][:email]
-    guid = session[:gcx][:guid]
+    fn = params[:first_name] || cas_first_name
+    ln = params[:last_name] || cas_last_name
+    uid = params[:email] || session[:cas_user]
+    guid = cas_sso_guid
 
     v = Viewer.create_new_cim_hrdb_account guid, fn, ln, uid
 
@@ -58,8 +73,6 @@ class SecurityController < ApplicationController
   end
 
   def link_gcx
-    redirect_to(:action => 'login') if session[:gcx].nil?
-
     flash.delete :gcx
     @show_contact_emails_override = true
   end
@@ -103,10 +116,8 @@ class SecurityController < ApplicationController
       end
     end
 
-    return unless params[:username]
-
     # props to Waterloo project
-    if params[:username] == 'stupid ninja game time'
+    if params[:username] && params[:username] == 'stupid ninja game time'
       e = (' '*(rand(30)+10)).split('').collect { |c| rand() < 0.8 ? '!' : '1' }.join
       options = [ "BOOOOOOM SUCKAAAAAAA!!!!!#{e}", "Sooooooonic BOOOOOOOOOOM!!!#{e}******", "Beat you with a stick!!#{e}", "bust u up!!!!!!!!!!!#{e}", 
           "AUuuugh Auuuurrgh Auuuuuuuugh!!#{e}! <ripping heart out>", "Proooteiiiin RAAAAAAAGGGGE!!!1!1!#{e}", "blessed.", 
@@ -121,20 +132,18 @@ class SecurityController < ApplicationController
     result = login_by_gcx if result[:keep_trying]
     result = login_by_cim if result[:keep_trying]
 
-    result[:error] = "Sorry, authentication failed for '#{params[:username]}'" if result[:keep_trying]
     if result[:error]
       flash[:notice] = result[:error]
-      return
     elsif result[:gcx_no_viewer]
       redirect_to :action => 'link_gcx'
-    else
+    elsif !result[:keep_trying]
       setup_given_viewer_id result[:viewer_id]
-    end      
+    end
 
     # give a warning about intranet logins expiring
     if session[:login_source] == 'spt'
-      flash[:notice] = "You logged in by your intranet username and password.  Please note that we are phasing out the intranet logins in favor of GCX.  *** By Friday April 17 we hope to shut off intranet logins. *** Please see <A HREF='http://docs.google.com/Doc?id=dd7zngd6_4c457j7dx' target='_blank'>this document</A> (link opens in a new window) explaining how you can upgrade to a GCX account."
-      logger.info "Intranet login @ #{Time.now} - viewer #{@user.viewer.viewer_userID if @user} id #{@user.viewer.id if @user}"
+      flash[:notice] = "You logged in by your intranet username and password.  Please note that we are phasing out the intranet logins in favor of GCX.  Please see <A HREF='http://docs.google.com/Doc?id=dd7zngd6_4c457j7dx' target='_blank'>this document</A> (link opens in a new window) explaining how you can upgrade to a GCX account."
+      logger.info "Intranet login @ #{Time.now} - viewer #{@viewer.viewer_userID} id #{@viewer.id}"
     end
 
   end
@@ -142,14 +151,14 @@ class SecurityController < ApplicationController
   def login_by_ticket
     return { :keep_trying => true } unless params[:ticket]
 
-    ticket = Ticket.find_by_ticket_ticket(ticket_str)
+    ticket = Ticket.find_by_ticket_ticket(params[:ticket])
 
     if ticket && ticket.viewer_id
       session[:login_source] = 'intranet'
       logger.debug "ticket login succeeded for #{params[:username]}"
       { :viewer_id => ticket.viewer_id }
     else
-      { :error => "Sorry, that ticket (#{params[:ticket]}) is invalid."}
+      { :error => "Sorry, that ticket (#{params[:ticket]}) is invalid.", :keep_trying => true }
     end
   end
 
@@ -157,7 +166,7 @@ class SecurityController < ApplicationController
     return { :keep_trying => true } unless params[:username] && params[:password]
 
     login_viewer = Viewer.find_by_viewer_userID params[:username]
-    return { :keep_trying => true } unless login_viewer
+    return { :error => "Username '#{params[:username]}' doesn't exist.", :keep_trying => true } unless login_viewer
 
     hash_pass = Digest::MD5.hexdigest(params[:password])
     if hash_pass == login_viewer.viewer_passWord || (RAILS_ENV == 'development' && params[:password] == 'secret123')
@@ -179,38 +188,12 @@ class SecurityController < ApplicationController
   end
 
   def login_by_gcx
-    # look for a gcx guid
-    cas = TntWareSSOProviderSoap.new
-    return_to = request.protocol + request.host
-    remote_ip = request.remote_ip # apparently this doesn't matter, but this looks like a good value
-    args = GetServiceTicketFromUserNamePassword.new(return_to, params[:username], params[:password], remote_ip)
-
-    # A little debug code can save the day
-    log = ''
-    cas.wiredump_dev = log
-    begin
-      ticket = cas.getServiceTicketFromUserNamePassword(args).getServiceTicketFromUserNamePasswordResult
-    rescue
-      # Auth failed
-      return { :keep_trying => true }
-    end
-
-    args = GetSsoUserFromServiceTicket.new(return_to, ticket)
-    # A little debug code can save the day
-    log = ''
-    cas.wiredump_dev = log
-    begin
-      user = cas.getSsoUserFromServiceTicket(args).getSsoUserFromServiceTicketResult
-    rescue
-      return { :error => "Sorry, failed getting user information from gcx for '#{params[:username]}'" }
-    end
-
-    viewer = Viewer.find_by_guid user.userID
-    session[:gcx] = { :ticket => ticket, :firstName => user.firstName, :lastName => user.lastName, :guid => user.userID, :email => user.email }
+    return { :keep_trying => true } unless session[:cas_user]
+    viewer = Viewer.find_by_guid cas_sso_guid
 
     if viewer
       session[:login_source] = 'gcx'
-      logger.debug "gcx login succeeded for #{params[:username]}"
+      logger.debug "gcx login succeeded for #{session[:cas_user]}"
 
       return { :viewer_id => viewer.id }
     else
@@ -219,16 +202,21 @@ class SecurityController < ApplicationController
   end
  
   def logout
-    @user = nil
+    @viewer = nil
     session[:user_id] = nil
     session[:needs_read_login_message_confirm] = true
 
     if session[:login_source] == 'intranet'
       redirect_to $cim_url
-    else
-      flash[:notice] = "You have been logged out."
-      redirect_to :action => :login
+    elsif session[:login_source] == 'gcx'
+      redirect_to CASClient::Frameworks::Rails::Filter.client.logout_url
     end
+
+    session[:login_source] = nil
+    session[:cas_extra_attributes] = nil
+    session[:cas_user] = nil
+
+    flash[:notice] = "You have been logged out."
   end
   
   def test_rescues_path
@@ -238,9 +226,9 @@ class SecurityController < ApplicationController
   protected
 
   def setup_given_viewer_id(viewer_id)
-    @user = User.new(viewer_id)
+    @viewer = Viewer.find viewer_id
 
-    session[:user_id] = @user.id
+    session[:user_id] = @viewer.id
     session[:gcx] = nil
 
     # if the secret password was used, we want to reset the session, since
@@ -250,23 +238,23 @@ class SecurityController < ApplicationController
       session[:event_group_id] = nil
     end
 
-    logger.debug('login ' + @user.inspect)
+    logger.debug('login ' + @viewer.inspect)
 
     #flash[:downtime] ||= "<br />There will be two short periods of downtime (approx 10 mins each) sometime before 9:30 AM EST (6:30 PST) on Tuesday Jan 22, 2007 for maintenance"
     
     # update last login stuff
-    @user.viewer.viewer_isActive = true
-    @user.viewer.viewer_lastLogin = Time.now
-    @user.viewer.save!
+    @viewer.viewer_isActive = true
+    @viewer.viewer_lastLogin = Time.now
+    @viewer.save!
 
     redirect_to :controller => "main"
   end
 
   def ensure_gcx_in_session
-    unless session[:gcx]
-      flash[:error] = "Error: No gcx info found in session."
-      redirect_to :action => :login
-    end
+    #unless session[:cas_user]
+    #  flash[:error] = "Error: No gcx info found in session."
+    #  redirect_to :action => :login
+    #end
   end
 
   def is_demo_host

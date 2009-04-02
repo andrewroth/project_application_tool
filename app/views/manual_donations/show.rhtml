@@ -1,6 +1,6 @@
-<% for column in ManualDonation.content_columns %>
+<% for column in ManualDonation::LIST_COLUMNS %>
 <p>
-  <b><%= column.human_name %>:</b> <%=h @manual_donation.send(column.name) %>
+  <b><%= column.humanize %>:</b> <%=h @manual_donation.send(column) %>
 </p>
 <% end %>
 

@@ -105,7 +105,7 @@ describe AcceptanceController do
   end
 
   it "should view summary" do
-    setup_eg; setup_form; setup_viewer(:pc => true); setup_project
+    setup_eg; setup_form; setup_viewer(:egc => true); setup_project
     setup_appln_profile
 
     get :view_summary, :viewer_id => 1, :profile_id => 1
@@ -115,7 +115,7 @@ describe AcceptanceController do
   end
 
   it "should update intern status" do
-    setup_eg; setup_form; setup_viewer(:pc => true); setup_project
+    setup_eg; setup_form; setup_viewer(:egc => true); setup_project
     setup_appln_profile
 
     @profile.stub!(:as_intern => true)
@@ -127,7 +127,7 @@ describe AcceptanceController do
   end
 
   it "should update intern status rjs" do
-    setup_eg; setup_form; setup_viewer(:pc => true); setup_project
+    setup_eg; setup_form; setup_viewer(:egc => true); setup_project
     setup_appln_profile
 
     @profile.stub!(:as_intern => true)
@@ -139,7 +139,7 @@ describe AcceptanceController do
   end
 
   it "should set support coach to a viewer" do
-    setup_eg; setup_form; setup_viewer(:pc => true); setup_project
+    setup_eg; setup_form; setup_viewer(:egc => true); setup_project
     setup_appln_profile
 
     @profile.stub!(:as_intern => true)
@@ -151,7 +151,7 @@ describe AcceptanceController do
   end
 
   it "should set support coach to a viewer using ajax" do
-    setup_eg; setup_form; setup_viewer(:pc => true); setup_project
+    setup_eg; setup_form; setup_viewer(:egc => true); setup_project
     setup_appln_profile
 
     @profile.stub!(:as_intern => true)
@@ -163,7 +163,7 @@ describe AcceptanceController do
   end
 
   it "should set support coach to none" do
-    setup_eg; setup_form; setup_viewer(:pc => true); setup_project
+    setup_eg; setup_form; setup_viewer(:egc => true); setup_project
     setup_appln_profile
 
     @profile.stub!(:as_intern => true)

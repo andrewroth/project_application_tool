@@ -2,3 +2,4 @@ profile_1:
   type: Acceptance
   viewer: student_seven_viewer
   project: project_1
+  motivation_code: profile_1

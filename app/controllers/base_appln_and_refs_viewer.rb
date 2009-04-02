@@ -2,7 +2,7 @@
 # should extend this class.  they should be read-only
 # and not modify the appln/ref
 
-require 'appln_admin/modules/view_custom_pages.rb'
+require_dependency 'appln_admin/modules/view_custom_pages.rb'
 
 class BaseApplnAndRefsViewer < ViewOnlineController
   prepend_before_filter :setup
@@ -23,8 +23,8 @@ class BaseApplnAndRefsViewer < ViewOnlineController
   protected
   
   def get_filter
-    @user.set_project @project
-    if !( (@project && @user.is_processor?) || @user.is_projects_coordinator?)
+    @viewer.set_project @project
+    if !( (@project && @viewer.is_processor?) || @viewer.is_eventgroup_coordinator?(@eg))
       return { :filter => ['confidential'], :default => true }
     end
     return nil

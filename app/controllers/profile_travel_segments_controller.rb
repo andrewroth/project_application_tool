@@ -1,4 +1,4 @@
-require 'permissions.rb'
+require_dependency 'permissions.rb'
 
 class ProfileTravelSegmentsController < ApplicationController
   include Permissions
@@ -19,7 +19,7 @@ class ProfileTravelSegmentsController < ApplicationController
   
   def set_editors
     want_full = !params[:restrict]
-    if want_full && !@user.is_student?
+    if want_full && !@viewer.is_student?
       @editors = 'all_editors'
     else
       @editors = 'restricted'
@@ -51,7 +51,7 @@ class ProfileTravelSegmentsController < ApplicationController
   def assigned
     list
 
-    @page_title = "Itinerary for #{@user.viewer.name}"
+    @page_title = "Itinerary for #{@viewer.name}"
 
     if params[:partial]
       render :partial => 'assigned_list', :locals => { :can_edit => true, :div => false }
@@ -201,7 +201,7 @@ class ProfileTravelSegmentsController < ApplicationController
     end
 
     def is_project_staff
-      return @user.is_projects_coordinator? ||
-          @user.is_atleast_project_staff(@profile.project)
+      return @viewer.is_eventgroup_coordinator?(@eg) ||
+          @viewer.is_atleast_project_staff(@profile.project)
     end
 end

@@ -1,17 +1,12 @@
-load 'permissions.rb'
+require_dependency 'permissions'
 
 class YourAppsController < ApplicationController
   include Permissions
 
-  before_filter :get_viewer
   before_filter :user_owns_profile_with_message, :only => [ :acceptance, :continue ]
   before_filter :set_title
 
   skip_before_filter :restrict_students
-  
-  def get_viewer
-    @viewer = @user.viewer
-  end
   
   def index
     redirect_to :action => :list
@@ -32,7 +27,7 @@ class YourAppsController < ApplicationController
   end
 
   def list
-    profiles = @user.viewer.profiles.find :all, :include => [ { :appln => { :form => :questionnaire } }, :project ],
+    profiles = @viewer.profiles.find :all, :include => [ { :appln => { :form => :questionnaire } }, :project ],
        :select => "#{Profile.table_name}.id, #{Form.table_name}.event_group_id," +
                   "#{Profile.table_name}.status, #{Profile.table_name}.type," +
                   "#{Questionnaire.table_name}.title, #{Project.table_name}.title",
@@ -67,17 +62,17 @@ class YourAppsController < ApplicationController
     form = @eg.forms.find params[:form_id]
 
     # look for ane already
-    appln = @user.viewer.applns.find_by_form_id(form.id)
+    appln = @viewer.applns.find_by_form_id(form.id)
     if appln
       @profile = appln.profile
     else
       appln = Appln.create :form_id => form.id,
-            :viewer_id => @user.id,
+            :viewer_id => @viewer.id,
             :status => "started"
 
       # might as well give them a profile right now, and set the viewer up properly too
       @profile = appln.profile
-      @profile.viewer_id = @user.id
+      @profile.viewer_id = @viewer.id
       @profile.save!
 
       # and set the pref 1 if there's only one project

@@ -1,7 +1,7 @@
 class NotificationsController < ApplicationController
   include Permissions
 
-  before_filter :ensure_projects_coordinator
+  before_filter :ensure_eventgroup_coordinator
 
   active_scaffold
 end

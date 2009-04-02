@@ -1,6 +1,6 @@
 <!-- from any status you can go to withdrawn.. -->
-<% @user.set_project @project %>
-<% if @user.is_projects_coordinator? || (@project && appln.status != 'withdrawn' && @user.is_processor?) %>
+<% @viewer.set_project @project %>
+<% if @viewer.is_eventgroup_coordinator?(@eg) || (@project && appln.status != 'withdrawn' && @viewer.is_processor?) %>
     <%= select_tag('status_'+appln.id.to_s, options_for_select(
             [ appln.status, 'withdrawn' ], appln.status
         ))

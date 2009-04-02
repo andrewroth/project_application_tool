@@ -13,9 +13,12 @@ class MigrateLigFormToCimHrdb < ActiveRecord::Migration
     convert 1361, :person, :person_legal_lname
     
     # gender
-    genders = Hash[*['Male','Female','???'].collect{ |w| [ w, Gender.find_by_gender_desc(w).id ] }.flatten ]
-    convert(1707) do |a,p,e|
-      p.gender_id = genders[a]
+    begin
+      genders = Hash[*['Male','Female','???'].collect{ |w| [ w, Gender.find_by_gender_desc(w).id ] }.flatten ]
+      convert(1707) do |a,p,e|
+        p.gender_id = genders[a]
+      end
+    rescue
     end
     
     # birthdate
@@ -90,14 +93,16 @@ class MigrateLigFormToCimHrdb < ActiveRecord::Migration
     convert_date 1436, :emerg, :emerg_passportExpiry, false
     
     page_id = 98
-    unless Page.find(page_id).elements.find_by_text "Personal Info Form"
-      puts "create personal info element"
-      e = PersonalInformation.create :text => "Personal Info Form"
-      e.page_elements.create :page_id => page_id, :element_id => e.id, :position => 1
-    else
-      puts "personal info element already found"
+    begin    
+       unless Page.find(page_id) && Page.find(page_id).elements.find_by_text("Personal Info Form")
+        puts "create personal info element"
+        e = PersonalInformation.create :text => "Personal Info Form"
+        e.page_elements.create :page_id => page_id, :element_id => e.id, :position => 1
+      else
+        puts "personal info element already found"
+      end
+    rescue
     end
-    
     delete_element 1358 # instruction
     delete_element 1359 # first
     delete_element 1360 # middle
@@ -129,14 +134,17 @@ class MigrateLigFormToCimHrdb < ActiveRecord::Migration
     
     # that's it for personal info, on to emergency contact
     page_id = 100
-    unless e = Page.find(page_id).elements.find_by_text("Emergency Contact Form")
-      puts "create emergency contact info element"
-      e = CrisisInformation.create :text => "Emergency Contact Form"
-      e.page_elements.create :page_id => page_id, :element_id => e.id, :position => 1
-    else
-      puts "emergency contact info element already found"
+    begin
+      unless e = Page.find(page_id).elements.find_by_text("Emergency Contact Form")
+        puts "create emergency contact info element"
+        e = CrisisInformation.create :text => "Emergency Contact Form"
+        e.page_elements.create :page_id => page_id, :element_id => e.id, :position => 1
+      else
+        puts "emergency contact info element already found"
+      end
+    rescue
     end
-    
+
     delete_element 1396 # ec1
     delete_element 1404 # ec2
     delete_element 1412 # medical professionals

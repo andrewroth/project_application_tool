@@ -1,0 +1,16 @@
+unless @prep_item.errors.empty?
+  page.replace_html "create", :partial => 'create_form'
+else
+  page.insert_html :bottom, "list_ul", %|
+    <li id = "list_#{@prep_item.id}">
+      #{render :partial => 'prep_item', :object => @prep_item}
+    </li>|
+  if @prep_item_id_to_clear
+    page << %|$('wrapper_#{@prep_item_id_to_clear}').removeClassName('last_modified');|
+  end
+  page.visual_effect :highlight, "wrapper_#{@prep_item.id}"
+  page.hide "create"
+  page.show "create_link"
+  @prep_item = PrepItem.new
+  page.replace_html "create", :partial => 'create_form'
+end

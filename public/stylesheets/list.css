@@ -2,6 +2,16 @@
     background-color: #0066B3;
     padding: 3px;
 }
+.unsubmitted_item, .unsubmitted_item_modified {
+    background-color: #8B0000;
+    padding: 3px;
+}
+
+.individual_item, .individual_item_modified {
+    border: #7CFC00 solid;
+}
+
+
 
 .project_item, .project_item_modified {
     background-color: #80C9FF;

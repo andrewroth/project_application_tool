@@ -3,14 +3,22 @@
 * user: <%= 
 user_id = @request.session.instance_variable_get(:@data)[:user_id]
 
+def crash_avoid
+  begin
+    yield
+  rescue Exception => e
+    "[crashed #{e.inspect}]"
+  end
+end
+
 if user_id
   user = User.new(user_id); 
-  { :name => (if user.viewer.person 
+  { :name => crash_avoid { if user.respond_to?(:viewer) && user.viewer && user.viewer.person 
                  then user.viewer.name 
-		 else '[no person found]' end ), 
-    :userID => user.viewer.viewer_userID, 
-    :id => user_id, 
-    :email => (if user.viewer.person then user.viewer.person.email end) }.inspect 
+                 else '[no person found]' end }, 
+    :userID => crash_avoid { user.viewer.viewer_userID }, 
+    :id => crash_avoid{ user_id }, 
+    :email => crash_avoid { if user.viewer.person then user.viewer.person.email end } }.inspect 
 else "[no user_id set]" 
 end
 %>

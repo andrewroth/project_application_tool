@@ -1,4 +1,4 @@
-require 'permissions'
+require_dependency 'permissions'
 
 class CustomReportsController < ApplicationController
   include Permissions
@@ -9,6 +9,7 @@ class CustomReportsController < ApplicationController
   active_scaffold :report do |config|
     config.columns = [ :title, :include_accepted, :include_applying, :include_staff, :report_elements ]
     config.update.columns.exclude :position
+    config.columns[:report_elements].associated_limit = 1000
   end
 
   def conditions_for_collection
@@ -23,7 +24,7 @@ class CustomReportsController < ApplicationController
 
     # filter out the confidential questions
     #logger.info 'AT FILTER'
-    if true || @user.is_projects_coordinator?
+    if true || @viewer.is_eventgroup_coordinator?(@eg) # TODO: remove hardcoded true
       @report_elements = @report.report_elements
     else
       @report_elements = @report.report_elements.reject { |re|

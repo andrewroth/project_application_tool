@@ -28,7 +28,7 @@
     	      <% end %>
     	    <% end %>
             
-          <% if @user.is_projects_coordinator? %>
+          <% if @viewer.is_eventgroup_coordinator?(@eg) %>
             <%= th :name => 'pile', :type => 'dropdown' %>
           <% end %>
           <%= th :name => 'other', :type => 'lcase_str' %>
@@ -36,11 +36,11 @@
       </thead>
       <tbody>
         <% for @profile in @processor_list %>
-	  <% next if @profile.appln.form != form %>
-          <% @project = @profile.project %>
-          <% @user.set_project(@project) %>
+          <% next if @profile.appln.form != form %>
+          <% project = @profile.project %>
+          <% @viewer.set_project(project) %>
           <% @appln = @profile.appln %>
-          <% @can_evaluate = @user.is_projects_coordinator? || (@project && @user.is_processor?) %>
+          <% @can_evaluate = @viewer.is_eventgroup_coordinator?(@eg) || (project && @viewer.is_processor?) %>
 
           <% 
 	  if @profile.status != 'completed'
@@ -52,7 +52,7 @@
           elsif @profile.locked_by.nil?
             @evaluate = evaluate_link @profile.id, @profile.project_id
           else
-            you = (@profile.locked_by == @user.viewer) ? "<br>(you! -- click to continue evaluating)" : ""
+            you = (@profile.locked_by == @viewer) ? "<br>(you! -- click to continue evaluating)" : ""
             @evaluate = "<I>being evaluated by #{@profile.locked_by.name} #{you}</I>"
             if !you.empty?
               @evaluate = continue_evaluate_link @evaluate, @profile.id, @profile.project_id

@@ -46,7 +46,7 @@ module AcceptancePileFunctionality
 
     @project = @appln.profile.project
     
-    @user.set_project @project unless @user.nil?
+    @viewer.set_project @project unless @viewer.nil?
   end
 
   protected
@@ -58,7 +58,7 @@ module AcceptancePileFunctionality
   def ensure_view_summary_permission
     set_can_view_summary if @can_view_summary.nil?
 
-    @user.set_project(@project)
+    @viewer.set_project(@project)
     unless (@can_view_summary)
       flash[:notice] = "You don't have permission to view this application summary."
       render :text => "", :layout => true
@@ -70,7 +70,7 @@ module AcceptancePileFunctionality
   def ensure_view_entire_permission
     set_can_view_entire if @can_view_entire.nil?
 
-    @user.set_project(@project)
+    @viewer.set_project(@project)
     unless (@can_view_entire)
       flash[:notice] = "You don't have permission to view this entire application."
       render :text => "", :layout => true
@@ -82,7 +82,7 @@ module AcceptancePileFunctionality
   def ensure_view_references_permission
     set_can_view_references if @can_view_references.nil?
     
-    @user.set_project(@project)
+    @viewer.set_project(@project)
     if %w(staff peer pastor).include?(params[:type]) && !@can_view_references
       flash[:notice] = "You don't have permission to view this reference."
       render :text => "", :layout => true

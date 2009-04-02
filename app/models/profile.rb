@@ -7,6 +7,7 @@ class Profile < ActiveRecord::Base
   has_many :profile_travel_segments, :order => "position ASC"
   has_many :travel_segments, :through => :profile_travel_segments, :order => "position ASC"
   has_many :optin_cost_items;
+  has_many :profile_prep_items
   
   #has_many :profile_manual_donations
   #has_many :profile_auto_donations
@@ -202,7 +203,13 @@ class Profile < ActiveRecord::Base
   end
   
   def donations_total(params = {})
-    donations(params).inject(0.0) { |received, donation| received + donation.amount.to_f }
+    donations(params).inject(0.0) { |received, donation| 
+      if donation.class == ManualDonation && donation.status == 'invalid'
+        received
+      else
+        received + donation.amount.to_f
+      end
+    }
   end
   
   def funding_target(eg, use_project_from_eg = false)
@@ -226,6 +233,19 @@ class Profile < ActiveRecord::Base
     return [ ] unless project_to_use
 
     project_to_use.all_cost_items(eg) + profile_cost_items
+  end
+  
+  def all_prep_items #return a list of all associated prep items
+    #PrepItem.find_by_project_id self.project.id
+    project.prep_items + project.event_group.prep_items
+  end
+  
+  def all_profile_prep_items
+    self.profile_prep_items
+  end
+
+  def profile_prep_item(pi)
+    profile_prep_items.detect{ |ppi| ppi.prep_item_id == pi.id }
   end
 
   after_create do |profile|

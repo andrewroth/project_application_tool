@@ -1,21 +1,20 @@
-<% form_tag :action => (@login_action || :login) do -%>
-  <fieldset>
-    <legend><%= @login_title || 'Login' %></legend>
-    <ol>
-      <li><label>Username: </label><%= text_field_tag 'username', {} %></li>
-      <li><label>Password: </label><%= text_field_tag 'password', {}, :type => 'password' %></li>
-    </ol>
-    <img src="/images/login.jpg" width="50px" />
-    <%= submit_tag 'Login', :id => 'submit' %>
-  </fieldset>   
-<% end -%>
-<div id="account_links">
-  <% if @content_for_account_links %>
-    <%= yield :account_links %>
-  <% else %>
-    <%= link_to "Create an Account", "/security/signup" %>
-    | <%= link_to "Change Password", "https://signin.mygcx.org/sso/selfservice/protected/password/changePassword.jsp" %>
-    | <%= link_to "Reset Password", "https://signin.mygcx.org/sso/selfservice/resetPassword.jsp" %>
-  <% end %>
-</div>
+<table id='login_table' border='0'>
+  <tr>
+    <td><img src="/images/login.jpg" width="50px"/></td>
+    <td>
+      <%= link_to_function 'Login with Campus for Christ intranet account', "Effect.SlideDown('login_form')" %>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>
+      <div id='login_form' style='display:none'><%= render :partial => 'cim_login_form' %></div>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="http://technology.ccci.org/gcx/images/288-GCX-logo.gif" width="100px"/></td>
+    <td><%= link_to 'Login with GCX', CASClient::Frameworks::Rails::Filter.login_url(controller) %></td>
+  </tr>
+</table>
 
+<%= render :partial => 'account_links' %>

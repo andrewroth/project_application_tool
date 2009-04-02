@@ -4,9 +4,9 @@
           @eg.projects.find(:all).sort{ |a,b| a.title <=> b.title }.collect{|p| [ p.title, p.id ]},
              @profile.project_id)) %>
 </p>
-<%= observe_field 'profile[type]', :update => 'class_options', :url =>
+<%= observe_field 'profile_type', :update => 'class_options', :url =>
          { :action => 'class_options', :id => @profile.id },
-       :with => "'type='+$F('profile[type]')",
+       :with => "'type='+$F('profile_type')",
        :loading => "$('loading').show();", :complete => "$('loading').hide();" -%>
 
 <div id="class_options">

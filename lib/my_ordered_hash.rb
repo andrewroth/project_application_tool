@@ -39,7 +39,7 @@ class MyOrderedHash < Hash
   end
   
   def []=(key, val)
-    @keys << key
+    @keys << key unless @keys.include?(key)
     super
   end
   

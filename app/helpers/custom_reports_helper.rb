@@ -1,5 +1,4 @@
 module CustomReportsHelper
-  include ActiveScaffold::Helpers::Ids
 
   def no_show_existing
     true
@@ -25,7 +24,7 @@ module CustomReportsHelper
     select_tag(input_name, options_for_select( [ '',
         ['Question Answer', 'ReportElementQuestion' ],
         ['Person Attribute' ,'ReportElementModelMethod' ] 
-    ] , (record.new_record? ? '' : record.class.name) )) + observe_field(input_name, toggle_params) + 
+    ] , (record.new_record? ? '' : record.class.name) ), :id => input_name) + observe_field(input_name, toggle_params) + 
       %|
          <script> // set initial visibilities
 	 #{if record.class == ReportElement then "$('#{method_js_id}').hide(); $('#{element_js_id}').hide();"
@@ -49,7 +48,7 @@ module CustomReportsHelper
        :method => :element_id, 
        :id => input_name, 
        :controller => 'report_element_questions',
-       :link_text => image_tag("new_window.gif", :class => 'new_window_img')) + 
+       :link_text => image_tag("new_window.gif", :class => 'new_window_img')) +
       observe_field(input_name, :url => { :controller => 'report_element_questions', 
                                           :action => :update_element_text,
 					  :js_id => input_name },

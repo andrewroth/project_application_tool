@@ -14,7 +14,12 @@ module Formatting
     return '' if value.to_s.empty?
     return format_date(value) if value.class == Date
 
-    time = (value.class == Time || value.class == DateTime) ? value : Time.parse(value)
+    begin
+      time = (value.class == Time || value.class == DateTime || value.class == ActiveSupport::TimeWithZone) ? 
+        value : Time.parse(value)
+    rescue
+      debugger
+    end
 
     if style == :ts
       time.strftime("%b %d %y %H:%M")

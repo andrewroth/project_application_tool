@@ -8,7 +8,7 @@
   <td>
       <%= costing_link staff_profile.id %>
       <%= travel_link staff_profile.id %>
-      <% if @user.is_projects_coordinator? %>
+      <% if @viewer.is_eventgroup_coordinator?(@eg) %>
         <%= manual_donations_link staff_profile.motivation_code %>
         <%= withdraw_move_link staff_profile.id, 'move' %>
       <% end %>

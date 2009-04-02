@@ -1,0 +1,18 @@
+<h1>New <%= @eg2.to_s_with_eg_path %> Coordinator</h1>
+
+<% remote_form_for(@eventgroup_coordinator, :url => { :action => :search, :id => @eg2.id }, :update => :results) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    Search by name:
+    <%= text_field_tag 'name' %>
+  </p>
+  <p>
+    <%= f.submit "Search" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', eventgroup_coordinators_path %>
+
+<div id='results'>
+</div>

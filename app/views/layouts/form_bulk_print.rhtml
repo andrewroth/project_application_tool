@@ -21,6 +21,7 @@
         next if this_page.hidden?
         @questionnaire_instance = instance[:instance]
         @appln = instance[:appln]
+        @appln_person = @appln.person
         params[:appln] = @appln # a hack since @appln's value is lost in controller's questionnaire_instance
         get_references if @appln
       %>

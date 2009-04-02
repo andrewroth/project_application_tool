@@ -8,7 +8,7 @@ module FormPrinting
   
   def index_with_form_printing
     if params[:view] == 'print'
-      render :nothing => true, :layout => 'form_print'
+      render :inline => '', :layout => 'form_print'
     else
       index_without_form_printing
     end

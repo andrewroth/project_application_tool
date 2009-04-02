@@ -1,4 +1,4 @@
-require 'permissions.rb'
+require_dependency 'permissions.rb'
 
 class OptinCostItemsController < ApplicationController
   include Permissions

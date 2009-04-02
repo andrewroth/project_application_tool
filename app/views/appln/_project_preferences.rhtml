@@ -1,5 +1,5 @@
 <% 
-@projects_options = @eg.projects.collect { |p| [ p.title, p.id ] }
+@projects_options = @eg.projects.find_all_by_hidden(false).collect { |p| [ p.title, p.id ] }
 %>
 
 <table cellspacing="0" border="0" cellpadding="0">

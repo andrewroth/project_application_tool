@@ -4,11 +4,11 @@ module MainHelper
   end
 
   def view_entire_link(profile_id)
-    link 'view entire', "/acceptance/view_entire?profile_id=#{profile_id}"
+    link 'view entire', "/profiles_viewer/#{profile_id}/entire"
   end
 
   def view_summary_link(profile_id)
-    link 'view summary', "/acceptance/view_summary?profile_id=#{profile_id}"
+    link 'view entire', "/profiles_viewer/#{profile_id}/summary"
   end
 
   def edit_always_editable_link(profile_id)
@@ -40,11 +40,13 @@ module MainHelper
   end
 
   def view_entire_processor_link(profile_id, project_id)
-    link 'view entire', "/processor/view_entire?profile_id=#{profile_id}"
+    #link 'view entire', "/processor/view_entire?profile_id=#{profile_id}"
+    view_entire_link(profile_id)
   end
 
   def view_entire_processor_link(profile_id)
-    link 'view entire', "/processor/view_entire?profile_id=#{profile_id}"
+    #link 'view entire', "/processor/view_entire?profile_id=#{profile_id}"
+    view_entire_link(profile_id)
   end
   
   def withdraw_move_link(id, label = 'move/withdraw..')
@@ -55,7 +57,7 @@ module MainHelper
     if ref.nil?
       "none"
     elsif ref.status != 'completed' && ref.mail?
-      @user.can_evaluate? ? "mailing (" + link("input", ref.ref_url) + ")" : "mailing"
+      @viewer.can_evaluate? ? "mailing (" + link("input", ref.ref_url) + ")" : "mailing"
     else
       ref.status
     end

@@ -23,7 +23,7 @@ function new_window(url) {
     <br/>
     <b>Questionnaire Dependent Reports</b>
     <br/>
-    <p>Not all questionnaire dependent reports are currently working.  Please contact russ.martin@c4c.ca if there is a report you need to work that is not.  <b>If a report is not here that you want, you can try and create it in the custom reports.</b></p>
+    <p>Please contact russ.martin@c4c.ca if there is a report you need to work that is not.  <b>If a report is not here that you want, you can try and create it in the custom reports.</b></p>
     <ol>
         
         <% if !@project_director_projects.empty? %>
@@ -51,8 +51,13 @@ function new_window(url) {
    <b>Standard Reports (for all projects and event groups)</b><br/>
       
       <ol>
-         <i>Lists all people applying for a given project, who indicated this project as their first preference.</i>
+         <i>Lists all registrants -- people applying for a given project, who indicated this project as their first preference.</i>
          <li><%= project_specific_report 'Registrants', 'registrants', :include_all => true %></li>
+      
+         <br/>
+
+         <i>Lists participants -- people accepted for a given project</i>
+         <li><%= project_specific_report 'Accepted', 'participants', :include_all => true %></li>
       
          <br/>
          
@@ -114,6 +119,40 @@ function new_window(url) {
         
         <br/> 
 
+        <i>Lists all manual donations for a project.</i>
+        <li><%= project_specific_report 'Manual Donations', 'manual_donations',  
+                    :include_blank => true, :include_all => true do |report| 
+                [  %|
+              type #{select_tag 'manual_donations_type', 
+                options_for_select(['all' ] + DonationType.find(:all).collect(&:description), 'USDMANUAL')}
+                #{observe_field 'manual_donations_type', :function => 'set_manual_donation_status_visibility();'}
+                <span id='manual_donations_status_span'>
+                status #{select_tag 'manual_donations_status', options_for_select(['any' ] + ManualDonation::STATUSES, 'all')}
+                </span>
+              |, [ 'type', 'status' ] ]
+                end %></li>
+          <script>
+            function set_manual_donation_status_visibility() {
+              console.debug('got here');
+              if ($('manual_donations_type').options[$('manual_donations_type').selectedIndex].text == 'USDMANUAL') {
+                $('manual_donations_status_span').show();
+              } else {
+                $('manual_donations_status_span').hide();
+              }
+            }
+            set_manual_donation_status_visibility();
+          </script>
+        <br/>
+        
+        <i>Lists the status of paperwork items.</i>
+        <li><%= project_specific_report 'Prep Items', 'prep_items', 
+                     :include_blank => true, :include_all => true, 
+                     :projects_list => 'director' do |report|
+                   prep_items_for_project report, :include_all => true
+                 end
+                %>
+         </li>
+
         <i>Lists crisis information for everyone accepted to a project</i>
         <li><%= project_specific_report 'Crisis Info', 'crisis_management', :include_all => true,
                 :include_blank => true,
@@ -121,6 +160,7 @@ function new_window(url) {
         </li>
 
    </ol>
+
     <% end %>
     
 

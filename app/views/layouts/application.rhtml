@@ -20,12 +20,14 @@
 <html>
   <head>
     <title>Project Application Tool</title>
-    <%= stylesheet_link_tag 'main2' %>
+    <%= stylesheet_link_tag 'main2', 'connexion_default' %>
     <%= render :partial => "externs/sortable_tables" %>
     <%= javascript_include_tag "prototype", "effects" %>
     <%= render :partial => "externs/load_extern" %>
   </head>
   <body>
+    <%= connexion_bar if @viewer && session[:login_source] == 'gcx' %>
+
     <% if RAILS_ENV == 'development' && @debug -%>
       <div>debug: <%= @debug -%></div>
     <% end -%>
@@ -38,10 +40,12 @@
     </div>
     <div id="header">
       <div id="user_info">
-        <% if @user %> 
+        <% if @viewer %> 
           <p>user: 
-            <%= @user.viewer.name %> - 
-            <%= link_to 'logout', :action => :logout, :controller => :security %>
+            <%= @viewer.name %>
+            <% unless session[:login_source] == 'gcx' -%>
+               - <%= link_to "logout", :action => :logout, :controller => :security %>
+            <% end %>
           </p>
         <% end %>
       </div>
@@ -61,19 +65,19 @@
       <% end -%>
     </div>
     
-    <% if @user %>
+    <% if @viewer %>
       <div class="menu">
         <ul>
           <%= new_item "Your Apps", "your_apps", :list %>
           <% if @show_your_project %>
             <%= new_item "Your Projects", "main", :your_projects %>
           <% end %>
-          <% unless @user.is_student? %>    
+          <% unless @viewer.is_student?(@eg) %>    
             <%= new_item "App Processing", "main", :your_applications %>
             <% if @eg && @eg.has_your_campuses %>
               <%= new_item "Your Campuses", "main", :your_campuses %>
 	          <% end %>
-            <% if @user.is_projects_coordinator? %>
+            <% if @viewer.is_eventgroup_coordinator?(@eg) %>
               <%= new_item "Tools", "tools", :index %>
               <%= new_item "Manage Forms", "forms" %>
               <%= new_item "Manage Groups", "event_groups" %>
@@ -98,7 +102,7 @@
          full_msg = h(full_msg) unless n.allow_html
          full_msg += "<p>"
 
-         unless n.no_hide_button || @user.nil?
+         unless n.no_hide_button || @viewer.nil?
            full_msg += link_to_remote('Hide', 
             :url => { :controller => 'notification_acknowledgments', 
                       :action => 'create', :notification_id => n.id },
@@ -109,7 +113,7 @@
       <%= content_tag :div, full_msg, :id => "notification_#{n.id}", :class => 'error flash' %>
     <% end -%>
 
-     <% if @user && !@user.is_student? && !@eg.nil? %>
+     <% if @viewer && !@eg.nil? && !@viewer.is_student?(@eg) %>
       <div id="search" >
         <%= form_remote_tag :url => { :controller => 'main', :action => :find_people },	:before => "Element.show('loading');", :complete  => "Element.hide('loading');" %>
           <label for="viewer_name">Search People:</label>
@@ -123,11 +127,9 @@
       <h3><%=@title%></h3>
     <% end %>
 		
-    <% if file_exists? controller.controller_name + "/_menu" %>
-      <%= render :partial => controller.controller_name + "/menu" %>
-    <% elsif @submenu && file_exists?(@submenu + "/_menu") %>
-      <%= render :partial => @submenu + "/menu" %>
-    <% end %>
+    <%= render_if_possible(controller.controller_name + "/menu") ||
+           (@submenu && render_if_possible(@submenu + "/menu"))
+    %>
 
     <% submenu_items_html = yield :submenu %>
     <% if submenu_items_html && !@eg.nil? %>
@@ -140,7 +142,7 @@
     <div>
       <div id="content">
         <% if @form && params[:controller] != 'forms' %>
-          <%= render "layouts/form_#{@form}.rhtml" %>
+          <%= render "qe_forms/form_#{@form}" %>
         <% else %>
           <%= yield %>
         <% end %>
@@ -153,7 +155,6 @@
 				Campus for Christ - projects@campusforchrist.org<br />
 				LeaderImpact Group - vip@leaderimpactgroup.com<br />
 				Athletes in Action - morgank@athletesinaction.com<br />
-        DRIME - tanya@drime.com <br />
 				<br/>
 			<b>General Inquiries:</b>help.pat@powertochange.org<br/>
 			<br/>

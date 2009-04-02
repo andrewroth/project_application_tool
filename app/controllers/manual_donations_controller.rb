@@ -29,6 +29,9 @@ class ManualDonationsController < ApplicationController
 
   def create
     @manual_donation = ManualDonation.new(params[:manual_donation])
+    @manual_donation.created_at = Time.now # use local timezone instead of GMT
+    check_rate
+
     if @manual_donation.save
       flash[:notice] = 'Manual Donation has been saved.'
       redirect_to :controller => :main, :action => :index
@@ -44,6 +47,8 @@ class ManualDonationsController < ApplicationController
 
   def update
     @manual_donation = ManualDonation.find(params[:id])
+    check_rate
+
     if @manual_donation.update_attributes(params[:manual_donation])
       flash[:notice] = 'ManualDonation was successfully updated.'
       redirect_to :action => 'show', :id => @manual_donation
@@ -60,5 +65,11 @@ class ManualDonationsController < ApplicationController
   protected
   
   def set_title() @page_title = "Tools" end
+  def check_rate
+    unless params[:use_rate]
+      params[:manual_donation][:conversion_rate] = 1
+      params[:manual_donation][:original_amount] = params[:manual_donation][:amount]
+    end
+  end
   
 end

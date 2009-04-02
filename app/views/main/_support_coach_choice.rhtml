@@ -1,10 +1,10 @@
 <%
-if @potential_coaches_cached_project != @project && @user.can_modify_profile_in_project(@project)
-    project_with_staff_loaded1 = Project.find @project.id, :include => [
+if @potential_coaches_cached_project != project && @viewer.can_modify_profile_in_project(project)
+    project_with_staff_loaded1 = Project.find project.id, :include => [
                     { :support_coaches => { :viewer => :persons } },
                     { :project_staffs => { :viewer => :persons } }
                 ]
-    project_with_staff_loaded2 = Project.find @project.id, :include => [
+    project_with_staff_loaded2 = Project.find project.id, :include => [
                     { :project_administrators  => { :viewer => :persons } },
                     { :project_directors  => { :viewer => :persons } }
                 ]
@@ -15,7 +15,7 @@ if @potential_coaches_cached_project != @project && @user.can_modify_profile_in_
     potential_coaches.sort! { |a,b| a.name <=> b.name }
     @potential_coaches_pairs = potential_coaches.collect { |v| [ v.name, v.id ] }.uniq
     @potential_coaches_pairs << [ Acceptance.support_coach_none, '' ]
-    @potential_coaches_cached_project = @project
+    @potential_coaches_cached_project = project
 end
 %>
 

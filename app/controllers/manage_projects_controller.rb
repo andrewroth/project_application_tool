@@ -1,4 +1,4 @@
-require 'permissions'
+require_dependency 'permissions'
 
 # Manage projects gets its own controller cause
 # there's a lot of functionality.
@@ -10,8 +10,8 @@ class ManageProjectsController < ApplicationController
 
   before_filter :set_project, :except => [ :index, :list, :create, :new ]
   before_filter :determine_project_roles, :except => [ :index, :list, :new, :create ]
-  before_filter :ensure_is_projects_coordinator, :only => [ :new, :create, :destroy ]
-  before_filter :ensure_projects_coordinator_or_projects_administrator, :only => [ :staff, :search, :add, :remove ]
+  before_filter :ensure_is_eventgroup_coordinator, :only => [ :new, :create, :destroy ]
+  before_filter :ensure_eventgroup_coordinator_or_projects_administrator, :only => [ :staff, :search, :add, :remove ]
   before_filter :ensure_can_edit, :only => [ :edit, :update ]
   before_filter :set_page_title
   before_filter :set_prefix, :only => [ :search, :add, :remove ]
@@ -25,8 +25,8 @@ class ManageProjectsController < ApplicationController
   NO_PERMISSIONS_MSG = "Sorry, you don't have permissions to do that."
   
   def ensure_can_edit
-    unless (@user.is_projects_coordinator? || @user.is_project_administrator? ||
-      @user.is_project_director?)
+    unless (@viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_project_administrator? ||
+      @viewer.is_project_director?)
 
       flash[:message] = NO_PERMISSIONS_MSG
       redirect_to :controller => "main"
@@ -35,8 +35,8 @@ class ManageProjectsController < ApplicationController
     return true
   end
               
-  def ensure_is_projects_coordinator
-    unless @user.is_projects_coordinator?
+  def ensure_is_eventgroup_coordinator
+    unless @viewer.is_eventgroup_coordinator?(@eg)
       flash[:message] = NO_PERMISSIONS_MSG
       redirect_to :controller => "main"
       return false
@@ -54,7 +54,7 @@ class ManageProjectsController < ApplicationController
   end
   
   def determine_project_roles
-    @user.set_project(@project)
+    @viewer.set_project(@project)
     true
   end
   
@@ -73,10 +73,10 @@ class ManageProjectsController < ApplicationController
 
   def list
     @submenu_title = "list"
-    @projects = if (@user.is_projects_coordinator?)
+    @projects = if (@viewer.is_eventgroup_coordinator?(@eg))
         @eg.projects
       else
-        @user.viewer.current_projects_with_any_role(@eg).reject{ |p|
+        @viewer.current_projects_with_any_role(@eg).reject{ |p|
           !@eg.projects.include?(p)
         }
       end
@@ -86,7 +86,7 @@ class ManageProjectsController < ApplicationController
   end
 
   def new
-    if (@user.is_projects_coordinator?)
+    if (@viewer.is_eventgroup_coordinator?(@eg))
       @project = Project.new :event_group_id => session[:event_group_id]
     else
       flash[:notice] = "Sorry, you don't have permissions to create a new project."
@@ -95,7 +95,7 @@ class ManageProjectsController < ApplicationController
   end
   
   def create
-    if (@user.is_projects_coordinator?)
+    if (@viewer.is_eventgroup_coordinator?(@eg))
       @project = Project.new(params[:project].merge(:event_group_id => session[:event_group_id]))
       
       if @project.save
@@ -179,7 +179,7 @@ class ManageProjectsController < ApplicationController
       if @profile.nil?
         @profile = StaffProfile.create :viewer_id => params[:viewer_id], :project_id => params[:project_id]
       elsif @profile.class != StaffProfile
-        @profile.manual_update :type => StaffProfile, :user => @user
+        @profile.manual_update :type => StaffProfile, :user => @viewer
       end
 
       @success = @success && @profile
@@ -208,7 +208,7 @@ class ManageProjectsController < ApplicationController
         # if 'going' has been unchecked, the staff profile is set to withdrawn
         @profile ||= Withdrawn.find_by_viewer_id_and_project_id viewer.id, @project.id
 
-        @profile.manual_update :type => Withdrawn, :status => :staff_profile_dropped, :user => @user
+        @profile.manual_update :type => Withdrawn, :status => :staff_profile_dropped, :user => @viewer
       end
     end
   

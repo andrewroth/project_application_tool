@@ -7,6 +7,8 @@ describe EventGroupsController do
 
     EventGroup.should_receive(:find_all_by_parent_id_and_hidden).and_return([ @eg ])
     @eg.should_receive(:filter_hidden=).with(true)
+    @eg.stub!(:eventgroup_coordinators_with_inheritance => [])
+
     @eg.stub!(:expanded= => nil, :children => [])
 
     get :scope
@@ -21,6 +23,7 @@ describe EventGroupsController do
 
     EventGroup.should_receive(:find_all_by_parent_id).and_return([ @eg ])
     @eg.stub!(:expanded= => nil, :children => [])
+    @eg.stub!(:eventgroup_coordinators_with_inheritance => [])
 
     get :scope, :show_hidden => true
     assigns('nodes').should_not be_nil

@@ -10,63 +10,77 @@ module Permissions
   end
 
   def is_staff
-    if @user.is_student?
-      @user.is_any_project_staff(@eg) # kinda annoying, but staff get put into the
+    if @viewer.is_student?(@eg)
+      @viewer.is_any_project_staff(@eg) # kinda annoying, but staff get put into the
                       # students group now for some rason
     else
       true
     end
   end
 
+  def is_project_staff
+    @viewer.is_atleast_project_staff(@project)
+  end
+
   def is_any_project_staff
-    @user.is_any_project_staff
+    @viewer.is_any_project_staff
   end
 
   def is_projects_coordinator
-    @user.is_projects_coordinator?
+    @viewer.is_projects_coordinator?
   end
 
+  def is_eventgroup_coordinator
+    @viewer.is_eventgroup_coordinator?(@eg)
+  end
+
+
   def set_can_view_summary
-    if @user && @user.is_projects_coordinator?
+    if @viewer && @viewer.is_eventgroup_coordinator?(@eg)
       @can_view_summary = true
       return
     end
 
-    if !@user || !@project
+    if !@viewer || !@project
       @can_view_summary = false
       return
     end
 
-    @user.set_project @project
-    @can_view_summary = @user.is_projects_coordinator? || @user.is_processor? ||
-      @user.is_project_staff? || @user.is_project_director? ||
-      @user.is_project_administrator?
+    @viewer.set_project @project
+    @can_view_summary = @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor? ||
+      @viewer.is_project_staff? || @viewer.is_project_director? ||
+      @viewer.is_project_administrator?
   end
 
   def set_can_view_references
-    if !@user || !@project
+    if !@viewer || !@project
       @can_view_references = false
       return
     end
 
-    @user.set_project @project
-    @can_view_references = @user.is_projects_coordinator? || @user.is_processor?
+    @viewer.set_project @project
+    @can_view_references = @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor?
   end
 
   def set_can_view_entire
-    if @user && @user.is_projects_coordinator?
+    if @viewer && @viewer.is_eventgroup_coordinator?(@eg)
       @can_view_entire = true
       return
     end
 
-    if !@user || !@project
+    if !@viewer || !@project
       @can_view_entire = false
       return
     end
 
-    @user.set_project(@project)
-    @can_view_entire = @user.is_projects_coordinator? || @user.is_processor? ||
-      @user.is_project_administrator? || @user.is_project_director?
+    @viewer.set_project(@project)
+    @can_view_entire = @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor? ||
+      @viewer.is_project_administrator? || @viewer.is_project_director?
+  end
+
+  def set_can_perform_actions
+    @can_perform_actions = @profile && ((@project && @viewer.is_processor?) || @viewer.is_eventgroup_coordinator?(@eg)) &&
+           @profile.class == Applying
   end
 
   def ensure_user_owns_appln
@@ -76,15 +90,15 @@ module Permissions
   end
 
   def user_owns_appln(appln)
-    return appln.viewer == @user.viewer
+    return appln.viewer == @viewer
   end
 
   def is_appln_ownership_or_permission(appln)
     return true if user_owns_appln appln
-    return false if @user.is_student?
+    return false if @viewer.is_student?(@eg)
 
     # first let's check the easy case, projects coordinators can do everything
-    if @user.is_projects_coordinator?
+    if @viewer.is_eventgroup_coordinator?(@eg)
       return true
     else
       # this viewer doesn't own this app, see if this viewer is at least ... (determined by yield)
@@ -98,16 +112,16 @@ module Permissions
   end
   
   def is_project_staff
-    return true if @user.is_projects_coordinator?
-    return @user.is_atleast_project_staff(@profile.project)
+    return true if @viewer.is_eventgroup_coordinator?(@eg)
+    return @viewer.is_atleast_project_staff(@profile.project)
   end
   
   def is_profile_ownership_or_any_project_staff
-    return true if @user.is_projects_coordinator?
-    return true if @user.id == @profile.viewer_id
+    return true if @viewer.is_eventgroup_coordinator?(@eg)
+    return true if @viewer.id == @profile.viewer_id
     @project = @profile.project
-    @user.set_project(@project)
-    @project && @user.is_atleast_project_staff(@project)
+    @viewer.set_project(@project)
+    @project && @viewer.is_atleast_project_staff(@project)
   end
 
   # longest method name ever
@@ -123,42 +137,42 @@ module Permissions
   end
   
   def is_project_director_or_administrator(project = @project)
-    return true if @user.is_projects_coordinator?
-    @user.set_project(project)
-    return false unless project && @user.is_project_director? || @user.is_project_administrator?
+    return true if @viewer.is_eventgroup_coordinator?(@eg)
+    @viewer.set_project(project)
+    return false unless project && @viewer.is_project_director? || @viewer.is_project_administrator?
     true
   end
   
-  def is_projects_coordinator_or_projects_administrator(project = @project)
-    return true if @user.is_projects_coordinator?
+  def is_eventgroup_coordinator_or_projects_administrator(project = @project)
+    return true if @viewer.is_eventgroup_coordinator?(@eg)
     project ||= @profile.project
-    @user.set_project(project)
+    @viewer.set_project(project)
     return false unless project
-    return @user.is_project_administrator?
+    return @viewer.is_project_administrator?
   end
 
   def is_profile_ownership_or_processor_or_support_coach
-    @user.set_project @profile.project
+    @viewer.set_project @profile.project
 
     is_profile_ownership_or_permission do |profile, project|
-      @profile.support_coach_id == @user.id || is_profile_ownership_or_processor
+      @profile.support_coach_id == @viewer.id || is_profile_ownership_or_processor
     end
   end
 
   def is_profile_ownership_or_processor
-    @user.set_project @profile.project
+    @viewer.set_project @profile.project
 
     is_profile_ownership_or_permission do |profile, project|
-      return unless project && @user.is_processor?
+      return unless project && @viewer.is_processor?
     end
   end
 
   def is_project_processor(project)
-    return true if @user.is_projects_coordinator?
+    return true if @viewer.is_eventgroup_coordinator?(@eg)
     return false unless project
 
-    @user.set_project(project)
-    @user.is_processor?
+    @viewer.set_project(project)
+    @viewer.is_processor?
   end
 
   def is_profile_processor(profile = @profile)
@@ -166,7 +180,7 @@ module Permissions
   end
 
   def is_appln_ownership_or_processor
-    @user.set_project @appln.profile.project
+    @viewer.set_project @appln.profile.project
 
     is_appln_ownership_or_permission(@appln) do |a, pr, pi|
       is_project_processor pr
@@ -178,10 +192,18 @@ module Permissions
   end
 
   def has_profile_ownership
-    @profile.viewer == @user.viewer || (@user && @user.is_projects_coordinator?)
+    @profile.viewer == @viewer || (@viewer && @viewer.is_eventgroup_coordinator?(@eg))
   end
 
-  def is_profile_ownership_or_projects_coordinator
+  def set_view_permissions
+    set_can_view_summary
+    set_can_view_references
+    set_can_view_entire
+    set_can_see_confidential_questions
+    set_can_perform_actions
+  end
+
+  def is_profile_ownership_or_eventgroup_coordinator
     # projects coordinator check already built into is_profile_ownership_or_permission
     is_profile_ownership_or_permission do |profile, project|
       has_profile_ownership
@@ -194,7 +216,7 @@ module Permissions
       return false
     end
 
-    if @user.is_projects_coordinator? then return true end
+    if @viewer.is_eventgroup_coordinator?(@eg) then return true end
     if has_profile_ownership then return true end
     
     # April 4 2007 - we are allowing staff to modify other staff's profiles now

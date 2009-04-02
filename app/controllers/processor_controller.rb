@@ -1,13 +1,14 @@
-require 'appln_admin/modules/acceptance_pile_functionality.rb'
-require 'appln_admin/modules/processor_pile_functionality.rb'
+require_dependency 'permissions'
 
-class ProcessorController < BaseApplnAndRefsViewer
-  include AcceptancePileFunctionality
-  include ProcessorPileFunctionality
+class ProcessorController < ApplicationController
+  include Permissions
   
-  before_filter :ensure_evaluate_permission
+  before_filter :get_profile_and_project
+  before_filter :set_view_permissions
+  before_filter :set_references
   
   def actions
+    @project = @profile.project
     @questionnaire = @eg.forms.find_by_name("Processor Form").questionnaire
     @invalid_pages = []
     @questionnaire.pages.each do |page|
@@ -19,20 +20,10 @@ class ProcessorController < BaseApplnAndRefsViewer
   # locks a processor entry, then goes to evaluate view
   def evaluate
     # lock
-    @profile[:locked_by] = @user.viewer.id
+    @profile[:locked_by] = @viewer.id
     @profile.save!
     
-    view_entire
-  end
-  
-  def view_summary
-    redirect_to params.merge({ :controller => :acceptance, 
-                               :action => :view_summary })
-  end
-
-  def view_entire
-    redirect_to params.merge({ :controller => :acceptance, 
-                               :action => :view_entire })
+    redirect_to :controller => :profiles_viewer, :action => :entire, :id => @profile.id
   end
   
   def release
@@ -47,13 +38,13 @@ class ProcessorController < BaseApplnAndRefsViewer
   def accept
     @appln.profile.manual_update :type => 'Acceptance', :appln_id => @appln.id, :project_id => @project.id, 
       :support_claimed => 0, :support_coach_id => params[:support_coach_id], 
-      :accepted_by_viewer_id => @user.id, :as_intern => params[:as_intern],
-      :viewer_id => @appln.viewer_id, :user => @user, :locked_by => nil
+      :accepted_by_viewer_id => @viewer.id, :as_intern => params[:as_intern],
+      :viewer_id => @appln.viewer_id, :user => @viewer, :locked_by => nil
     
     profile = Profile.find(@appln.profile.id) # reload to make the new type catch
     profile.accept!
 
-    SpApplicationMailer.deliver_accepted(profile, @user.viewer.email)
+    SpApplicationMailer.deliver_accepted(profile, @viewer.email)
 
     flash[:notice] = "#{@appln.viewer.name} accepted to #{@project.title}"
     redirect_to :controller => "main", :action => "your_projects"
@@ -61,7 +52,7 @@ class ProcessorController < BaseApplnAndRefsViewer
   
   def decline
     @profile.manual_update :type => 'Withdrawn', :status => 'declined',
-      :user => @user
+      :user => @viewer
     
     flash[:notice] = "#{@appln.viewer.name} declined"
     redirect_to :controller => "main", :action => "your_projects"
@@ -81,4 +72,22 @@ class ProcessorController < BaseApplnAndRefsViewer
   protected
   
   def set_title() @page_title = "App Processing" end
+
+  def ensure_evaluate_permission
+    @viewer.set_project(@project)
+    unless (@viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor?)
+      flash[:notice] = "Sorry, you don't have permissions to evaluate applications."
+      render :text => "", :layout => true
+      return false
+    end
+    return true
+  end
+
+  def get_profile_and_project
+    @profile = Profile.find params[:profile_id]
+    @project = @profile.project
+    @viewer.set_project @project
+  end
+
+  def set_references() @references = @appln.references_text_list end
 end

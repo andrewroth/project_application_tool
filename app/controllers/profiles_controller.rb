@@ -1,4 +1,4 @@
-require 'permissions'
+require_dependency 'permissions'
 
 class ProfilesController < ApplicationController
   include Permissions
@@ -7,13 +7,13 @@ class ProfilesController < ApplicationController
   INFO_ACTIONS = [ :crisis_info, :update_crisis_info, :campus_info, :update_campus_info, :campus_info_new ]
 
   skip_before_filter :restrict_students, :only => [ :index, :list, :view, :update, 
-                                              :travel, :support_received, :costing, :update_support ] + INFO_ACTIONS
+                                              :travel, :support_received, :costing, :prep_items, :update_support ] + INFO_ACTIONS
                                               
   before_filter :set_title
   before_filter :get_profile, :except => [ :index, :list, :set_profile_going, :new, :create ] + INFO_ACTIONS
   before_filter :ensure_profile_ownership, :except => [ :view, :index, :list, :update, :set_profile_going, 
                                                         :class_options, :new, :viewer_id_dropdown, :populate_applications, :create ] + INFO_ACTIONS
-  before_filter :ensure_profile_ownership_or_projects_coordinator, :only => [ :view, :update ]
+  before_filter :ensure_profile_ownership_or_eventgroup_coordinator, :only => [ :view, :update ]
   before_filter :ensure_projects_coordinator, :only => [ :new, :create ]
 
   def viewer_id_dropdown
@@ -39,7 +39,7 @@ class ProfilesController < ApplicationController
 
     vs = Viewer.find :all, :conditions => [ 'viewer_userID like ? ', "%#{filter_s}%" ]
 
-    @viewers = ps.collect(&:viewers).flatten + vs
+    @viewers = ps.collect(&:viewers).flatten.compact + vs
     @viewers.uniq!
   end
 
@@ -54,7 +54,7 @@ class ProfilesController < ApplicationController
        params[:profile][:appln_id] = @appln.id
     end
 
-    success = @profile.manual_update(params[:profile], @user)
+    success = @profile.manual_update(params[:profile], @viewer)
     @profile.reload
 
     flash[:notice] = "Created new profile for #{@profile.viewer.name}."
@@ -91,7 +91,11 @@ class ProfilesController < ApplicationController
   def travel
     @submenu_title = 'travel'
   end
-
+  
+  def prep_items
+    @submenu_title = 'paperwork'
+  end
+  
   def set_profile_going
     viewer = Viewer.find params[:viewer_id]
     project = @eg.projects.find params[:project_id]
@@ -109,7 +113,7 @@ class ProfilesController < ApplicationController
         Profile.create :viewer_id => viewer.id, :project_id => project.id
       else
         if profile.class != StaffProfile then
-          profile.manual_update :type => StaffProfile, :user => @user
+          profile.manual_update :type => StaffProfile, :user => @viewer
           render :inline => 'already created, changed type to StaffProfile'
        else
           render :inline => 'already created, already a StaffProfile'
@@ -118,7 +122,7 @@ class ProfilesController < ApplicationController
     else
       # remove
       if !profile.nil?
-        profile.manual_update :type => Withdrawn, :status => :staff_profile_dropped, :user => @user
+        profile.manual_update :type => Withdrawn, :status => :staff_profile_dropped, :user => @viewer
         render :inline => 'withdrawn'
       else
         render :inline => 'tried to withdraw, but didn\'t exist'
@@ -127,7 +131,7 @@ class ProfilesController < ApplicationController
   end
 
   def update
-    success = @profile.manual_update(params[:profile], @user)
+    success = @profile.manual_update(params[:profile], @viewer)
     
     if !request.xml_http_request?
       @profile.viewer_id ||= @profile.appln.viewer_id
@@ -139,7 +143,7 @@ class ProfilesController < ApplicationController
   end
   
   def list
-    @profiles = Profile.find_all_by_viewer_id(@user.viewer.id, :include => :project).reject{ |profile|
+    @profiles = Profile.find_all_by_viewer_id(@viewer.id, :include => :project).reject{ |profile|
         profile.project.nil? || profile.project.event_group_id != @eg.id
     }
 
@@ -148,7 +152,7 @@ class ProfilesController < ApplicationController
   
   def campus_info
     @submenu_title = 'Campus Info'
-    @person = @appln_person = @user.viewer.person
+    @person = @appln_person = @viewer.person
     @assignments = @person.assignments
 
     render :template => 'assignments/index'
@@ -156,14 +160,14 @@ class ProfilesController < ApplicationController
 
   def crisis_info
     @submenu_title = 'Personal Info and Crisis Info'
-    @person = @appln_person = @user.viewer.person
+    @person = @appln_person = @viewer.person
     @emerg = @person.emerg
   end
   
   def update_crisis_info # also updates personal info
     @submenu_title = 'Personal Info and Crisis Info'
 
-    @person = @appln_person = @user.viewer.person
+    @person = @appln_person = @viewer.person
 
     success_p = PersonalInformation.save_from_params @person, params
     success_c = CrisisInformation.save_from_params @person, params

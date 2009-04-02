@@ -3,7 +3,7 @@ table.datagrid {
     border-collapse: collapse;
 }
 
-table.datagrid thead th { 
+table.datagrid thead th, table.datagrid thead td { 
     text-align: left;
     background-color: #DDDDDD;
     background-repeat: no-repeat;
@@ -58,3 +58,5 @@ table.datagrid tfoot th { text-align: left; }
 table.datagrid tfoot td {  }
 
 .invisible { display: none; }
+
+.currency span { float: right; }

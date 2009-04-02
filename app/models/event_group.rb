@@ -12,13 +12,26 @@ class EventGroup < Node
   has_many :reason_for_withdrawals
   has_many :reference_emails
   has_many :tags
+  has_many :eventgroup_coordinators
+  has_many :prep_items
 
   acts_as_tree
 
   has_attachment :content_type => :image, 
-                 :storage => :file_system
+                 :storage => :file_system,
+                 :path_prefix => 'public/event_groups'
 
   attr :filter_hidden, true
+
+  def eventgroup_coordinators_names
+    eventgroup_coordinators.collect{ |egc| egc.viewer.name if egc.viewer }.compact.join(', ')
+  end
+
+  def eventgroup_coordinators_with_inheritance
+    r = eventgroup_coordinators
+    r += parent.eventgroup_coordinators_with_inheritance if parent
+    r
+  end
 
   def has_logo?() !filename.nil? end
 
