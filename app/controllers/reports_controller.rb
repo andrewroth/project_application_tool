@@ -1478,8 +1478,8 @@ class ReportsController < ApplicationController
     requested_projects.each do |project|
       # ensure the user has permission to access this project
       @viewer.set_project project
-      if @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_project_director?(@eg) || 
-        @viewer.is_project_administrator?(@eg) || @viewer.is_project_staff?(@eg)
+      if @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_project_director? || 
+        @viewer.is_project_administrator? || @viewer.is_project_staff?(@eg)
         @projects << project
       end
     end

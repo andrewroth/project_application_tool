@@ -42,7 +42,7 @@ class MainController < ApplicationController
     else
       # students should go to your projects, that's all they can see -- they might
       #  be interns then they can see support coaches only
-      if @viewer.is_student?
+      if @viewer.is_student?(@eg)
         redirect_to :action => :your_projects
       else
         redirect_to :action => :your_campuses
@@ -332,7 +332,7 @@ render :partial => "viewer_specifics"
   def users_campuses
     campuses = nil
 
-    if (@viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_assigned_regional_or_national?(@eg))
+    if (@viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_assigned_regional_or_national?)
       campuses_find = :all
     else
       campuses_find = @viewer.person.campuses.collect(&:id)
