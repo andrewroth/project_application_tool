@@ -10,11 +10,13 @@ class ReferencesViewerController < BaseViewController
   prepend_before_filter :set_user # run this before set_view_permissions since permissions depend on user
   before_filter :ensure_permission
   before_filter :set_references
+  skip_before_filter :get_profile_and_appln
 
   def show
     @submenu_title = @reference.text
 
     # pass the reference_instance, not the profile_id
+    @pass_params ||= {}
     @pass_params[:profile_id] = nil
     @pass_params[:id] = @reference_instance.id
 
@@ -24,6 +26,7 @@ class ReferencesViewerController < BaseViewController
   protected
 
     def get_reference_instance
+      debugger
       @reference_instance = ReferenceInstance.find params[:id]
       @reference = @reference_instance.reference
       @appln = @reference_instance.instance
