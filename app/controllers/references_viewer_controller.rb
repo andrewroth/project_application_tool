@@ -1,6 +1,6 @@
 require_dependency 'permissions'
 
-class ReferencesViewerController < BaseViewController
+class ReferencesViewerController < ViewOnlineController
   include Permissions
 
   ProjectsCoordinator
