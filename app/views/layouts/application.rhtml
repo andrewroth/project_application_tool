@@ -95,7 +95,6 @@
       <% full_msg = msg %>
       <%= content_tag :div, full_msg, :id => "flash_#{key}", :class => 'error flash' %>
     <% end -%>
-    <% flash.discard -%>
    
     <% @notifications.each do |n| -%>
       <% full_msg = n.message

@@ -17,12 +17,15 @@ class BaseViewController < ApplicationController
     
     # finds a good page to redirect to after denying permission
     def redirect_after_denied
+      flash.keep
+      render :inline => "", :layout => true
+
       # go back to the next best spot
-      if @profile
-        redirect_to profiles_viewer_url(@profile.id)
-      else
-        redirect_to :controller => :main
-      end
+      #if @profile && @can_view_entire
+      #  redirect_to profiles_viewer_url(@profile.id)
+      #else
+      #  redirect_to :controller => :main
+      #end
     end
 
     def get_profile

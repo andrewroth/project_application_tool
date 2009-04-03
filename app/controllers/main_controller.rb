@@ -33,11 +33,12 @@ class MainController < ApplicationController
 
   def index
     logger.info 'starting main_controller index'
-    # at this point we know the user is not a student
+    flash.keep
+
+    # at this point we know the user is not a student, unless they're intern
     # 
     # project directors would like to go to my projects
     if @viewer.is_eventgroup_coordinator?(@eg)
-      flash.keep(:notice)
       redirect_to :action => :your_projects
     else
       # students should go to your projects, that's all they can see -- they might

@@ -29,11 +29,12 @@ class ReferencesViewerController < BaseViewController
       @appln = @reference_instance.instance
       @profile = @appln.profile
       @project = @profile.project
+      @eg = @project.event_group
     end
 
     def ensure_permission
       unless @can_view_references
-        flash[:notice] = "Sorry, you don't have permission to view references."
+        flash[:notice] = "Sorry, you don't have permission to view references for this project."
         redirect_after_denied
       end
     end

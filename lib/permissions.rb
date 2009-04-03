@@ -196,6 +196,8 @@ module Permissions
   end
 
   def set_view_permissions
+    return false unless @viewer
+
     set_can_view_summary
     set_can_view_references
     set_can_view_entire
