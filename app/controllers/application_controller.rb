@@ -6,15 +6,6 @@ require_dependency 'custom_elements'
 class ApplicationController < ActionController::Base
   include ExceptionNotifiable
 
-  def rescues_path(template_name)
-    trypath = "#{RAILS_ROOT}/app/views/rescues/#{template_name}.rhtml"
-    if File.exists? trypath
-      trypath
-    else
-      super
-    end
-  end
-
   if RAILS_ENV == 'production'
     $server_url = "https://pat.powertochange.org"
   else
