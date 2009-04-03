@@ -85,15 +85,24 @@ class MainController < ApplicationController
     
     @allowable_projects_array << ["All", "all"]
     
-    params[:project_id] ||= session[:project_id] || if @first_allowable_project then @first_allowable_project.id.to_s 
-                             else '' end
-    session[:project_id] = params[:project_id]
-    
+    # give a default project_id
+    if params[:project_id].nil?
+      if session[:project_id]
+        params[:project_id] = session[:project_id]
+      else
+        params[:project_id] = @first_allowable_project ? @first_allowable_project.id.to_s : ''
+      end
+    end
+
     if params[:project_id] == 'all'
       @show_projects = @allowable_projects
     else
       requested_project_ids = params[:project_id].split(',') # comma-separated list of projects ids
-      @show_projects = @allowable_projects.select{ |p| requested_project_ids.include?(p.id.to_s) }
+      @show_projects = @allowable_projects.find_all{ |p| requested_project_ids.include?(p.id.to_s) }
+
+      # if none of the projects they requested are permissible, use the first one
+      @show_projects = [ @allowable_projects.first ] if @show_projects.empty? && @allowable_projects.length >= 1
+
     # now that we know what projects will be shown with @show_projects, we can do the big query
     #@show_projects = @eg.projects.find @show_projects.collect{ |p| p.id },
     #  :include => [ 
@@ -109,6 +118,9 @@ class MainController < ApplicationController
     #    }
     #  ] end
     end
+
+    session[:project_id] = @show_projects.first.id if @show_projects.length == 1
+    
     @page_title = "Your Projects"
     if request.xml_http_request?
       render :file => 'main/render_your_project.rjs', :use_full_path => true
