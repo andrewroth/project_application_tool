@@ -100,8 +100,6 @@ class SecurityController < ApplicationController
   end
 
   def login
-    throw 'test exception notifier'
-
     if is_demo_host
       student_str = "- To demo a student filling out an application, use the username 'student' and password 'student'"
       processor_str = "- To demo a processor deciding whether to accept or decline a student, use the username 'processor' and password 'processor'"
