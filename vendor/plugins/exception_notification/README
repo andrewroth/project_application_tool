@@ -1,8 +1,3 @@
-= Midas Changes
-
-I intend to add some sort of mechanism for routing different exceptions to different email 
-addresses, etc.  This is not yet implemented.  Please check back at a later date.
-
 = Exception Notifier Plugin for Rails
 
 The Exception Notifier plugin provides a mailer object and a default set of
@@ -62,6 +57,10 @@ NOT be considered local), you can simply do, somewhere in your controller:
 
   local_addresses.clear
 
+You can also specify a custom view path with the following setting:
+
+  ExceptionNotifier.custom_template_path = File.join(RAILS_ROOT, 'app', 'views', 'default')
+
 == Customization
 
 By default, the notification email includes four parts: request, session,
@@ -112,5 +111,5 @@ to use different rules for the notification, you will need to implement your
 own rescue_action_in_public method. You can look at the default implementation
 in ExceptionNotifiable for an example of how to go about that.
 
-
+Copyright (c) 2009 Rohan Deshpande, released under the MIT license
 Copyright (c) 2005 Jamis Buck, released under the MIT license

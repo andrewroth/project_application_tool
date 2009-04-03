@@ -1,5 +1,6 @@
 require 'ipaddr'
 
+# Copyright (c) 2009 Rohan Deshpande
 # Copyright (c) 2005 Jamis Buck
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -48,11 +49,9 @@ module ExceptionNotifiable
     end
 
     def exceptions_to_treat_as_404
-      exceptions = [ActiveRecord::RecordNotFound,
-                    ActionController::UnknownController,
-                    ActionController::UnknownAction]
+      exceptions = [ActiveRecord::RecordNotFound, ActionController::UnknownController, ActionController::UnknownAction]
       exceptions << ActionController::RoutingError if ActionController.const_defined?(:RoutingError)
-      exceptions
+      return exceptions
     end
   end
 
@@ -92,8 +91,7 @@ module ExceptionNotifiable
             when Proc then deliverer.call(self)
           end
 
-          ExceptionNotifier.deliver_exception_notification(exception, self,
-            request, data)
+          ExceptionNotifier.deliver_exception_notification(exception, self, request, data)
       end
     end
 end

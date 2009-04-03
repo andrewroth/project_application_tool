@@ -1,3 +1,0 @@
-.* # Ignore all dotfiles...
-!.gitignore # except for .gitignore
-.svn*

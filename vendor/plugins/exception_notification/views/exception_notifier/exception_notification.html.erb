@@ -1,0 +1,4 @@
+<%= @exception.class %> disaster in <%= @controller.controller_name %>#<%= @controller.action_name %>:
+  <%= @exception.message %>
+  <%= @backtrace.first %>
+<%= @sections.map { |section| render_section(section, @custom_template_path) }.join %>

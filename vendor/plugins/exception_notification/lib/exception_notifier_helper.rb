@@ -1,5 +1,6 @@
 require 'pp'
 
+# Copyright (c) 2009 Rohan Deshpande
 # Copyright (c) 2005 Jamis Buck
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -21,26 +22,29 @@ require 'pp'
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 module ExceptionNotifierHelper
-  VIEW_PATH = "views/exception_notifier"
-  APP_PATH = "#{RAILS_ROOT}/app/#{VIEW_PATH}"
-  PARAM_FILTER_REPLACEMENT = "[FILTERED]"
+  VIEW_FOLDER = 'exception_notifier'
+  APP_VIEW_PATH = File.join(RAILS_ROOT, 'app', 'views', VIEW_FOLDER)
+  DEFAULT_VIEW_PATH = File.join(File.dirname(__FILE__), '..', 'views', VIEW_FOLDER)
 
-  def render_section(section)
+  PARAM_FILTER_REPLACEMENT = "[FILTERED]"
+  VIEW_PATH_EXTENSION = '.html.erb'
+
+  def render_section(section, custom_template_path)
     RAILS_DEFAULT_LOGGER.info("rendering section #{section.inspect}")
-    summary = render_overridable(section).strip
+    summary = render_overridable(section, custom_template_path).strip
     unless summary.blank?
-      title = render_overridable(:title, :locals => { :title => section }).strip
+      title = render_overridable(:title, nil, :locals => { :title => section }).strip
       "#{title}\n\n#{summary.gsub(/^/, "  ")}\n\n"
     end
   end
 
-  def render_overridable(partial, options={})
-    if File.exist?(path = "#{APP_PATH}/_#{partial}.rhtml")
-      render(options.merge(:file => path, :use_full_path => false))
-    elsif File.exist?(path = "#{File.dirname(__FILE__)}/../#{VIEW_PATH}/_#{partial}.rhtml")
+  def render_overridable(partial, custom_template_path, options={})
+    if File.exist?(path = File.join(APP_VIEW_PATH, filename_for_partial(partial))) ||
+      File.exist?(path = File.join(DEFAULT_VIEW_PATH, filename_for_partial(partial))) ||
+      (custom_template_path && File.exists?(path = File.join(custom_template_path, VIEW_FOLDER, filename_for_partial(partial))))
       render(options.merge(:file => path, :use_full_path => false))
     else
-      ""
+      ''
     end
   end
 
@@ -74,5 +78,9 @@ module ExceptionNotifierHelper
     return env_value unless exclude_raw_post_parameters?
     return PARAM_FILTER_REPLACEMENT if (env_key =~ /RAW_POST_DATA/i)
     return @controller.__send__(:filter_parameters, {env_key => env_value}).values[0]
+  end
+
+  def filename_for_partial(partial)
+    return "_#{partial}#{VIEW_PATH_EXTENSION}"
   end
 end

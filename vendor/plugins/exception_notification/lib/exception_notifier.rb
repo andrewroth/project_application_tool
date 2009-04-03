@@ -1,5 +1,6 @@
 require 'pathname'
 
+# Copyright (c) 2009 Rohan Deshpande
 # Copyright (c) 2005 Jamis Buck
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -33,6 +34,9 @@ class ExceptionNotifier < ActionMailer::Base
   @@sections = %w(request session environment backtrace)
   cattr_accessor :sections
 
+  @@custom_template_path = nil
+  cattr_accessor :custom_template_path
+
   self.template_root = "#{File.dirname(__FILE__)}/../views"
 
   def self.reloadable?() false end
@@ -48,8 +52,7 @@ class ExceptionNotifier < ActionMailer::Base
     body       data.merge({ :controller => controller, :request => request,
                   :exception => exception, :host => (request.env["HTTP_X_FORWARDED_HOST"] || request.env["HTTP_HOST"]),
                   :backtrace => sanitize_backtrace(exception.backtrace),
-                  :rails_root => rails_root, :data => data,
-                  :sections => sections })
+                  :rails_root => rails_root, :data => data, :sections => sections, :custom_template_path => custom_template_path })
   end
 
   private
