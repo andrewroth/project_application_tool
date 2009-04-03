@@ -97,7 +97,7 @@ class MainController < ApplicationController
     if params[:project_id] == 'all'
       @show_projects = @allowable_projects
     else
-      requested_project_ids = params[:project_id].split(',') # comma-separated list of projects ids
+      requested_project_ids = params[:project_id].to_s.split(',') # comma-separated list of projects ids
       @show_projects = @allowable_projects.find_all{ |p| requested_project_ids.include?(p.id.to_s) }
 
       # if none of the projects they requested are permissible, use the first one
