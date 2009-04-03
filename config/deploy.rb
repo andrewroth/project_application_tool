@@ -79,7 +79,7 @@ unless ENV['target'] == 'demo'
     link_shared 'log', :overwrite => true
     link_shared 'config/database.yml'
     link_shared 'public/event_groups'
-    if RAILS_ENV = 'development'
+    if RAILS_ENV == 'development'
       link_shared 'config/environments/development.rb', :overwrite => true
     end
   end
