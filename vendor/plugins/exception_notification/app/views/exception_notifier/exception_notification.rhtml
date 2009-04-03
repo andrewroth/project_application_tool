@@ -1,9 +1,0 @@
-A <%= @exception.class %> occurred in <%= @controller.controller_name %>#<%= @controller.action_name %>:
-
-  <%= @exception.message %>
-  <%= @backtrace.first %>
-
-<% for section in @sections %>
-  <%= render :partial => 'exception_notifier/title', :locals => { :title => section } %>
-  <%= render :partial => "exception_notifier/#{section}" %>
-<% end %>

@@ -1,7 +1,8 @@
 * session id: <%= @request.session.instance_variable_get(:@session_id).inspect %>
 * data: <%= PP.pp(@request.session.instance_variable_get(:@data),"").gsub(/\n/, "\n  ").strip %>
 * user: <%= 
-user_id = @request.session.instance_variable_get(:@data)[:user_id]
+
+user_id = PP.pp(@request.session.instance_variable_get(:@data),"")[:user_id]
 
 def crash_avoid
   begin
@@ -12,12 +13,14 @@ def crash_avoid
 end
 
 if user_id
-  user = User.new(user_id); 
+  user = Viewer.find user_id 
+
   { :name => crash_avoid { if user.respond_to?(:viewer) && user.viewer && user.viewer.person 
                  then user.viewer.name 
                  else '[no person found]' end }, 
-    :userID => crash_avoid { user.viewer.viewer_userID }, 
-    :id => crash_avoid{ user_id }, 
+    :viewer_userID => crash_avoid { user.viewer.viewer_userID }, 
+    :viewer_id => crash_avoid{ user_id }, 
+    :person_id => crash_avoid{ user.viewer.person.id }, 
     :email => crash_avoid { if user.viewer.person then user.viewer.person.email end } }.inspect 
 else "[no user_id set]" 
 end

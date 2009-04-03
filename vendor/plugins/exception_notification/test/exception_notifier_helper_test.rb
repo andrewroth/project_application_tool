@@ -1,5 +1,5 @@
 require 'test_helper'
-require '../app/helpers/exception_notifier_helper'
+require 'exception_notifier_helper'
 
 class ExceptionNotifierHelperTest < Test::Unit::TestCase
 

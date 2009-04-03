@@ -1,3 +1,8 @@
+= Midas Changes
+
+I intend to add some sort of mechanism for routing different exceptions to different email 
+addresses, etc.  This is not yet implemented.  Please check back at a later date.
+
 = Exception Notifier Plugin for Rails
 
 The Exception Notifier plugin provides a mailer object and a default set of

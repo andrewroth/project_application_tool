@@ -4,9 +4,7 @@ require_dependency 'custom_elements'
 # Filters added to this controller will be run for all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 class ApplicationController < ActionController::Base
-  def local_request?
-    false
-  end
+  include ExceptionNotifiable
 
   def rescues_path(template_name)
     trypath = "#{RAILS_ROOT}/app/views/rescues/#{template_name}.rhtml"
