@@ -32,6 +32,7 @@ class AcceptanceController < ApplicationController
   protected
   
   def ensure_modify_acceptance_permission
+    @project = @profile.project
     @viewer.set_project(@project)
     
     unless @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor? || 
