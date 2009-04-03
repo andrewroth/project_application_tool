@@ -26,7 +26,6 @@ class ReferencesViewerController < BaseViewController
   protected
 
     def get_reference_instance
-      debugger
       @reference_instance = ReferenceInstance.find params[:id]
       @reference = @reference_instance.reference
       @appln = @reference_instance.instance
