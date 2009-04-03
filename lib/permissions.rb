@@ -198,6 +198,10 @@ module Permissions
   def set_view_permissions
     return false unless @viewer
 
+    # expects event_group set - TODO - permissions really need to be 
+    # cleaned up to not use instance variables, or be more explicit on which
+    # ones
+    @eg = @project.event_group if @eg.nil? && @project
     set_can_view_summary
     set_can_view_references
     set_can_view_entire
