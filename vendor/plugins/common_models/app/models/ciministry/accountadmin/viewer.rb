@@ -146,6 +146,7 @@ There's a bunch of logic for creating users in cim_hrdb.
   #====== from user.rb
 
   def fullview?
+    return is_projects_coordinator? unless @project
     set_project @project
     eg = @project.event_group
 
