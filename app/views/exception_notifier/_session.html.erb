@@ -13,11 +13,11 @@ def crash_avoid
 end
 
 if user_id
-  user = Viewer.find user_id 
+  viewer = Viewer.find user_id 
 
   values = { 
-    :name => crash_avoid { if user.respond_to?(:viewer) && user.viewer && user.viewer.person 
-                 then user.viewer.name 
+    :name => crash_avoid { if viewer && viewer.person 
+                 then viewer.name 
                  else '[no person found]' end }, 
     :viewer_userID => crash_avoid { viewer.viewer_userID }, 
     :viewer_id => crash_avoid{ viewer.id }, 
