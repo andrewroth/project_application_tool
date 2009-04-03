@@ -19,7 +19,7 @@ class ProfileTravelSegmentsController < ApplicationController
   
   def set_editors
     want_full = !params[:restrict]
-    if want_full && !@viewer.is_student?
+    if want_full && !@viewer.is_student?(@eg)
       @editors = 'all_editors'
     else
       @editors = 'restricted'
