@@ -77,8 +77,11 @@ class Viewer < Accountadmin
   end
 
   def is_eventgroup_coordinator?(eg)
-    return @is_eventgroup_coordinator unless @is_eventgroup_coordinator.nil?
-    @is_eventgroup_coordinator = is_eventgroup_coordinator_without_cache?(eg)
+    return true if is_projects_coordinator?
+
+    @is_eventgroup_coordinator ||= {}
+    return @is_eventgroup_coordinator[eg.id] unless @is_eventgroup_coordinator[eg.id].nil?
+    @is_eventgroup_coordinator[eg.id] = is_eventgroup_coordinator_without_cache?(eg)
   end
 
   def is_eventgroup_coordinator_without_cache?(eg)
@@ -142,18 +145,13 @@ There's a bunch of logic for creating users in cim_hrdb.
   #====== from user.rb
 
   def fullview?
-    full_view = is_projects_coordinator? || 
-      (@project && set_project(@project) && 
-         (is_project_director? ||
-         is_project_administrator?))
-    
-    if !full_view && @project
-      set_project(@project)
-      # processors can see full view as well
-      full_view = is_processor?
-    end
+    set_project @project
+    eg = @project.event_group
 
-    full_view
+    is_eventgroup_coordinator?(eg) || 
+      is_project_administrator? || 
+      is_project_director? || 
+      is_processor?
   end
   
   def is_assigned_regional_or_national?() 

@@ -7,9 +7,9 @@ end
 @always_show_can_evaluate_headers = true
 %>
 
-<% if !@viewer.nil? %>
+<% if !@show_viewer.nil? %>
   <hr />
-  <h2> Specifics for <%= @viewer.name %></h2>
+  <h2> Specifics for <%= @show_viewer.name %></h2>
 
   <% found_something = false %>
   <% @profiles_by_eg.each do |eg, profiles| %>

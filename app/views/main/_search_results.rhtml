@@ -24,11 +24,7 @@
                                   :before => "Element.show('finding_viewer_specifics_#{viewer.id}');",
                                   :complete => "Element.hide('finding_viewer_specifics_#{viewer.id}');" } %>
                 <%= link_to_remote viewer.name, view_result_params %>
-                <% if @viewers.length == 1 %>
-                  <script>
-                    <%= remote_function view_result_params %>
-                  </script>
-                <% end %>
+                <% @init_js = view_result_params if @viewers.length == 1 %>
             </td>
             <td><%=h viewer.id %></td>
             <td><%=h viewer.viewer_userID %></td>
@@ -42,6 +38,8 @@
           </tr>
         <% end %>
       </tbody></table></p>
+
+      <script><%= remote_function @init_js %></script>
   <% else %>
       <p><i>No results found.</i></p>
   <% end %>

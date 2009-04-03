@@ -168,18 +168,18 @@ class MainController < ApplicationController
   end
   
   def get_viewer_specifics
-    @viewer = Viewer.find(params[:id])
+    @show_viewer = Viewer.find(params[:id])
 
-    profiles = Profile.find_all_by_viewer_id(@viewer.id, :include => [ :appln => :form ])
+    profiles = Profile.find_all_by_viewer_id(@show_viewer.id, :include => [ :appln => :form ])
     @profiles_by_eg = EventGroup.find(:all).collect { |eg|
       [ eg, profiles.find_all { |p| 
         if p.project 
-	  p.project.event_group_id == eg.id 
-	elsif p.appln && p.appln.form
-	  p.appln.form.event_group_id == eg.id
-	else
-	  false
-	end
+          p.project.event_group_id == eg.id 
+        elsif p.appln && p.appln.form
+          p.appln.form.event_group_id == eg.id
+        else
+          false
+        end
       } ]
     }
 
