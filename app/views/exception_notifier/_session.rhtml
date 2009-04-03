@@ -1,8 +1,10 @@
-* session id: <%= @request.session.instance_variable_get(:@session_id).inspect %>
-* data: <%= PP.pp(@request.session.instance_variable_get(:@data),"").gsub(/\n/, "\n  ").strip %>
+<% debugger %>
+
+* session id: <%= @request.session.session_id %>
+* data: <%= clone = @request.session.clone; clone[:connexion_bar] = nil; clone.inspect %>
 * user: <%= 
 
-user_id = PP.pp(@request.session.instance_variable_get(:@data),"")[:user_id]
+user_id = @request.session[:user_id]
 
 def crash_avoid
   begin
