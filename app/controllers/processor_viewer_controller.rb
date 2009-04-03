@@ -32,7 +32,7 @@ class ProcessorViewerController < InstanceController
       # when not doing bulk processor forms and not in the pdf form view (why was the
       # @pdf check added? I forget)
       if !@pdf && !@for_pdf && !(params[:action] == 'bulk_processor_form') &&
-        (@viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor?)
+        (@viewer.is_eventgroup_coordinator?(@eg) || (@viewer.set_project(@project) && @viewer.is_processor?))
         nil
       else
        { :filter => ['confidential'], :default => true } 
