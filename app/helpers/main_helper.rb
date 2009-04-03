@@ -8,7 +8,7 @@ module MainHelper
   end
 
   def view_summary_link(profile_id)
-    link 'view entire', "/profiles_viewer/#{profile_id}/summary"
+    link 'view summary', "/profiles_viewer/#{profile_id}/summary"
   end
 
   def edit_always_editable_link(profile_id)
