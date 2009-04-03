@@ -1,0 +1,10 @@
+app/views/active_scaffold_overrides/_update_form.rhtml
+config/database.yml
+log
+public/blank.html
+public/images/active_scaffold/
+public/javascripts/active_scaffold/
+public/javascripts/as_dd_reorder.js
+public/stylesheets/active_scaffold/
+tmp
+*.swp
