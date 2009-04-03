@@ -39,7 +39,7 @@
         <% end %>
       </tbody></table></p>
 
-      <script><%= remote_function @init_js %></script>
+      <script><%= remote_function(@init_js) if @init_js %></script>
   <% else %>
       <p><i>No results found.</i></p>
   <% end %>
