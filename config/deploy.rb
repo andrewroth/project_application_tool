@@ -7,7 +7,8 @@ ENV['system'] ||= 'p2c'
 ENV['user'] = 'deploy'
 
 set :application, "Project Application Tool"
-set :repository,  "https://svn.ministryapp.com/pat/branches/rails_2.2/"
+set :scm, "git"
+set :repository,  "git://github.com/andrewroth/project_application_tool.git"
 
 if %w(ma mh).include? ENV['system']
   ENV['host'] ||= 'ministryapp.com'
@@ -26,7 +27,6 @@ if ENV['env']
   RAILS_ENV = ENV['env']
 elsif ENV['target'] == 'dev'
   RAILS_ENV = 'development'
-  set :repository,  "https://svn.ministryapp.com/pat/branches/rails_2.3_remove_user/"
 elsif ENV['target'] == 'demo'
   RAILS_ENV = 'production'
 elsif ENV['target'] == 'prod'
@@ -49,10 +49,6 @@ ssh_options[:port] = ENV['port']
 set :user, ENV['user']
 
 set :deploy_to, ENV['deploy_to']
-
-# If you aren't using Subversion to manage your source code, specify
-# your SCM below:
-# set :scm, :subversion
 
 desc "Restart the web server"
 deploy.task :restart, :roles => :app do
@@ -82,8 +78,10 @@ unless ENV['target'] == 'demo'
     # other shared files / folders
     link_shared 'log', :overwrite => true
     link_shared 'config/database.yml'
-    link_shared 'config/environments/development.rb', :overwrite => true
     link_shared 'public/event_groups'
+    if RAILS_ENV = 'development'
+      link_shared 'config/environments/development.rb', :overwrite => true
+    end
   end
 end
 
