@@ -5,6 +5,7 @@ require_dependency  'vendor/plugins/questionnaire_engine/app/helpers/application
 module ApplicationHelper
   include Formatting
   
+  # TODO: I would really like to make this actually check for the file, rather than do this silly try to render thing
   def file_exists?(p)
     !render_if_possible(:template => p).nil? || 
       !render_if_possible(:file => p).nil?
@@ -15,6 +16,8 @@ module ApplicationHelper
       render(params)
     rescue ActionView::MissingTemplate
       return nil
+    rescue # any other errors are ok, just a :locals => ... issue
+      return true
     end
   end
 
