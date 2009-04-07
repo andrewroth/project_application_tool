@@ -726,6 +726,13 @@ class ReportsController < ApplicationController
     
     @rows = get_rows(profile.donations, columns)
     
+    # fix status since get_rows uses model[attribute] which bypasses
+    # the code that removes status for non-USDMANUAL donations
+    status_column = columns.index 'status'
+    profile.donations.each_with_index do |d,i|
+      @rows[i][status_column] = d.status
+    end
+
     # some totals at the bottom
     @rows << [ 'total', '', '', '', profile.donations_total ]
     
@@ -987,7 +994,7 @@ class ReportsController < ApplicationController
       :project, 'string',
       :created_at, 'string',
       :type, 'string',
-      :usd_amount, 'currency',
+      :orig_amount, 'currency',
       :rate, 'string',
       :cad_amount, 'currency',
       :status, 'string'
@@ -999,7 +1006,6 @@ class ReportsController < ApplicationController
     motivation_codes = projects.collect{ |p|
                       p.profiles.collect(&:motivation_code)
                     }.flatten.reject{ |mc| mc == '0' }
-
 
     conditions_str = ""; conditions_var = []
     if params[:type] && params[:type] != 'all'
@@ -1027,7 +1033,8 @@ class ReportsController < ApplicationController
       end
     end
 
-    @page_title = "Manual Donations"
+    @page_title = "Manual Donations #{@projects.collect(&:title).join(',')}"
+
     render_report @rows
   end
 
