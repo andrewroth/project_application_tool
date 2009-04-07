@@ -143,6 +143,19 @@ There's a bunch of logic for creating users in cim_hrdb.
     v
   end
 
+  def create_person
+    raise "person already created" if person
+
+    p = Person.create! :person_fname => '', :person_lname => '', :person_legal_fname => '', :person_legal_lname => ''
+    ag_st = Accessgroup.find_by_accessgroup_key '[accessgroup_student]'
+    ag_all = Accessgroup.find_by_accessgroup_key '[accessgroup_key1]'
+    Vieweraccessgroup.create! :viewer_id => self.id, :accessgroup_id => ag_st.id
+    Vieweraccessgroup.create! :viewer_id => self.id, :accessgroup_id => ag_all.id
+    Access.create :viewer_id => self.id, :person_id => p.id
+
+    @person = p
+  end
+
   #====== from user.rb
 
   def fullview?
