@@ -8,6 +8,9 @@
 	  <tr>
 	    <th>Date</th>
 	    <th>Donor name</th>
+	    <th>Type</th>
+	    <th>Orig Amount</th>
+	    <th>Conversion</th>
 	    <th>Amount</th>
 	    <th>Status</th>
 	  </tr>
@@ -16,12 +19,26 @@
 		  <tr>
 		    <td><%= donation.donation_date %></td>
 		    <td><%= donation.donor_name %></td>
+		    <td><%= donation.donation_type %></td>
+        <td align="right">
+          <% if a = donation.respond_to?(:original_amount) && !donation.original_amount.to_s.empty? %>
+            $<%= "%0.2f" % donation.original_amount.to_f %>
+          <% else %>&nbsp;<% end %>
+        </td>
+        <td align="right">
+          <% if r = donation.respond_to?(:conversion_rate) && !donation.conversion_rate.to_s.empty? %>
+            $<%= "%0.2f" % donation.conversion_rate.to_f %>
+          <% else %>&nbsp;<% end %>
+        </td>
 		    <td align="right">$<%= "%0.2f" % donation.amount.to_f %></td>
 		    <td><%= donation.status if donation.respond_to?(:status) %></td>
 		  <tr>
 		<% end %>
 	  <td> </td>
+    <td>&nbsp;</td>
 	  <td>TOTAL</td>
-	  <td align="right">$<%= @profile.donations_total %></td>
+    <td align="right">$<%= "%0.2f" % @profile.donations_total(:orig => true) %></td>
+    <td>&nbsp;</td>
+    <td align="right">$<%= "%0.2f" % @profile.donations_total %></td>
 	</table>
 </div>
