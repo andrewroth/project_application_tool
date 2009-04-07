@@ -713,16 +713,21 @@ class ReportsController < ApplicationController
     end
     
     # got a profile , now print all the donations that have come in for that acceptance
-    columns = [ 'donor_name',  # from model..
+    columns = [ 'donor_name',
       [ 'donation_type', 'type' ], 
       [ 'donation_reference_number', 'reference' ], 
       [ 'donation_date', 'date'] , 
+      [ 'original_amount', 'orig_amount' ],
       [ 'amount', 'amount' ],
+      [ 'conversion_rate', 'conv_rate' ],
       'status'
     ]
+
     @columns = columns_from_model AutoDonation, columns # used for client-side javascript sorting
-    @columns['status'] = 'string' # for manual donations
+    @columns['orig_amount'] = 'currency'
+    @columns['conv_rate'] = 'currency'
     @columns['amount'] = 'currency'
+    @columns['status'] = 'string' # for manual donations
     
     @rows = get_rows(profile.donations, columns)
     
@@ -730,11 +735,11 @@ class ReportsController < ApplicationController
     # the code that removes status for non-USDMANUAL donations
     status_column = columns.index 'status'
     profile.donations.each_with_index do |d,i|
-      @rows[i][status_column] = d.status
+      @rows[i][status_column] = d.status if d.respond_to?(:status)
     end
 
     # some totals at the bottom
-    @rows << [ 'total', '', '', '', profile.donations_total ]
+    @rows << [ 'total', '', '', '', profile.donations_total(:orig => true), profile.donations_total ]
     
     @page_title = "#{@eg.title} #{@project_title} #{@report_viewer.name} Funding Details Report"
     render_report @rows

@@ -203,11 +203,13 @@ class Profile < ActiveRecord::Base
   end
   
   def donations_total(params = {})
+    amount_method = (params.delete(:orig) ? :original_amount : :amount)
+
     donations(params).inject(0.0) { |received, donation| 
       if donation.class == ManualDonation && donation.status == 'invalid'
         received
       else
-        received + donation.amount.to_f
+        received + donation.send(amount_method).to_f
       end
     }
   end
