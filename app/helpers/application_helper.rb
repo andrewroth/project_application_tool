@@ -6,7 +6,8 @@ module ApplicationHelper
   include Formatting
   
   def file_exists?(p)
-    render_if_possible(:template => p) != nil
+    !render_if_possible(:template => p).nil? || 
+      !render_if_possible(:file => p).nil?
   end
 
   def render_if_possible(params = {})
