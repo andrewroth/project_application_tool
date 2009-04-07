@@ -270,7 +270,7 @@ render :partial => "viewer_specifics"
       end
         
       # get profiles out of projects
-      @profiles = @projects.collect{ |p| p.acceptances }.flatten
+      @profiles = @projects.collect{ |p| p.acceptances + p.staff_profiles }.flatten
         
       # sort by name if they came from tools
       if params[:from_tools] && params[:name] && !params[:name].empty?
