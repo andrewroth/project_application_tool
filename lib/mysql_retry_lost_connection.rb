@@ -17,8 +17,8 @@ module ActiveRecord
           execute_without_handle_connection_errors sql, name
         rescue ActiveRecord::StatementInvalid, ActiveRecord::NilResultError => exception
           retries -= 1
-          log_error('execute', exception, retries)
           if retries > 0 and exception.message =~ /(Lost connection to MySQL server during query|MySQL server has gone away)|execute returned nil result/
+            log_error('execute', exception, retries)
             reconnect!
             retry
           end
@@ -33,8 +33,8 @@ module ActiveRecord
           columns_without_handle_nils table_name, name
         rescue NoMethodError => exception
           retries -= 1
-          log_error('column', exception, retries)
           if retries > 0 and exception.message =~ /nil/
+            log_error('column', exception, retries)
             reconnect!
             retry
           end
@@ -43,6 +43,7 @@ module ActiveRecord
       alias_method_chain :columns, :handle_nils
 
       # retry select methods that get nil back from execute
+=begin
       def select_with_handle_exceptions(table_name, name = nil) #:nodoc:
         retries = RETRY_COUNT
         begin
@@ -52,13 +53,14 @@ module ActiveRecord
         rescue NoMethodError, ActiveRecord::NilResultError => exception
           retries -= 1
           log_error('select', exception, retries)
-          if retries > 0 && exception.message =~ /undefined method `all_hashes' for nil:NilClass|select returned nil result/
+          if retries > 0 && /undefined method `all_hashes' for nil:NilClass|select returned nil result/
             reconnect!
             retry
           end
         end
       end
       alias_method_chain :select, :handle_exceptions
+=end
 
     end
   end
