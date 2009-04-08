@@ -20,6 +20,7 @@ class PrepItemsController < ApplicationController
     @prep_item = PrepItem.new(params[:prep_item])
     @checkbox_projects = @eg.projects.find_all_by_hidden(false)
     check_prep_item_event_group_all
+    check_prep_item_deadline_optional
     
     respond_to do |format|
       if @prep_item.save
@@ -44,6 +45,7 @@ class PrepItemsController < ApplicationController
     @prep_item = PrepItem.find(params[:id])
     @checkbox_projects = @eg.projects.find_all_by_hidden(false)
     check_prep_item_event_group_all
+    check_prep_item_deadline_optional
     
     respond_to do |format|
       if @prep_item.update_attributes(params[:prep_item])
@@ -88,6 +90,10 @@ class PrepItemsController < ApplicationController
     end
   end
   
+  def check_prep_item_deadline_optional
+    @prep_item.deadline_optional = params[(@prep_item.id.to_s + "_deadline_optional").to_sym]
+  end
+
   def update_last_modified(id)
     @prep_item_id_to_clear = @last_modified_id
 

@@ -1,6 +1,5 @@
 class PrepItem < ActiveRecord::Base
   validates_presence_of :title, :description
-  validates_uniqueness_of :title
   belongs_to :event_group
   has_and_belongs_to_many :projects
   has_many :profile_prep_items, :include => :profile
@@ -10,6 +9,13 @@ class PrepItem < ActiveRecord::Base
     find(:all, :order => "title")
   end
  
+  def validate
+    if applies_to == :event_group then eg = event_group else eg = projects.first.event_group end
+    pis = (eg.prep_items + eg.projects.collect {|p| p.prep_items}.flatten).uniq
+    pis.delete_if { |pi| pi.title != self.title || pi.id = id}
+    errors.add_to_base "Cannont have two paperwork items with the same name within the same event group" if pis.size > 0
+  end
+
   def applies_to
     if event_group_id
       :event_group

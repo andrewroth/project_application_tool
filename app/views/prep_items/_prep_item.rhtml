@@ -12,7 +12,7 @@
   </div>
 
   <div id='show_<%= prep_item.id %>'>
-    <b><%=h prep_item.title %></b> - Due <%=h prep_item.deadline %>
+    <b><%=h prep_item.title %></b><% if !prep_item.deadline_optional %> - Due <%= h prep_item.deadline %><% end %>
     <br />
     Description: <%=h prep_item.description %>
     <br />
