@@ -10,9 +10,7 @@ module Components
       attr_accessor :parent_controller
 
       alias_method_chain :process_cleanup, :render_component
-      alias_method_chain :session=, :render_component
       alias_method_chain :flash, :render_component
-      alias_method_chain :assign_shortcuts, :render_component
       alias_method_chain :send_response, :render_component
 
       alias_method :component_request?, :parent_controller
@@ -50,7 +48,7 @@ module Components
       # Renders the component specified as the response for the current method
       def render_component(options) #:doc:
         component_logging(options) do
-          render_for_text(component_response(options, true).body, response.headers["Status"])
+          render_for_text(component_response(options, true).body, response.status)
         end
       end
 
@@ -67,8 +65,8 @@ module Components
         end
       end
 
-      def flash_with_render_component(refresh = false) #:nodoc:
-        if !defined?(@_flash) || refresh
+      def flash_with_render_component
+        if !defined?(@_flash)
           @_flash =
             if defined?(@parent_controller)
               @parent_controller.flash
@@ -125,18 +123,8 @@ module Components
         end
       end
 
-      def session_with_render_component=(options = {})
-        session_without_render_component=(options) unless component_request?
-      end
-
       def process_cleanup_with_render_component
         process_cleanup_without_render_component unless component_request?
-      end
-      
-      def assign_shortcuts_with_render_component(request, response)
-        assign_shortcuts_without_render_component(request, response)
-        flash(:refresh)
-        flash.sweep if @_session && !component_request?
-      end
+      end      
   end
 end
