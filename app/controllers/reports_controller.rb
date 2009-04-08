@@ -1084,7 +1084,7 @@ class ReportsController < ApplicationController
     
     for profile in @profiles
       row = []
-      row += [ profile.viewer.name, profile.project.name ]
+      row += [ ("(staff) " if profile.class == StaffProfile).to_s + profile.viewer.name, profile.project.name ]
       for prep_item in @prep_items
         profile_prep_item = profile.profile_prep_item prep_item
 
@@ -1093,7 +1093,7 @@ class ReportsController < ApplicationController
           if csv_requested
             check_r = if profile_prep_item.received then "Y" else "n" end
             check_s = if profile_prep_item.submitted then "Y" else "n" end
-            aray += [ check_r, check_s ]
+            row += [ check_r, check_s ]
           else
             check_r = if profile_prep_item.received then "[&#x2713;]" else "[&nbsp;]" end
             check_s = if profile_prep_item.submitted then "[&#x2713;]" else "[&nbsp;]" end

@@ -6,10 +6,10 @@ class Project < ActiveRecord::Base
   has_many :processors
   
   has_many :profiles
-  has_many :withdrawns
-  has_many :acceptances
-  has_many :staff_profiles
   has_many :applyings
+  has_many :acceptances
+  has_many :withdrawns
+  has_many :staff_profiles
   has_many :cost_items
   has_and_belongs_to_many :prep_items
   

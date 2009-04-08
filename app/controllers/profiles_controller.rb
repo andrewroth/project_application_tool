@@ -101,7 +101,7 @@ class ProfilesController < ApplicationController
     project = @eg.projects.find params[:project_id]
     profile = Profile.find_by_viewer_id_and_project_id viewer.id, project.id
 
-    unless is_projects_coordinator_or_projects_administrator(project)
+    unless is_eventgroup_coordinator_or_projects_administrator(project)
       render :inline => "no permission"
       return false
     end

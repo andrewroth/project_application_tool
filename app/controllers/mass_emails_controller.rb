@@ -45,7 +45,7 @@ class MassEmailsController < ApplicationController
     if params[:prep_item_unreceived]
     if params[:project_id]!= 'any' then @prep_items = Project.find(params[:project_id]).prep_items + @eg.prep_items else @prep_items = @eg.prep_items end
       prep_ids = @prep_items.collect { |p| p.id }
-      for i in 1 .. @prep_items.size
+      for i in 0 .. @prep_items.size - 1
         if params[("prep_item"+ prep_ids.at(i).to_s).to_sym]
           profile_prep_items = PrepItem.find(prep_ids.at(i)).profile_prep_items
           if params[:project_id]!= 'any' then profile_prep_items.delete_if { |ppi| ppi.profile.project_id != params[:project_id].to_i } end
@@ -74,6 +74,7 @@ class MassEmailsController < ApplicationController
     else
     @prep_items = []
     end
+    @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
   end
   
   protected
