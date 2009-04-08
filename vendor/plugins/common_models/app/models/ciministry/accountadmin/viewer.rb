@@ -77,8 +77,8 @@ class Viewer < Accountadmin
   end
 
   def is_eventgroup_coordinator?(eg)
-    return false unless eg
     return true if is_projects_coordinator?
+    return false unless eg
 
     @is_eventgroup_coordinator ||= {}
     return @is_eventgroup_coordinator[eg.id] unless @is_eventgroup_coordinator[eg.id].nil?
