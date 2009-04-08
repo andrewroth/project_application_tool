@@ -52,7 +52,7 @@ module ActiveRecord
         rescue NoMethodError, ActiveRecord::NilResultError => exception
           retries -= 1
           log_error('select', exception, retries)
-          if retries > 0 && /undefined method `all_hashes' for nil:NilClass|select returned nil result/
+          if retries > 0 && exception.message =~ /undefined method `all_hashes' for nil:NilClass|select returned nil result/
             reconnect!
             retry
           end
