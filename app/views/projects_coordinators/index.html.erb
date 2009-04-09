@@ -2,12 +2,15 @@
 
 <p><%= link_to 'New projects_coordinator', new_projects_coordinator_path %></p>
 
-<table>
-  <tr>
-    <th>Viewer ID</th>
-    <th>userid</th>
-    <th>Name</th>
-  </tr>
+<%= sortable_table %>
+  <thead>
+    <tr>
+      <th>Viewer ID</th>
+      <th>userid</th>
+      <th mochi:default='true'>Name</th>
+      <th></th>
+    </tr>
+  </thead>
 
 <% for projects_coordinator in @projects_coordinators %>
   <tr>
