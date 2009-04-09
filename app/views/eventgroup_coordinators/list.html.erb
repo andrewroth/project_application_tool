@@ -19,8 +19,8 @@
     <td><%=h viewer ? eventgroup_coordinator.viewer_id : 'no viewer' %></td>
     <td><%=h viewer ? eventgroup_coordinator.viewer.viewer_userID : 'no viewer' %></td>
     <td><%=h viewer ? eventgroup_coordinator.viewer.person.name : 'no viewer' %></td>
-    <td><%=h(eventgroup_coordinator.event_group.to_s_with_eg_path) if eventgroup_coordinator.event_group != @eg %></td>
-    <% if eventgroup_coordinator.event_group == @eg %>
+    <td><%=h(eventgroup_coordinator.event_group.to_s_with_eg_path) if eventgroup_coordinator.event_group != @eg2 %></td>
+    <% if eventgroup_coordinator.event_group == @eg2 %>
       <td><%= link_to 'Destroy', eventgroup_coordinator, :confirm => 'Are you sure?', :method => :delete %></td>
     <% else %>
       <td></td>
