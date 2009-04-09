@@ -13,20 +13,22 @@
     </tr>
   </thead>
 
+  <tbody>
 <% for eventgroup_coordinator in @eventgroup_coordinators %>
-  <tr>
-    <% viewer = eventgroup_coordinator.viewer %>
-    <td><%=h viewer ? eventgroup_coordinator.viewer_id : 'no viewer' %></td>
-    <td><%=h viewer ? eventgroup_coordinator.viewer.viewer_userID : 'no viewer' %></td>
-    <td><%=h viewer ? eventgroup_coordinator.viewer.person.name : 'no viewer' %></td>
-    <td><%=h(eventgroup_coordinator.event_group.to_s_with_eg_path) if eventgroup_coordinator.event_group != @eg2 %></td>
-    <% if eventgroup_coordinator.event_group == @eg2 %>
-      <td><%= link_to 'Destroy', eventgroup_coordinator, :confirm => 'Are you sure?', :method => :delete %></td>
-    <% else %>
-      <td></td>
-    <% end %>
-  </tr>
+    <tr>
+      <% viewer = eventgroup_coordinator.viewer %>
+      <td><%=h viewer ? eventgroup_coordinator.viewer_id : 'no viewer' %></td>
+      <td><%=h viewer ? eventgroup_coordinator.viewer.viewer_userID : 'no viewer' %></td>
+      <td><%=h viewer ? eventgroup_coordinator.viewer.person.name : 'no viewer' %></td>
+      <td><%=h(eventgroup_coordinator.event_group.to_s_with_eg_path) if eventgroup_coordinator.event_group != @eg2 %></td>
+      <% if eventgroup_coordinator.event_group == @eg2 %>
+        <td><%= link_to 'Destroy', eventgroup_coordinator, :confirm => "Are you sure you want to delete #{eventgroup_coordinator.viewer.name} (#{eventgroup_coordinator.viewer.email}) from being an eventgroup coordinator for #{@eg2.to_s_with_eg_path}?", :method => :delete %></td>
+      <% else %>
+        <td></td>
+      <% end %>
+    </tr>
 <% end %>
+  </tbody>
 </table>
 
 <p><%= link_to 'New eventgroup_coordinator', :action => :new, :id => @eg2.id %></p>
