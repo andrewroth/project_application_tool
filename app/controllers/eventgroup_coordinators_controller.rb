@@ -2,7 +2,7 @@ class EventgroupCoordinatorsController < ApplicationController
   SUPERADMIN_VIEWER_IDS = [ 1, 2939, 812 ] # first viewer, Andrew, Russ -- sorry for the magic ids, 
                                            # eventually we will find a better way :|
 
-  before_filter :set_eg2, :except => :index
+  before_filter :set_eg2, :except => [ :index, :destroy ]
   before_filter :can_add_eventgroup_coordinators
   before_filter :set_title
 
@@ -76,6 +76,7 @@ class EventgroupCoordinatorsController < ApplicationController
   # DELETE /eventgroup_coordinators/1.xml
   def destroy
     @eventgroup_coordinator = EventgroupCoordinator.find(params[:id])
+    @eg2 = @eventgroup_coordinator.event_group
     @eventgroup_coordinator.destroy
 
     respond_to do |format|
