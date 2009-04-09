@@ -163,7 +163,7 @@ class SecurityController < ApplicationController
   end
 
   def login_by_cim
-    return { :keep_trying => true } unless params[:username] && params[:password]
+    return { :keep_trying => true } unless params[:username] && params[:password] && params[:password] != ''
 
     login_viewer = Viewer.find_by_viewer_userID params[:username]
     return { :error => "Username '#{params[:username]}' doesn't exist.", :keep_trying => true } unless login_viewer
