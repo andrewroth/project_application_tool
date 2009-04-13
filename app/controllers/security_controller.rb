@@ -128,6 +128,8 @@ class SecurityController < ApplicationController
       return
     end
 
+    clear_login_session_info
+
     result = login_by_ticket
     result = login_by_gcx if result[:keep_trying]
     result = login_by_cim if result[:keep_trying]
@@ -202,19 +204,15 @@ class SecurityController < ApplicationController
   end
  
   def logout
-    @viewer = nil
-    session[:user_id] = nil
-    session[:needs_read_login_message_confirm] = true
-
     if session[:login_source] == 'intranet'
       redirect_to $cim_url
     elsif session[:login_source] == 'gcx'
       redirect_to CASClient::Frameworks::Rails::Filter.client.logout_url
     end
 
-    session[:login_source] = nil
-    session[:cas_extra_attributes] = nil
-    session[:cas_user] = nil
+    clear_login_session_info
+    clear_cas_session
+    @viewer = nil
 
     flash[:notice] = "You have been logged out."
   end
@@ -224,6 +222,17 @@ class SecurityController < ApplicationController
   end
 
   protected
+
+  def clear_login_session_info
+    session[:user_id] = nil
+    session[:needs_read_login_message_confirm] = true
+    session[:login_source] = nil
+  end
+
+  def clear_cas_session
+    session[:user_id] = nil
+    session[:needs_read_login_message_confirm] = true
+  end
 
   def setup_given_viewer_id(viewer_id)
     @viewer = Viewer.find viewer_id
