@@ -1,7 +1,8 @@
-.year_item, .year_item_modified, .own_note {
+.year_item, .year_item_modified {
     background-color: #0066B3;
     padding: 3px;
 }
+
 .unsubmitted_item, .unsubmitted_item_modified {
     background-color: #8B0000;
     padding: 3px;
@@ -11,9 +12,13 @@
     border: #7CFC00 solid;
 }
 
-.project_item, .project_item_modified, .others_note {
+.project_item, .project_item_modified, .own_note, .others_note {
     background-color: #80C9FF;
     padding: 3px;
+}
+
+.others_note {
+    background-color: white;
 }
 
 .profile_item, .profile_item_modified, .acceptance_item, .acceptance_item_modified {
