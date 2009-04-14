@@ -5,7 +5,7 @@ describe SecurityController do
   
   before do 
     session[:cas_sent_to_gateway] = true # make cas think it's already gone to the server to avoid redirect
-    @viewer = mock_model(Viewer, :id => 1, :viewer_userID => "copter", :viewer_passWord => "9cdfb439c7876e703e307864c9167a15")
+    @viewer = mock_model(Viewer, :id => 1, :viewer_userID => "copter", :viewer_passWord => "9cdfb439c7876e703e307864c9167a15", :viewer_isActive= => 1, :viewer_lastLogin= => Time.now, :save! =>'')
     Viewer.stub!(:find).and_return(@viewer)
     @params = { :username => "copter", :password => "lol"}
   end

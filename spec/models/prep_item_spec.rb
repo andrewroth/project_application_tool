@@ -31,9 +31,19 @@ describe PrepItem do
   
   it "should not create a new prep item if one with an identical title already exists" do
     @prep_item.attributes = valid_prep_item_attributes
+    @prep_item.save!
     prep1= PrepItem.new
     prep1.attributes = valid_prep_item_attributes
     lambda { prep1.save }.should_not change(PrepItem, :count)
+  end
+  
+  it "should create a new prep item if one with an identical title but is in a different eg already exists" do
+    @prep_item.attributes = valid_prep_item_attributes
+    @prep_item.save!
+    prep1= PrepItem.new
+    prep1.attributes = valid_prep_item_attributes
+    prep1.event_group_id = 23
+    lambda { prep1.save }.should change(PrepItem, :count)
   end
   
   it "should apply to event group" do

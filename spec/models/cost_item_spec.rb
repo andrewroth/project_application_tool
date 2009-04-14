@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 module CostItemSpecHelper
   def valid_cost_item_attributes 
-    { :description => "description", :
+    { :description => "description" }
   end
 end
 
@@ -13,6 +13,7 @@ describe CostItem do
 
   before(:each) do
     @cost_item = CostItem.new
+    @profile = mock_model(Profile, :id => 1)
   end
   
   it "should be valid" do
@@ -21,7 +22,7 @@ describe CostItem do
   
   
   it "should assign title to new cost items" do
-    @cost_item.description.should equal("no description")
+    @cost_item.description.should == "no description"
   end
   
   
