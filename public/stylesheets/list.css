@@ -1,4 +1,4 @@
-.year_item, .year_item_modified {
+.year_item, .year_item_modified, .own_note {
     background-color: #0066B3;
     padding: 3px;
 }
@@ -11,9 +11,7 @@
     border: #7CFC00 solid;
 }
 
-
-
-.project_item, .project_item_modified {
+.project_item, .project_item_modified, .others_note {
     background-color: #80C9FF;
     padding: 3px;
 }

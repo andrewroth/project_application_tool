@@ -1,0 +1,18 @@
+<hr>
+<h3>New Note</h3>
+
+<% form_for(@profile_note) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.text_area :content, :rows => 4 %>
+  </p>
+
+  
+  <%= hidden_field :profile_note, :profile_id, :value => params[:profile_id] %>
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+
+<% end %>
+<%= link_to_function 'cancel', "$('create').hide(); $('create_link').show();" %>

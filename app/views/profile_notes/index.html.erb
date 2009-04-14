@@ -1,0 +1,24 @@
+<div id="list_profile_notes">
+  <h3>Notes for <%= @profile.viewer.name %></h3>
+  <p class='own_note'><i>your notes are in this colour</i></p>
+  <p class='others_note'><i>notes created by others are in this colour</i></p>
+
+  <div id="list" class="inconspicuous">
+    <ul id="list_ul">
+      <% for profile_note in @profile_notes %>
+        <% if profile_note.creator_id == @user.viewer.id then klass = "own_note" else klass = "others_note" end %>
+          <li id="profile_note_<%= profile_note.id %>" class="inconspicuous <%= klass %>">
+            <%= render :partial => "profile_note", :object => profile_note %>
+          </li>
+        <% end %>
+    </ul>
+
+    <div id='create' class="" style="display:none;">
+      <%= render :partial => 'create_form' %>
+    </div>
+        
+    <div id='create_link'>
+      <%= link_to_function 'New Profile Note', "$('create').show(); $('create_link').hide();"  %>
+    </div>
+  </div>
+</div>

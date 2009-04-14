@@ -10,4 +10,5 @@
 
    <%= sub_menu_item('Processor Form', :url => processor_viewer_url(@profile.id)) if @can_view_entire %>
    <%= sub_menu_item('Actions', :url => url_for({ :controller => :processor, :action => :actions, :profile_id => @profile.id })) if @can_perform_actions %>
+   <%= sub_menu_item('Notes', :url => url_for({ :controller => :profile_notes, :profile_id => @profile.id })) %>
 <% end %>

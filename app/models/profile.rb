@@ -8,6 +8,7 @@ class Profile < ActiveRecord::Base
   has_many :travel_segments, :through => :profile_travel_segments, :order => "position ASC"
   has_many :optin_cost_items;
   has_many :profile_prep_items
+  has_many :profile_notes
   
   #has_many :profile_manual_donations
   #has_many :profile_auto_donations
