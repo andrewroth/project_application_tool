@@ -167,7 +167,13 @@ class SecurityController < ApplicationController
   def login_by_cim
     return { :keep_trying => true } unless params[:username] && params[:password] && params[:password] != ''
 
-    login_viewer = Viewer.find_by_viewer_userID params[:username]
+    begin
+      login_viewer = Viewer.find_by_viewer_userID params[:username]
+    rescue NoMethodError => e
+      # bizarre error, happens randomly.  try again
+      login_viewer = Viewer.find_by_viewer_userID params[:username]
+    end
+
     return { :error => "Username '#{params[:username]}' doesn't exist.", :keep_trying => true } unless login_viewer
 
     hash_pass = Digest::MD5.hexdigest(params[:password])
@@ -191,7 +197,13 @@ class SecurityController < ApplicationController
 
   def login_by_gcx
     return { :keep_trying => true } unless session[:cas_user]
-    viewer = Viewer.find_by_guid cas_sso_guid
+
+    begin
+      viewer = Viewer.find_by_guid cas_sso_guid
+    rescue NoMethodError => e
+      # try the darned thing again..
+      viewer = Viewer.find_by_guid cas_sso_guid
+    end
 
     if viewer
       session[:login_source] = 'gcx'
