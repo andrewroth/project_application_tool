@@ -9,10 +9,15 @@ class Campus < CimHrdb
   end
   
   def students(options = {})
+    # Following line breaks with a rails bug on eager loading
+    #assignments.find_all_by_assignmentstatus_id(Assignmentstatus.campus_student_ids, 
+    #    :include => { :person => :viewers }, :select => options[:select] ).collect { |a|
+    #  a.person
+    #}
     assignments.find_all_by_assignmentstatus_id(Assignmentstatus.campus_student_ids, 
-        :include => { :person => :viewers }, :select => options[:select] ).collect { |a|
-      a.person
-    }
+        :select => options[:select]
+    ).collect { |a| a.person }
+
     #assignments.find(:all,
     #    :include => { :person => :viewers }, :select => options[:select] ).collect { |a|
     #  a.person
