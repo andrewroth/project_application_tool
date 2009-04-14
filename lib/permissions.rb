@@ -236,6 +236,7 @@ module Permissions
     value = self.send(m, *args)
     @debug = @debug.to_s + "permission method checked: #{m}  value: #{value}<br />"
     halt unless value
+    return value
   end
 
   def method_missing(m, *args)
