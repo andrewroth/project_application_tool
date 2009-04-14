@@ -141,7 +141,7 @@
     <div>
       <div id="content">
         <% if @form && params[:controller] != 'forms' %>
-          <%= render "qe_forms/form_#{@form}" %>
+          <%= render_if_possible("qe_forms/form_#{@form}") || render_if_possible(:file => "layouts/form_#{@form}")%>
         <% else %>
           <%= yield %>
         <% end %>
