@@ -5,12 +5,14 @@
 
 <p>
   <b>Created by:</b>
-  <%= (Viewer.find(profile_note.creator_id)).name %>
+  <%= h profile_note.creator.name %>
 </p>
 
-<%= link_to_remote 'delete', :url => "/profile_notes/#{profile_note.id}.js",
+<% if profile_note.creator == @viewer || @is_eventgroup_coordinator%>
+  <%= link_to_remote 'delete', :url => "/profile_notes/#{profile_note.id}.js",
       :method => :delete,
       :loading => "$('loading').show();",
       :loaded => "$('loading').hide();",
       :confirm => 'Are you sure?'
-    %>
+   %>
+<% end %>

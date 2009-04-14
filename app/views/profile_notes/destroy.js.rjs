@@ -1,5 +1,9 @@
-page.visual_effect :switch_off, "profile_note_#{@profile_note.id}"
+if @denied
+  page.alert "Sorry, you don't have permission to do that."
+else
+  page.visual_effect :switch_off, "profile_note_#{@profile_note.id}"
 
-page.delay(3) do
-  page.remove "profile_note_#{@profile_note.id}"
+  page.delay(3) do
+    page.remove "profile_note_#{@profile_note.id}"
+  end
 end
