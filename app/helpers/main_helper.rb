@@ -27,8 +27,8 @@ module MainHelper
     link 'travel', "/profile_travel_segments/index?profile_id=#{profile_id}"
   end
   
-  def profile_notes_link(profile_id)
-    link 'notes', "/profile_notes/?profile_id=#{profile_id}"
+  def profile_notes_link(profile_id, nn)
+    link "notes(#{nn})", "/profile_notes/?profile_id=#{profile_id}"
   end
 
   def evaluate_link(profile_id, project_id)

@@ -120,7 +120,7 @@
                 <% end %>
 
                 <%= travel_link acceptance.id %>
-                <%= profile_notes_link acceptance.id %>
+                <%= profile_notes_link acceptance.id, acceptance.profile_notes.length %>
             </td>
           </tr>
         <% end %>
