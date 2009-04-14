@@ -28,7 +28,7 @@ module MainHelper
   end
   
   def profile_notes_link(profile_id)
-    link 'profile notes', "/profile_notes/?profile_id=#{profile_id}"
+    link 'notes', "/profile_notes/?profile_id=#{profile_id}"
   end
 
   def evaluate_link(profile_id, project_id)
