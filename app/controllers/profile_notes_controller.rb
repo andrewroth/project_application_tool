@@ -5,9 +5,12 @@ class ProfileNotesController < ApplicationController
   # GET /profile_notes.xml
   include Permissions
   
+  # needs to be done before set_profile_and_appln
+  prepend_before_filter :set_profile_id_from_profile_notes_params, :only => [ :create ]
+
   before_filter :set_view_permissions
   before_filter :ensure_profile_ownership_or_any_project_staff
-  before_filter :set_references, :except => [:create, :destroy]
+  before_filter :set_references, :except => [ :create, :destroy ]
   before_filter :set_menu_titles
   
   def index
@@ -20,7 +23,7 @@ class ProfileNotesController < ApplicationController
   # POST /profile_notes.xml
   def create
     @profile_note = ProfileNote.new(params[:profile_note])
-    @profile_note.creator_id = @user.viewer.id
+    @profile_note.creator_id = @viewer.id
     
     respond_to do |format|
       if @profile_note.save
@@ -57,5 +60,6 @@ class ProfileNotesController < ApplicationController
     @references = @appln.references_text_list
   end
     
+  def set_profile_id_from_profile_notes_params() params[:profile_id] = params[:profile_note][:profile_id] end
 end
 

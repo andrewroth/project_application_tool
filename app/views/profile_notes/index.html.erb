@@ -6,7 +6,7 @@
   <div id="list" class="inconspicuous">
     <ul id="list_ul">
       <% for profile_note in @profile_notes %>
-        <% if profile_note.creator_id == @user.viewer.id then klass = "own_note" else klass = "others_note" end %>
+        <% if profile_note.creator_id == @viewer.id then klass = "own_note" else klass = "others_note" end %>
           <li id="profile_note_<%= profile_note.id %>" class="inconspicuous <%= klass %>">
             <%= render :partial => "profile_note", :object => profile_note %>
           </li>
