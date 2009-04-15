@@ -19,7 +19,7 @@ module ActiveRecord
         retries = RETRY_COUNT
         begin
           execute_without_handle_connection_errors sql, name
-        rescue ActiveRecord::StatementInvalid
+        rescue ActiveRecord::StatementInvalid => exception
           retries -= 1
           log_error('execute', exception, retries)
           if retries > 0 and exception.message =~ /(Lost connection to MySQL server during query|MySQL server has gone away)/
