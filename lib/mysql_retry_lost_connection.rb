@@ -28,6 +28,7 @@ module ActiveRecord
             retry
           else
             log_error('execute', 'giving up')
+            raise exception
           end
         end
       end
@@ -47,6 +48,7 @@ module ActiveRecord
             retry
           else
             log_error('column', 'giving up')
+            raise exception
           end
         end
       end
@@ -68,6 +70,7 @@ module ActiveRecord
             retry
           else
             log_error('select', 'giving up')
+            raise exception
           end
         end
       end
