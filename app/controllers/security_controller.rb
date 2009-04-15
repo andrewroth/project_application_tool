@@ -171,6 +171,7 @@ class SecurityController < ApplicationController
       login_viewer = Viewer.find_by_viewer_userID params[:username]
     rescue NoMethodError => e
       # bizarre error, happens randomly.  try again
+      Viewer.reset_column_information
       login_viewer = Viewer.find_by_viewer_userID params[:username]
     end
 
@@ -202,6 +203,7 @@ class SecurityController < ApplicationController
       viewer = Viewer.find_by_guid cas_sso_guid
     rescue NoMethodError => e
       # try the darned thing again..
+      Viewer.reset_column_information
       viewer = Viewer.find_by_guid cas_sso_guid
     end
 
