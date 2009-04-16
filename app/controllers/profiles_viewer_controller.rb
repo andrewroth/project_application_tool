@@ -72,7 +72,7 @@ class ProfilesViewerController < ViewOnlineController
     end
 
     def get_questionnaire
-      unless @profile.appln.form
+      unless @profile.appln && @profile.appln.form
         render :inline => "Error: Couldn't find application for profile #{@profile.id}.  This might be because the profile was created manually without an application.  If there should be an application, email us at #{$tech_email_only}."
       else
         @questionnaire = @profile.appln.form.questionnaire
