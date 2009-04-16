@@ -12,19 +12,23 @@ describe PrepItemsController do
     Viewer.stub!(:find).and_return(@viewer)
     @event_group = mock_model(EventGroup, :id => 1, :empty? => false, :logo => "a", :projects=>'')
     EventGroup.stub!(:find).and_return(@event_group)
-    @project = mock_model(Project, :id => 1, :hidden => false)
+    @project = mock_model(Project, :id => 1, :find_all_by_hidden => false)
     Project.stub!(:find).and_return(@project)
+    @event_group.stub!(:projects).and_return(@project)
     session[:user_id] = @viewer.id
     session[:event_group_id]=1
+    
+    @prep_item = mock_model(PrepItem, :id =>1, :title => '', :description => '', :event_group_id= => 1, :projects => [@project])
+    PrepItem.stub!(:find).and_return(@prep_item)
+    @params = {}
   end
   
   it "should redirect to index on successful save" do
-    PrepItem.any_instance.stubs(:valid?).returns(true)
-    post 'create'
+    PrepItem.should_receive(:new).with(@params).and_return(@prep_item)
+    post 'create', :prep_item =>@params
     response.should redirect_to(prep_items_path)  
     assigns[:prep_item].should_not be_new_record
     flash[:notice].should be_nil
-  
   end
   
   it "should render new template on failed save" do
