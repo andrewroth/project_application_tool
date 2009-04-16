@@ -17,6 +17,3 @@ config.action_controller.perform_caching             = false
 # The :test delivery method accumulates sent emails in the
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
-
-# eager loading messes up active scaffold and a bunch of other things
-config.eager_load_paths = []
