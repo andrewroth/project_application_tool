@@ -51,10 +51,16 @@ class Person < CimHrdb
   def emerg
     return emerg_relation if emerg_relation
 
-    # really dumb, yo uneed a birthdate & passport expiry to create but
-    # once made they can be set to nil
+    # A bunch of emergency contact info stuff can't be nil
     e = Emerg.create(:person_id => id, :emerg_birthdate => Time.now,
-                 :emerg_passportExpiry => Time.now)
+                 :emerg_passportExpiry => Time.now, 
+                 :emerg_contact2Mobile => '',
+                 :emerg_contact2Rship => '',
+                 :emerg_contact2Home => '',
+                 :emerg_contact2Work => '',
+                 :emerg_contact2Email => '',
+                 :emerg_contact2Name => ''
+    )
     e.save!
     e.emerg_birthdate = e.emerg_passportExpiry = nil
     e.save!

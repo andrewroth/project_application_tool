@@ -387,7 +387,7 @@ class ReportsController < ApplicationController
   #    because it does mass select statements instead of looping through each one
   def loop_reports_viewers(project_ids, include_pref1_applns = false, include_staff = false)
     accepted = Acceptance.find_all_by_project_id(project_ids, :include => [ :project, :appln ])
-    viewer_ids = accepted.collect{ |ac| ac.appln.viewer_id }
+    viewer_ids = accepted.collect{ |ac| ac.viewer_id }
     viewers_cache, persons_cache = generate_cache(viewer_ids)
     applns_list = Appln.find :all, :conditions => "viewer_id in (#{viewer_ids.join(',')})", :include => :processor_form_ref
     applns = {}
