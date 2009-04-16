@@ -31,6 +31,8 @@
                 <TH>User ID</TH>
                 <TH>Campus</TH>
                 <TH>Status</TH>
+                <TH>Support Received</TH>
+                <TH>Support Goal</TH>
                 <TH>Preference1</TH>
                 <TH>Accepted</TH>
             </TR></thead>
@@ -44,6 +46,8 @@
                         <TD align="center"><%= person.viewer.viewer_userID %></TD>
                         <TD align="center"><%= campus.campus_shortDesc %></TD>
                         <TD align="center"><%= profile.status %></TD>
+                        <TD align="center"><%= if profile.class == Acceptance then format_currency profile.donations_total end %></TD>
+                        <TD align="center"><%= if profile.class == Acceptance then format_currency profile.cached_costing_total end %></TD>
                         <TD align="center"><%= title(profile.appln.preference1_id) %></TD>
                         <TD align="center"><%= title(if profile.class == Acceptance then profile.project_id else nil end) %></TD>
                     </TR>
