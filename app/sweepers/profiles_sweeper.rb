@@ -1,3 +1,5 @@
+require_dependency "#{RAILS_ROOT}/app/models/profile"
+
 class ProfilesSweeper < ActionController::Caching::Sweeper
   observe Profile
 
