@@ -1,5 +1,5 @@
 <P>The person you clicked on is the subject, ie. the one that will be removed (actually it's only set to inactive, just to be safe).<p>
-<p>This will move all profiles for viewer '<%= @subject.name %>' with <%= pluralize @subject.profiles.length, 'profile'%>, id <%= @subject.id %> username <%= @subject.viewer_userID %> to another viewer you search for, and mark the viewer as inactive.  It will also copy the gcx tie-in over.
+<p>This will move all profiles for viewer '<%= @subject.name %>' with <%= pluralize @subject.profiles.length, 'profile'%>, id <%= @subject.id %> username <%= @subject.viewer_userID %> to another viewer you search for, and mark the viewer as inactive.  It will also copy the gcx tie-in over, if the recipient has no gcx set but the subject does.
 
 <P>Which viewer do you want to move all profiles and gcx to?</P>
 

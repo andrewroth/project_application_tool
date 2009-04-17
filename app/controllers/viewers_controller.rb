@@ -17,8 +17,9 @@ class ViewersController < ApplicationController
       end
 
       # copy gcx over
-      unless @subject.guid.empty?
-        @subject.guid unless @subject.guid.empty?
+      if @recipient.guid.empty? && !@subject.guid.empty?
+        @transfer_gcx = true
+        @recipient.guid = @subject.guid
         @subject.guid = ''
       end
       # make subject inactive

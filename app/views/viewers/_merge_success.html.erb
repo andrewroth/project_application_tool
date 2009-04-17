@@ -2,10 +2,10 @@
   <p>Successfully moved <%= pluralize @profiles_copies, 'profiles' %> from viewer id <%= @subject.id %> to <%= @subject.id %>.</p>
 
   <p>
-  <% if @subject.guid %>
-    No gcx was set, so it wasn't transferred over.
+  <% if @transfer_gcx %>
+    Gcx itie-in was also transferred over.
   <% else %>
-    Gcx guid was also transffered over.
+    Gcx tie-in was not modified.
   <% end %>
   </p>
 </div>
