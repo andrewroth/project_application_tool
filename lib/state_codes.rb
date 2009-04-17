@@ -39,6 +39,7 @@ CODES = {
   'NM' => 'New Mexico',
   'NY' => 'New York',
   'NC' => 'North Carolina',
+}
 
 end
 
