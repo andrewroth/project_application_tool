@@ -9,6 +9,7 @@
                    :loading => "$('loading').show()",
                    :complete => "$('loading').hide()"
                   ) do %>
+  <%= check_box_tag 'skip_profiles' %> Don't copy profiles over.<BR/>
   <%= text_field_tag 'viewer' %>
   <%= submit_tag 'search' %>
 <% end %>

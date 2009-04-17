@@ -27,6 +27,7 @@
                   :url => { :action => 'merge', :id => @subject.id, :recipient_id => viewer.id },
                   :before => "$('saving').show()",
                   :complete => "$('saving').hide()",
+                  :with => "'skip_profiles='+$F('skip_profiles')",
                   :confirm => "Are you sure you want to merge viewer #{@subject.id} to viewer #{viewer.id}, and #{@subject.id} to be set to inactive?",
                   :method => :post
                 }

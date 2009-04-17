@@ -9,11 +9,13 @@ class ViewersController < ApplicationController
       @recipient = Viewer.find params[:recipient_id]
 
       # copy all profiles over
-      @profiles_copies = 0
-      for p in @subject.profiles
-        p.viewer_id = @recipient.id
-        p.save!
-        @profiles_copies += 1
+      unless params[:skip_profiles] == '1'
+        @profiles_copies = 0
+        for p in @subject.profiles
+          p.viewer_id = @recipient.id
+          p.save!
+          @profiles_copies += 1
+        end
       end
 
       # copy gcx over
