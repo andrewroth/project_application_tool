@@ -132,6 +132,10 @@ There's a bunch of logic for creating users in cim_hrdb.
 // 4. create an access table entry for this (viewer,person) combo
 =end
   def self.create_new_cim_hrdb_account(guid, fn, ln, uid)
+    # first and last names can't be nil
+    fn ||= ''
+    ln ||= ''
+
     v = Viewer.create! :guid => guid, :viewer_lastLogin => 0, :accountgroup_id => 15, :viewer_userID => uid, :language_id => 1, :viewer_isActive => true, :accountgroup_id => 15 
     p = Person.create! :person_fname => fn, :person_lname => ln, :person_legal_fname => '', :person_legal_lname => ''
     ag_st = Accessgroup.find_by_accessgroup_key '[accessgroup_student]'
