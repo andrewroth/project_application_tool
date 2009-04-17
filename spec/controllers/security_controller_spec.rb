@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SecurityController do
-  integrate_views
+  #integrate_views
   
   before do 
     session[:cas_sent_to_gateway] = true # make cas think it's already gone to the server to avoid redirect

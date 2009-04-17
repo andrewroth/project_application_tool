@@ -1,6 +1,6 @@
 # support a command line option --rcov_baseline which will load in all models and controllers, 
 # so that rcov has a baseline of all the files (roughly) that are used.
-if ARGV.include?('--rcov_baseline')
+if ARGV.include?('--rcov_baseline') && false
   puts "Loading each controller and model once to get the base coverage in."
 
   # seems that we need application.rb loaded first for all the other controllers to work,
