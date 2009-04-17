@@ -1,8 +1,8 @@
 require "helpers/form_column_helpers.rb"
 
 # install public files
-['/public/images', '/public/javascripts'].each{|dir|
-  source = File.join(directory,dir)
+['/public/images', '/public/javascripts'].each{ |dir|
+  source = File.join(File.dirname(__FILE__), dir)
   dest = File.join(RAILS_ROOT, dir)
   FileUtils.mkdir_p(dest)
   FileUtils.cp_r(Dir.glob(source+'/*.*'), dest)
