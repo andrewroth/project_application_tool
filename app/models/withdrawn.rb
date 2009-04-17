@@ -1,8 +1,7 @@
 class Withdrawn < Profile
   belongs_to :appln
   belongs_to :withdrawn_by, :class_name => "Viewer",
-    :foreign_key => :withdrawn_by,
-    :include => :persons
+    :foreign_key => :withdrawn_by
   belongs_to :reason_for_withdrawal, :foreign_key => 'reason_id'
 
   acts_as_state_machine :initial => :started, :column => :status

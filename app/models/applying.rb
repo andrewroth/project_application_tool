@@ -2,8 +2,7 @@ class Applying < Profile
   belongs_to :appln
 
   belongs_to :locked_by, :class_name => "Viewer",
-    :foreign_key => :locked_by,
-    :include => :persons
+    :foreign_key => :locked_by
 
   acts_as_state_machine :initial => :started, :column => :status
   
