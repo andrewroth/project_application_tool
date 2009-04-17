@@ -165,7 +165,9 @@ class MainController < ApplicationController
   def find_people
     name = params[:viewer][:name]
     @people = Person.search_by_name name
-    @viewers = @people.collect {|p| p.viewers}.flatten.compact
+    @viewers = Viewer.find_all_by_viewer_userID name
+    @viewers += @people.collect {|p| p.viewers }.flatten
+    @viewers.compact!
   end
   
   def get_viewer_specifics

@@ -1,0 +1,2 @@
+page.replace_html :merge_results, :partial => 'merge_success'
+page.visual_effect :appear, :merge_results

@@ -678,3 +678,7 @@ img.new_window {
 #mass_email_results {
 	border: 1px solid blue;
 }
+
+.inactive {
+  color: gray;
+}
