@@ -46,7 +46,6 @@ class ProfileNotesController < ApplicationController
     @profile_note = ProfileNote.find(params[:id])
     @profile = @profile_note.profile
 
-    debugger
     if ensure_profile_ownership_or_any_project_staff && 
       (is_eventgroup_coordinator || @profile_note.creator == @viewer)
       @profile_note.destroy
