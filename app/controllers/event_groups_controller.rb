@@ -98,7 +98,9 @@ class EventGroupsController < AjaxTreeController
     end
 
     def ensure_eventgroup_coordinator_access_to_node
-      unless @viewer.is_eventgroup_coordinator?(@node) && @viewer.is_eventgroup_coordinator?(EventGroup.find(params[:event_group][:parent_id]))
+      unless (params[:action] == 'create' || @viewer.is_eventgroup_coordinator?(@node)) && 
+        @viewer.is_eventgroup_coordinator?(EventGroup.find(params[:event_group][:parent_id]))
+
         render :inline => 'no permission'
       end
     end
