@@ -98,10 +98,19 @@ class EventGroupsController < AjaxTreeController
     end
 
     def ensure_eventgroup_coordinator_access_to_node
-      unless (params[:action] == 'create' || @viewer.is_eventgroup_coordinator?(@node)) && 
-        @viewer.is_eventgroup_coordinator?(EventGroup.find(params[:event_group][:parent_id]))
-
+      unless has_access_on_existing_node && has_access_on_new_node
         render :inline => 'no permission'
       end
     end
+
+    def has_access_on_existing_node() params[:action] == 'create' || @viewer.is_eventgroup_coordinator?(@node) end
+
+    def has_access_on_new_node
+      if params[:event_group][:parent_id].empty?
+        @viewer.is_projects_coordinator?
+      else
+        @viewer.is_eventgroup_coordinator?(EventGroup.find(params[:event_group][:parent_id]))
+      end
+    end
+
 end
