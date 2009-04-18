@@ -20,8 +20,12 @@ class ProcessorViewerController < InstanceController
 
     def ensure_permission
       unless @can_view_entire
-        flash[:notice] = "Sorry, you don't have permission to view references."
-        redirect_after_denied
+        if request.xhr?
+          render(:update) { |page| page.alert("Sorry, no permission for this action.") }
+        else
+          flash[:notice] = "Sorry, you don't have permission to view references."
+          redirect_after_denied
+        end
       end
     end
 
