@@ -21,6 +21,8 @@
             <% else %>
               <td>no</td>
             <% end %>
+            <td><%= viewer.name %></td>
+            <td><%=h viewer.id %></td>
             <td>
               <% 
                 view_result_params = { 
@@ -32,10 +34,8 @@
                   :method => :post
                 }
                  %>
-                <%= link_to_remote viewer.name, view_result_params %>
+                <%= link_to_remote viewer.viewer_userID, view_result_params %>
             </td>
-            <td><%=h viewer.id %></td>
-            <td><%=h viewer.viewer_userID %></td>
             <td><%=h viewer.person.person_email if viewer.person %></td>
             <td><%=h viewer.person.campus_shortDesc %></td>
             <td><%=h 'gcx' unless viewer.guid.empty? %></td>
