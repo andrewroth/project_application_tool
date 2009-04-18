@@ -7,7 +7,7 @@ class EventGroupsController < AjaxTreeController
   
   prepend_before_filter :get_node
   before_filter :set_ministries_options, :only => [ :index, :create, :edit ]
-  before_filter :ensure_eventgroup_coordinator, :except => [ :scope, :set_as_scope ]
+  before_filter :ensure_eventgroup_coordinator_access_to_node, :only => [ :create, :update, :delete ]
   before_filter :set_title, :except => [ :scope, :set_as_scope ]
 
   # bug with caching when you edit, it caches the edit screen
@@ -97,8 +97,8 @@ class EventGroupsController < AjaxTreeController
       session[:logo_url] = @eg.logo unless session[:logo_url]
     end
 
-    def ensure_eventgroup_coordinator
-      unless @viewer.is_eventgroup_coordinator?(@eg)
+    def ensure_eventgroup_coordinator_access_to_node
+      unless @viewer.is_eventgroup_coordinator?(@node) && @viewer.is_eventgroup_coordinator?(EventGroup.find(params[:event_group][:parent_id]))
         render :inline => 'no permission'
       end
     end
