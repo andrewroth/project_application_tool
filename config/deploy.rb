@@ -50,6 +50,10 @@ set :user, ENV['user']
 
 set :deploy_to, ENV['deploy_to']
 
+# remove old deploys after each new deploy
+set :use_sudo, false
+after "deploy", "deploy:cleanup"
+
 desc "Restart the web server"
 deploy.task :restart, :roles => :app do
   # sudo "/opt/lsws/bin/lswsctrl restart"
@@ -84,4 +88,3 @@ unless ENV['target'] == 'demo'
     end
   end
 end
-
