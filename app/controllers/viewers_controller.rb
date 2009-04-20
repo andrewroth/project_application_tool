@@ -2,7 +2,7 @@ class ViewersController < ApplicationController
   include Permissions
 
   before_filter :set_subject
-  before_filter :ensure_eventgroup_coordinator
+  before_filter :ensure_projects_coordinator
 
   def merge
     if request.post?
