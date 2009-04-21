@@ -1,9 +1,7 @@
 desc "Task to do some preparations for CruiseControl"
 task :prepare do
   RAILS_ENV = 'test'
-
-  # it seems to require a manual rubygems load also
-  require 'rubygems'
+  env['RUBYOPT'] = 'rubygems'
 end
 
 desc "Task for CruiseControl.rb"
