@@ -29,7 +29,7 @@ class BaseViewController < ApplicationController
     end
 
     def get_profile
-      @profile = Profile.find (params[:profile_id] || params[:id])
+      @profile = Profile.find(params[:profile_id] || params[:id])
       @project = @profile.project
       @appln = @profile.appln
     end
