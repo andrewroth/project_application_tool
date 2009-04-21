@@ -11,23 +11,6 @@ class ProfilePrepItemsController < ApplicationController
     @profile_prep_items = @profile.all_profile_prep_items
   end
 
-  # GET /profile_prep_items/new
-  # GET /profile_prep_items/new.xml
-  def new
-    @profile_prep_item = ProfilePrepItem.new
-    @prep_item = PrepItem.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @profile_prep_item }
-    end
-  end
-
-  # GET /profile_prep_items/1/edit
-  def edit
-    @profile_prep_item = ProfilePrepItem.find(params[:id])
-  end
-
   # POST /profile_prep_items
   # POST /profile_prep_items.xml
   def create
@@ -57,7 +40,7 @@ class ProfilePrepItemsController < ApplicationController
         format.html { redirect_to(@profile_prep_item) }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
+        format.html { render :action => "index" }
         format.xml  { render :xml => @profile_prep_item.errors, :status => :unprocessable_entity }
       end
     end
