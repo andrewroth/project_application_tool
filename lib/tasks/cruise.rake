@@ -1,7 +1,7 @@
 desc "Task to do some preparations for CruiseControl"
 task :prepare do
   RAILS_ENV = 'test'
-  env['RUBYOPT'] = 'rubygems'
+  ENV['RUBYOPT'] = 'rubygems'
 end
 
 desc "Task for CruiseControl.rb"
