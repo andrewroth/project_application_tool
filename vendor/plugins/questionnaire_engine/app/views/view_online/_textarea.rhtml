@@ -1,7 +1,8 @@
-<%=textarea.parent_id? ? textarea.text : ""%>
 <div>
-<% field = %|
+  <B><%=textarea.parent_id? ? textarea.text : ""%></B>
+  <% field = %|
 <div class="inconspicuous_window">#{textarea.get_answer(questionnaire_instance)}
 </div>          |%>
-<%= error_wrap(@current_page, textarea, field) %>
+  <%= error_wrap(@current_page, textarea, field) %>
+  <br/>
 </div>

@@ -1,6 +1,8 @@
-<div><%=textfield.parent_id? && textfield.text ? textfield.text+"<br />" : ""%>
-<% field = %|
+<div>
+  <b><%=textfield.parent_id? && textfield.text ? textfield.text+"<br />" : ""%></b>
+  <% field = %|
 <div class=\"inconspicuous_window\">#{textfield.get_answer(questionnaire_instance)}
 </div> | %>
-<%= error_wrap(@current_page, textfield, field) %>
+  <%= error_wrap(@current_page, textfield, field) %>
+  <br/>
 </div>
