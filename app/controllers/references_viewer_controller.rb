@@ -43,7 +43,7 @@ class ReferencesViewerController < ViewOnlineController
 
     ### questionnaire methods
   
-    def get_filter() nil end
+    def get_filter() { :filter => ['confidential'], :default => true } end
 
     def questionnaire_instance
       @instance = @reference_instance

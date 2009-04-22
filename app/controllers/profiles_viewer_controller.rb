@@ -63,7 +63,11 @@ class ProfilesViewerController < ViewOnlineController
       if %w(summary bulk_summary_forms).include? params[:action]
         { :filter => [ "in_summary_view" ], :default => false }
       elsif %w(entire).include? params[:action]
-        { :filter => ['confidential'], :default => true }
+        if @can_view_confidential
+          nil
+        else
+          { :filter => ['confidential'], :default => true }
+        end
       end
     end
 

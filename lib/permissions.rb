@@ -78,6 +78,21 @@ module Permissions
       @viewer.is_project_administrator? || @viewer.is_project_director?
   end
 
+  def set_can_view_confidential
+    if @viewer && @viewer.is_eventgroup_coordinator?(@eg)
+      @can_view_confidential = true
+      return
+    end
+
+    if !@viewer || !@project
+      @can_view_confidential = false
+      return
+    end
+
+    @viewer.set_project(@project)
+    @can_view_confidential = @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor?
+  end
+
   def set_can_perform_actions
     @can_perform_actions = @profile && ((@project && @viewer.is_processor?) || @viewer.is_eventgroup_coordinator?(@eg)) &&
            @profile.class == Applying
@@ -205,7 +220,7 @@ module Permissions
     set_can_view_summary
     set_can_view_references
     set_can_view_entire
-    set_can_see_confidential_questions
+    set_can_view_confidential
     set_can_perform_actions
   end
 

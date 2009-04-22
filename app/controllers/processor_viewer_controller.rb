@@ -38,8 +38,10 @@ class ProcessorViewerController < InstanceController
       if !@pdf && !@for_pdf && !(params[:action] == 'bulk_processor_form') &&
         (@viewer.is_eventgroup_coordinator?(@eg) || (@viewer.set_project(@project) && @viewer.is_processor?))
         nil
+      elsif @can_view_confidential
+        nil
       else
-       { :filter => ['confidential'], :default => true } 
+        { :filter => ['confidential'], :default => true } 
       end
     end
 
