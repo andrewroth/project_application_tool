@@ -1,7 +1,8 @@
 <% formats = [ 'html', 'excel(csv)' ] %>
 
-Project: <%= select_tag 'render_report_project_id', options_for_select([[]] + 
-  @eg.projects.collect{ |p| [p.title, p.id] } << [ 'All','all' ] ),
+Project: <%= select_tag 'render_report_project_id', 
+  options_for_select([[]] + @show_projects.collect{ |p| [p.title, p.id] } << [ 'All','all' ], 
+                     if @show_projects.length == 1 then @show_projects.first.id end ),
   :onChange => "update_view_links('custom_reports','render_report', [ 'id', 'project_id' ], [ #{formats.collect{|f| "'#{f}'"}.join(',')} ]);"
 %>
 

@@ -103,6 +103,11 @@ class CustomReportsController < ApplicationController
     record.save
   end
 
+  def show
+    @show_projects = (@viewer.is_eventgroup_coordinator?(@eg) ? @eg.projects : @viewer.current_projects_with_any_role(@eg))
+    super
+  end
+
   protected
 
   def render_row(sort, answers_cache, viewer, person, profile, appln)
