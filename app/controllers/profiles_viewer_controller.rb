@@ -22,7 +22,7 @@ class ProfilesViewerController < ViewOnlineController
   end
 
   def submit
-    flash[:notice] = "Sorry, only students can submit applications.  If you need to change an applicat ions status, you can do it with the move/withdraw link if you have sufficient access permissions.  If you don't, email the contact email and you should be a ble to."
+    flash[:notice] = "Sorry, only students can submit applications.  If you need to change an applications status, you can do it with the move/withdraw link if you have sufficient access permissions.  If you don't, email the contact email and you should be a ble to."
     redirect_to :back
   end
 
