@@ -5,6 +5,8 @@ class CustomReportsController < ApplicationController
 
   before_filter :set_title
   before_filter :ensure_staff
+  before_filter :set_show_projects, :only => [ :show, :render_report ]
+  before_filter :ensure_project_access, :only => [ :render_report ]
 
   active_scaffold :report do |config|
     config.columns = [ :title, :include_accepted, :include_applying, :include_staff, :report_elements ]
@@ -103,12 +105,17 @@ class CustomReportsController < ApplicationController
     record.save
   end
 
-  def show
+  protected
+
+  def set_show_projects
     @show_projects = (@viewer.is_eventgroup_coordinator?(@eg) ? @eg.projects : @viewer.current_projects_with_any_role(@eg))
-    super
   end
 
-  protected
+  def ensure_project_access
+    unless @show_projects.collect(&:id).include?(params[:project_id].to_i)
+      render(:text => "Sorry, no permission to view that project.")
+    end
+  end
 
   def render_row(sort, answers_cache, viewer, person, profile, appln)
       row = [ ]
