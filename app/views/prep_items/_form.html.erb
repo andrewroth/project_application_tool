@@ -16,18 +16,16 @@
     <%= check_box_tag "#{prep_item.id}_deadline_optional" %>
   <% end %>
   <br />
+  <%= observe_field "#{prep_item.id}_deadline_optional", :function => "$('#{prep_item.id}_deadline').toggle();" %>
 </p>
 
-<% if prep_item.deadline_optional %>
-  <div id="<%= prep_item.id %>_deadline" class="" style="display:none;">
-<% else %>
-  <div id="<%= prep_item.id %>_deadline">
-<% end %>
+<div id="<%= prep_item.id %>_deadline" <%= "style=\"display:none;\"" if prep_item.deadline_optional %>"
+  <p>
+    <%= f.label :deadline %><br />
+    <%= f.date_select :deadline %>
+  </p>
+</div>
 
-<p>
-  <%= f.label :deadline %><br />
-  <%= f.date_select :deadline %>
-</p>
 <p>
   <%= f.check_box :individual %> <%= f.label "This item applies to select individuals" %>
 </p>
