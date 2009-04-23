@@ -61,6 +61,8 @@ class ProfileTravelSegmentsController < ApplicationController
   # creates a travel segment and assigns it to the current profile
   def create_and_assign
     params[:travel_segment] ||= { }
+    params[:travel_segment][:event_group_id] = @eg.id
+
     begin
       @travel_segment = TravelSegment.new_with_parse params[:travel_segment]
 

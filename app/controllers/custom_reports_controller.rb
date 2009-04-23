@@ -118,68 +118,68 @@ class CustomReportsController < ApplicationController
   end
 
   def render_row(sort, answers_cache, viewer, person, profile, appln)
-      row = [ ]
+    row = [ ]
 
-      project = profile.project
-      emerg = person.emerg if person
+    project = profile.project
+    emerg = person.emerg if person
 
-      for re in @report_elements
-        if re.class == ReportElementQuestion
-          e = re.element
+    for re in @report_elements
+      if re.class == ReportElementQuestion
+        e = re.element
 
-	  # fix 1402 - http://ccc.clockingit.com/tasks/edit/79620
-	  if e.nil?
-	    row << "Couldn't find element #{re.element_id}"
-	    next
-	  end
+        # fix 1402 - http://ccc.clockingit.com/tasks/edit/79620
+        if e.nil?
+          row << "Couldn't find element #{re.element_id}"
+          next
+        end
 
-	  q = e.traverse_to_questionnaire
+        q = e.traverse_to_questionnaire
 
-          # find answer by question_id and instance_id
-          row << if appln
-	      instance = if q.name == 'Processor Form'
-	           appln.processor_form
-                 else
-		   # try to find a reference questionnaire
-                   ri = appln.reference_instances.detect { |ri|
-                     ri.questionnaire == q
-                   }
+        # find answer by question_id and instance_id
+        row << if appln
+                 instance = if q.name == 'Processor Form'
+                              appln.processor_form
+                            else
+                              # try to find a reference questionnaire
+                              ri = appln.reference_instances.detect { |ri|
+                                ri.questionnaire == q
+                              }
 
-                   ri || appln # use appln if can't find anything else
-		 end
+                              ri || appln # use appln if can't find anything else
+                            end
 
-              e.get_verbose_answer(instance, :cache => answers_cache, :cache_sorted => sort, :use_cache_only => true).to_s
-            else
-              ''
-            end
+                 e.get_verbose_answer(instance, :cache => answers_cache, :cache_sorted => sort, :use_cache_only => true).to_s
+        else
+        ''
+        end
 
-        elsif re.class == ReportElementModelMethod
-          mm = re.report_model_method
+      elsif re.class == ReportElementModelMethod
+        mm = re.report_model_method
 
-          if mm.nil?
-	    row << 'nil modelmethod'
-	  else
-            method_s = mm.method_s
-            class_s = mm.report_model.model_s
+        if mm.nil?
+          row << 'nil modelmethod'
+        else
+          method_s = mm.method_s
+          class_s = mm.report_model.model_s
 
-            result = if valid_eval_str(method_s) && valid_eval_str(class_s)
-                class_o = eval(class_s)
-                res = if class_o then class_o.send(method_s) else "error: '#{class_s}' not defined" end
-                res = if res.nil? then '' else res end 
-              else
-                'not allowed'
-              end
+          result = if valid_eval_str(method_s) && valid_eval_str(class_s)
+                     class_o = eval(class_s)
+                     res = if class_o then class_o.send(method_s) else "error: '#{class_s}' not defined" end
+                     res = if res.nil? then '' else res end 
+                   else
+                     'not allowed'
+                   end
 
-            row << result.to_s
-	  end
+          row << result.to_s
         end
       end
+    end
 
-      row
+    row
   end
 
   def valid_eval_str(s)
-    s =~ /^([a-zA-Z]|\.|_)+$/
+    s =~ /^([a-zA-Z0-9]|\.|_)+$/
   end
 
   def for_viewers_in_project(pids)
@@ -192,9 +192,9 @@ class CustomReportsController < ApplicationController
       appln = if profile.appln then profile.appln else nil end
 
       next unless (profile.class == Acceptance && @report.include_accepted) ||
-         (profile.class == Applying && @report.include_applying) || 
-         (profile.class == StaffProfile && @report.include_staff) 
-        
+        (profile.class == Applying && @report.include_applying) || 
+        (profile.class == StaffProfile && @report.include_staff) 
+
       yield viewer, person, profile, appln
     end
   end

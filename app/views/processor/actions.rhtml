@@ -22,7 +22,7 @@
     <% if !@invalid_pages.empty? %>
       </ul>
       <p>For legal reasons, we need processors to fill out a <%= link_to "processor form", 
-      :pile => 'processor', :controller => :processor_form, :profile_id => @profile.id %>
+           processor_viewer_url(@profile.id) %>
       before accepting or declining an application. The following pages are missing answers for required
       fields: </p>
       <ul>

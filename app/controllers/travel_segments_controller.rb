@@ -79,6 +79,7 @@ class TravelSegmentsController < ApplicationController
   
   def create
     params[:travel_segment] ||= { }
+    params[:travel_segment][:event_group_id] = @eg.id
     @travel_segment = TravelSegment.new_with_parse params[:travel_segment]
     @travel_segment.event_group_id = @eg.id
     

@@ -25,8 +25,8 @@ rails 2.3 seems to have a bug with eager loading
   potential_coaches.sort! { |a,b| a.name <=> b.name }
 
   @potential_coaches_pairs = potential_coaches.collect { |v| [ v.name, v.id ] }.uniq
-    @potential_coaches_pairs << [ Acceptance.support_coach_none, '' ]
-    @potential_coaches_cached_project = project
+  @potential_coaches_pairs << [ Acceptance.support_coach_none, '' ]
+  @potential_coaches_cached_project = project
 end
 %>
 

@@ -131,7 +131,7 @@ module ReportsHelper
           
           dropdown_choices = []
           dropdown_choices << ['',''] if include_blank
-          dropdown_choices += @eg.travel_segments.find(:all, :order => :departure_time).collect { 
+          dropdown_choices += TravelSegment.current.find_all { |ts| ts.profiles.detect { |p| p.project && p.project.event_group_id == @eg.id } }.collect {
                                   |ts| [ ts.short_desc, ts.id]
                               }
           dropdown_choices << [ 'All', 'all' ] if include_all
