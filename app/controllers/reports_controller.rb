@@ -398,7 +398,8 @@ class ReportsController < ApplicationController
       v2 = viewers_cache[a2.viewer_id]
       p1 = persons_cache[v1.access.person_id]
       p2 = persons_cache[v2.access.person_id]
-      p1.name <=> p2.name
+
+      v1.name <=> v2.name
     }
 
     accepted.each do |ac|
