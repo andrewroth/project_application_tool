@@ -18,7 +18,7 @@
                     :collection => ts_filter_list 
                     %>
       <% end %>
-      <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+      <%= '<td></td>' * 8 %>
       <td class='inconspicuous'>
         <%= check_box_tag "select_all", 1, false,
                           :class => "checkall", 

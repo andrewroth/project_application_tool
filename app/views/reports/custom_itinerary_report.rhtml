@@ -7,6 +7,7 @@
   <%= render :partial => 'travel_segments/advanced_travel_segments_filter', :locals => { :update_id => 'travel_segment_pool' } %>
 </div>
 <div id='travel_segment_pool'>
-  <%= render  :partial => 'ts_filter_list', :object => @travel_segments %>
+  <%= render  :partial => 'ts_filter_list', :object => @travel_segments,
+        :locals => { :prefix => '' } %>
 </div>
 

@@ -989,7 +989,7 @@ class ReportsController < ApplicationController
     @travel_segments = TravelSegment.filter(@travel_segments, params)
     
     render  :partial  => 'ts_filter_list', 
-            :locals   => { :sortable => true },
+            :locals   => { :sortable => true, :prefix => '' },
             :object   => @travel_segments
   end
   
