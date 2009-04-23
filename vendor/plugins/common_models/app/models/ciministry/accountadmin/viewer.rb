@@ -193,7 +193,7 @@ There's a bunch of logic for creating users in cim_hrdb.
   # returns true iff user can modify the given profile
   def can_modify_profile_in_project(p)
     set_project(p)
-    (is_projects_coordinator? || is_processor? || 
+    (is_eventgroup_coordinator?(p.event_group) || is_processor? || 
       is_project_director? || is_project_administrator?)
   end
   
