@@ -179,7 +179,7 @@ class CustomReportsController < ApplicationController
   end
 
   def valid_eval_str(s)
-    s =~ /^([a-zA-Z]|\.|_)+$/
+    s =~ /^([a-zA-Z0-9]|\.|_)+$/
   end
 
   def for_viewers_in_project(pids)
