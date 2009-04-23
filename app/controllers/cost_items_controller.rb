@@ -46,7 +46,7 @@ class CostItemsController < ApplicationController
       end
     end
     @cost_item.save!
-    list
+    #list
     render :partial => 'list'
   end
 
@@ -71,7 +71,7 @@ class CostItemsController < ApplicationController
     @cost_item = params[:cost_item][:type].constantize.new(params[:cost_item])
     if @cost_item.save
       flash[:notice] = 'CostItem was successfully created.'
-      list
+      #list
     else
       render :action => 'new'
     end

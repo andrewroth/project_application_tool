@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 module PrepItemSpecHelper
   def valid_prep_item_attributes 
-    { :title => "title", :description => "description", :event_group_id => 41}
+    { :title => "title", :description => "description", :event_group_id => 1}
   end
   
 end
@@ -12,12 +12,20 @@ describe PrepItem do
 
   include PrepItemSpecHelper
 
-  before(:each) do
+  before do
     @prep_item = PrepItem.new
+    PrepItem.stub!(:find).and_return(@prep_item)
+    @event_group = mock_model(EventGroup, :id => 1, :empty? => false, :logo => "a", :projects=>[], :prep_items =>[])
+    EventGroup.stub!(:find).and_return(@event_group)
+    EventGroup.stub!(:prep_items).and_return(@prep_item)
+    @project = mock_model(Project, :id => 1, :find_all_by_hidden => [@project], :collect =>[])
+    Project.stub!(:find).and_return(@project)
+    
   end
   
   it "should be valid" do
     @prep_item.attributes = valid_prep_item_attributes
+    @prep_item.save
     @prep_item.should be_valid
   end
   
@@ -34,7 +42,7 @@ describe PrepItem do
     @prep_item.save!
     prep1= PrepItem.new
     prep1.attributes = valid_prep_item_attributes
-    lambda { prep1.save }.should_not change(PrepItem, :count)
+    lambda {prep1.save }.should_not change(PrepItem, :count)
   end
   
   it "should create a new prep item if one with an identical title but is in a different eg already exists" do

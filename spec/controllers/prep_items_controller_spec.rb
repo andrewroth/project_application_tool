@@ -22,7 +22,7 @@ describe PrepItemsController do
     before do
       @prep_item = mock_model(PrepItem, :id => 1, :title => '', :description => '', 
         :projects => mock('projects', :delete_all => []), :event_group_id= => 1, :errors => '', :applies_to => "year_item", 
-        :individual => false, :deadline => '', :update_attributes => self, :destroy => self, :event_group= => nil, :event_group_id => nil)
+        :individual => false, :deadline => '', :update_attributes => self, :destroy => self, :event_group= => nil, :event_group_id => nil, :deadline_optional= => true)
       PrepItem.stub!(:find).and_return(@prep_item)
       @params = {}
     end
@@ -35,8 +35,6 @@ describe PrepItemsController do
     end
     
     it "should have a success notice when prep item is created" do
-    PrepItem.should_receive(:new).with(@params).and_return(@prep_item)
-      @prep_item.should_receive(:save)
       post 'create', :prep_item =>@params
       flash[:notice].should eql('PrepItem was successfully created.')
     end
@@ -80,7 +78,7 @@ describe PrepItemsController do
     before do
     @prep_item = mock_model(PrepItem, :id => 1, :title => '', :description => '', 
         :projects => mock('projects', :delete_all => []), :event_group_id= => 1, :errors => '', :applies_to => "year_item", 
-        :individual => false, :deadline => '', :update_attributes => nil, :destroy => self, :event_group= => nil, :event_group_id => nil)
+        :individual => false, :deadline => '', :update_attributes => nil, :destroy => self, :event_group= => nil, :event_group_id => nil, :deadline_optional= => false)
       PrepItem.stub!(:find).and_return(@prep_item)
       @params = {}
     end
