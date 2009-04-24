@@ -3,12 +3,12 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe ProfilePrepItemsController do
 
   before do 
-    mock_viewer_as_event_group_coordinator
-    mock_event_group
-    mock_project
-    mock_login
+    stub_viewer_as_event_group_coordinator
+    stub_event_group
+    stub_project
+    setup_login
     
-    @prep_item = mock_model(PrepItem, :id => 1, :title => '', :description => '', 
+    @prep_item = stub_model(PrepItem, :id => 1, :title => '', :description => '', 
         :projects => mock('projects', :delete_all => []), :event_group_id= => 1, :errors => '', :applies_to => "year_item", 
         :individual => false, :deadline => '', :update_attributes => self, :destroy => self, :event_group= => nil, :event_group_id => nil)
     PrepItem.stub!(:find).and_return(@prep_item)
@@ -17,13 +17,17 @@ describe ProfilePrepItemsController do
   describe "valid profile prep item attributes" do
     
     before do
-      mock_profile_prep_item
-      mock_profile
+      stub_profile_prep_item
+      stub_profile
       @params = { :id => 1 }
     end
     
     it "should create new profile prep item" do
-      post 'create', :profile_prep_item =>@params
+      ppi = stub_model(ProfilePrepItem)
+      ProfilePrepItem.should_receive(:new).and_return(ppi)
+      ppi.should_receive(:save).and_return(true)
+      post 'create', :profile_prep_item => @params
+      assigns[:profile_prep_item].should_not be_nil
       assigns[:profile_prep_item].should_not be_new_record
       flash[:error].should be_nil
       flash[:notice].should_not be_nil
@@ -47,15 +51,15 @@ describe ProfilePrepItemsController do
     
   end
   
-  def mock_profile_prep_item
-    @profile_prep_item = mock_model(ProfilePrepItem, :id => 1, :submitted => true, :received => true, :notes => '', :optional => true,
+  def stub_profile_prep_item
+    @profile_prep_item = stub_model(ProfilePrepItem, :id => 1, :submitted => true, :received => true, :notes => '', :optional => true,
                                     :update_attributes => nil, :destroy => self, :find_or_create_by_prep_item_id => mock('prep_item', :save! => true),
                                     :save => true, :save! => true)
     ProfilePrepItem.stub!(:find).and_return(@profile_prep_item)
   end
 
-  def mock_profile
-    @profile = mock_model(Profile, :id => 1, :all_prep_items => [@prep_item], :profile_prep_items => @profile_prep_item, 
+  def stub_profile
+    @profile = stub_model(Profile, :id => 1, :all_prep_items => [@prep_item], :profile_prep_items => @profile_prep_item, 
                           :all_profile_prep_items => [ @profile_prep_item ])
     Profile.stub!(:find).and_return(@profile)
   end
@@ -63,8 +67,8 @@ describe ProfilePrepItemsController do
   describe "with invalid params" do
   
   before do
-      mock_profile_prep_item
-      mock_profile
+      stub_profile_prep_item
+      stub_profile
       @params = { }
     end
   

@@ -52,12 +52,14 @@ Spec::Runner.configure do |config|
   # For more information take a look at Spec::Example::Configuration and Spec::Runner
 end
 
-def mock_login
+def setup_login
   throw "mock_login needs to be done after @viewer and @event_group are set" unless @viewer && @event_group
   session[:cas_sent_to_gateway] = true # make cas think it's already gone to the server to avoid redirect
   session[:user_id] = @viewer.id
   session[:event_group_id] = @event_group.id
 end
+
+def mock_login() setup_login end
 
 def mock_viewer_as_event_group_coordinator(params = {})
   mock_viewer({ :is_student? => false, :is_eventgroup_coordinator? => true, :is_projects_coordinator? => false }.merge(params))
@@ -139,6 +141,50 @@ def depends_on(v)
     caller.first =~ /`(.*)'/
     raise "#{$1} requires @#{v} to be defined."
   end
+end
+
+def stub_viewer_as_staff(params = {}, person_params = {})
+  stub_viewer_short params.merge(:st => true), person_params
+end
+
+def stub_viewer_as_event_group_coordinator(params = {}, person_params = {})
+  stub_viewer_short params.merge(:egc => true), person_params
+end
+
+def stub_viewer_short(params = {}, person_params = {})
+  p = { :s => false, :egc => false, :pc => false, :st => false }.merge(params)
+  full_params = {
+    :is_student? => p[:s],
+    :is_eventgroup_coordinator? => p[:egc],
+    :is_staff? => p[:st]
+  }
+  stub_viewer(full_params, person_params)
+end
+
+def stub_viewer(params = {}, person_params = {})
+  person_params[:person_fname] ||= 'John'
+  person_params[:person_lname] ||= 'Smith'
+  @person = stub_model(Person, person_params)
+  params[:person] ||= @person
+  @viewer = stub_model(Viewer, params)
+  Viewer.stub!(:find).with(@viewer.id).and_return(@viewer)
+end
+
+def stub_profile(params = {})
+  @profile = stub_model(Profile, params)
+  Project.stub!(:profile).with(@profile.id).and_return(@profile)
+end
+
+def stub_project(params = {})
+  @project = stub_model(Project, params)
+  Project.stub!(:project).with(@project.id).and_return(@project)
+end
+
+def stub_event_group(params = {})
+  params[:filename] ||= 'logo.png'
+  @event_group = stub_model(EventGroup, params)
+  EventGroup.stub!(:find).with(:all).and_return([ @event_group] )
+  EventGroup.stub!(:find).with(@event_group.id).and_return(@event_group)
 end
 
 FIXTURE_CLASS = {
