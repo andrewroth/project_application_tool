@@ -126,6 +126,9 @@ def mock_ar_arr(arr, extras = {})
            def @target.set_arr(arr)
              @arr = arr
            end
+           def @target.delete_all()
+             @arr = []
+           end
            def @target.method_missing(sym, *args, &block)
              @arr.send sym, *args, &block
            end
@@ -180,6 +183,7 @@ end
 
 def stub_project(params = {})
   params[:title] ||= 'project_title'
+  params[:event_group] ||= @event_group
   @project = stub_model(Project, params)
   @event_group.stub!(:projects => [ @project ])
   stub_model_find(:project)
@@ -197,6 +201,8 @@ def stub_model_find(v)
   inst = instance_variable_get("@#{v}")
   inst.class.stub!(:find).with(inst.id).and_return(inst)
   inst.class.stub!(:find).with(inst.id.to_s).and_return(inst)
+  inst.class.stub!(:find).with([inst.id]).and_return(inst)
+  inst.class.stub!(:find).with([inst.id.to_s]).and_return(inst)
 end
 
 FIXTURE_CLASS = {
