@@ -13,7 +13,7 @@ describe CostItemsController do
       stub_viewer_as_event_group_coordinator
       stub_profile
       setup_login
-      @profile.stub!(:profile_cost_items => mock_ar_arr([]))
+      @profile.stub!(:profile_cost_items => [])
     end
     
     describe "create" do
