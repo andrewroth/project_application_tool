@@ -58,7 +58,7 @@ describe CostItemsController do
 
       before do
         @cost_item = stub_model(CostItem)
-        CostItem.should_receive(:find).with(@cost_item.id.to_s).and_return(@cost_item)
+        stub_model_find(:cost_item)
       end
 
       it "should update cost item" do
@@ -103,31 +103,25 @@ describe CostItemsController do
       stub_profile
       setup_login
     end
-    
-    describe "" do
 
-      before do
-      end
+    it "should make a profile cost item" do
+      @profile_cost_item = stub_model(ProfileCostItem, :save => true)
+      ProfileCostItem.should_receive(:new).and_return(@profile_cost_item)
+      post 'create', :cost_item => @params, :profile_id => '1'
+      assigns[:cost_item].class.should == ProfileCostItem
+    end
 
-      it "should make a profile cost item" do
-        @profile_cost_item = stub_model(ProfileCostItem, :save => true)
-        ProfileCostItem.should_receive(:new).and_return(@profile_cost_item)
-        post 'create', :cost_item => @params, :profile_id => '1'
-        assigns[:cost_item].class.should == ProfileCostItem
-      end
-
-      it "should not be able to change type to ProjectCostItem" do
-        @cost_item = stub_model(CostItem)
-        CostItem.should_receive(:find).with(@cost_item.id.to_s).and_return(@cost_item)
-        @cost_item.should_not_receive(:[]=).with(:type, "ProjectCostItem")
-        post 'set_applies_to', :id => @cost_item.id, :value => 1
-      end
+    it "should not be able to change type to ProjectCostItem" do
+      @cost_item = stub_model(CostItem)
+      stub_model_find(:cost_item)
+      @cost_item.should_not_receive(:[]=).with(:type, "ProjectCostItem")
+      post 'set_applies_to', :id => @cost_item.id, :value => 1
+    end
 
     end
 
     it "should render list" do
       @event_group.stub!(:cost_items).and_return([@cost_item])
-       get 'list'
+      get 'list'
     end
-  end
 end
