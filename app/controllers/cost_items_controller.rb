@@ -1,7 +1,7 @@
 class CostItemsController < ApplicationController
   before_filter :set_menu_titles
   before_filter :set_project_access_list
-  before_filter :get_cost_item, :only => [ :show, :set_applies_to, :destroy, :edit ]
+  before_filter :get_cost_item, :only => [ :show, :set_applies_to, :destroy, :edit, :update ]
   in_place_edit_for :cost_item, :description
   in_place_edit_for :cost_item, :amount
 	
@@ -15,7 +15,7 @@ class CostItemsController < ApplicationController
          :redirect_to => { :action => :list }
 
   def list
-    @cost_items = @eg.cost_items.find(:all)
+    @cost_items = @eg.cost_items
     @cost_items.delete_if{ |ci| ci.class == ProfileCostItem }
     # get rid of cost items for projects that don't exist any more
     @cost_items.delete_if{ |ci| ci.class == ProjectCostItem && (begin ci.project.nil? rescue true end) }
@@ -36,7 +36,6 @@ class CostItemsController < ApplicationController
       end
     else
       project_id = params[:value].to_i
-      @cost_item[:type] = 'ProjectCostItem'
       if @project_access.rassoc(project_id).nil?
         render :inline => 'No access to that project.'
         return
@@ -52,7 +51,7 @@ class CostItemsController < ApplicationController
 
   def create
     params[:cost_item] ||= { }
-    if !params[:profile_id].nil?
+    if params[:profile_id]
       params[:cost_item][:type]       ||= 'ProfileCostItem'
       params[:cost_item][:profile_id] ||= (params[:profile_id] || params[:acceptance_id])
     elsif @viewer.is_eventgroup_coordinator?(@eg)
@@ -78,7 +77,6 @@ class CostItemsController < ApplicationController
   end
 
   def update
-    @cost_item = CostItem.find(params[:id])
     if @cost_item.update_attributes(params[:cost_item])
       flash[:notice] = 'CostItem was successfully updated.'
       redirect_to :action => 'show', :id => @cost_item
