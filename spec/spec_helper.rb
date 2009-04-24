@@ -52,64 +52,98 @@ Spec::Runner.configure do |config|
   # For more information take a look at Spec::Example::Configuration and Spec::Runner
 end
 
-def setup_eg
-  session[:event_group_id] = 1
-  @eg = mock("eg", :empty? => false, 
-                   :default_text_area_length => nil, 
-                   :id => 1,
-                   :logo => '/logo'
-            )
-  EventGroup.stub!(:find).and_return(@eg)
+def mock_login
+  throw "mock_login needs to be done after @viewer and @event_group are set" unless @viewer && @event_group
+  session[:cas_sent_to_gateway] = true # make cas think it's already gone to the server to avoid redirect
+  session[:user_id] = @viewer.id
+  session[:event_group_id] = @event_group.id
 end
 
-def setup_form
-  @form = mock("form", 
-      :id => 1,
-      :questionnaire => mock('questionnaire', :filter= => nil, :pages => []), 
-      :event_group => @eg, 
-      :event_group_id => @eg.id, 
-      :title => 'a form'
-  )
-  if @eg
-    @forms = mock('forms', :find_by_hidden => @form, :find_all_by_hidden => [ @form ])
-    @forms.stub!(:find).with('1').and_return(@form)
-    @eg.stub!(:forms).and_return(@forms)
+def mock_viewer_as_event_group_coordinator(params = {})
+  mock_viewer({ :is_student? => false, :is_eventgroup_coordinator? => true, :is_projects_coordinator? => false }.merge(params))
+end
+
+def mock_viewer_as_projects_coordinator(params = {})
+  mock_viewer({ :is_student? => false, :is_eventgroup_coordinator? => false, :is_projects_coordinator? => true }.merge(params))
+end
+
+def mock_viewer_as_staff(params = {})
+  mock_viewer({ :is_student? => false, :is_eventgroup_coordinator? => false, :is_projects_coordinator? => false, 
+              :is_project_administrator? => false, :is_project_director? => false,
+              :set_project => true }.merge(params))
+end
+
+def mock_viewer(params = {})
+  @viewer = mock_model(Viewer, { 
+    :viewer_userID => 'copter', :viewer_passWord => '9cdfb439c7876e703e307864c9167a15', # password is lol
+    :viewer_isActive= => 1, :viewer_lastLogin= => Time.now, :save! => '', :person => '', :name => 'Cop Ter',
+    :profile_cost_items => []
+  }.merge(params))
+  Viewer.stub!(:find).and_return(@viewer)
+
+  # tie-in with profile if possible
+  if @profile
+    @profile.stub!(:viewer => @viewer)
   end
 end
 
-def setup_viewer(options = {})
-  options[:student] ||= false
-  options[:pc] ||= false
-  options[:egc] ||= false
-
-  session[:user_id] = 1
-
-  @viewer = mock("viewer", {
-    :project_director_projects => [],
-    :project_administrator_projects => [],
-    :support_coach_projects => [],
-    :project_staff_projects => [],
-    :processor_projects => [],
-    :is_student? => options[:student],
-    :is_projects_coordinator? => options[:pc],
-    :is_eventgroup_coordinator? => options[:egc],
-    :name => 'Bob',
-    :id => 1
-  })
-
-  #Viewer.stub!(:find).with(1).and_return(@viewer)
-  Viewer.stub!(:find).and_return(@viewer)
+def mock_event_group(params = {})
+  @form = mock_model(Form)
+  @event_group = mock_model(EventGroup, {
+    :title => 'event_group', :empty? => false, :logo => "a", 
+    :projects => (@project ? [ @project ] : [ ]), :prep_items => [],
+    :forms => mock_ar_arr([@form], :find_by_hidden => @form)
+  }.merge(params))
+  EventGroup.stub!(:find).and_return(@event_group)
 end
 
-def setup_project
-  @project = mock('project', :id => 1, :title => "some project")
-  @eg.stub!(:projects).and_return([ @project ]) if @eg
+def mock_project(params = {})
+  @project = mock_model(Project, { :title => 'project', :find_all_by_hidden => [@project], :collect => [], :all_cost_items => [] }.merge(params))
+
+  # tie-in to what's already defined
+  if @event_group
+    @event_group.stub!(:projects => [ @project ])
+    @project.stub!(:event_group => @event_group)
+  end
+
   Project.stub!(:find).and_return(@project)
 end
 
-def setup_profile
-  @profile = mock('profile', :id => 1, :appln => @appln)
+def mock_profile
+  depends_on(:viewer)
+  @profile = mock_model(Profile, :destroy => true, :viewer => @viewer, :viewer_id => @viewer.id,
+                       :update_costing_total_cache => true)
   Profile.stub!(:find).and_return(@profile)
+  Profile.stub!(:project).and_return(@project)
+end
+
+def mock_ar_arr(arr, extras = {})
+  m = mock("ar_arr_#{arr.object_id}")
+  m.__send__(:__mock_proxy).instance_eval <<-CODE
+           def @target.set_arr(arr)
+             @arr = arr
+           end
+           def @target.[](k)
+             @arr[k]
+           end
+           def @target.sort!(*params)
+             [].sort! *params
+           end
+           def @target.each(*params)
+             [].each *params
+           end
+   CODE
+  m.set_arr(arr)
+  m.stub!(:reload => true)
+  m.stub!(extras)
+  return m
+end
+
+def depends_on(v)
+  unless instance_variable_get("@#{v}")
+    caller.first =~ /`(.*)'/
+    raise "#{$1} requires @#{v} to be defined."
+  end
 end
 
 FIXTURE_CLASS = {

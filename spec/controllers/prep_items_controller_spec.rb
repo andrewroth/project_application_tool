@@ -26,28 +26,24 @@ describe PrepItemsController do
       PrepItem.stub!(:find).and_return(@prep_item)
       @params = {}
     end
-    it "should create a prep item upon save" do
+    it "should create a prep item upon create" do
       PrepItem.should_receive(:new).with(@params).and_return(@prep_item)
-      @prep_item.should_receive(:save)
-      post 'create', :prep_item =>@params
+      @prep_item.should_receive(:save).and_return(true)
+      post 'create', :prep_item => @params
       assigns[:prep_item].should_not be_new_record
       flash[:error].should be_nil
-    end
-    
-    it "should have a success notice when prep item is created" do
-      post 'create', :prep_item =>@params
-      flash[:notice].should eql('PrepItem was successfully created.')
+      flash[:notice].should == 'PrepItem was successfully created.'
     end
     
     it "should update prep item" do
-      post 'update', :prep_item=>@params, :id => 1
+      post 'update', :prep_item => @params, :id => 1
       assigns[:prep_item].should_not be_new_record
       flash[:notice].should_not be_nil
     end
     
     it "should have a success notice when prep item is updated" do
-      post 'update', :prep_item =>@params, :id => 1
-      flash[:notice].should eql('PrepItem was successfully updated.')
+      post 'update', :prep_item => @params, :id => 1
+      flash[:notice].should == 'PrepItem was successfully updated.'
     end
     
     it "should destroy prep item" do
@@ -84,7 +80,7 @@ describe PrepItemsController do
     end
     
     it "should not create a prep item on failed save" do
-      post 'create', :prep_item =>@params
+      post 'create', :prep_item => @params
       assigns[:prep_item].should be_new_record
     end
     

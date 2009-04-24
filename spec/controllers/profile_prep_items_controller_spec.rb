@@ -3,17 +3,10 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe ProfilePrepItemsController do
 
   before do 
-    session[:cas_sent_to_gateway] = true # make cas think it's already gone to the server to avoid redirect
-    @viewer = mock_model(Viewer, :id => 1, :viewer_userID => "copter", :viewer_passWord => "9cdfb439c7876e703e307864c9167a15",
-                        :viewer_isActive= => 1, :viewer_lastLogin= => Time.now, :save! =>'', :person =>'', :is_student? => false)
-    Viewer.stub!(:find).and_return(@viewer)
-    @event_group = mock_model(EventGroup, :id => 1, :empty? => false, :logo => "a", :projects=>[], :prep_items =>[])
-    EventGroup.stub!(:find).and_return(@event_group)
-    @project = mock_model(Project, :id => 1, :find_all_by_hidden => [@project], :collect =>[])
-    Project.stub!(:find).and_return(@project)
-    @event_group.stub!(:projects).and_return(@project)
-    session[:user_id] = @viewer.id
-    session[:event_group_id]=1
+    mock_viewer_as_event_group_coordinator
+    mock_event_group
+    mock_project
+    mock_login
     
     @prep_item = mock_model(PrepItem, :id => 1, :title => '', :description => '', 
         :projects => mock('projects', :delete_all => []), :event_group_id= => 1, :errors => '', :applies_to => "year_item", 
@@ -24,11 +17,8 @@ describe ProfilePrepItemsController do
   describe "valid profile prep item attributes" do
     
     before do
-      @profile_prep_item = mock_model(ProfilePrepItem, :id => 1, :submitted => true, :received => true, :notes => '', :optional => true, 
-                                      :update_attributes => self, :destroy => self, :find_or_create_by_prep_item_id => self)
-      ProfilePrepItem.stub!(:find).and_return(@profile_prep_item)
-      @profile = mock_model(Profile, :id => 1, :all_prep_items => [@prep_item], :profile_prep_items => @profile_prep_item)
-      Profile.stub!(:find).and_return(@profile)
+      mock_profile_prep_item
+      mock_profile
       @params = { :id => 1 }
     end
     
@@ -50,7 +40,6 @@ describe ProfilePrepItemsController do
     end
     
     it "should render index" do
-      @profile_prep_item.should_receive(:save)
       post 'index'
       response.should be_success
       response.should render_template('index')
@@ -58,15 +47,24 @@ describe ProfilePrepItemsController do
     
   end
   
+  def mock_profile_prep_item
+    @profile_prep_item = mock_model(ProfilePrepItem, :id => 1, :submitted => true, :received => true, :notes => '', :optional => true,
+                                    :update_attributes => nil, :destroy => self, :find_or_create_by_prep_item_id => mock('prep_item', :save! => true),
+                                    :save => true, :save! => true)
+    ProfilePrepItem.stub!(:find).and_return(@profile_prep_item)
+  end
+
+  def mock_profile
+    @profile = mock_model(Profile, :id => 1, :all_prep_items => [@prep_item], :profile_prep_items => @profile_prep_item, 
+                          :all_profile_prep_items => [ @profile_prep_item ])
+    Profile.stub!(:find).and_return(@profile)
+  end
+
   describe "with invalid params" do
   
   before do
-      @profile_prep_item = mock_model(ProfilePrepItem, :id => 1, :submitted => true, :received => true, :notes => '', :optional => true, 
-                                      :update_attributes => nil, :destroy => self, :find_or_create_by_prep_item_id => self, :save => false)
-      ProfilePrepItem.stub!(:find).and_return(@profile_prep_item)
-      @profile = mock_model(Profile, :id => 1, :all_prep_items => [@prep_item], :profile_prep_items => @profile_prep_item)
-      Profile.stub!(:find).and_return(@profile)
-      ProfilePrepItem.stub!(:find).and_return(@profile_prep_item)
+      mock_profile_prep_item
+      mock_profile
       @params = { }
     end
   

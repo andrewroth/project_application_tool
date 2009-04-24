@@ -3,48 +3,43 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe CostItemsController do
 
   before do 
-    session[:cas_sent_to_gateway] = true # make cas think it's already gone to the server to avoid redirect
-    
-    @event_group = mock_model(EventGroup, :id => 1, :title => '', :empty? => false, :logo => "a", :projects=>[], :prep_items =>[])
-    EventGroup.stub!(:find).and_return(@event_group)
-    @project = mock_model(Project, :id => 1, :find_all_by_hidden => [@project], :collect =>[])
-    Project.stub!(:find).and_return(@project)
-    @EventGroup.stub!(:projects).and_return(@project)
-    
-    session[:event_group_id]=1
-    
-    @cost_item = mock_model(CostItem, :id => 1, :description => '', :type => '', :amount => 1, :optional => true, :update_attributes =>self, :find => self,
+    mock_event_group
+    mock_project
+
+    @cost_item = mock_model(CostItem, :description => '', :type => '', :amount => 1, 
+                            :optional => true, :update_attributes => true,
                             :delete_if => '', :update_attributes => self)
     CostItem.stub!(:find).and_return(@cost_item)
     CostItem.stub!(:project).and_return(@project)
     @event_group.stub!(:cost_items).and_return(mock('cost item results', :find => [@cost_item]))
+
+    Profile.stub!(:find_all_by_project_id).and_return(mock_ar_arr([]))
+
     @params = {}
   end
 
   describe "for eventgroup coordinator" do
     before do
-      @viewer = mock_model(Viewer, :id => 1, :viewer_userID => "copter", :viewer_passWord => "9cdfb439c7876e703e307864c9167a15",
-                          :viewer_isActive= => 1, :viewer_lastLogin= => Time.now, :save! =>'', :person =>'', :is_student? => false,
-                          :is_eventgroup_coordinator? => true)
-      Viewer.stub!(:find).and_return(@viewer)
-      session[:user_id] = @viewer.id
+      mock_viewer_as_event_group_coordinator
+      mock_profile
+      mock_login
+      @profile.stub!(:profile_cost_items => mock_ar_arr([]))
     end
     
     it "should make a profile cost item" do
-      post 'create', :cost_item => @params, :profile_id => '1'
-      @cost_item.type.should eql(ProfileCostItem)
+      post 'create', :cost_item => @params, :profile_id => @profile.id
+      assigns[:cost_item].class.should == ProfileCostItem
     end
     
     it "should not be a profile cost item if type is assigned" do
       assigns[:type] = 'YearCostItem'
       post 'create', :cost_item => @params
-      @cost_item.type.should eql(YearCostItem)
+      assigns[:cost_item].class.should == YearCostItem
     end
     
-    it "should make yearcostitems for eg coordinators" do
-      @event_group.should_receive(:is_eventgroup_coordinator).with(@viewer).and_return(true)
+    it "should make YearCostItems" do
       post 'create', :cost_item => @params
-      @cost_item.type.should eql(YearCostItem)
+      assigns[:cost_item].class.should == YearCostItem
     end
     
     it "should create new cost item" do
@@ -84,16 +79,15 @@ describe CostItemsController do
   
   describe "for non eventgroup coordinator" do
     before do
-      @viewer = mock_model(Viewer, :id => 1, :viewer_userID => "copter", :viewer_passWord => "9cdfb439c7876e703e307864c9167a15",
-                          :viewer_isActive= => 1, :viewer_lastLogin= => Time.now, :save! =>'', :person =>'', :is_student? => false,
-                          :is_eventgroup_coordinator? => false, :acceptance_id => 1)
-      Viewer.stub!(:find).and_return(@viewer)
-      session[:user_id] = @viewer.id
+      mock_viewer_as_staff
+      mock_profile
+      mock_login
     end
     
     it "should make a profile cost item" do
+      ProfileCostItem.should_receive(:new).and_return(mock_model(ProfileCostItem, :save => true))
       post 'create', :cost_item => @params, :profile_id => '1'
-      @cost_item.type.should eql(ProfileCostItem)
+      assigns[:cost_item].class.should == ProfileCostItem
     end
     
     it "should be able to change type to projectcostitem" do
