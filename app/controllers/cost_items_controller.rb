@@ -53,8 +53,8 @@ class CostItemsController < ApplicationController
   def create
     params[:cost_item] ||= { }
     if !params[:profile_id].nil?
-      params[:cost_item][:type]           ||= 'ProfileCostItem'
-      params[:cost_item][:acceptance_id]  ||= params[:acceptance_id]
+      params[:cost_item][:type]       ||= 'ProfileCostItem'
+      params[:cost_item][:profile_id] ||= (params[:profile_id] || params[:acceptance_id])
     elsif @viewer.is_eventgroup_coordinator?(@eg)
       params[:cost_item][:type] ||= 'YearCostItem'
     elsif !@project_access.empty?
