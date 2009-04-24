@@ -98,11 +98,12 @@ def mock_event_group(params = {})
 end
 
 def mock_project(params = {})
-  @project = mock_model(Project, { :title => 'project', :find_all_by_hidden => [@project], :collect => [], :all_cost_items => [] }.merge(params))
+  @project = mock_model(Project, { :title => 'project', :find_all_by_hidden => [@project], :collect => [], 
+                        :all_cost_items => [], :prep_items => [] }.merge(params))
 
   # tie-in to what's already defined
   if @event_group
-    @event_group.stub!(:projects => [ @project ])
+    @event_group.stub!(:projects => mock_ar_arr([ @project ], :find_all_by_hidden => [ @project ]))
     @project.stub!(:event_group => @event_group)
   end
 
@@ -123,14 +124,8 @@ def mock_ar_arr(arr, extras = {})
            def @target.set_arr(arr)
              @arr = arr
            end
-           def @target.[](k)
-             @arr[k]
-           end
-           def @target.sort!(*params)
-             [].sort! *params
-           end
-           def @target.each(*params)
-             [].each *params
+           def @target.method_missing(sym, *args, &block)
+             @arr.send sym, *args, &block
            end
    CODE
   m.set_arr(arr)
