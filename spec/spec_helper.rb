@@ -176,12 +176,15 @@ def stub_profile(params = {})
 end
 
 def stub_project(params = {})
+  params[:title] ||= 'project_title'
   @project = stub_model(Project, params)
+  @event_group.stub!(:projects => [ @project ])
   Project.stub!(:project).with(@project.id).and_return(@project)
 end
 
 def stub_event_group(params = {})
   params[:filename] ||= 'logo.png'
+  params[:title] ||= 'event_group_title'
   @event_group = stub_model(EventGroup, params)
   EventGroup.stub!(:find).with(:all).and_return([ @event_group] )
   EventGroup.stub!(:find).with(@event_group.id).and_return(@event_group)
