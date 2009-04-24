@@ -151,12 +151,14 @@ def stub_viewer_as_event_group_coordinator(params = {}, person_params = {})
   stub_viewer_short params.merge(:egc => true), person_params
 end
 
-def stub_viewer_short(params = {}, person_params = {})
-  p = { :s => false, :egc => false, :pc => false, :st => false }.merge(params)
+def stub_viewer_short(p = {}, person_params = {})
   full_params = {
-    :is_student? => p[:s],
-    :is_eventgroup_coordinator? => p[:egc],
-    :is_staff? => p[:st]
+    :project_director_projects => (p[:pd] ? [ @project ] : []),
+    :project_administrator_projects => (p[:pa] ? [ @project ] : []),
+    :support_coach_projects => (p[:sc] ? [ @project ] : []),
+    :project_staff_projects => (p[:st] ? [ @project ] : []),
+    :processor_projects => (p[:pr] ? [ @project ] : []),
+    :is_eventgroup_coordinator? => p[:egc]
   }
   stub_viewer(full_params, person_params)
 end
@@ -165,21 +167,22 @@ def stub_viewer(params = {}, person_params = {})
   person_params[:person_fname] ||= 'John'
   person_params[:person_lname] ||= 'Smith'
   @person = stub_model(Person, person_params)
+  stub_model_find(:person)
   params[:person] ||= @person
   @viewer = stub_model(Viewer, params)
-  Viewer.stub!(:find).with(@viewer.id).and_return(@viewer)
+  stub_model_find(:viewer)
 end
 
 def stub_profile(params = {})
   @profile = stub_model(Profile, params)
-  Project.stub!(:profile).with(@profile.id).and_return(@profile)
+  stub_model_find(:profile)
 end
 
 def stub_project(params = {})
   params[:title] ||= 'project_title'
   @project = stub_model(Project, params)
   @event_group.stub!(:projects => [ @project ])
-  Project.stub!(:project).with(@project.id).and_return(@project)
+  stub_model_find(:project)
 end
 
 def stub_event_group(params = {})
@@ -187,7 +190,13 @@ def stub_event_group(params = {})
   params[:title] ||= 'event_group_title'
   @event_group = stub_model(EventGroup, params)
   EventGroup.stub!(:find).with(:all).and_return([ @event_group] )
-  EventGroup.stub!(:find).with(@event_group.id).and_return(@event_group)
+  stub_model_find(:event_group)
+end
+
+def stub_model_find(v)
+  inst = instance_variable_get("@#{v}")
+  inst.class.stub!(:find).with(inst.id).and_return(inst)
+  inst.class.stub!(:find).with(inst.id.to_s).and_return(inst)
 end
 
 FIXTURE_CLASS = {
