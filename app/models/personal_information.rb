@@ -18,7 +18,7 @@ class PersonalInformation < CustomElement
       copy = params[:appln_person].delete :permanent_same_as_local
       if copy == '1'
         for suffix in %w(city addr pc phone)
-	  params[:appln_person][:"person_#{suffix}"] = params[:appln_person][:"person_local_#{suffix}"]
+          params[:appln_person][:"person_#{suffix}"] = params[:appln_person][:"person_local_#{suffix}"]
         end
         params[:appln_person][:province_id] = params[:appln_person][:person_local_province_id]
         params[:appln_person][:country_id] = params[:appln_person][:person_local_country_id]
