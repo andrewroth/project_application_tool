@@ -21,10 +21,14 @@ class CustomElement < Element
     @emerg = @person.emerg
   
     for section in custom_element_required_sections
-      if (section.name == 'appln_person' && [nil, ''].include?(@person.send(section.attribute))) ||
+      sa = section.attribute
+      sa_assoc = (sa =~ /(.*)_id/; $1)
+      if (section.name == 'appln_person' && (
+            [nil, ''].include?(@person.send(sa)) ||
+            sa_assoc && @person.send(sa_assoc).nil?)) ||
          (section.name == 'emerg' && [nil, ''].include?(@emerg.send(section.attribute)))
          
-        page.errors.add_to_base("Attribute '#{section.attribute.to_s.camelize}' is required")
+        page.errors.add_to_base("Attribute '#{section.attribute.humanize}' is required")
         page.add_invalid_element("#{section.name}_#{section.attribute}")
       end
     end
