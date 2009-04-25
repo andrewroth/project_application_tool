@@ -75,13 +75,13 @@ describe CostItemsController do
         response.should be_success
       end
 
-      it "should be able to change type to yearCostItem" do
+      it "should be able to change type to YearCostItem" do
         @cost_item.should_receive(:[]=).with(:type, "YearCostItem")
         @cost_item.should_receive(:save!)
         @cost_item.stub!(:update_costing_total_cache)
         post 'set_applies_to', :id => @cost_item.id, :value => 'all'
       end
-
+            
     end
     
     it "should render index" do
@@ -117,11 +117,40 @@ describe CostItemsController do
       @cost_item.should_not_receive(:[]=).with(:type, "ProjectCostItem")
       post 'set_applies_to', :id => @cost_item.id, :value => 1
     end
+    
+    it "should not be able to change type to YearCostItem" do
+      @cost_item = stub_model(CostItem)
+      stub_model_find(:cost_item)
+      @cost_item.should_not_receive(:[]=).with(:type, "YearCostItem")
+      post 'set_applies_to', :id => @cost_item.id, :value => 'all'
+    end
 
     end
 
     it "should render list" do
       @event_group.stub!(:cost_items).and_return([@cost_item])
       get 'list'
+    end
+    
+    describe "with invaild params" do
+      before do
+        stub_viewer_as_staff
+        stub_profile
+        setup_login
+        @cost_item = stub_model(CostItem, :update_attributes => nil)
+        stub_model_find(:cost_item)
+      end
+      
+      it "should not create (with no access)" do
+        @project_cost_item.should be_nil
+        post 'create', :cost_item => { :type => 'ProjectCostItem' }
+        assigns[:cost_item].class.should_not == ProjectCostItem
+      end
+  
+      it "should not update" do
+        post 'update', :id => @cost_item.id, :cost_item => { :amount => 2 }
+        flash[:notice].should_not == 'CostItem was successfully updated.'
+      end
+      
     end
 end
