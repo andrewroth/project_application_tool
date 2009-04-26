@@ -31,7 +31,4 @@ describe OptinCostItemsController do
     response.should be_success
   end
   
-  it "should send a notification email when this fails" do
-    "this".should == 'fail'
-  end
 end
