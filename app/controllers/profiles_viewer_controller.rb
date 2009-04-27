@@ -9,6 +9,10 @@ class ProfilesViewerController < ViewOnlineController
   before_filter :ensure_permission, :only => [ :entire, :summary ]
   before_filter :set_references
 
+  def set_custom_folder
+    @custom_folder = 'readonly'
+  end
+
   def bulk_summary_forms
     @page_title = "Acceptance Summary Forms"
 

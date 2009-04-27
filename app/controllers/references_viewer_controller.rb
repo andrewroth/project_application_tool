@@ -12,12 +12,17 @@ class ReferencesViewerController < ViewOnlineController
   before_filter :set_references
   skip_before_filter :get_profile_and_appln
 
+  def set_custom_folder
+    @custom_folder = 'readonly'
+  end
+
   def show
     @submenu_title = @reference.text
 
-    # pass the reference_instance, not the profile_id
+    # pass the reference_id as well as id, since on questionnaire methods, the id passed
+    # is the page id
     @pass_params ||= {}
-    @pass_params[:profile_id] = nil
+    @pass_params[:reference_instance_id] = @reference_instance.id
     @pass_params[:id] = @reference_instance.id
 
     index
@@ -26,7 +31,7 @@ class ReferencesViewerController < ViewOnlineController
   protected
 
     def get_reference_instance
-      @reference_instance = ReferenceInstance.find params[:id]
+      @reference_instance = ReferenceInstance.find params[:reference_instance_id] || params[:id]
       @reference = @reference_instance.reference
       @appln = @reference_instance.instance
       @profile = @appln.profile
