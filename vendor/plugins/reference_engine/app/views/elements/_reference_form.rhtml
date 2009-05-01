@@ -17,7 +17,7 @@
   <% puts @current_element %>
   
   <% if @controller.action_name != 'show_element_form' -%>
-    <%= observe_field('reference[questionnaire_id]', 
+    <%= observe_field('element_questionnaire_id', 
                       :url => set_questionnaire_id_reference_element_url(@questionnaire, @page, @current_element),
     									:with => 'value',
     									:loading => "Element.show('spinner2')",
