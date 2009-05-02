@@ -52,6 +52,16 @@ class ProfilesViewerController < ViewOnlineController
     redirect_to :back
   end
 
+  # explain withdrawing should be done with admin options
+  def withdraw
+    render :inline => %|
+<html>
+Sorry, this link only works for students.  If you need to withdraw an application, you can do so with the move/withdraw link on your projects if you have sufficient permissions; if not, contact #{$tech_email_only}.
+<A HREF="javascript:history.go(-1)>Back</A>
+</html>
+|
+  end
+
   protected
 
     def ensure_permission

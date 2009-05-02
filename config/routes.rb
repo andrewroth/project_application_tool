@@ -18,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :profile_prep_items
 
   unless defined?(QUESTIONNAIRE_ACTIONS) == 'constant'
-    QUESTIONNAIRE_ACTIONS = { :get_page => [ :get, :post ], :validate_page => :post }
+    QUESTIONNAIRE_ACTIONS = { :get_page => [ :get, :post ], :validate_page => :post, :withdraw => :post }
   end
 
   map.resources :profiles_viewer, :member => { :entire => :get, :summary => :get, 
