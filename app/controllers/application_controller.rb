@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   $cim_url = "http://intranet.campusforchrist.org"
   $sp_email_only = 'projects@campusforchrist.org'
   $sp_email = "Power to Change Projects <#{$sp_email_only}>"
-  $tech_email_only = 'help.pat@powertochange.org'
+  $tech_email_only = 'pat.help@powertochange.org'
   
   # let's just sweep everything, it's easier :P
   cache_sweeper :profiles_sweeper
