@@ -183,7 +183,7 @@ module Permissions
   end
 
   def is_project_processor(project)
-    return true if @viewer.is_eventgroup_coordinator?(@eg)
+    return true if @viewer.is_eventgroup_coordinator?(@eg || project.event_group)
     return false unless project
 
     @viewer.set_project(project)
