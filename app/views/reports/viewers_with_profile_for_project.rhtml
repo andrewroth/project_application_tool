@@ -1,7 +1,7 @@
-<%= select_tag 'viewers', options_for_select( 
-      (params[:include_all] ? ['all'] : []) + 
-      (params[:include_blank] ? [''] : []) + 
-      @accepted_viewers.collect { |v| [v.name, v.id ] } 
+<%= select_tag 'viewers', options_for_select(
+      (params[:include_all] ? ['all'] : []) +
+      (params[:include_blank] ? [''] : []) +
+      @profile_type_and_viewers.collect { |klass, viewer| [ "(#{klass}) #{viewer.name}", viewer.id ] }
     ),
-    :id => @id 
+    :id => @id
 %>

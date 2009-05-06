@@ -837,13 +837,21 @@ class ReportsController < ApplicationController
   
   # returns a select list with viewers who are accepted to the projects given
   def viewers_with_profile_for_project
-    acceptances = Acceptance.find_all_by_project_id @projects_ids, :include => { :viewer => :persons }
-    @accepted_viewers = acceptances.collect &:viewer
+    profiles = Profile.find_all_by_project_id @projects_ids, :include => { :viewer => :persons }
+    @profile_type_and_viewers = profiles.collect{ |p| [ p.class.name, p.viewer ] }
     
-    # TODO: do we need to worry about StaffProfiles ?
-    #@viewer.is_project_director? || @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_project_administrator? || @viewer == v
-    
-    @accepted_viewers.sort!{ |a,b| a.name <=> b.name }
+    # sort first by type of profile, then by name
+    @profile_type_and_viewers.sort!{ |a,b| 
+      klass_a, viewer_a = a
+      klass_b, viewer_b = b
+
+      if klass_a != klass_b
+        klass_a <=> klass_b
+      else
+        viewer_a.name <=> viewer_b.name
+      end
+    }
+
     @id = params[:dom_id]
     render :layout => !request.xml_http_request?
   end
