@@ -28,7 +28,8 @@
                                   :update => 'viewer_specifics',
                                   :before => "Element.show('finding_viewer_specifics_#{viewer.id}');",
                                   :complete => "Element.hide('finding_viewer_specifics_#{viewer.id}');" } %>
-                <%= link_to_remote viewer.name, view_result_params %>
+                <% link_text = viewer.name =~ /^\s+$/ ? '(no name set)' : viewer.name %>
+                <%= link_to_remote link_text, view_result_params %>
                 <% @init_js = view_result_params if @viewers.length == 1 %>
             </td>
             <td><%=h viewer.id %></td>
