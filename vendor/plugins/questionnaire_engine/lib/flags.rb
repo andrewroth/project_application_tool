@@ -4,15 +4,15 @@ module Flags
     m = params[0].to_s
     
     # try to assign or read flags
-    m.scan(/(is_)?(\w+)[=|\?]/) do |flag_str|
+    m.scan(/(is_)?(\w+)[=|\?]?/) do |flag_str|
       flag_str = flag_str[1] # for some reason the string come as a single sized array
       begin
-        if m.last_char == '?'
-          return get_value_of(flag_str)
-        elsif m.last_char == '='
+        if m.last_char == '='
           return set_flag_value(flag_str, params[1])
+        else
+          return get_value_of(flag_str)
         end
-      rescue NoSuchFlag
+      rescue
         super
       end
     end
