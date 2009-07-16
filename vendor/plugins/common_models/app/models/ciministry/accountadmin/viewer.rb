@@ -138,9 +138,7 @@ There's a bunch of logic for creating users in cim_hrdb.
 
     v = Viewer.create! :guid => guid, :viewer_lastLogin => 0, :accountgroup_id => 15, :viewer_userID => uid, :language_id => 1, :viewer_isActive => true, :accountgroup_id => 15 
     p = Person.create! :person_fname => fn, :person_lname => ln, :person_legal_fname => '', :person_legal_lname => ''
-    ag_st = Accessgroup.find_by_accessgroup_key '[accessgroup_student]'
     ag_all = Accessgroup.find_by_accessgroup_key '[accessgroup_key1]'
-    Vieweraccessgroup.create! :viewer_id => v.id, :accessgroup_id => ag_st.id
     Vieweraccessgroup.create! :viewer_id => v.id, :accessgroup_id => ag_all.id
     Access.create :viewer_id => v.id, :person_id => p.id
 
@@ -151,9 +149,7 @@ There's a bunch of logic for creating users in cim_hrdb.
     raise "person already created" if person
 
     p = Person.create! :person_fname => '', :person_lname => '', :person_legal_fname => '', :person_legal_lname => ''
-    ag_st = Accessgroup.find_by_accessgroup_key '[accessgroup_student]'
     ag_all = Accessgroup.find_by_accessgroup_key '[accessgroup_key1]'
-    Vieweraccessgroup.create! :viewer_id => self.id, :accessgroup_id => ag_st.id
     Vieweraccessgroup.create! :viewer_id => self.id, :accessgroup_id => ag_all.id
     Access.create :viewer_id => self.id, :person_id => p.id
 
