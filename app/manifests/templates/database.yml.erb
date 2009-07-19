@@ -1,0 +1,34 @@
+defaults: &defaults
+adapter: mysql
+username: root
+password: 
+socket: /tmp/mysql.sock
+
+development:
+database: pat
+<<: *defaults
+
+test:
+database: pat_test
+<<: *defaults
+
+production:
+database: pat
+<<: *defaults
+
+ciministry_development:
+database: ciministry
+<<: *defaults
+
+ciministry_production:
+database: ciministry
+<<: *defaults
+
+authservice_development:
+database: authservice
+<<: *defaults
+
+authservice_production:
+database: authservice
+<<: *defaults
+
