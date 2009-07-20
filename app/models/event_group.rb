@@ -64,18 +64,8 @@ class EventGroup < Node
   end
   alias_method_chain :children, :hidden_check
 
-  # returns the ministry followed by the entire path of parents in the event group tree
-  def to_s_with_ministry_and_eg_path
-    "#{[ministry_inherited_name, eg_path].compact.join(' - ')}"
-  end
-  
   def to_s_with_eg_path
     "#{eg_path}"
-  end
-
-  def ministry_inherited_name
-    m = ministry_inherited
-    m ? "#{m.name} " : ''
   end
 
   def eg_path
@@ -99,15 +89,6 @@ class EventGroup < Node
 
   def to_s
     title
-  end
-
-  def ministry_inherited
-    node = self
-    while node.ministry.nil? && !node.parent_id.nil?
-      node = node.parent
-    end
-
-    node.ministry
   end
 
   def ensure_emails_exist

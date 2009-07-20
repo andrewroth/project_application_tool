@@ -4,18 +4,12 @@ class Form < ActiveRecord::Base
   belongs_to :event_group
   after_create :create_questionnaire_for_this_form
 
-  def to_s_with_ministry_and_eg_path
-    eg_s = event_group.nil? ? '[no event group]' : event_group.to_s_with_ministry_and_eg_path
-
-    "#{eg_s} #{name}"
-  end
-  
   def to_s_with_eg_path
     eg_s = event_group.nil? ? '[no event group]' : event_group.to_s_with_eg_path
 
     "#{eg_s} #{name}"
   end
-
+  
   def title_for_questionnaire() self.name end
 
   def title() name end

@@ -9,7 +9,7 @@ class SecurityController < ApplicationController
   skip_before_filter :verify_event_group_chosen
   skip_before_filter :set_event_group
 
-  before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login
+  #before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login
 
   before_filter :ensure_gcx_in_session, :only => [ :link_gcx, :do_link_gcx, :link_gcx_new, :do_link_gcx_new ]
 

@@ -15,7 +15,7 @@ end
   <% @profiles_by_eg.each do |eg, profiles| %>
     <% if profiles.empty? then next else found_something = true end %>
 
-    <strong><%= eg.to_s_with_ministry_and_eg_path %></strong>
+    <strong><%= eg.to_s_with_eg_path %></strong>
     <blockquote>
       <% @projects = true %>
       <%= output_profiles_list profiles.find_all{|p| p.class == Acceptance }, 

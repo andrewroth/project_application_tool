@@ -1,2 +1,0 @@
-class LocationAlias < Location
-end

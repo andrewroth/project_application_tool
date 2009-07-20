@@ -84,10 +84,6 @@ class EventGroupsController < AjaxTreeController
       @submenu_title = "Event Groups"
     end
 
-    def set_ministries_options
-      @ministries_options = [ [ 'Same as parent', nil ] ] + Ministry.to_list_options
-    end
-
     def clear_cache
       expire_fragment(:action => 'index')
     end

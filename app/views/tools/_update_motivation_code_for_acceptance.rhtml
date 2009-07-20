@@ -3,7 +3,7 @@
 <td><%= pe.status %></td>
 <td><%= pe.project.title %></td>
 <% if @eg_column %>
-  <td><%= pe.project.event_group ? pe.project.event_group.to_s_with_ministry_and_eg_path : "Warning: no event_group for project id #{pe.project.id} title #{pe.project.title}" %></td>
+  <td><%= pe.project.event_group ? pe.project.event_group.to_s_with_eg_path : "Warning: no event_group for project id #{pe.project.id} title #{pe.project.title}" %></td>
 <% end %>
 <% eval "@profile_#{pe.id} = pe" %>
 <td><%= text_field "profile_#{pe.id}", 'motivation_code' %></td>

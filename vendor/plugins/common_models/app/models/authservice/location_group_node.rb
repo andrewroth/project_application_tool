@@ -1,2 +1,0 @@
-class LocationGroupNode < LocationGroup
-end
