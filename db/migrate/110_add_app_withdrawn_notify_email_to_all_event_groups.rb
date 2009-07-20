@@ -1,5 +1,5 @@
-require File.join(RAILS_ROOT, 'app','controllers','application')
-require File.join(RAILS_ROOT, 'app','controllers','reference_emails_controller')
+#require File.join(RAILS_ROOT, 'app','controllers','application')
+#require File.join(RAILS_ROOT, 'app','controllers','reference_emails_controller')
 
 class AddAppWithdrawnNotifyEmailToAllEventGroups < ActiveRecord::Migration
   def self.up

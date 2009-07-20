@@ -50,10 +50,12 @@ class AddCrisisInfoEnhancementsToIntranet < ActiveRecord::Migration
 
   def self.up
     loop_specs do |model, cn, ct|
-      add_column model.table_name, cn, ct
+      unless model.column_names.include?(cn.to_s)
+        add_column model.table_name, cn, ct
 
-      rm = ReportModel.find_or_create_by_model_s model.to_s.downcase
-      rm.report_model_methods.find_or_create_by_method_s cn.to_s
+        rm = ReportModel.find_or_create_by_model_s model.to_s.downcase
+        rm.report_model_methods.find_or_create_by_method_s cn.to_s
+      end
     end
   end
 

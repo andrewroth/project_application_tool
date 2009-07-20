@@ -11,7 +11,7 @@ class CreateCountries < ActiveRecord::Migration
     while (line = file.gets)
       line =~ /(\w+)\W+(.+)/
       puts "code=#{$1} name=#{$2}"
-      Country.create :code => $1, :name => $2
+      PatCountry.create :code => $1, :name => $2
     end
     file.close
 
