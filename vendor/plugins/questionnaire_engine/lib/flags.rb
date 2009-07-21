@@ -6,6 +6,8 @@ module Flags
     # try to assign or read flags
     m.scan(/(is_)?(\w+)[=|\?]?/) do |flag_str|
       flag_str = flag_str[1] # for some reason the string come as a single sized array
+      return super unless Flag.find(:first, :conditions => { :name => flag_str })
+
       begin
         if m.last_char == '='
           return set_flag_value(flag_str, params[1])
