@@ -1,5 +1,7 @@
 class FixDuplicateApplns < ActiveRecord::Migration
   def self.up
+    return unless Appln.count > 0
+
     Viewer.find(:all).each do |v|
       apps = v.applns.find(:all)
       first_app = apps[0] if !apps.empty?

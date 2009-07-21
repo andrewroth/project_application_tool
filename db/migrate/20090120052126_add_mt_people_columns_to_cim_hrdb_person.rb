@@ -1,13 +1,13 @@
 class AddMtPeopleColumnsToCimHrdbPerson < ActiveRecord::Migration
   def self.up
     change_table(Person.table_name) do |t|
-      t.string   "person_mname"
+      t.string "person_mname" unless Person.column_names.include?('person_mname')
     end
   end
 
   def self.down
     change_table(Person.table_name) do |t|
-      t.string   "person_mname"
+      t.string "person_mname"
     end
    end
 end

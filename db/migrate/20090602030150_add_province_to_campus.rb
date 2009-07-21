@@ -29,7 +29,7 @@ class AddProvinceToCampus < ActiveRecord::Migration
    } 
 
   def self.up
-    add_column Campus.table_name, :province_id, :integer
+    add_column Campus.table_name, :province_id, :integer unless Campus.column_names.include?('province_id')
     Person.reset_column_information
 
     for c, p in CAMPUS_PROVINCES

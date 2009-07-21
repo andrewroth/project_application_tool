@@ -4,8 +4,6 @@ class AddTitleToCimHrdb < ActiveRecord::Migration
   end
 
   def self.up
-    require 'environment'
-
     unless Title.table_exists?
       create_table Title.table_name do |t|
         t.string :desc

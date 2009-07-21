@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090602030150) do
+ActiveRecord::Schema.define(:version => 20090719234529) do
 
   create_table "airports", :force => true do |t|
     t.string   "code"
@@ -31,11 +31,11 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.boolean  "as_intern",      :default => false
   end
 
-  add_index "applns", ["as_intern"], :name => "applns_as_intern_index"
-  add_index "applns", ["form_id"], :name => "applns_form_id_index"
-  add_index "applns", ["preference1_id"], :name => "applns_preference1_id_index"
-  add_index "applns", ["preference2_id"], :name => "applns_preference2_id_index"
-  add_index "applns", ["viewer_id"], :name => "applns_viewer_id_index"
+  add_index "applns", ["as_intern"], :name => "index_applns_on_as_intern"
+  add_index "applns", ["form_id"], :name => "index_applns_on_form_id"
+  add_index "applns", ["preference1_id"], :name => "index_applns_on_preference1_id"
+  add_index "applns", ["preference2_id"], :name => "index_applns_on_preference2_id"
+  add_index "applns", ["viewer_id"], :name => "index_applns_on_viewer_id"
 
   create_table "cost_items", :force => true do |t|
     t.string  "type"
@@ -49,8 +49,8 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
   end
 
   add_index "cost_items", ["event_group_id"], :name => "index_cost_items_on_event_group_id"
-  add_index "cost_items", ["type"], :name => "cost_items_type_index"
-  add_index "cost_items", ["year"], :name => "cost_items_year_index"
+  add_index "cost_items", ["type"], :name => "index_cost_items_on_type"
+  add_index "cost_items", ["year"], :name => "index_cost_items_on_year"
 
   create_table "countries", :force => true do |t|
     t.string   "code"
@@ -67,15 +67,20 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.datetime "updated_at"
   end
 
+  create_table "custom_reports", :force => true do |t|
+    t.string  "name"
+    t.string  "description"
+    t.integer "event_group_id"
+  end
+
   create_table "donation_types", :force => true do |t|
     t.string "description"
   end
 
-  add_index "donation_types", ["description"], :name => "donation_types_description_index"
+  add_index "donation_types", ["description"], :name => "index_donation_types_on_description"
 
   create_table "event_groups", :force => true do |t|
     t.string  "title"
-    t.integer "ministry_id"
     t.integer "parent_id"
     t.string  "type"
     t.string  "location_type"
@@ -109,26 +114,21 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
   end
 
   add_index "feedbacks", ["event_group_id"], :name => "index_feedbacks_on_event_group_id"
-  add_index "feedbacks", ["viewer_id"], :name => "feedbacks_viewer_id_index"
+  add_index "feedbacks", ["viewer_id"], :name => "index_feedbacks_on_viewer_id"
 
   create_table "form_answers", :force => true do |t|
     t.integer "question_id"
     t.integer "instance_id"
-    t.text    "answer"
+    t.string  "answer",      :limit => 4000
   end
 
-  add_index "form_answers", ["instance_id"], :name => "form_answers_instance_id_index"
-  add_index "form_answers", ["question_id", "instance_id"], :name => "form_answers_question_id_index", :unique => true
+  add_index "form_answers", ["question_id", "instance_id"], :name => "index_form_answers_on_question_id_and_instance_id", :unique => true
 
   create_table "form_element_flags", :force => true do |t|
     t.integer "element_id"
     t.integer "flag_id"
     t.boolean "value"
   end
-
-  add_index "form_element_flags", ["element_id"], :name => "form_element_flags_element_id_index"
-  add_index "form_element_flags", ["flag_id"], :name => "form_element_flags_flag_id_index"
-  add_index "form_element_flags", ["value"], :name => "form_element_flags_value_index"
 
   create_table "form_elements", :force => true do |t|
     t.integer  "parent_id"
@@ -146,10 +146,6 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.integer  "max_length",                    :default => 0, :null => false
   end
 
-  add_index "form_elements", ["parent_id"], :name => "form_elements_parent_id_index"
-  add_index "form_elements", ["position"], :name => "form_elements_position_index"
-  add_index "form_elements", ["type"], :name => "form_elements_type_index"
-
   create_table "form_flags", :force => true do |t|
     t.string "name"
     t.string "element_txt"
@@ -164,19 +160,11 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.datetime "updated_at"
   end
 
-  add_index "form_page_elements", ["element_id"], :name => "form_page_elements_element_id_index"
-  add_index "form_page_elements", ["page_id"], :name => "form_page_elements_page_id_index"
-  add_index "form_page_elements", ["position"], :name => "form_page_elements_position_index"
-
   create_table "form_page_flags", :force => true do |t|
     t.integer "page_id"
     t.integer "flag_id"
     t.boolean "value"
   end
-
-  add_index "form_page_flags", ["flag_id"], :name => "form_page_flags_flag_id_index"
-  add_index "form_page_flags", ["page_id"], :name => "form_page_flags_page_id_index"
-  add_index "form_page_flags", ["value"], :name => "form_page_flags_value_index"
 
   create_table "form_pages", :force => true do |t|
     t.string   "title",         :limit => 50
@@ -190,16 +178,11 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
 
   create_table "form_question_options", :force => true do |t|
     t.integer  "question_id"
-    t.string   "option",      :limit => 256
+    t.string   "option",      :limit => 50
     t.string   "value",       :limit => 50
     t.integer  "position"
     t.datetime "created_at"
   end
-
-  add_index "form_question_options", ["option"], :name => "form_question_options_option_index"
-  add_index "form_question_options", ["position"], :name => "form_question_options_position_index"
-  add_index "form_question_options", ["question_id"], :name => "form_question_options_question_id_index"
-  add_index "form_question_options", ["value"], :name => "form_question_options_value_index"
 
   create_table "form_questionnaire_pages", :force => true do |t|
     t.integer  "questionnaire_id"
@@ -208,10 +191,6 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "form_questionnaire_pages", ["page_id"], :name => "form_questionnaire_pages_page_id_index"
-  add_index "form_questionnaire_pages", ["position"], :name => "form_questionnaire_pages_position_index"
-  add_index "form_questionnaire_pages", ["questionnaire_id"], :name => "form_questionnaire_pages_questionnaire_id_index"
 
   create_table "form_reference_attributes", :force => true do |t|
     t.integer "reference_id"
@@ -228,7 +207,7 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
   end
 
   add_index "forms", ["event_group_id"], :name => "index_forms_on_event_group_id"
-  add_index "forms", ["questionnaire_id"], :name => "forms_questionnaire_id_index"
+  add_index "forms", ["questionnaire_id"], :name => "index_forms_on_questionnaire_id"
 
   create_table "manual_donations", :force => true do |t|
     t.string   "motivation_code"
@@ -241,7 +220,7 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.float    "conversion_rate"
   end
 
-  add_index "manual_donations", ["motivation_code"], :name => "manual_donations_motivation_code_index"
+  add_index "manual_donations", ["motivation_code"], :name => "index_manual_donations_on_motivation_code"
 
   create_table "notification_acknowledgments", :force => true do |t|
     t.integer  "notification_id"
@@ -269,20 +248,15 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.integer "cost_item_id"
   end
 
-  add_index "optin_cost_items", ["cost_item_id"], :name => "optin_cost_items_cost_item_id_index"
-  add_index "optin_cost_items", ["profile_id"], :name => "optin_cost_items_profile_id_index"
-
-  create_table "plugin_schema_info", :id => false, :force => true do |t|
-    t.string  "plugin_name"
-    t.integer "version"
-  end
+  add_index "optin_cost_items", ["cost_item_id"], :name => "index_optin_cost_items_on_cost_item_id"
+  add_index "optin_cost_items", ["profile_id"], :name => "index_optin_cost_items_on_profile_id"
 
   create_table "preferences", :force => true do |t|
     t.integer "viewer_id"
     t.string  "time_zone"
   end
 
-  add_index "preferences", ["viewer_id"], :name => "preferences_viewer_id_index"
+  add_index "preferences", ["viewer_id"], :name => "index_preferences_on_viewer_id"
 
   create_table "prep_items", :force => true do |t|
     t.string   "title"
@@ -305,15 +279,15 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.datetime "updated_at"
   end
 
-  add_index "processor_forms", ["appln_id"], :name => "processor_forms_appln_id_index"
+  add_index "processor_forms", ["appln_id"], :name => "index_processor_forms_on_appln_id"
 
   create_table "processors", :force => true do |t|
     t.integer "project_id"
     t.integer "viewer_id"
   end
 
-  add_index "processors", ["project_id"], :name => "processors_project_id_index"
-  add_index "processors", ["viewer_id"], :name => "processors_viewer_id_index"
+  add_index "processors", ["project_id"], :name => "index_processors_on_project_id"
+  add_index "processors", ["viewer_id"], :name => "index_processors_on_viewer_id"
 
   create_table "profile_donations", :force => true do |t|
     t.integer "profile_id"
@@ -322,10 +296,10 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.integer "manual_donation_id"
   end
 
-  add_index "profile_donations", ["auto_donation_id"], :name => "profile_donations_auto_donation_id_index"
-  add_index "profile_donations", ["manual_donation_id"], :name => "profile_donations_manual_donation_id_index"
-  add_index "profile_donations", ["profile_id"], :name => "profile_donations_profile_id_index"
-  add_index "profile_donations", ["type"], :name => "profile_donations_type_index"
+  add_index "profile_donations", ["auto_donation_id"], :name => "index_profile_donations_on_auto_donation_id"
+  add_index "profile_donations", ["manual_donation_id"], :name => "index_profile_donations_on_manual_donation_id"
+  add_index "profile_donations", ["profile_id"], :name => "index_profile_donations_on_profile_id"
+  add_index "profile_donations", ["type"], :name => "index_profile_donations_on_type"
 
   create_table "profile_notes", :force => true do |t|
     t.text     "content"
@@ -355,9 +329,9 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.string  "confirmation_number"
   end
 
-  add_index "profile_travel_segments", ["position"], :name => "profile_travel_segments_position_index"
-  add_index "profile_travel_segments", ["profile_id"], :name => "profile_travel_segments_profile_id_index"
-  add_index "profile_travel_segments", ["travel_segment_id"], :name => "profile_travel_segments_travel_segment_id_index"
+  add_index "profile_travel_segments", ["position"], :name => "index_profile_travel_segments_on_position"
+  add_index "profile_travel_segments", ["profile_id"], :name => "index_profile_travel_segments_on_profile_id"
+  add_index "profile_travel_segments", ["travel_segment_id"], :name => "index_profile_travel_segments_on_travel_segment_id"
 
   create_table "profiles", :force => true do |t|
     t.integer  "appln_id"
@@ -386,31 +360,31 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.decimal  "cached_costing_total",       :precision => 8, :scale => 2
   end
 
-  add_index "profiles", ["accepted_by"], :name => "profiles_accepted_by_index"
-  add_index "profiles", ["appln_id"], :name => "profiles_appln_id_index"
-  add_index "profiles", ["locked_by"], :name => "profiles_locked_by_index"
-  add_index "profiles", ["project_id"], :name => "profiles_project_id_index"
-  add_index "profiles", ["reason_id"], :name => "profiles_reason_id_index"
-  add_index "profiles", ["support_coach_id"], :name => "profiles_support_coach_id_index"
-  add_index "profiles", ["type"], :name => "profiles_type_index"
-  add_index "profiles", ["viewer_id"], :name => "profiles_viewer_id_index"
-  add_index "profiles", ["withdrawn_by"], :name => "profiles_withdrawn_by_index"
+  add_index "profiles", ["accepted_by"], :name => "index_profiles_on_accepted_by"
+  add_index "profiles", ["appln_id"], :name => "index_profiles_on_appln_id"
+  add_index "profiles", ["locked_by"], :name => "index_profiles_on_locked_by"
+  add_index "profiles", ["project_id"], :name => "index_profiles_on_project_id"
+  add_index "profiles", ["reason_id"], :name => "index_profiles_on_reason_id"
+  add_index "profiles", ["support_coach_id"], :name => "index_profiles_on_support_coach_id"
+  add_index "profiles", ["type"], :name => "index_profiles_on_type"
+  add_index "profiles", ["viewer_id"], :name => "index_profiles_on_viewer_id"
+  add_index "profiles", ["withdrawn_by"], :name => "index_profiles_on_withdrawn_by"
 
   create_table "project_administrators", :force => true do |t|
     t.integer "project_id"
     t.integer "viewer_id"
   end
 
-  add_index "project_administrators", ["project_id"], :name => "project_administrators_project_id_index"
-  add_index "project_administrators", ["viewer_id"], :name => "project_administrators_viewer_id_index"
+  add_index "project_administrators", ["project_id"], :name => "index_project_administrators_on_project_id"
+  add_index "project_administrators", ["viewer_id"], :name => "index_project_administrators_on_viewer_id"
 
   create_table "project_directors", :force => true do |t|
     t.integer "project_id"
     t.integer "viewer_id"
   end
 
-  add_index "project_directors", ["project_id"], :name => "project_directors_project_id_index"
-  add_index "project_directors", ["viewer_id"], :name => "project_directors_viewer_id_index"
+  add_index "project_directors", ["project_id"], :name => "index_project_directors_on_project_id"
+  add_index "project_directors", ["viewer_id"], :name => "index_project_directors_on_viewer_id"
 
   create_table "project_donations", :force => true do |t|
     t.string   "participant_motv_code",     :limit => 10,  :default => "",  :null => false
@@ -423,15 +397,15 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.float    "amount",                                   :default => 0.0
   end
 
-  add_index "project_donations", ["participant_motv_code"], :name => "project_donations_participant_motv_code_index"
+  add_index "project_donations", ["participant_motv_code"], :name => "index_project_donations_on_participant_motv_code"
 
   create_table "project_staffs", :force => true do |t|
     t.integer "project_id"
     t.integer "viewer_id"
   end
 
-  add_index "project_staffs", ["project_id"], :name => "project_staffs_project_id_index"
-  add_index "project_staffs", ["viewer_id"], :name => "project_staffs_viewer_id_index"
+  add_index "project_staffs", ["project_id"], :name => "index_project_staffs_on_project_id"
+  add_index "project_staffs", ["viewer_id"], :name => "index_project_staffs_on_viewer_id"
 
   create_table "projects", :force => true do |t|
     t.string  "title"
@@ -492,13 +466,13 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.integer  "updated_by_id"
     t.boolean  "mail",          :default => false
     t.boolean  "email_sent",    :default => false
-    t.integer  "reference_id"
+    t.integer  "reference_id",                     :null => false
     t.string   "type"
   end
 
-  add_index "reference_instances", ["access_key"], :name => "appln_references_access_key_index"
-  add_index "reference_instances", ["instance_id"], :name => "appln_references_appln_id_index"
-  add_index "reference_instances", ["status"], :name => "appln_references_status_index"
+  add_index "reference_instances", ["access_key"], :name => "index_appln_references_on_access_key"
+  add_index "reference_instances", ["instance_id"], :name => "index_appln_references_on_appln_id"
+  add_index "reference_instances", ["status"], :name => "index_appln_references_on_status"
 
   create_table "report_elements", :force => true do |t|
     t.integer "report_id"
@@ -541,8 +515,8 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.integer "viewer_id"
   end
 
-  add_index "support_coaches", ["project_id"], :name => "support_coaches_project_id_index"
-  add_index "support_coaches", ["viewer_id"], :name => "support_coaches_viewer_id_index"
+  add_index "support_coaches", ["project_id"], :name => "index_support_coaches_on_project_id"
+  add_index "support_coaches", ["viewer_id"], :name => "index_support_coaches_on_viewer_id"
 
   create_table "taggings", :force => true do |t|
     t.string  "tagee_type"
@@ -550,9 +524,9 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.integer "tag_id"
   end
 
-  add_index "taggings", ["tag_id"], :name => "taggings_tag_id_index"
-  add_index "taggings", ["tagee_id"], :name => "taggings_tagee_id_index"
-  add_index "taggings", ["tagee_type"], :name => "taggings_tagee_type_index"
+  add_index "taggings", ["tag_id"], :name => "index_taggings_on_tag_id"
+  add_index "taggings", ["tagee_id"], :name => "index_taggings_on_tagee_id"
+  add_index "taggings", ["tagee_type"], :name => "index_taggings_on_tagee_type"
 
   create_table "tags", :force => true do |t|
     t.string  "name"
@@ -573,13 +547,13 @@ ActiveRecord::Schema.define(:version => 20090602030150) do
     t.integer  "event_group_id"
   end
 
-  add_index "travel_segments", ["arrival_city"], :name => "travel_segments_arrival_city_index"
-  add_index "travel_segments", ["arrival_time"], :name => "travel_segments_arrival_time_index"
-  add_index "travel_segments", ["carrier"], :name => "travel_segments_carrier_index"
-  add_index "travel_segments", ["departure_city"], :name => "travel_segments_departure_city_index"
-  add_index "travel_segments", ["departure_time"], :name => "travel_segments_departure_time_index"
+  add_index "travel_segments", ["arrival_city"], :name => "index_travel_segments_on_arrival_city"
+  add_index "travel_segments", ["arrival_time"], :name => "index_travel_segments_on_arrival_time"
+  add_index "travel_segments", ["carrier"], :name => "index_travel_segments_on_carrier"
+  add_index "travel_segments", ["departure_city"], :name => "index_travel_segments_on_departure_city"
+  add_index "travel_segments", ["departure_time"], :name => "index_travel_segments_on_departure_time"
   add_index "travel_segments", ["event_group_id"], :name => "index_travel_segments_on_event_group_id"
-  add_index "travel_segments", ["flight_no"], :name => "travel_segments_flight_no_index"
-  add_index "travel_segments", ["year"], :name => "travel_segments_year_index"
+  add_index "travel_segments", ["flight_no"], :name => "index_travel_segments_on_flight_no"
+  add_index "travel_segments", ["year"], :name => "index_travel_segments_on_year"
 
 end
