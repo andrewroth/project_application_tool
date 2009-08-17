@@ -1,10 +1,12 @@
 <table id='login_table' border='0'>
+  <!--
   <tr>
     <td><img src="/images/login.jpg" width="50px"/></td>
     <td>
       <%= link_to_function 'Login with Campus for Christ intranet account', "Effect.SlideDown('login_form')" %>
     </td>
   </tr>
+  -->
   <tr>
     <td></td>
     <td>
@@ -12,7 +14,7 @@
     </td>
   </tr>
   <tr>
-    <td><img src="http://technology.ccci.org/gcx/images/288-GCX-logo.gif" width="100px"/></td>
+    <td><%= link_to %|<img src="http://technology.ccci.org/gcx/images/288-GCX-logo.gif" width="100px"/>|, CASClient::Frameworks::Rails::Filter.login_url(controller) %></td>
     <td><%= link_to 'Login with GCX', CASClient::Frameworks::Rails::Filter.login_url(controller) %></td>
   </tr>
 </table>

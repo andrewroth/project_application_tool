@@ -144,8 +144,9 @@ class SecurityController < ApplicationController
 
     # give a warning about intranet logins expiring
     if session[:login_source] == 'spt'
-      flash[:notice] = "You logged in by your intranet username and password.  Please note that we are phasing out the intranet logins in favor of GCX.  Please see <A HREF='http://docs.google.com/Doc?id=dd7zngd6_4c457j7dx' target='_blank'>this document</A> (link opens in a new window) explaining how you can upgrade to a GCX account."
-      logger.info "Intranet login @ #{Time.now} - viewer #{@viewer.viewer_userID} id #{@viewer.id}"
+      flash[:notice] = "Sorry, intranet logins are not supported any more.  Use GCX instead."
+      clear_login_session_info
+      logger.info "Intranet login closed @ #{Time.now} - viewer #{@viewer.viewer_userID} id #{@viewer.id}"
     end
 
   end
