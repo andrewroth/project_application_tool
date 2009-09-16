@@ -37,9 +37,9 @@ module CustomReportsHelper
   end
 
   # note - these will be set invisible if not the right type by the "set initial visibilities" js above
-  def report_element_element_form_column(record, input_name) element_form_column(record, input_name) end
   def report_element_model_method_element_form_column(record, input_name) element_form_column(record, input_name) end
   def report_element_question_element_form_column(record, input_name) element_form_column(record, input_name) end
+  def report_element_element_form_column(record, input_name) element_form_column(record, input_name) end
 
   def element_form_column(record, input_name)
     visible = record.class == ReportElementQuestion
@@ -63,6 +63,7 @@ module CustomReportsHelper
      "</span>"
   end
 
+  # note - these will be set invisible if not the right type by the "set initial visibilities" js above
   def report_element_model_method_report_model_method_form_column(record, input_name) report_model_method_form_column(record, input_name) end
   def report_element_question_report_model_method_form_column(record, input_name) report_model_method_form_column(record, input_name) end
   def report_element_report_model_method_form_column(record, input_name) report_model_method_form_column(record, input_name) end
