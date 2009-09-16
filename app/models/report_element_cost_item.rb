@@ -1,4 +1,4 @@
-class ReportElementQuestion < ReportElement
+class ReportElementCostItem < ReportElement
   def name
     if heading && !heading.empty?
       heading

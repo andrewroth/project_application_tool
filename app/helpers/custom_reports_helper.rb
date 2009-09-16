@@ -93,7 +93,7 @@ module CustomReportsHelper
 
   def report_cost_item_form_column(record, input_name)
     "<span id='#{input_name}_span'>" + 
-      collection_select(:record, :report_model_method_id, @eg.cost_items.find_all { 
+      collection_select(:record, :cost_item_id, @eg.cost_items.find_all { 
            |ci| (ci.is_a?(YearCostItem) || ci.is_a?(ProjectCostItem)) && ci.optional 
 	 }.sort { 
 	   |a,b| a.description <=> b.description # issue 1427, as requested

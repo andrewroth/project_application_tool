@@ -124,7 +124,20 @@ class CustomReportsController < ApplicationController
     emerg = person.emerg if person
 
     for re in @report_elements
-      if re.class == ReportElementQuestion
+      if re.class == ReportElementCostItem
+        ci = re.cost_item
+        if ci.nil?
+          row << "Couldn't find cost item #{re.element_id}"
+          next
+        end
+
+        if ci.optional
+          row << (ci.optins.detect{ |oi| oi.profile_id == profile.id }.nil? ? '' : 'Y')
+        else
+          row << 'Y'
+        end
+
+      elsif re.class == ReportElementQuestion
         e = re.element
 
         # fix 1402 - http://ccc.clockingit.com/tasks/edit/79620
