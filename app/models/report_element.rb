@@ -3,6 +3,7 @@ class ReportElement < ActiveRecord::Base
 
   belongs_to :report
   belongs_to :element
+  belongs_to :cost_item
   belongs_to :report_model_method
 
   before_update :test
