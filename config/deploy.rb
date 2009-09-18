@@ -60,10 +60,6 @@ deploy.task :restart, :roles => :app do
   run "touch #{current_path}/tmp/restart.txt"
 end
 
-deploy.task :before_migrate do
-  run "cd #{current_path}; RAILS_ENV=#{RAILS_ENV} rake db:setup:pat"
-end
-
 def link_shared(p, o = {})
   if o[:overwrite]
     run "rm -Rf #{release_path}/#{p}"
