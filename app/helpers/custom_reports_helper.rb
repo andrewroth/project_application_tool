@@ -7,6 +7,7 @@ module CustomReportsHelper
   # use the type dropdown for all report element types
   def report_element_model_method_type_form_column(record, input_name) type_form_column(record, input_name) end
   def report_element_question_type_form_column(record, input_name) type_form_column(record, input_name) end
+  def report_element_cost_item_type_form_column(record, input_name) type_form_column(record, input_name) end
   def report_element_type_form_column(record, input_name) type_form_column(record, input_name) end
 
   def type_form_column(record, input_name)
@@ -20,16 +21,19 @@ module CustomReportsHelper
 
     element_js_id = id.sub('type', 'element')+'_span'
     method_js_id = id.sub('type', 'report_model_method')+'_span'
+    cost_js_id = id.sub('type', 'cost_item')+'_span'
 
     select_tag(input_name, options_for_select( [ '',
         ['Question Answer', 'ReportElementQuestion' ],
-        ['Person Attribute' ,'ReportElementModelMethod' ] 
+        ['Person Attribute' ,'ReportElementModelMethod' ],
+        ['Cost Item' ,'ReportElementCostItem' ] 
     ] , (record.new_record? ? '' : record.class.name) ), :id => input_name) + observe_field(input_name, toggle_params) + 
       %|
          <script> // set initial visibilities
-	 #{if record.class == ReportElement then "$('#{method_js_id}').hide(); $('#{element_js_id}').hide();"
-	 elsif record.class == ReportElementQuestion then "$('#{method_js_id}').hide(); $('#{element_js_id}').show();"
-	 elsif record.class == ReportElementModelMethod then "$('#{method_js_id}').show(); $('#{element_js_id}').hide();"
+	 #{if record.class == ReportElement then "$('#{method_js_id}').hide(); $('#{element_js_id}').hide(); $('#{cost_js_id}').hide();"
+	 elsif record.class == ReportElementQuestion then "$('#{method_js_id}').hide(); $('#{element_js_id}').show(); $('#{cost_js_id}').hide();";
+	 elsif record.class == ReportElementModelMethod then "$('#{method_js_id}').show(); $('#{element_js_id}').hide(); $('#{cost_js_id}').hide();"
+	 elsif record.class == ReportElementCostItem then "$('#{method_js_id}').hide(); $('#{element_js_id}').hide(); $('#{cost_js_id}').show();"
 	 end
 	 }
 	 </script>
@@ -37,9 +41,10 @@ module CustomReportsHelper
   end
 
   # note - these will be set invisible if not the right type by the "set initial visibilities" js above
-  def report_element_element_form_column(record, input_name) element_form_column(record, input_name) end
   def report_element_model_method_element_form_column(record, input_name) element_form_column(record, input_name) end
   def report_element_question_element_form_column(record, input_name) element_form_column(record, input_name) end
+  def report_element_cost_item_element_form_column(record, input_name) element_form_column(record, input_name) end
+  def report_element_element_form_column(record, input_name) element_form_column(record, input_name) end
 
   def element_form_column(record, input_name)
     visible = record.class == ReportElementQuestion
@@ -63,8 +68,10 @@ module CustomReportsHelper
      "</span>"
   end
 
+  # note - these will be set invisible if not the right type by the "set initial visibilities" js above
   def report_element_model_method_report_model_method_form_column(record, input_name) report_model_method_form_column(record, input_name) end
   def report_element_question_report_model_method_form_column(record, input_name) report_model_method_form_column(record, input_name) end
+  def report_element_cost_item_report_model_method_form_column(record, input_name) report_model_method_form_column(record, input_name) end
   def report_element_report_model_method_form_column(record, input_name) report_model_method_form_column(record, input_name) end
 
   def report_model_method_form_column(record, input_name)
@@ -78,9 +85,27 @@ module CustomReportsHelper
     "</span>"
   end
  
+  # note - these will be set invisible if not the right type by the "set initial visibilities" js above
+  def report_element_model_method_cost_item_form_column(record, input_name) report_cost_item_form_column(record, input_name) end
+  def report_element_question_cost_item_form_column(record, input_name) report_cost_item_form_column(record, input_name) end
+  def report_element_cost_item_cost_item_form_column(record, input_name) report_cost_item_form_column(record, input_name) end
+  def report_element_cost_item_form_column(record, input_name) report_cost_item_form_column(record, input_name) end
+
+  def report_cost_item_form_column(record, input_name)
+    "<span id='#{input_name}_span'>" + 
+      collection_select(:record, :cost_item_id, @eg.cost_items.find_all { 
+           |ci| (ci.is_a?(YearCostItem) || ci.is_a?(ProjectCostItem)) && ci.optional 
+	 }.sort { 
+	   |a,b| a.description <=> b.description # issue 1427, as requested
+	 }, :id, :description, 
+        options ={:prompt => "- select -"}, :id => input_name, :name => input_name) + 
+    "</span>"
+  end
+
   include ActiveScaffoldSortableSubforms
   active_scaffold_sortable_subform :report_element_model_method => :position, 
                                    :report_element_question => :position,
+                                   :report_element_cost_item => :position,
                                    :report_element => :position
 
   protected

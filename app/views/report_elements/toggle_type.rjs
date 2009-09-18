@@ -1,8 +1,18 @@
 if params[:value] == 'ReportElementQuestion'
   page.show(@element_js_id)
   page.hide(@method_js_id)
+  page.hide(@cost_js_id)
 elsif params[:value] == 'ReportElementModelMethod'
   page.hide(@element_js_id)
   page.show(@method_js_id)
+  page.hide(@cost_js_id)
+elsif params[:value] == 'ReportElementCostItem'
+  page.hide(@element_js_id)
+  page.hide(@method_js_id)
+  page.show(@cost_js_id)
+else
+  page.hide(@element_js_id)
+  page.hide(@method_js_id)
+  page.hide(@cost_js_id)
 end
 

@@ -215,6 +215,12 @@ class Profile < ActiveRecord::Base
     }
   end
   
+  # nicer names and display
+  def support_goal() cached_costing_total ? cached_costing_total : BigDecimal(0) end
+  def support_received() BigDecimal("%.2f" % donations_total) end
+  def support_outstanding_use_claimed() support_goal - BigDecimal(support_claimed.to_s) end
+  def support_outstanding_use_received() support_goal - support_received end
+
   def funding_target(eg, use_project_from_eg = false)
     optin_cost_item_ids = Hash[*optin_cost_items.inject([]) {|a,oci| a + [oci.cost_item_id, true ]}]
 
