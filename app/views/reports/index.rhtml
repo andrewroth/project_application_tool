@@ -133,7 +133,6 @@ function new_window(url) {
                 end %></li>
           <script>
             function set_manual_donation_status_visibility() {
-              console.debug('got here');
               if ($('manual_donations_type').options[$('manual_donations_type').selectedIndex].text == 'USDMANUAL') {
                 $('manual_donations_status_span').show();
               } else {
