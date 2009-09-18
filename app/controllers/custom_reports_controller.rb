@@ -112,7 +112,8 @@ class CustomReportsController < ApplicationController
   end
 
   def ensure_project_access
-    unless @show_projects.collect(&:id).include?(params[:project_id].to_i)
+    unless params[:project_id] == 'all' ||
+      @show_projects.collect(&:id).include?(params[:project_id].to_i)
       render(:text => "Sorry, no permission to view that project.")
     end
   end
@@ -183,7 +184,7 @@ class CustomReportsController < ApplicationController
   end
 
   def for_viewers_in_project(pids)
-    pids = @eg.projects.collect &:id if pids == 'all'
+    pids = @show_projects.collect(&:id) if pids == 'all'
     profiles = Profile.find_all_by_project_id pids, :include => [ :appln, { :viewer => :persons } ]
 
     for profile in profiles
