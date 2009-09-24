@@ -1,4 +1,4 @@
-<% @withdrawn ||= project.withdrawns.find :all, :include => [ :reason_for_withdrawal, :project ] %>
+<% @withdrawn ||= project.withdrawns %>
 
 <% if !@withdrawn.empty? %>
   <%= sortable_table %><thead>

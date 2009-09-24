@@ -1,15 +1,5 @@
 <% 
-@accepted = Acceptance.find_all_by_project_id project.id, :include => [
-            { :viewer => [
-                :vieweraccessgroups,
-                { :persons => :campuses }
-              ]
-            },
-            :appln,
-            #:manual_donations,
-            #:auto_donations,
-            :support_coach
-          ]
+@accepted = Acceptance.find_all_by_project_id project.id
 @viewer.set_project project
 @full_view = @viewer.fullview? 
 @cache = ProfileDonation.cache project.id

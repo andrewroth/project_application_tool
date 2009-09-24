@@ -1,4 +1,4 @@
-<% profiles = StaffProfile.find_all_by_project_id project, :include => { :viewer => :persons } %>
+<% profiles = StaffProfile.find_all_by_project_id project %>
 
 <%= sortable_table %><thead>
   <tr>

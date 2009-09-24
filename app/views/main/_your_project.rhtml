@@ -55,12 +55,7 @@ end
     <!-- all staff can see the processor list, but only certain people can actually evaluate -->
     <% @can_evaluate = @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor? %>
     <% appln_includes = [ :references, { :viewer => { :persons => :campuses } }, :preference1, :profiles ]
-       @processor_list = Applying.find_all_by_project_id your_project.id,
-         :include => [
-          :project,
-          :appln,
-          { :locked_by => :persons }
-        ]
+       @processor_list = Applying.find_all_by_project_id your_project.id
     %>
     <% @refs_for_questionnaire = Hash[*(@processor_list.collect{ |applying|
            applying.appln.form.questionnaire.id
