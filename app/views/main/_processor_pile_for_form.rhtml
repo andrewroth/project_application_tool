@@ -23,7 +23,8 @@
           <% end %>
 
     	    <% if form %>
-    	      <% for ref in @refs_for_questionnaire[form.questionnaire.id] %> 
+            <% for ref in ((@refs_for_questionnaire && @refs_for_questionnaire[form.questionnaire.id]) ||
+                         form.questionnaire.references) %> 
               <%= th :name => ref.text.underscore.gsub('_',' '), :type => 'lcase_str' %>
     	      <% end %>
     	    <% end %>
