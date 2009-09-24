@@ -62,6 +62,13 @@ end
           { :locked_by => :persons }
         ]
     %>
+    <% @refs_for_questionnaire = Hash[*(@processor_list.collect{ |applying|
+           applying.appln.form.questionnaire.id
+         }.uniq.inject([]) { |arr,qid|
+           arr << qid << Questionnaire.find(qid).references
+         })]
+    %>
+
     
   <% 
     cache(:controller => 'main', :action => 'your_projects', :section => 'Applying',

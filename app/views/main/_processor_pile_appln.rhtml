@@ -19,7 +19,7 @@
           <% end %>
           <!-- refs -->
           <% if @appln.reference_instances.empty? %>
-            <% for ref in @appln.form.questionnaire.references %>
+            <% for ref in @refs_for_questionnaire[@appln.form.questionnaire.id] %>
               <td>&nbsp;</td>
             <% end %>
           <% else %>
