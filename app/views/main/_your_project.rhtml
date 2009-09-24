@@ -63,11 +63,16 @@ end
         ]
     %>
     
+  <% 
+    cache(:controller => 'main', :action => 'your_projects', :section => 'Applying',
+          :project_id => your_project.id, :role => @viewer.roles_wrt_project(your_project)) do
+  %>
     <p>Processor's pile:
     <blockquote>
       <%= render :partial => "processor_pile", :locals => { :project => your_project } %>
     </blockquote>
     </p>
+  <% end %>
 
   <% 
     cache(:controller => 'main', :action => 'your_projects', :section => 'StaffProfile',
