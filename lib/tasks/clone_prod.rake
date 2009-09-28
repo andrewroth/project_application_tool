@@ -34,7 +34,7 @@ end
 
 def clone_one_db(prod, dev)
   puts "cloning #{prod} to #{dev}"
-  cmd = "mysqldump -h dbserver.crusade.org -u ciministry --password=########### --skip-lock-tables #{prod} | sed \"2 s/.*/SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO';/\" | mysql -h dbserver.crusade.org -u ciministry --password=########### #{dev}"
+  cmd = "mysqldump -h dbserver.crusade.org -u ciministry --password=#{@password} --skip-lock-tables #{prod} | sed \"2 s/.*/SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO';/\" | mysql -h dbserver.crusade.org -u ciministry --password=#{@password} #{dev}"
   puts cmd
   system cmd
 end
@@ -42,6 +42,9 @@ end
 namespace "db:clone" do
   desc "clones the power to change ciministry and summerprojectool dbs to dev_campusforchrist and spt_dev respectively, and removes all answer to confidential qs from spt_dev"
   task :p2c => :environment do
+
+    STDOUT.print "database password: "
+    @password = STDIN.gets.chomp
 
     prod_spt = 'summerprojecttool'
     dev_spt = 'spt_dev'
