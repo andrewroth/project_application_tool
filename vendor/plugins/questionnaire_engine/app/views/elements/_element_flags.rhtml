@@ -3,16 +3,17 @@
 	<%= boolean_select(element_symbol, :is_required) %>
     <%= observe_field("#{element_symbol}_is_required",
 									:url => {:action => 'set_flag', :flag => 'required', :id => element.id},
-									:with => 'value')%>
+									:with => 'value') unless element.new_record? %>
 
 <% @flags.each do |flag| %>
 	<BR><% if element.class.name == "Group" %>"<%= flag.group_txt %>"
     <% else %>"<%= flag.element_txt %>"<% end %>
 	<%= boolean_select(element_symbol, :"is_#{flag.name}?") %>
-    <%= observe_field("#{element_symbol}_is_#{flag.name}",
+    <%- unless element.new_record? -%>
+      <%= observe_field("#{element_symbol}_is_#{flag.name}",
 									:url => {:action => "set_flag", :id => element.id, :flag => flag.name},
                   :before => "$('saving').show();",
                   :complete => "$('saving').hide();",
 									:with => 'value')%>
-    
+    <%- end -%> 
 <% end %>

@@ -1,8 +1,10 @@
 <% @flags.each do |flag| %>	
-	<%= check_box('page', :"is_#{flag.name}?") %> <%= flag.group_txt.sub('group', 'page') %>
-    <%= observe_field("page_is_#{flag.name}?",
+	<%= check_box('page', :"is_#{flag.name}") %> <%= flag.group_txt.sub('group', 'page') %>
+    <%- unless @page.new_record? -%>
+      <%= observe_field("page_is_#{flag.name}",
 									:url => {:action => "set_flag", :id => @page.id, :flag => flag.name},
 									:with => 'value')%>
+    <%- end -%>
 	<BR>
 <% end %>
 <BR>
