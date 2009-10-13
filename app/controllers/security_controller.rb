@@ -130,8 +130,7 @@ class SecurityController < ApplicationController
 
     clear_login_session_info
 
-    result = login_by_ticket
-    result = login_by_gcx if result[:keep_trying]
+    result = login_by_gcx
     result = login_by_cim if result[:keep_trying]
 
     if result[:error]
@@ -149,20 +148,6 @@ class SecurityController < ApplicationController
       logger.info "Intranet login closed @ #{Time.now} - viewer #{@viewer.viewer_userID} id #{@viewer.id}"
     end
 
-  end
-
-  def login_by_ticket
-    return { :keep_trying => true } unless params[:ticket]
-
-    ticket = Ticket.find_by_ticket_ticket(params[:ticket])
-
-    if ticket && ticket.viewer_id
-      session[:login_source] = 'intranet'
-      logger.debug "ticket login succeeded for #{params[:username]}"
-      { :viewer_id => ticket.viewer_id }
-    else
-      { :error => "Sorry, that ticket (#{params[:ticket]}) is invalid.", :keep_trying => true }
-    end
   end
 
   def login_by_cim
