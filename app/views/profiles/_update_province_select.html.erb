@@ -1,0 +1,21 @@
+  // NOTE: function also defined in questionnaire.js since this is loaded in a remote request
+  //         which doesn't let you defined functions
+  function update_province_select(mid) {
+    last_province_id = 'appln_person_person_'+mid+'province_id';
+    country_province_id = last_province_id+'_'+$('appln_person_person_'+mid+'country_id').value;
+
+    // set visibility before ids get switched around
+    if ($(last_province_id) != null) { $(last_province_id).hide(); }
+    if ($(country_province_id) != null) { $(country_province_id).show(); }
+
+    // update names so currently chosen country's province list is the value used in assigning province_id
+    if ($(last_province_id) != null) { $(last_province_id).name = ''; }
+    if ($(country_province_id) != null) { $(country_province_id).name = 'appln_person[person_'+mid+'province_id]'; }
+
+    // update ids so the chosen country's province list is identifiable as $(province_id)
+    if ($(last_province_id) != null) { $(last_province_id).id = $(last_province_id).orig_id; }
+    if ($(country_province_id) != null) {
+      $(country_province_id).orig_id = country_province_id;
+      $(country_province_id).id = last_province_id;
+    }
+  }
