@@ -3,6 +3,11 @@
 
 <% unless @viewer.is_student?(@eg) then %>
 
+<% form_tag(:controller => :manual_donations, :action => :list) do %>
+<p>Search: <%= text_field_tag 'donor_name', params[:donor_name] %>
+<%= submit_tag 'Seach' %>
+<% end %>
+
 <p><%= sortable_table %>
       <thead><tr>
       <% for column in ManualDonation::LIST_COLUMNS %>
@@ -26,11 +31,12 @@
         <% end %> 
     </tbody>
     </table>
-</p>
-    
+    </p>
     <br />
     
-    
+    <center>
+      <%= will_paginate @posts %>    
+    </center>
 
 <% else %>
     <p>You are not authorized to access manual donation listings</p>

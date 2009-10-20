@@ -13,7 +13,15 @@ class ManualDonationsController < ApplicationController
 
   def list
     @submenu_title = "List"
-    @manual_donations = ManualDonation.find(:all)
+    params[:page] ||= 1
+    if params[:donor_name].present?
+      @manual_donations = ManualDonation.paginate :page => params[:page], 
+        :order => 'created_at DESC',
+        :conditions => [ "donor_name LIKE ?", "%#{params[:donor_name]}%" ]
+    else
+      @manual_donations = ManualDonation.paginate :page => params[:page], 
+        :order => 'created_at DESC'
+    end
   end
 
   def show
