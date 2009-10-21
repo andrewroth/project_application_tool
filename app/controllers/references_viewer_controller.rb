@@ -48,7 +48,13 @@ class ReferencesViewerController < ViewOnlineController
 
     ### questionnaire methods
   
-    def get_filter() { :filter => ['confidential'], :default => true } end
+    def get_filter()
+      if @can_view_confidential
+        { }
+      else
+        { :filter => ['confidential'], :default => true }
+      end
+    end
 
     def questionnaire_instance
       @instance = @reference_instance
