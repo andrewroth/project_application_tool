@@ -47,7 +47,7 @@ Rails::Initializer.run do |config|
 
   # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
   # Run "rake -D time" for a list of tasks for finding time zone names.
-  config.time_zone = 'UTC'
+  config.time_zone = 'Pacific Time (US & Canada)'
 
   # Use the database for sessions instead of the file system
   # (create the session table with 'rake db:sessions:create')

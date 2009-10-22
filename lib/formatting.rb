@@ -21,9 +21,9 @@ module Formatting
     return time if time == ''
 
     if style == :ts
-      time.strftime("%b %d %y %H:%M")
+      time.strftime("%b %d %y %H:%M %Z")
     else
-      time.strftime("%Y/%m/%d %H:%M")
+      time.strftime("%Y/%m/%d %H:%M %Z")
     end
   end
 end
