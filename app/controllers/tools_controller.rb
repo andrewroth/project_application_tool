@@ -68,7 +68,7 @@ class ToolsController < ApplicationController
   def accept_from_paper
     @project = Project.find params[:project_id]
     
-    form = @eg.form.find_by_hidden(false)
+    form = @eg.application_form
       @appln = Appln.create :form_id => form.id,
         :viewer_id => params[:viewer_id],
         :status => "started"

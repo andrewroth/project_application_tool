@@ -23,6 +23,14 @@ class EventGroup < Node
 
   attr :filter_hidden, true
 
+  def application_form
+    forms.find_by_hidden(false) || forms.all.detect{ |f| 
+      # find first form that's not the processor form or a reference form
+      !f.name != 'Processor Form' && 
+        !ReferenceAttribute.find_by_questionnaire_id(f.questionnaire.id)
+    }
+  end
+
   def eventgroup_coordinators_names
     eventgroup_coordinators.collect{ |egc| egc.viewer.name if egc.viewer }.compact.join(', ')
   end

@@ -62,7 +62,7 @@ class MainController < ApplicationController
   end
   
   def your_campuses
-    @current_projects_form = @eg.forms.find_by_hidden(false)
+    @current_projects_form = @eg.application_form
 
     # getting the project name as a join is simply too slow
     @projects_cache = Hash[*@eg.projects.collect{ |p| [ p.id, p.title ] }.flatten]

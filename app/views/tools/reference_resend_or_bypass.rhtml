@@ -15,14 +15,14 @@ end
 
 <p><b>Note: Please do not use the BYPASS feature unless you know what you are doing.  It may not do what you expect.  Please contact russ.martin@c4c.ca for help with this feature.</b></p>
 
-<% if @eg.forms.find_by_hidden(false).nil? %>
+<% if @eg.application_form.nil? %>
 	All forms are hidden, make one not hidden to see this list.
 <% else %>
 	<table class='inconspicuous' style='border-collapse: collapse'>
 	  <tr>
 	    <th>name</th>
 	    <th>status</th>
-	    <% for reference in @eg.forms.find_by_hidden(false).questionnaire.references -%>
+	    <% for reference in @eg.application_form.questionnaire.references -%>
 	      <th colspan='3'><%= reference.text %></th>
 	    <% end -%>
 	  </tr>

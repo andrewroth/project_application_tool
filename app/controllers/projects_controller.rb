@@ -10,7 +10,7 @@ class ProjectsController < ApplicationController
   
   def bulk_summary_forms
     @page_title = "Acceptance Summary Forms"
-    form = @eg.forms.find_by_hidden false # params[:form_id]
+    form = @eg.application_form
     @questionnaire = form.questionnaire
     @questionnaire.filter = { :filter => [ "in_summary_view" ], :default => false }
     @pages = @questionnaire.pages
