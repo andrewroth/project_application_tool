@@ -128,7 +128,7 @@ module Permissions
   
   def is_project_staff
     return true if @viewer.is_eventgroup_coordinator?(@eg)
-    return @viewer.is_atleast_project_staff(@profile.project)
+    return @viewer.is_atleast_project_staff(@project || @profile.project)
   end
   
   def is_profile_ownership_or_any_project_staff

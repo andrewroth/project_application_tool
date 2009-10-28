@@ -28,7 +28,7 @@ function new_window(url) {
         
         <% if !@project_director_projects.empty? %>
             <li><%= project_specific_report 'Processor Forms', 'processor_forms', 
-                        :formats => [ 'pdf','html' ], :include_blank => true, :include_all => true, 
+                        :formats => [ 'pdf','html' ], :include_blank => true,
                         :projects_list => 'director' do |report|
                       viewers_with_profile_for_project_choice report, :formats => [ 'pdf','html' ], :include_all => true
                     end
