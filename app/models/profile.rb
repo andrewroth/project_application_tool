@@ -71,9 +71,9 @@ class Profile < ActiveRecord::Base
   #
   #  :type - the new profile type
   #  :status - the new status for the profile
-  #  :user - the User object of the person making the change
+  #  :viewer - the Viewer of the person making the change
   #
-  def manual_update(params, user = params.delete(:user))
+  def manual_update(params, viewer = params.delete(:viewer))
     profile = self
     params[:type] = params[:type].to_s if params[:type]
 
@@ -102,7 +102,7 @@ class Profile < ActiveRecord::Base
     if (params[:status] || params[:type]) && profile.respond_to?(:initialize_state)
       profile.initialize_state(
         { :status => (params[:status] || 'unspecified').to_sym, 
-          :setter_id => user.id
+          :setter_id => viewer.id
         }.merge(init_params || {})
       ) 
     end
@@ -111,11 +111,11 @@ class Profile < ActiveRecord::Base
   end
   
   def withdraw!(options)
-    user = options.delete :user
+    viewer = options.delete :viewer
     manual_update options.merge({ 
         :type => 'Withdrawn', 
-        :status => (user.viewer.id == viewer_id) ? 'self_withdrawn' : 'declined'
-      }), user
+        :status => (viewer.id == viewer_id) ? 'self_withdrawn' : 'declined'
+      }), viewer
   end
 
   # returns option for the initialize_state method, and the new profile

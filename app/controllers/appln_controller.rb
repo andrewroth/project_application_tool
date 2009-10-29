@@ -32,7 +32,7 @@ class ApplnController < InstanceController
   end
   
   def withdraw
-    @appln.profile.withdraw! :status => 'self_withdrawn', :user => @viewer
+    @appln.profile.withdraw! :status => 'self_withdrawn', :viewer => @viewer
     flash[:notice] = 'Your application has been withdrawn.  If you change your mind, please email the appropriate address below.'
     redirect_to :controller => :your_apps, :action => :list
   end

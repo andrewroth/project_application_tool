@@ -55,7 +55,7 @@
   <p>Your application has been withdrawn: 
   <ul>
     <% for appln in @withdrawn %>
-      <li><%= appln.form_title %> (<%= appln.status %>)</li>
+      <li><%= appln.form_title %> (<%= appln.status.humanize %>)</li>
     <% end %>
   </ul>
   </p>
