@@ -45,7 +45,7 @@ class CostItemsController < ApplicationController
       end
     end
     @cost_item.save!
-    #list
+    list
     render :partial => 'list'
   end
 

@@ -79,6 +79,7 @@ describe CostItemsController do
         @cost_item.should_receive(:[]=).with(:type, "YearCostItem")
         @cost_item.should_receive(:save!)
         @cost_item.stub!(:update_costing_total_cache)
+        @event_group.should_receive(:cost_items).and_return([])
         post 'set_applies_to', :id => @cost_item.id, :value => 'all'
       end
             

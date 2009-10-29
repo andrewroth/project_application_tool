@@ -94,7 +94,7 @@ def mock_event_group(params = {})
   @event_group = mock_model(EventGroup, {
     :title => 'event_group', :empty? => false, :logo => "a", 
     :projects => (@project ? [ @project ] : [ ]), :prep_items => [],
-    :forms => mock_ar_arr([@form], :find_by_hidden => @form)
+    :forms => mock_ar_arr([@form]), :application_form => @form
   }.merge(params))
   EventGroup.stub!(:find).and_return(@event_group)
 end
