@@ -52,7 +52,7 @@ class Applying < Profile
 
     if params[:status] == :submitted || params[:status] == :completed
       app = self.appln
-      app.submitted_at ||= Time.now
+      app.profile.submitted_at ||= Time.now
       app.save!
     end
   end
