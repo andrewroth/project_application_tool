@@ -117,7 +117,13 @@ def mock_profile
   @profile = mock_model(Profile, :destroy => true, :viewer => @viewer, :viewer_id => @viewer.id,
                        :update_costing_total_cache => true)
   Profile.stub!(:find).and_return(@profile)
+  Profile.stub!(:find).with(@profile.id.to_s, :include => :appln).and_return(@profile)
   Profile.stub!(:project).and_return(@project)
+end
+
+def mock_appln
+  depends_on(:profile)
+
 end
 
 def mock_ar_arr(arr, extras = {})
@@ -177,8 +183,22 @@ def stub_viewer(params = {}, person_params = {})
 end
 
 def stub_profile(params = {})
+  params[:project] ||= @project
+  params[:viewer] ||= @viewer
   @profile = stub_model(Profile, params)
+  Profile.stub!(:find).with(@profile.id.to_s, :include => :appln).and_return(@profile)
   stub_model_find(:profile)
+end
+
+def stub_appln(params = {})
+  depends_on(:viewer)
+  depends_on(:profile)
+  params[:profile] ||= @profile
+  params[:viewer_id] ||= @viewer.id
+  params[:viewer] ||= @viewer
+  @appln = mock_model(Appln, params)
+  @profile.stub!(:appln => @appln)
+  stub_model_find(:appln)
 end
 
 def stub_project(params = {})
@@ -195,6 +215,12 @@ def stub_event_group(params = {})
   @event_group = stub_model(EventGroup, params)
   EventGroup.stub!(:find).with(:all).and_return([ @event_group] )
   stub_model_find(:event_group)
+end
+
+def stub_form
+  depends_on(:event_group)
+  @form = stub_model(Form, params)
+  @event_group.stub!(:application_form).and_return(@form)
 end
 
 def stub_model_find(v)

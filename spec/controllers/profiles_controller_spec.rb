@@ -3,11 +3,18 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe ProfilesController do
 
   before do 
-    mock_event_group
-    mock_viewer_as_projects_coordinator
-    mock_project
-    mock_profile
-    mock_login
+    #mock_event_group
+    #mock_viewer_as_projects_coordinator
+    #mock_project
+    #mock_profile
+    #mock_login
+    stub_viewer_as_event_group_coordinator
+    stub_event_group
+    stub_form
+    stub_project
+    stub_profile
+    stub_appln
+    setup_login
 
     @params = { :id => @profile.id }
   end
@@ -24,12 +31,7 @@ describe ProfilesController do
   it "should update profile" do
       @profile.should_receive(:manual_update).with(nil, @viewer).and_return(@viewer)
       post 'update', @params
-      flash[:notice].should eql("Successfully updated Cop Ter's profile.")
-    end
-    
-    it "should destroy profile" do
-      @profile.destroy
-      response.should be_success
+      flash[:notice].should eql("Successfully updated #{@viewer.name}'s profile.")
     end
     
     it "should make a new empty profile" do

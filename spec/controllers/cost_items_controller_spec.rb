@@ -5,6 +5,7 @@ describe CostItemsController do
   before do 
     stub_event_group
     stub_project
+    stub_profile
   end
 
   describe "for eventgroup coordinator" do
@@ -108,7 +109,7 @@ describe CostItemsController do
     it "should make a profile cost item" do
       @profile_cost_item = stub_model(ProfileCostItem, :save => true)
       ProfileCostItem.should_receive(:new).and_return(@profile_cost_item)
-      post 'create', :cost_item => @params, :profile_id => '1'
+      post 'create', :cost_item => @params, :profile_id => @profile.id
       assigns[:cost_item].class.should == ProfileCostItem
     end
 
