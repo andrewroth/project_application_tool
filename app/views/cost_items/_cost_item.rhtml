@@ -40,7 +40,7 @@ end
         :url => {:controller => 'cost_items', :action => "update", :id => cost_item.id},
         :loading => "$('spinner_#{cost_item.id}').show();",
         :loaded => "$('spinner_#{cost_item.id}').hide();",
-        :with => 'cost_item[optional]' %>
+        :with => 'cost_item_optional' %>
 
 <%= observe_field 'applies_to_' + cost_item.id.to_s, 
         :update => 'list',

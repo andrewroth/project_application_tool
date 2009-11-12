@@ -1,4 +1,4 @@
 Now choose name from dropdown <%= select_tag 'profile[viewer_id]', options_for_select( [''] + @viewers.collect{ |v| 
    [ "#{v.name} (#{v.viewer_userID})", v.id ] } ) %>
-<%= observe_field 'profile[viewer_id]', :url => { :action => :populate_applications },
+<%= observe_field 'profile_viewer_id', :url => { :action => :populate_applications },
       :update => 'appln_span', :with => 'viewer_id' %>
