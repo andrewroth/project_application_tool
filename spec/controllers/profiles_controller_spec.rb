@@ -23,7 +23,7 @@ describe ProfilesController do
     Appln.should_receive(:create).and_return(mock_model(Appln))
     Profile.should_receive(:create).and_return(@profile)
     @profile.stub!(:manual_update => true, :reload => true)
-    post 'create', { :profile => { :appln_id => 'new' } }
+    post 'create', { :profile => { :appln_id => 'new', :viewer_id => 1 } }
     assigns[:profile].should_not be_nil
     response.should be_redirect
   end
