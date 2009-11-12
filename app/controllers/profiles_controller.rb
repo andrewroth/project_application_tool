@@ -44,6 +44,13 @@ class ProfilesController < ApplicationController
   end
 
   def create
+    unless params[:profile][:viewer_id].present?
+      @profile = Profile.new
+      @profile.errors.add_to_base "no person chosen"
+      render :action => :new
+      return
+    end
+
     @profile = Profile.create
 
     # make new app if necessary

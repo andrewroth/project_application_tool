@@ -92,7 +92,7 @@ class Profile < ActiveRecord::Base
     profile.save!
 
     # special case - update the appln's viewer_id if viewer_id changed
-    if params[:viewer_id] && profile.try(:appln).try(:viewer_id) != params[:viewer_id]
+    if params[:viewer_id] && profile.appln && profile.appln.viewer_id != params[:viewer_id]
       app = profile.appln
       app.viewer_id = profile.viewer_id
       app.save!
