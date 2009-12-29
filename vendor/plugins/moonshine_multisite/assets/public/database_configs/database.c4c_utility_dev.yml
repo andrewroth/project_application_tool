@@ -1,0 +1,5 @@
+development:
+  database: c4c_utility
+
+production:
+  database: c4c_utility

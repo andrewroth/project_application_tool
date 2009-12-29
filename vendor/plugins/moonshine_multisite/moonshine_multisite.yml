@@ -1,0 +1,123 @@
+---
+
+# stages are required -- sets the stages you want your sites to work with
+:stages: 
+- :prod
+- :staging
+- :dev
+
+# legacy_stages are optional - sets up some stages for use without capistrano-ext
+# this is useful if you have a sysadmin who doesn't want to use moonshine
+:legacy_stages: 
+- :dev
+- :prod
+
+:servers:
+  :c4c:
+    :moonshine:
+      :user: deploy
+      :group: www-data
+      :server: pat.powertochange.org
+      :lan_ip: 192.168.1.112
+      :domain: campusforchrist.org
+      :time_zone: PST
+      :private_path: /home/deploy/private_repo2
+      :private_host: 208.87.54.217
+      :private_user: deploy
+      :ssl: true
+      :ruby: ree187 
+      :utility: /var/www/c4c_utility.campusforchrist.org/current
+    :stage_moonshines:
+      :pulse:
+        :prod: 
+          :db_name: emu
+          :server_name: pulse.campusforchrist.org
+        :dev: 
+          :db_name: emu_dev
+          :server_name: pulse.dev.campusforchrist.org
+          :application_aliases:
+            - moose.campusforchrist.org
+        :staging: 
+          :db_name: emu_stage
+          :server_name: pulse.dev.campusforchrist.org
+      :intranet:
+        :prod:
+          :db_name: ciministry
+        :dev:
+          :db_name: dev_campusforchrist
+        :staging:
+          :db_name: dev_campusforchrist
+      :utility:
+        :dev:
+          :db_name: c4c_utility
+          :server_name: utility.local
+    :local:
+      :moonshine:
+        :domain: local
+        :ssl: false
+      :stage_moonshines:
+        :pulse:
+          :prod: 
+            :db_name: c4c_pulse_prod
+          :dev:  # only dev is installed in /var/www, the other stages are for db only
+                 # since there is only c4c.dev (no c4c.prod or c4c.staging) in pulse git
+            :db_name: c4c_pulse_dev
+            :server_name: pulse.local
+            :application_aliases:
+              - moose.local
+          :staging: 
+            :db_name: emu
+        :intranet: # for db only
+          :prod:
+            :db_name: c4c_intranet_prod
+          :dev:
+            :db_name: c4c_intranet_dev
+          :staging:
+            :db_name: c4c_intranet_staging
+        :utility:
+          :dev:
+            :db_name: c4c_utility
+            :server_name: utility.local
+            :deploy_to: /var/www/utility.local
+  :p2c:
+    :moonshine:
+      :user: deploy
+      :group: www-data
+      :server: pat.powertochange.org
+      :lan_ip: 192.168.1.112
+      :domain: powertochange.org
+      :time_zone: PST
+      :private_path: /home/deploy/private_repo2
+      :private_host: 208.87.54.217
+      :private_user: deploy
+      :ssl: true
+      :ruby: ree187 
+      :utility: /var/www/c4c_utility.campusforchrist.org/current
+    :stage_moonshines:
+      :pat:
+        :prod: 
+          :db_name: summerprojecttool
+          :server_name: pat.powertochange.org
+        :dev: 
+          :db_name: spt_dev
+          :server_name: pat.dev.powertochange.org
+        :staging: 
+          :db_name: spt_dev
+          :server_name: pat.staging.powertochange.org
+    :local:
+      :moonshine:
+        :domain: local
+        :ssl: false
+      :stage_moonshines:
+        :pat:
+          :staging:
+            :db_name: p2c_pat_staging
+          :dev:
+            :db_name: p2c_pat_dev
+            :server_name: pat.local
+            :deploy_to: /var/www/pat.local
+:apps:
+  :pat: git://github.com/andrewroth/project_application_tool.git
+  :pulse: git://github.com/twinge/ministry-tracker.git
+  :intranet: 
+  :utility: git://github.com/andrewroth/c4c_utility.git
