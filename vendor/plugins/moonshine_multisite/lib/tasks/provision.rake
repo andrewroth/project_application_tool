@@ -135,34 +135,6 @@ def cap_upload_certs(stage)
 end
 =end
 
-# TODO: all these comments are out of date now
-#
-# :database_mode: is one of
-#
-# :vanilla
-#
-#   Creates the databases, and runs rake db:seed.
-#
-# :mirror
-#
-#   Copies the database info from the seed server locally, using the names specified
-#   in moonshine_multisite.yml for the seed server.  If utopian is true, the database
-#   names will be done with utopian naming (ex. p2c_pat_dev)
-#
-# :seed
-#
-#   Similar to mirror, but uses the local server names.  For example, you could
-#   make a server "server2" seeded from "server" if you wanted to move away from
-#   "server2" and keep the database data.  Utopian will also work for this option,
-#   if you want the new server to use utopian naming instead of what's given in
-#   moonshine_multisite.yml (not sure why you'd want this, but it's there).
-#
-# :utopian: is a flag to override the database naming on the new server to always
-# use the utopian names.  You might want to do this if you've been forced to support
-# an old legacy naming convention, but are now moving to a new server.  Or if you're
-# setting up a local computer for development and would prefer the consistent names.
-#
-#
 def provision(server, server_config, utopian)
   debug "[DBG] setup #{server} utopian=#{utopian}"
   debug "[DBG] config #{server_config.inspect}"
@@ -174,23 +146,23 @@ def provision(server, server_config, utopian)
     app_root = "#{tmp_dir}/#{app}"
 
     # set up all apps on server
-    first = true # first time deploy:setup should run
     multisite_config_hash[:stages].each do |stage|
       cap_stage = "#{server}/#{stage}"
       utopian_name = utopian_db_name(server, app, stage)
       debug "----------------------------- #{app.to_s.ljust(10, " ")} #{stage.to_s.ljust(10, " ")} ----------------------------"
+
       # update and make sure this app is supposed to go on this server
       if repo == '' || %x[git ls-remote #{repo} #{server}.#{stage}] == ''
         debug "[WRN] Skipping installation of #{app} on #{server} since no #{server}.#{stage} branch found"
         next
       end
-=begin
-      if !utopian && legacy_db_name(server, app, stage).nil?
-        debug "[WRN] Skipping installation of #{app} on #{server} since no legacy db name found"
+
+      new_cap server, app, stage, utopian
+
+      if @cap_config.fetch(:skip_deploy, false)
+        debug "[WRN] Skipping installation of #{app} on #{server} since skip_deploy flag is set"
         next
       end
-=end
-      new_cap server, app, stage, utopian
 
       # deploy
       server_moonshine_folder = "#{app_root}/config/deploy/#{server}"
@@ -198,10 +170,8 @@ def provision(server, server_config, utopian)
       if first_app && ENV['skipsetup'] != 'true'
         run_cap cap_stage, "deploy:setup"
         first_app = false
-      elsif first
-        run_cap cap_stage, "moonshine:setup_directories"
-        first = false
       end
+      #run_cap cap_stage, "moonshine:setup_directories"
 
       # copy the database file
       #@cap_config.set(:shared_config, (@cap_config.fetch(:shared_configs, []) + [ "config/database.yml", "config/database.#{utopian_name}.yml", "config/moonshine.yml" ]).uniq)
@@ -209,29 +179,24 @@ def provision(server, server_config, utopian)
       if utopian
         db_file = File.read(File.join(MOONSHINE_MULTISITE_ROOT, "/assets/public/database_configs/database.#{utopian_name}.yml"))
       else
-        db_file = File.read(Rails.root.join("/app/manifests/assets/private/database_configs/database.#{utopian_name}.yml"))
+        db_file = File.read("app/manifests/assets/private/database_configs/database.#{utopian_name}.yml")
       end
       @cap_config.put db_file, "#{@cap_config.fetch(:shared_path)}/config/database.yml"
       @cap_config.put YAML::dump(@cap_config.fetch(:moonshine_config)), "#{@cap_config.fetch(:shared_path)}/config/moonshine.yml"
       puts "REPO BEFORE DEPLOY IS #{@cap_config.fetch(:repository)}"
-      run_cap cap_stage, "deploy"
-      run_cap cap_stage, "shared_config:symlink"
+      puts "BRANCH BEFORE DEPLOY IS #{@cap_config.fetch(:branch)}"
+      #run_cap cap_stage, "deploy"
+      #run_cap cap_stage, "shared_config:symlink"
 
       # upload certs if possible
-
-=begin
-      # run the appropriate database setup command
-      if database_mode == :nothing
-        # create only
-        run_rake_remotely "pulse:create:c4c:all"
-        run_rake_remotely "pulse:create:c4c:all:utopian"
-      elsif database_mode == :mirror
-        # cap <db_source> pull:<pat>:to:<db_source>
-        puts "cap #{db_source} pull:#{app}:to:#{db_source}#{":utopian" if utopian}"
-      elsif database_mode == :seed
-        puts "cap #{db_source} pull:#{app}:to:#{server}#{":utopian" if utopian}"
+      if @cap_config.fetch(:certs).is_a?(Hash)
+        @cap_config.fetch(:certs).each do |local_file, remote_file|
+          base_name = File.basename(remote_file)
+          tmp_file = "/tmp/#{base_name}"
+          @cap_config.upload local_file, tmp_file
+          @cap_config.sudo "mv #{tmp_file} #{remote_file}"
+        end
       end
-=end
     end
   end
 end

@@ -60,7 +60,15 @@ def apply_moonshine_multisite_config(server, app, stage)
   @moonshine_config[:repository] ||= multisite_config_hash[:apps][app]
   @moonshine_config[:repository] ||= (@moonshine_config[:repository] =~ /^svn/ ? :svn : :git)
   @moonshine_config[:branch] ||= (stage ? "#{server}.#{stage}" : nil)
-  @moonshine_config[:deploy_to] ||= "/var/www/#{app}.#{@moonshine_config[:domain]}"
+  if @moonshine_config[:server_name]
+    @moonshine_config[:deploy_to] ||= "/var/www/#{@moonshine_config[:server_name]}"
+  else
+    if stage == multisite_config_hash[:stages].first
+      @moonshine_config[:deploy_to] ||= "/var/www/#{app}.#{@moonshine_config[:domain]}"
+    else
+      @moonshine_config[:deploy_to] ||= "/var/www/#{app}.#{stage}.#{@moonshine_config[:domain]}"
+    end
+  end
   puts "REPO AFTER IS #{@moonshine_config[:repository]}"
 
   # allow overriding from env

@@ -1,10 +1,10 @@
 <% if configuration[:ssl] %>
 <VirtualHost *:80>
-  ServerName <%= configuration[:application] %>
-<% if configuration[:application_aliases] %>
-  ServerAlias <%= configuration[:application_aliases].to_a.join(' ') %>
+  ServerName <%= configuration[:server_name] %>
+<% if configuration[:server_aliases] %>
+  ServerAlias <%= configuration[:server_aliases].to_a.join(' ') %>
 <% end %>
-  Redirect 301 / https://<%= configuration[:application] %>
+  Redirect 301 / https://<%= configuration[:server_name] %>
 </VirtualHost>
 <% end %>
 
@@ -13,9 +13,9 @@
 <% else %>
 <VirtualHost *:80>
 <% end %>
-  ServerName <%= configuration[:application] %>
-<% if configuration[:application_aliases] %>
-  ServerAlias <%= configuration[:application_aliases].to_a.join(' ') %>
+  ServerName <%= configuration[:server_name] %>
+<% if configuration[:server_aliases] %>
+  ServerAlias <%= configuration[:server_aliases].to_a.join(' ') %>
 <% end %>
   DocumentRoot <%= configuration[:deploy_to] + "/current/public" %>
   RailsEnv <%= configuration[:passenger][:rails_env] || ENV['RAILS_ENV'] || 'production' %>
@@ -45,7 +45,7 @@
      downgrade-1.0 force-response-1.0
 
   # Deflate
-  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/x-javascript
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css server/x-javascript
   BrowserMatch ^Mozilla/4 gzip-only-text/html
   BrowserMatch ^Mozilla/4\.0[678] no-gzip
   BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
