@@ -35,7 +35,7 @@
         :dev: 
           :db_name: emu_dev
           :server_name: pulse.dev.campusforchrist.org
-          :application_aliases:
+          :server_aliases:
             - moose.campusforchrist.org
         :staging: 
           :db_name: emu_stage
@@ -43,14 +43,18 @@
       :intranet:
         :prod:
           :db_name: ciministry
+          :skip_deploy: true
         :dev:
           :db_name: dev_campusforchrist
+          :skip_deploy: true
         :staging:
           :db_name: dev_campusforchrist
+          :skip_deploy: true
       :utility:
         :dev:
           :db_name: c4c_utility
           :server_name: utility.local
+          :skip_pull: true
     :local:
       :moonshine:
         :domain: local
@@ -59,24 +63,31 @@
         :pulse:
           :prod: 
             :db_name: c4c_pulse_prod
+            :skip_deploy: true
+            :sensitive: true
           :dev:  # only dev is installed in /var/www, the other stages are for db only
                  # since there is only c4c.dev (no c4c.prod or c4c.staging) in pulse git
             :db_name: c4c_pulse_dev
             :server_name: pulse.local
-            :application_aliases:
+            :server_aliases:
               - moose.local
           :staging: 
             :db_name: emu
+            :skip_deploy: true
         :intranet: # for db only
           :prod:
             :db_name: c4c_intranet_prod
+            :skip_deploy: true
+            :sensitive: true
           :dev:
             :db_name: c4c_intranet_dev
+            :skip_deploy: true
           :staging:
             :db_name: c4c_intranet_staging
+            :skip_deploy: true
         :utility:
           :dev:
-            :db_name: c4c_utility
+            #:db_name: c4c_utility
             :server_name: utility.local
             :deploy_to: /var/www/utility.local
   :p2c:
@@ -112,10 +123,16 @@
         :pat:
           :staging:
             :db_name: p2c_pat_staging
+            :skip_deploy: true
           :dev:
             :db_name: p2c_pat_dev
             :server_name: pat.local
             :deploy_to: /var/www/pat.local
+          :prod:
+            :db_name: p2c_pat_prod
+            :skip_deploy: true
+            :sensitive: true
+
 :apps:
   :pat: git://github.com/andrewroth/project_application_tool.git
   :pulse: git://github.com/twinge/ministry-tracker.git
