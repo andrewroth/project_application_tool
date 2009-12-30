@@ -26,9 +26,8 @@
       :private_user: deploy
       :ssl: true
       :certs:
-        :dir: app/manifests/assets/private/certs
-        :cert: /etc/apache2/certs/campusforchrist.org.cert
-        :key: /etc/apache2/certs/campusforchrist.org.key
+        - "app/manifests/assets/private/certs/campusforchrist.org.cert": "/etc/apache2/certs/campusforchrist.org.cert"
+        - "app/manifests/assets/private/certs/campusforchrist.org.key": "/etc/apache2/certs/campusforchrist.org.key"
       :ruby: ree187 
       :utility: /var/www/c4c_utility.campusforchrist.org/current
     :stage_moonshines:
