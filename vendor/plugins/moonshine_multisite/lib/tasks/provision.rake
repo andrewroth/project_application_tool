@@ -146,7 +146,6 @@ def provision(server, server_config, utopian)
     app_root = "#{tmp_dir}/#{app}"
 
     # set up all apps on server
-    first = true # first time deploy:setup should run
     multisite_config_hash[:stages].each do |stage|
       cap_stage = "#{server}/#{stage}"
       utopian_name = utopian_db_name(server, app, stage)
@@ -171,10 +170,8 @@ def provision(server, server_config, utopian)
       if first_app && ENV['skipsetup'] != 'true'
         run_cap cap_stage, "deploy:setup"
         first_app = false
-      elsif first
-        run_cap cap_stage, "moonshine:setup_directories"
-        first = false
       end
+      #run_cap cap_stage, "moonshine:setup_directories"
 
       # copy the database file
       #@cap_config.set(:shared_config, (@cap_config.fetch(:shared_configs, []) + [ "config/database.yml", "config/database.#{utopian_name}.yml", "config/moonshine.yml" ]).uniq)
@@ -182,16 +179,24 @@ def provision(server, server_config, utopian)
       if utopian
         db_file = File.read(File.join(MOONSHINE_MULTISITE_ROOT, "/assets/public/database_configs/database.#{utopian_name}.yml"))
       else
-        db_file = File.read(Rails.root.join("/app/manifests/assets/private/database_configs/database.#{utopian_name}.yml"))
+        db_file = File.read("app/manifests/assets/private/database_configs/database.#{utopian_name}.yml")
       end
       @cap_config.put db_file, "#{@cap_config.fetch(:shared_path)}/config/database.yml"
       @cap_config.put YAML::dump(@cap_config.fetch(:moonshine_config)), "#{@cap_config.fetch(:shared_path)}/config/moonshine.yml"
       puts "REPO BEFORE DEPLOY IS #{@cap_config.fetch(:repository)}"
       puts "BRANCH BEFORE DEPLOY IS #{@cap_config.fetch(:branch)}"
-      run_cap cap_stage, "deploy"
-      run_cap cap_stage, "shared_config:symlink"
+      #run_cap cap_stage, "deploy"
+      #run_cap cap_stage, "shared_config:symlink"
 
       # upload certs if possible
+      if @cap_config.fetch(:certs).is_a?(Hash)
+        @cap_config.fetch(:certs).each do |local_file, remote_file|
+          base_name = File.basename(remote_file)
+          tmp_file = "/tmp/#{base_name}"
+          @cap_config.upload local_file, tmp_file
+          @cap_config.sudo "mv #{tmp_file} #{remote_file}"
+        end
+      end
     end
   end
 end
