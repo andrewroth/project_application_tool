@@ -210,8 +210,12 @@ private
     # load this gems' dependencies. we don't create packages for em, we just
     # check them against the system dependency map
     specs = Gem::SpecFetcher.fetcher.fetch exact_dep
-    spec = specs.first.first
-    deps = spec.dependencies
+    if specs.first
+      spec = specs.first.first
+      deps = spec.dependencies
+    else
+      deps = []
+    end
     deps << exact_dep
     deps.each do |dep|
       (configuration[:apt_gems][dep.name.to_sym] || []).each do |apt|
