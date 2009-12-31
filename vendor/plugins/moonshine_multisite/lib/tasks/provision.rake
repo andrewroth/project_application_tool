@@ -171,7 +171,7 @@ def provision(server, server_config, utopian)
         run_cap cap_stage, "deploy:setup"
         first_app = false
       end
-      #run_cap cap_stage, "moonshine:setup_directories"
+      run_cap cap_stage, "moonshine:setup_directories"
 
       # copy the database file
       #@cap_config.set(:shared_config, (@cap_config.fetch(:shared_configs, []) + [ "config/database.yml", "config/database.#{utopian_name}.yml", "config/moonshine.yml" ]).uniq)
@@ -185,8 +185,8 @@ def provision(server, server_config, utopian)
       @cap_config.put YAML::dump(@cap_config.fetch(:moonshine_config)), "#{@cap_config.fetch(:shared_path)}/config/moonshine.yml"
       puts "REPO BEFORE DEPLOY IS #{@cap_config.fetch(:repository)}"
       puts "BRANCH BEFORE DEPLOY IS #{@cap_config.fetch(:branch)}"
-      #run_cap cap_stage, "deploy"
-      #run_cap cap_stage, "shared_config:symlink"
+      run_cap cap_stage, "deploy"
+      run_cap cap_stage, "shared_config:symlink"
 
       # upload certs if possible
       if @cap_config.fetch(:certs).is_a?(Hash)
