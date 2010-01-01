@@ -28,11 +28,20 @@ namespace :pull do
       desc "dumps #{app} remotely, downloads it, and loads locally"
       task :default do
         if fetch(:stage_only, nil)
-          set(:app, app)
-          set_remote_db
-          if fetch(:remote_db, nil)
-            set_local_db
-            pull_db app, fetch(:server_only), fetch(:stage_only), fetch(:remote_utopian), fetch(:local_db)
+          if ENV['sensitive'] != 'true' && traverse_hash(multisite_config_hash, 
+                                                         [ :servers, fetch(:server_only), :stage_moonshines, app, fetch(:stage_only), :sensitive ])
+            set(:app, app)
+            set_remote_db
+            puts "[WRN] skipping database '#{fetch(:remote_db)}' because it has sensitive data.  If you really want this, specify the 'sensitive=true' parameter" 
+          else
+            set(:app, app)
+            set_remote_db
+            if fetch(:remote_db, nil)
+              set_local_db
+              pull_db app, fetch(:server_only), fetch(:stage_only), fetch(:remote_utopian), fetch(:local_db)
+            else
+              puts "[WRN] Couldn't find a database for app #{app} on server #{fetch(:server_only)} stage #{fetch(:stage_only)}"
+            end
           end
         else
           find_and_execute_task "pull:#{app}:all"
