@@ -189,7 +189,7 @@ def provision(server, server_config, utopian)
       run_cap cap_stage, "shared_config:symlink"
 
       # upload certs if possible
-      if @cap_config.fetch(:certs).is_a?(Hash)
+      if @cap_config.fetch(:certs, nil).is_a?(Hash)
         @cap_config.fetch(:certs).each do |local_file, remote_file|
           base_name = File.basename(remote_file)
           tmp_file = "/tmp/#{base_name}"
