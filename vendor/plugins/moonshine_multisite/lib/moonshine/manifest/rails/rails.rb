@@ -3,7 +3,6 @@ module Moonshine::Manifest::Rails::Rails
   # Attempt to bootstrap your application. Calls <tt>rake moonshine:bootstrap</tt>
   # which runs:
   #
-  #   rake db:schema:load (if db/schema.rb exists)
   #   rake db:migrate (if db/migrate exists)
   #
   # We then run a task to load bootstrap fixtures from <tt>db/bootstrap</tt>

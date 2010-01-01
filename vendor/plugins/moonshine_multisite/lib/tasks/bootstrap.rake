@@ -41,7 +41,6 @@ namespace :moonshine do
   desc <<-DOC
   Attempt to bootstrap this application. In order, we run:
 
-    rake db:schema:load (if db/schema.rb exists)
     rake db:migrate (if db/migrate exists)
     rake moonshine:db:bootstrap (if db/bootstrap/ exists)
     rake moonshine:app:bootstrap
@@ -51,7 +50,6 @@ namespace :moonshine do
   so!
   DOC
   task :bootstrap do
-    Rake::Task["db:schema:load"].invoke if File.exist?("db/schema.rb")
     Rake::Task["environment"].invoke
     Rake::Task["db:migrate"].invoke if File.exist?("db/migrate")
     Rake::Task["moonshine:db:bootstrap"].invoke if File.exist?("db/bootstrap")
