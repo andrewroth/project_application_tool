@@ -64,7 +64,6 @@
       :moonshine:
         :domain: local
         :ssl: false
-        :utility: /var/www/utility.local/current
       :stage_moonshines:
         :pulse:
           :prod: 
@@ -128,7 +127,6 @@
       :moonshine:
         :domain: local
         :ssl: false
-        :utility: /var/www/utility.local/current
       :stage_moonshines:
         :pat:
           :staging:
