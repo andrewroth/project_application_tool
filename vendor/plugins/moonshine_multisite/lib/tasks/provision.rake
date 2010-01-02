@@ -8,20 +8,18 @@ rescue MissingSourceFile => ex
 end
 require 'ftools'
 
-namespace :moonshine do
-  namespace :multisite do
-    namespace :provision do
-      multisite_config_hash[:servers].each do |server, server_config|
-        desc "Provision the #{server} server"
-        task server do
-          provision(server, server_config, false)
-        end
-        namespace server do
-          desc "Provision the #{server} server"
-          task :utopian do
-            provision(server, server_config, true)
-          end
-        end
+namespace :provision do
+  multisite_config_hash[:servers].each do |server, server_config|
+    desc "Provision the #{server} server"
+    task server do
+      provision(server, server_config, false)
+    end
+    namespace server do
+      desc "Provision the #{server} server"
+      task :utopian do
+        provision(server, server_config, true)
+      end
+    end
 =begin
         namespace server do
           desc "Provision the #{server} server with empty databases."
@@ -62,9 +60,7 @@ namespace :moonshine do
           end
         end
 =end
-      end
-    end
-  end 
+  end
 end
 
 # fix rake collisions with capistrano
