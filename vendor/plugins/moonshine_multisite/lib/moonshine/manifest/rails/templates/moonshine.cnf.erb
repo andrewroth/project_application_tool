@@ -54,7 +54,7 @@ thread_concurrency    = <%= configuration[:mysql][:thread_concurrency] || '8' %>
 query_cache_size      = <%= configuration[:mysql][:query_cache_size] || '128M' %>
 query_cache_limit     = <%= configuration[:mysql][:query_cache_limit] || '2M' %>
 thread_stack          = <%= configuration[:mysql][:thread_stack] || '192K' %>
-transaction_isolation = <%= configuration[:mysql][:transaction_isolation] || 'READ-COMMITTED' %>
+transaction_isolation = <%= configuration[:mysql][:transaction_isolation] || 'REPEATABLE-READ' %>
 tmp_table_size        = <%= configuration[:mysql][:tmp_table_size] || '128M' %>
 tmpdir                = <%= configuration[:mysql][:tmpdir] || '/tmp' %>
 log_slow_queries      = <%= configuration[:mysql][:log_slow_queries] || '/var/log/mysql/slow_queries.log' %>
