@@ -6,7 +6,7 @@ def utopian_db_name(server, app, stage)
 end
 
 def legacy_db_name(server, app, stage)
-  debug "[DBG] legacy_db_name server=#{server} app=#{app} stage=#{stage}"
+  #debug "[DBG] legacy_db_name server=#{server} app=#{app} stage=#{stage}"
   hash_path = [ :servers, server.to_sym, :stage_moonshines, app.to_sym, stage.to_sym, :db_name ]
   traverse_hash(multisite_config_hash, hash_path)
 end
@@ -56,7 +56,6 @@ def apply_moonshine_multisite_config(server, app, stage)
   @moonshine_config[:stage_only] = stage
 
   # give some defaults
-  puts "REPO IS #{@moonshine_config[:repository]}"
   @moonshine_config[:repository] ||= multisite_config_hash[:apps][app]
   @moonshine_config[:repository] ||= (@moonshine_config[:repository] =~ /^svn/ ? :svn : :git)
   @moonshine_config[:branch] ||= (stage ? "#{server}.#{stage}" : nil)
@@ -69,7 +68,6 @@ def apply_moonshine_multisite_config(server, app, stage)
       @moonshine_config[:deploy_to] ||= "/var/www/#{app}.#{stage}.#{@moonshine_config[:domain]}"
     end
   end
-  puts "REPO AFTER IS #{@moonshine_config[:repository]}"
 
   # allow overriding from env
   @moonshine_config.each do |key, value|
