@@ -19,6 +19,7 @@ namespace :provision do
       STDOUT.print "Enter the password for deploy@pat.powertochange.org: "
       @p2c_password = STDIN.gets.chomp
       ENV['HOSTS'] = '127.0.0.1'
+      ENV['skipsetup'] = 'true'
       provision(:c4c, multisite_config_hash[:servers][:c4c], true)
       provision(:p2c, multisite_config_hash[:servers][:p2c], true)
       # p2c
