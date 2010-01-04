@@ -36,7 +36,7 @@ class PersonalInformation < CustomElement
       # Need all three of date fields chosen, otherwise it crashes
       if (person_params["local_valid_until(1i)"] || person_params["local_valid_until(2i)"] ||
           person_params["local_valid_until(3i)"]) && !(person_params["local_valid_until(1i)"] &&
-          person_params["local_valid_until(1i)"] && person_params["local_valid_until(1i)"])
+          person_params["local_valid_until(2i)"] && person_params["local_valid_until(3i)"])
         person_params.delete 'local_valid_until(1i)'
         person_params.delete 'local_valid_until(2i)'
         person_params.delete 'local_valid_until(3i)'
