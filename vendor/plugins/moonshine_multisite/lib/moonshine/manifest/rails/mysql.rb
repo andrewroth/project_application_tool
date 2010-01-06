@@ -14,15 +14,15 @@ module Moonshine::Manifest::Rails::Mysql
     configure(:mysql => {})
     file '/etc/mysql', :ensure => :directory
     file '/etc/mysql/conf.d', :ensure => :directory
-    file '/etc/mysql/conf.d/innodb.cnf',
-      :ensure => :present,
-      :content => template(File.join(File.dirname(__FILE__), 'templates', 'innodb.cnf.erb')),
-      :before => package('mysql-server')
-    file '/etc/mysql/conf.d/moonshine.cnf',
-      :ensure => :present,
-      :content => template(File.join(File.dirname(__FILE__), 'templates', 'moonshine.cnf.erb')),
-      :require => package('mysql-server'),
-      :notify => service('mysql')
+#    file '/etc/mysql/conf.d/innodb.cnf',
+#      :ensure => :present,
+#      :content => template(File.join(File.dirname(__FILE__), 'templates', 'innodb.cnf.erb')),
+#      :before => package('mysql-server')
+#    file '/etc/mysql/conf.d/moonshine.cnf',
+#      :ensure => :present,
+#      :content => template(File.join(File.dirname(__FILE__), 'templates', 'moonshine.cnf.erb')),
+#      :require => package('mysql-server'),
+#      :notify => service('mysql')
     file '/etc/logrotate.d/varlogmysql.conf', :ensure => :absent
   end
 
@@ -45,7 +45,7 @@ EOF
     exec "mysql_user",
       :command => mysql_query(grant),
       :unless  => "mysqlshow -u#{database_environment[:username]} -p#{database_environment[:password]} #{database_environment[:database]}",
-      :require => exec('mysql_database'),
+      #:require => exec('mysql_database'),
       :before => exec('rake tasks')
   end
 
