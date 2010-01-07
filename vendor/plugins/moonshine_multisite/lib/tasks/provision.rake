@@ -28,6 +28,20 @@ namespace :provision do
       run_cap nil, "pull:dbs:utopian"
     end
     task :server do
+      STDOUT.print "Enter the password for deploy@localhost: "
+      @local_password = STDIN.gets.chomp
+      STDOUT.print "Enter the password for deploy@pat.powertochange.org: "
+      @p2c_password = STDIN.gets.chomp
+      # download private
+      @password = @p2c_password
+      new_cap nil, nil, nil, true
+      run_cap nil, "cap moonshine:secure:download_private"
+      # now provision
+      @password = @local_password
+      ENV['HOSTS'] = '127.0.0.1'
+      provision(:c4c, multisite_config_hash[:servers][:c4c], false)
+      ENV['skipsetup'] = 'true'
+      provision(:p2c, multisite_config_hash[:servers][:p2c], false)
     end
   end
 

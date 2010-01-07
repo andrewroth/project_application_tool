@@ -64,6 +64,8 @@
       :moonshine:
         :domain: local
         :ssl: false
+        :passenger:
+          :rails_env: development
       :stage_moonshines:
         :pulse:
           :prod: 
@@ -127,6 +129,8 @@
       :moonshine:
         :domain: local
         :ssl: false
+        :passenger:
+          :rails_env: development
       :stage_moonshines:
         :pat:
           :staging:
