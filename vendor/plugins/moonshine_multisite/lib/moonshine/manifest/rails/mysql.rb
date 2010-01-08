@@ -34,6 +34,7 @@ module Moonshine::Manifest::Rails::Mysql
   # GRANT the database user specified in the current <tt>database_environment</tt>
   # permisson to access the database with the supplied password
   def mysql_user
+=begin
     grant =<<EOF
 GRANT ALL PRIVILEGES 
 ON #{database_environment[:database]}.*
@@ -47,15 +48,18 @@ EOF
       :unless  => "mysqlshow -u#{database_environment[:username]} -p#{database_environment[:password]} #{database_environment[:database]}",
       #:require => exec('mysql_database'),
       :before => exec('rake tasks')
+=end
   end
 
   # Create the database from the current <tt>database_environment</tt>
   def mysql_database
+=begin
     exec "mysql_database",
       :command => mysql_query("create database #{database_environment[:database]};"),
       :unless => mysql_query("show create database #{database_environment[:database]};"),
       :require => service('mysql'),
       :notify => exec('rails_bootstrap')
+=end
   end
 
   # Noop <tt>/etc/mysql/debian-start</tt>, which does some nasty table scans on

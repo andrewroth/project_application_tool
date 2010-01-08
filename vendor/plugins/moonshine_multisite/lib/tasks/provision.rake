@@ -227,6 +227,7 @@ def provision(server, server_config, utopian)
           base_name = File.basename(remote_file)
           tmp_file = "/tmp/#{base_name}"
           @cap_config.upload local_file, tmp_file
+          @cap_config.sudo "mkdir -p #{File.dirname(remote_file)}"
           @cap_config.sudo "mv #{tmp_file} #{remote_file}"
         end
       end
