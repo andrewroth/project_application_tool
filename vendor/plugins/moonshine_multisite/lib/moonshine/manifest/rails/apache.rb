@@ -41,6 +41,7 @@ STATUS
       :content => status,
       :notify => service("apache2")
     file '/etc/logrotate.d/varlogapachelog.conf', :ensure => :absent
+    system "echo #{fetch(:lan_ip)}:443 >> /etc/apache2/ports.conf}" if !system("grep #{fetch(:lan_ip)}:443 /etc/apache2/ports.conf") && fetch(:ssl, true)
   end
 
 private
