@@ -18,7 +18,7 @@
       :user: deploy
       :group: www-data
       :server: pat.powertochange.org
-      :lan_ip: 192.168.1.112
+      :lan_ip: 192.168.242.174
       :domain: campusforchrist.org
       :time_zone: PST
       :private_path: /home/deploy/private_repo2
@@ -100,7 +100,7 @@
       :user: deploy
       :group: www-data
       :server: pat.powertochange.org
-      :lan_ip: 192.168.1.112
+      :lan_ip: 192.168.242.175
       :domain: powertochange.org
       :time_zone: PST
       :private_path: /home/deploy/private_repo2
