@@ -38,6 +38,7 @@ namespace :provision do
       run_cap nil, "moonshine:secure:download_private"
       # now provision
       @password = @local_password
+      @cap_config = nil # force new password to take effect
       ENV['HOSTS'] = '127.0.0.1'
       provision(:c4c, multisite_config_hash[:servers][:c4c], false)
       ENV['skipsetup'] = 'true'
