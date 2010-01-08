@@ -34,8 +34,8 @@ namespace :provision do
       @p2c_password = STDIN.gets.chomp
       # download private
       @password = @p2c_password
-      new_cap nil, nil, nil, true
-      run_cap nil, "cap moonshine:secure:download_private"
+      new_cap "p2c", nil, nil, true
+      run_cap nil, "moonshine:secure:download_private"
       # now provision
       @password = @local_password
       ENV['HOSTS'] = '127.0.0.1'
