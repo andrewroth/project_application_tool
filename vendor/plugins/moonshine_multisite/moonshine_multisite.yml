@@ -30,6 +30,7 @@
         "app/manifests/assets/private/certs/campusforchrist.org.key": "/etc/apache2/certs/campusforchrist.org.key"
       :ruby: ree187 
       :utility: /var/www/c4c_utility.campusforchrist.org/current
+      :skip_deploy: false
     :stage_moonshines:
       :pulse:
         :prod: 
@@ -112,6 +113,7 @@
       :certs:
         "app/manifests/assets/private/certs/powertochange.org.cert": "/etc/apache2/certs/powertochange.org.cert"
         "app/manifests/assets/private/certs/powertochange.org.key": "/etc/apache2/certs/powertochange.org.key"
+      :skip_deploy: false
     :stage_moonshines:
       :pat:
         :prod: 
