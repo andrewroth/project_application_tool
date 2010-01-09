@@ -222,7 +222,7 @@ def provision(server, server_config, utopian)
       @cap_config.put db_file, "#{@cap_config.fetch(:shared_path)}/config/database.yml"
       @cap_config.put YAML::dump(@cap_config.fetch(:moonshine_config)), "#{@cap_config.fetch(:shared_path)}/config/moonshine.yml"
       # upload certs if possible
-      if @cap_config.fetch(:certs, nil).is_a?(Hash)
+      if @cap_config.fetch(:ssl, false) && @cap_config.fetch(:certs, nil).is_a?(Hash)
         @cap_config.fetch(:certs).each do |local_file, remote_file|
           base_name = File.basename(remote_file)
           tmp_file = "/tmp/#{base_name}"
