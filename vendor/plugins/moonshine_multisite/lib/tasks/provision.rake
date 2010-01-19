@@ -23,6 +23,7 @@ namespace :provision do
       provision(:p2c, multisite_config_hash[:servers][:p2c], true)
       # p2c
       ENV.delete 'HOSTS'
+      @cap_config = nil
       @password = @p2c_password
       new_cap nil, nil, nil, true
       run_cap nil, "pull:dbs:utopian"
