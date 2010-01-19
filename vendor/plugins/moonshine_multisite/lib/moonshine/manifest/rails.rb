@@ -24,6 +24,8 @@ class Moonshine::Manifest::Rails < Moonshine::Manifest
   include Moonshine::Manifest::Rails::Mysql
   require File.join(File.dirname(__FILE__), 'rails', 'postgresql.rb')
   include Moonshine::Manifest::Rails::Postgresql
+  require File.join(File.dirname(__FILE__), 'rails', 'god.rb')
+  include Moonshine::Manifest::Rails::God
   require File.join(File.dirname(__FILE__), 'rails', 'sqlite3.rb')
   include Moonshine::Manifest::Rails::Sqlite3
   require File.join(File.dirname(__FILE__), 'rails', 'apache.rb')
@@ -51,5 +53,6 @@ class Moonshine::Manifest::Rails < Moonshine::Manifest
     end
     self.class.recipe :rails_rake_environment, :rails_gems, :rails_directories, :rails_bootstrap, :rails_migrations, :rails_logrotate
     self.class.recipe :ntp, :time_zone, :postfix, :cron_packages, :motd, :security_updates
+    self.class.recipe :god_gem, :god_delayed_job, :god_restart
   end
 end
