@@ -7,10 +7,10 @@ module Moonshine::Manifest::Rails::God
     file '/etc/god/apps', :ensure => :directory
     file '/etc/god/god.rb',
       :ensure => :present,
-      :content => template(File.join(File.dirname(__FILE__), 'templates', 'god.rb.erb')),
+      :content => template(File.join(File.dirname(__FILE__), 'templates', 'god.rb.erb'))
     file "/etc/god/apps/#{configuration[:application]}.yml",
       :ensure => :present,
-      :content => template(File.join(File.dirname(__FILE__), 'templates', 'god_app.yml.erb')),
+      :content => template(File.join(File.dirname(__FILE__), 'templates', 'god_app.yml.erb'))
   end
 
   # Install the <tt>god</tt> rubygem and dependencies
