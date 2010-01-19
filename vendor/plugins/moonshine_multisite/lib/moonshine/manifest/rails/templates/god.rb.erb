@@ -4,7 +4,7 @@ require' yaml'
 # load each yaml in /apps
 apps = {}
 for yaml in Dir['apps/*.yml']
-  apps.merge(YAML::load(yaml)
+  apps.merge(YAML::load(yaml))
 end
 #apps = {
 #  'moose' => {:deploy_dir => 'moose.campusforchrist.org', :workers => 1, :env => 'production'},
