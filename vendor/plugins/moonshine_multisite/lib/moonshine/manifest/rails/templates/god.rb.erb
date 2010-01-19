@@ -3,9 +3,12 @@ require' yaml'
 
 # load each yaml in /apps
 apps = {}
-for yaml in Dir['apps/*.yml']
-  apps.merge(YAML::load(yaml))
+for yaml in Dir['/etc/god/apps/*.yml']
+  raw_config = File.read(yaml)
+  app_config = YAML.load(raw_config)
+  apps.merge!(app_config)
 end
+
 #apps = {
 #  'moose' => {:deploy_dir => 'moose.campusforchrist.org', :workers => 1, :env => 'production'},
 #  'emu' => {:deploy_dir => 'emu.campusforchrist.org', :workers => 1, :env => 'production'}, 
