@@ -9,11 +9,6 @@ for yaml in Dir['/etc/god/apps/*.yml']
   apps.merge!(app_config)
 end
 
-#apps = {
-#  'moose' => {:deploy_dir => 'moose.campusforchrist.org', :workers => 1, :env => 'production'},
-#  'emu' => {:deploy_dir => 'emu.campusforchrist.org', :workers => 1, :env => 'production'}, 
-#  'pulse' => {:deploy_dir => 'pulse.campusforchrist.org', :workers => 1, :env => 'production'} }
-#
 apps.each do |app, params|
   #rails_root = "/var/www/#{params[:deploy_dir]}/current"
   rails_root = "#{params[:deploy_to]}/current"
