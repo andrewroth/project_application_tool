@@ -23,11 +23,12 @@ module Moonshine::Manifest::Rails::God
   end
 
   def god_start
-    sudo('god -c /etc/god/god.rb start')
+    exec "god_start", :command => "sudo god -c /etc/god/god.rb start"
   end
 
   def god_stop
-    sudo('god quit')
+    exec "god_stop", :command => "sudo god quit",
+      :onlyif => "test `ps aux | grep '/usr/bin/ruby /usr/bin/god` -eq 0"
   end
 
   def god_restart
