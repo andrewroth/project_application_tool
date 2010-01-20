@@ -27,6 +27,7 @@ namespace :provision do
       @password = @p2c_password
       new_cap nil, nil, nil, true
       run_cap nil, "pull:dbs:utopian"
+      Rake::Task["aliases"].execute
     end
     task :server do
       STDOUT.print "Enter the password for deploy@localhost: "
