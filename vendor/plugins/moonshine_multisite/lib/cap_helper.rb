@@ -19,9 +19,9 @@ def run_remote_utility_rake(rake_cmd)
 end
 
 # helper task to run rake commands remotely
-def run_remote_rake(rake_cmd, path = current_path)
-  rake = fetch(:rake, "rake")
-  rails_env = fetch(:rails_env, "production")
+def run_remote_rake(rake_cmd, path = current_path, cap_config = self)
+  rake = cap_config.fetch(:rake, "rake")
+  rails_env = cap_config.fetch(:rails_env, "production")
   puts "[RUN] cd #{path} && #{rake} RAILS_ENV=#{rails_env} #{rake_cmd.split(',').join(' ')}"
   run "cd #{path} && #{rake} RAILS_ENV=#{rails_env} #{rake_cmd.split(',').join(' ')}"
 end

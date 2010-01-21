@@ -236,6 +236,7 @@ def provision(server, server_config, utopian)
 
       run_cap cap_stage, "deploy"
       run_cap cap_stage, "shared_config:symlink"
+      run_remote_rake "git:branches", @cap_config.current_path, @cap_config
     end
   end
 end

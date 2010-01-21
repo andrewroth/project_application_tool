@@ -1,29 +1,35 @@
+# these are required at load time by capistrano, we'll set them later
+set :application, ''
+set :repository, ''
+
+# sane defaults
 set :branch, 'master'
 set :repository, ''
 set :scm, :git
 set :git_enable_submodules, 1
+set :keep_releases, 2
 ssh_options[:paranoid] = false
 ssh_options[:forward_agent] = true
 default_run_options[:pty] = true
-set :keep_releases, 2
-
-after 'deploy:restart', 'deploy:cleanup'
 
 require 'yaml'
 require "#{File.dirname(__FILE__)}/../lib/multisite_helper.rb"
 set_stages
-after "multistage:ensure", "moonshine:load_moonshine_multisite_config"
 
+#fix common svn error
 set :scm, :svn if !! repository =~ /^svn/
 
-namespace :moonshine do
+# callbacks
+after "multistage:ensure", "moonshine:configure"
+after 'deploy:restart', 'deploy:cleanup'
 
+namespace :moonshine do
   desc <<-DESC
   Loads the moonshine_multisite config and, based on the stage, applies the
   variables with cap's "set" method.  Also sets the server name and roles.
   See also Moonshine::Multisite.apply_moonshine_multisite_config_from_cap
   DESC
-  task :load_moonshine_multisite_config do
+  task :configure do
     if apply_moonshine_multisite_config_from_cap
       roles.clear
       server fetch(:server), :web, :app, :db
