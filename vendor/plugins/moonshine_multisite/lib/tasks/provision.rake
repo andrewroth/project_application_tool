@@ -4,7 +4,10 @@ require MOONSHINE_MULTISITE_ROOT + '/lib/multisite_helper.rb'
 require MOONSHINE_MULTISITE_ROOT + '/lib/rake_helper.rb'
 
 require 'rubygems'
-require 'capistrano/cli'
+begin
+  require('capistrano/cli')
+rescue Exception => e
+end
 require 'ftools'
 
 namespace :provision do
