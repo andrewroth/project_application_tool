@@ -41,8 +41,22 @@ STATUS
       :content => status,
       :notify => service("apache2")
     file '/etc/logrotate.d/varlogapachelog.conf', :ensure => :absent
-    name_virtual_host = "NameVirtualHost #{configuration[:lan_ip]}:443"
-    system "echo '#{name_virtual_host}' >> /etc/apache2/ports.conf" if !system("grep '#{name_virtual_host}' /etc/apache2/ports.conf") && configuration[:ssl]
+    ports = <<-PORTS
+NameVirtualHost #{configuration[:lan_ip]}:443
+PORTS
+    file "/etc/apache2/conf.d/#{configuration[:domain]}.ports.conf",
+    :ensure => :present,
+      :mode => '644',
+      :content => ports
+    if configuration[:ssl]
+      nvh = <<-NVH
+NameVirtualHost #{configuration[:lan_ip]}:443
+NVH
+      file "/etc/apache2/conf.d/#{configuration[:domain]}.nvh.conf",
+        :ensure => :present,
+        :mode => '644',
+        :content => nvh
+    end
   end
 
 private
