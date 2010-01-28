@@ -19,7 +19,8 @@ module Moonshine::Manifest::Rails::God
   end
 
   def god_start
-    gem 'god', :before => exec("god_start", :command => "sudo god -c /etc/god/god.rb start")
+    exec("god_start", :command => "sudo god -c /etc/god/god.rb start")
+    gem 'god', :before => exec("god_start")
   end
 
   def god_stop
