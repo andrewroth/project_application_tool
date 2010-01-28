@@ -48,6 +48,7 @@ NVH
       file "/etc/apache2/conf.d/#{configuration[:domain]}.nvh.conf",
         :ensure => :present,
         :mode => '644',
+        :require => package("apache2-mpm-worker"),
         :content => nvh,
         :notify => service("apache2")
     end
