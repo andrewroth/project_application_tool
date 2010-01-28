@@ -1,0 +1,25 @@
+defaults: &defaults
+  adapter: mysql
+  username: root
+  password: 
+  host: localhost
+
+development:
+  database: c4c_pulse_dev
+  <<: *defaults
+
+test:
+  database: c4c_pulse_test
+  <<: *defaults
+
+production:
+  database: c4c_pulse_dev
+  <<: *defaults
+
+ciministry_development:
+  database: c4c_intranet_dev
+  <<: *defaults
+
+ciministry_production:
+  database: c4c_intranet_dev
+  <<: *defaults

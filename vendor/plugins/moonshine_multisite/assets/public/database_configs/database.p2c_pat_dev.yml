@@ -1,0 +1,25 @@
+defaults: &defaults
+  adapter: mysql
+  username: root
+  password: 
+  host: localhost
+
+development:
+  database: p2c_pat_dev
+  <<: *defaults
+
+test:
+  database: p2c_pat_test
+  <<: *defaults
+
+production:
+  database: p2c_pat_dev
+  <<: *defaults
+
+ciministry_development:
+  database: c4c_intranet_dev
+  <<: *defaults
+
+ciministry_production:
+  database: c4c_intranet_dev
+  <<: *defaults
