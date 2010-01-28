@@ -1,0 +1,5 @@
+development:
+  adapter: mysql
+
+production:
+  adapter: mysql
