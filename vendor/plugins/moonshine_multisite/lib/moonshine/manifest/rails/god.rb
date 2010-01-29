@@ -5,6 +5,7 @@ module Moonshine::Manifest::Rails::God
   # <tt>/etc/god/apps/<application>.yml</tt> if :delayed_job is set to true in
   # moonshine.yml
   def god
+    gem 'god'
     file '/etc/god', :ensure => :directory
     file '/etc/god/apps', :ensure => :directory
     file '/etc/god/god.rb',
@@ -19,8 +20,9 @@ module Moonshine::Manifest::Rails::God
   end
 
   def god_start
-    exec("god_start", :command => "sudo god -c /etc/god/god.rb start")
-    gem 'god', :before => exec("god_start")
+    exec "god_start", 
+      :command => "sudo god -c /etc/god/god.rb start",
+      :require -> package("god")
   end
 
   def god_stop
