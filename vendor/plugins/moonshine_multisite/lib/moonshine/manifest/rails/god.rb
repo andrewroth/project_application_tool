@@ -22,7 +22,7 @@ module Moonshine::Manifest::Rails::God
   def god_start
     exec "god_start", 
       :command => "sudo god -c /etc/god/god.rb start",
-      :require -> package("god")
+      :require => package("god")
   end
 
   def god_stop
