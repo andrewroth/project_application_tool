@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# test
+
 echo This installer will set up your computer for development with Campus for Christ.  It will do a number of package installs, including rails, mysql and ruby enterprise edition.  If you have a working rails setup already, you should probably not use this installer unless you\'ve looked at it and know what it will do.
 echo
 read -p "Press enter to continue, or ctrl-C to abort."

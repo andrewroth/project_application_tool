@@ -28,6 +28,7 @@ class MoonshineSetupManifest < ShadowPuppet::Manifest
       "#{configuration[:deploy_to]}/shared/config",
       "#{configuration[:deploy_to]}/shared/log",
       "#{configuration[:deploy_to]}/shared/tmp",
+      "#{configuration[:deploy_to]}/shared/tmp/sessions",
       "#{configuration[:deploy_to]}/releases"
     ]
     dirs.each do |dir|
