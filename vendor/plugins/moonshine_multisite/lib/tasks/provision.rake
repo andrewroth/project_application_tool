@@ -218,13 +218,14 @@ def provision(server, server_config, utopian)
 
       # copy the database file
       #@cap_config.set(:shared_config, (@cap_config.fetch(:shared_configs, []) + [ "config/database.yml", "config/database.#{utopian_name}.yml", "config/moonshine.yml" ]).uniq)
-      @cap_config.set(:shared_config, (@cap_config.fetch(:shared_configs, []) + [ "config/database.yml", "config/moonshine.yml" ]).uniq)
+      @cap_config.set(:shared_config, (@cap_config.fetch(:shared_configs, []) + [ "config/database.yml", "config/database.emu.yml", "config/moonshine.yml" ]).uniq)
       if utopian
         db_file = File.read(File.join(MOONSHINE_MULTISITE_ROOT, "/assets/public/database_configs/database.#{utopian_name}.yml"))
       else
         db_file = File.read("app/manifests/assets/private/database_configs/database.#{utopian_name}.yml")
       end
       @cap_config.put db_file, "#{@cap_config.fetch(:shared_path)}/config/database.yml"
+      @cap_config.put db_file, "#{@cap_config.fetch(:shared_path)}/config/database.emu.yml"
       @cap_config.put YAML::dump(@cap_config.fetch(:moonshine_config)), "#{@cap_config.fetch(:shared_path)}/config/moonshine.yml"
       # upload certs if possible
       if @cap_config.fetch(:ssl, false) && @cap_config.fetch(:certs, nil).is_a?(Hash)
