@@ -22,8 +22,16 @@ set :scm, :svn if !! repository =~ /^svn/
 # callbacks
 after "multistage:ensure", "moonshine:configure"
 after 'deploy:restart', 'deploy:cleanup'
+before 'moonshine:apply', 'moonshine:upload_moonshine_config'
 
 namespace :moonshine do
+  desc <<-DESC
+  Uploads the current values in :moonshine_config to config/moonshine.yml
+  DESC
+  task :upload_moonshine_config do
+    put YAML::dump(fetch(:moonshine_config)), "#{release_path}/config/moonshine.yml"
+  end
+
   desc <<-DESC
   Loads the moonshine_multisite config and, based on the stage, applies the
   variables with cap's "set" method.  Also sets the server name and roles.

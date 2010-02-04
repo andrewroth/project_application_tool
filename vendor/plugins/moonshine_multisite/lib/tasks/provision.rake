@@ -218,7 +218,7 @@ def provision(server, server_config, utopian)
 
       # copy the database file
       #@cap_config.set(:shared_config, (@cap_config.fetch(:shared_configs, []) + [ "config/database.yml", "config/database.#{utopian_name}.yml", "config/moonshine.yml" ]).uniq)
-      @cap_config.set(:shared_config, (@cap_config.fetch(:shared_configs, []) + [ "config/database.yml", "config/database.emu.yml", "config/moonshine.yml" ]).uniq)
+      #@cap_config.set(:shared_config, (@cap_config.fetch(:shared_configs, []) + [ "config/database.yml", "config/database.emu.yml", "config/moonshine.yml" ]).uniq)
       if utopian
         db_file = File.read(File.join(MOONSHINE_MULTISITE_ROOT, "/assets/public/database_configs/database.#{utopian_name}.yml"))
       else
@@ -226,7 +226,7 @@ def provision(server, server_config, utopian)
       end
       @cap_config.put db_file, "#{@cap_config.fetch(:shared_path)}/config/database.yml"
       @cap_config.put db_file, "#{@cap_config.fetch(:shared_path)}/config/database.emu.yml"
-      @cap_config.put YAML::dump(@cap_config.fetch(:moonshine_config)), "#{@cap_config.fetch(:shared_path)}/config/moonshine.yml"
+      #@cap_config.put YAML::dump(@cap_config.fetch(:moonshine_config)), "#{@cap_config.fetch(:shared_path)}/config/moonshine.yml"
       # upload certs if possible
       if @cap_config.fetch(:ssl, false) && @cap_config.fetch(:certs, nil).is_a?(Hash)
         @cap_config.fetch(:certs).each do |local_file, remote_file|
@@ -239,7 +239,7 @@ def provision(server, server_config, utopian)
       end
 
       run_cap cap_stage, "deploy"
-      run_cap cap_stage, "shared_config:symlink"
+      #run_cap cap_stage, "shared_config:symlink"
       run_remote_rake "git:branches", @cap_config.current_path, @cap_config
     end
   end

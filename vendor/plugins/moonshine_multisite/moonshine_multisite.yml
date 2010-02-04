@@ -25,6 +25,9 @@
       :private_host: 208.87.54.217
       :private_user: deploy
       :ssl: true
+      :shared_config:
+        - config/database.yml
+        - config/database.emu.yml
       :certs:
         "app/manifests/assets/private/certs/campusforchrist.org.cert": "/etc/apache2/certs/campusforchrist.org.cert"
         "app/manifests/assets/private/certs/campusforchrist.org.key": "/etc/apache2/certs/campusforchrist.org.key"
