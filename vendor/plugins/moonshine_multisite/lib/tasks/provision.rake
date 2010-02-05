@@ -226,7 +226,7 @@ def provision(server, server_config, utopian)
       end
       @cap_config.put db_file, "#{@cap_config.fetch(:shared_path)}/config/database.yml"
       @cap_config.put db_file, "#{@cap_config.fetch(:shared_path)}/config/database.emu.yml"
-      @cap_config.run "rm #{release_path}/config/database.emu.yml" # it will be symlinked in shared_config:symlink
+      @cap_config.run "rm #{@cap_config.fetch(:release_path)}/config/database.emu.yml" # it will be symlinked in shared_config:symlink
       #@cap_config.put YAML::dump(@cap_config.fetch(:moonshine_config)), "#{@cap_config.fetch(:shared_path)}/config/moonshine.yml"
       # upload certs if possible
       if @cap_config.fetch(:ssl, false) && @cap_config.fetch(:certs, nil).is_a?(Hash)
