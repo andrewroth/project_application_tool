@@ -25,6 +25,7 @@
       :private_host: 208.87.54.217
       :private_user: deploy
       :ssl: true
+      :delayed_job: true
       :shared_config:
         - config/database.yml
         - config/database.emu.yml
