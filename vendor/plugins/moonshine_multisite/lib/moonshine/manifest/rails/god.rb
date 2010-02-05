@@ -27,7 +27,8 @@ module Moonshine::Manifest::Rails::God
 
   def god_stop
     exec "god_stop", :command => "sudo god quit",
-      :onlyif => "test `ps aux | grep '/usr/bin/ruby /usr/bin/god` -eq 0"
+      :onlyif => "ps aux | grep '/usr/bin/ruby /usr/bin/[g]od'; test \"$?\" -eq 0",
+      :before => exec("god_start")
   end
 
   def god_restart
