@@ -16,7 +16,7 @@ module Moonshine::Manifest::Rails::God
         :ensure => :present,
         :content => template(File.join(File.dirname(__FILE__), 'templates', 'god_app.yml.erb'))
     end
-    god_start
+    god_restart
   end
 
   def god_start
