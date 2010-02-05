@@ -36,6 +36,7 @@ end
 def apply_moonshine_multisite_config(server, app, stage)
   server = server.to_sym
   stage = stage.to_sym unless stage.nil?
+  app = app.to_sym unless app.nil?
 
   debug "[DBG] apply_moonshine_multisite_config server=#{server} app=#{app} stage=#{stage}"
   return false if multisite_config_hash[:servers][server.to_sym].nil?
@@ -56,7 +57,7 @@ def apply_moonshine_multisite_config(server, app, stage)
   @moonshine_config[:stage_only] = stage
 
   # give some defaults
-  @moonshine_config[:repository] ||= multisite_config_hash[:apps][app.to_sym]
+  @moonshine_config[:repository] ||= multisite_config_hash[:apps][app]
   @moonshine_config[:repository] ||= (@moonshine_config[:repository] =~ /^svn/ ? :svn : :git)
   @moonshine_config[:branch] ||= (stage ? "#{server}.#{stage}" : nil)
   if @moonshine_config[:server_name]
