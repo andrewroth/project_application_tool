@@ -12,7 +12,7 @@ module Moonshine::Manifest::Rails::God
       :ensure => :present,
       :content => template(File.join(File.dirname(__FILE__), 'templates', 'god.rb.erb'))
     if configuration[:delayed_job]
-      file "/etc/god/apps/#{configuration[:application]}.yml",
+      file "/etc/god/apps/#{configuration[:server_name]}.yml",
         :ensure => :present,
         :content => template(File.join(File.dirname(__FILE__), 'templates', 'god_app.yml.erb'))
     end
