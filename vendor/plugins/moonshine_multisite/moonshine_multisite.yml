@@ -64,7 +64,7 @@
         :dev:
           :delayed_job: false
           :db_name: c4c_utility
-          :server_name: utility.local
+          :server_name: utility.campusforchrist.org
           :skip_pull: true
     :local:
       :moonshine:
