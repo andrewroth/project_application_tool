@@ -43,8 +43,8 @@ def apply_moonshine_multisite_config(server, app, stage)
   
   @moonshine_config = { :application => app }
   @moonshine_config.merge!(traverse_hash(multisite_config_hash, [ :servers, server, :moonshine ]) || {})
-  puts "utopian override: #{fetch(:utopian_override, false)}"
-  if fetch(:utopian_override, false)
+  puts "utopian override: #{fetch(:utopian_override, ENV['local'] == 'true')}"
+  if fetch(:utopian_override, ENV['local'] == 'true')
     @moonshine_config.merge!(traverse_hash(multisite_config_hash, [ :servers, server, :local, :moonshine ]) || {})
     puts traverse_hash(multisite_config_hash, [ :servers, server, :local, :moonshine ]).inspect
     @moonshine_config.merge!(traverse_hash(multisite_config_hash, [ :servers, server, :local, :stage_moonshines, app, stage ]) || {})
