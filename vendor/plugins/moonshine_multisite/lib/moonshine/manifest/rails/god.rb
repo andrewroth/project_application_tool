@@ -14,7 +14,8 @@ module Moonshine::Manifest::Rails::God
     if configuration[:delayed_job]
       file "/etc/god/apps/#{configuration[:server_name]}.yml",
         :ensure => :present,
-        :content => template(File.join(File.dirname(__FILE__), 'templates', 'god_app.yml.erb'))
+        :content => template(File.join(File.dirname(__FILE__), 'templates', 'god_app.yml.erb')),
+        :before => [ exec("god_start"), exec("god_stop") ]
     end
     god_restart
   end

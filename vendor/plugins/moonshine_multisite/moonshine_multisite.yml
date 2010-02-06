@@ -62,6 +62,7 @@
           :skip_deploy: true
       :utility:
         :dev:
+          :delayed_job: false
           :db_name: c4c_utility
           :server_name: utility.local
           :skip_pull: true
@@ -98,6 +99,7 @@
         :utility:
           :dev:
             #:db_name: c4c_utility
+            :delayed_job: false
             :server_name: utility.local
             :deploy_to: /var/www/utility.local
   :p2c:
