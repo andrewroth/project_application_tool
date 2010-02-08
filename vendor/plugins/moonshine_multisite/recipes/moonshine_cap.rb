@@ -253,6 +253,10 @@ namespace :deploy do
   task :setup, :except => { :no_release => true } do
     moonshine.bootstrap
   end
+
+  # I really don't like how cap's deploy.rb creates directories, so I'm going to noop it
+  task :finalize_update do
+  end
 end
 
 namespace :ruby do

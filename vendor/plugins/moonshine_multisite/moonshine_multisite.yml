@@ -26,9 +26,16 @@
       :private_user: deploy
       :ssl: true
       :delayed_job: true
+      :shared_children:
+        - config
+        - log
+        - tmp
+        - public
       :shared_config:
         - config/database.yml
+        - log
         - tmp
+        # TODO shared public dir for attachment_fu
       :certs:
         "app/manifests/assets/private/certs/campusforchrist.org.cert": "/etc/apache2/certs/campusforchrist.org.cert"
         "app/manifests/assets/private/certs/campusforchrist.org.key": "/etc/apache2/certs/campusforchrist.org.key"
@@ -116,9 +123,16 @@
       :ssl: true
       :ruby: ree187 
       :utility: /var/www/c4c_utility.campusforchrist.org/current
+      :shared_children:
+        - config
+        - log
+        - tmp
+        - public
       :shared_config:
         - config/database.yml
+        - log
         - tmp
+        # TODO shared public dir for attachment_fu
       :certs:
         "app/manifests/assets/private/certs/powertochange.org.cert": "/etc/apache2/certs/powertochange.org.cert"
         "app/manifests/assets/private/certs/powertochange.org.key": "/etc/apache2/certs/powertochange.org.key"
