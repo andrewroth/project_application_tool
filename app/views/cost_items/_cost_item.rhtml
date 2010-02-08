@@ -33,11 +33,11 @@ end
 <label>Description: </label><%= can_edit ? in_place_editor_field(:cost_item, :description) : cost_item.description %> <br />
 <label>Amount: </label><%= can_edit ? in_place_editor_field(:cost_item, :amount) : cost_item.amount %> <br />
 
-<%= check_box :cost_item, :optional, :id => 'optional_' + cost_item.id.to_s, :disabled => !can_edit %> optional<br />
+<%= check_box :cost_item, :optional, :id => 'optional_' + cost_item.id.to_s, :disabled => !can_edit %> <span id="optional_<%=cost_item.id%>_text">optional</span><br />
 
 <% if can_edit %>
 <%= observe_field 'optional_' + cost_item.id.to_s, 
-        :url => {:controller => 'cost_items', :action => "update", :id => cost_item.id},
+        :url => {:controller => 'cost_items', :action => "set_optional", :id => cost_item.id},
         :loading => "$('spinner_#{cost_item.id}').show();",
         :loaded => "$('spinner_#{cost_item.id}').hide();",
         :with => 'cost_item_optional' %>
