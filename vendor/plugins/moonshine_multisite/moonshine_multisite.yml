@@ -29,6 +29,7 @@
       :shared_config:
         - config/database.yml
         - config/database.emu.yml
+        - tmp
       :certs:
         "app/manifests/assets/private/certs/campusforchrist.org.cert": "/etc/apache2/certs/campusforchrist.org.cert"
         "app/manifests/assets/private/certs/campusforchrist.org.key": "/etc/apache2/certs/campusforchrist.org.key"
@@ -118,6 +119,7 @@
       :utility: /var/www/c4c_utility.campusforchrist.org/current
       :shared_config:
         - config/database.yml
+        - tmp
       :certs:
         "app/manifests/assets/private/certs/powertochange.org.cert": "/etc/apache2/certs/powertochange.org.cert"
         "app/manifests/assets/private/certs/powertochange.org.key": "/etc/apache2/certs/powertochange.org.key"
