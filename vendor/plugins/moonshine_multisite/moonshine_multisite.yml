@@ -28,7 +28,6 @@
       :delayed_job: true
       :shared_config:
         - config/database.yml
-        - config/database.emu.yml
         - tmp
       :certs:
         "app/manifests/assets/private/certs/campusforchrist.org.cert": "/etc/apache2/certs/campusforchrist.org.cert"
