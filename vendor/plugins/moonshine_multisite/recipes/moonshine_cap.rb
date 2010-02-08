@@ -52,7 +52,6 @@ namespace :moonshine do
     ruby.install
     vcs.install
     moonshine.setup_directories
-    shared_config.upload
   end
 
   desc <<-DESC
@@ -221,8 +220,7 @@ namespace :shared_config do
   DESC
   task :symlink do
     fetch(:shared_config, []).each do |file|
-      filename = File.split(file).last
-      run "ls #{ latest_release }/#{ file } 2> /dev/null || ln -nfs #{ shared_path }/config/#{ filename } #{ latest_release }/#{ file }"
+      run "ls #{ latest_release }/#{ file } 2> /dev/null || ln -nfs #{ shared_path }/#{ file } #{ latest_release }/#{ file }"
     end
   end
 end

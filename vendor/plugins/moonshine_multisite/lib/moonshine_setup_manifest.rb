@@ -28,6 +28,15 @@ class MoonshineSetupManifest < ShadowPuppet::Manifest
       "#{configuration[:deploy_to]}/shared/config",
       "#{configuration[:deploy_to]}/releases"
     ]
+    if configuration[:shared_children].is_a?(Array)
+      shared_dirs = configuration[:shared_children].map { |d| "#{configuration[:deploy_to]}/shared/#{d}" }
+      dirs += shared_dirs
+    end
+    if configuration[:app_symlinks].is_a?(Array)
+      dirs += ["#{configuration[:deploy_to]}/shared/public"]
+      symlink_dirs = configuration[:app_symlinks].map { |d| "#{configuration[:deploy_to]}/shared/public/#{d}" }
+      dirs += symlink_dirs
+    end
     dirs.each do |dir|
       file dir,
       :ensure => :directory,
