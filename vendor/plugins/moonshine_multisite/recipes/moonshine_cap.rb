@@ -198,7 +198,7 @@ namespace :shared_config do
     fetch(:shared_config, []).each do |file|
       filename = File.split(file).last
       if File.exist?(file)
-        put File.read(file), "#{ shared_path }/config/#{ filename }"
+        put File.read(file), "#{ shared_path }/#{ filename }"
       end
     end
   end
