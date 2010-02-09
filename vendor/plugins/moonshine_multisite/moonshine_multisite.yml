@@ -30,6 +30,7 @@
         - config
         - log
         - tmp
+        - tmp/sessions
         - public
       :shared_config:
         - config/database.yml
@@ -129,6 +130,7 @@
         - config
         - log
         - tmp
+        - tmp/sessions
         - public
       :shared_config:
         - config/database.yml
