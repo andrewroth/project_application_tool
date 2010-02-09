@@ -79,6 +79,8 @@
         :ssl: false
         :passenger:
           :rails_env: development
+        :user: <%= %x[whoami].chomp %>
+        :group: <%= %x[whoami].chomp %>
       :stage_moonshines:
         :pulse:
           :prod: 
@@ -156,6 +158,8 @@
         :ssl: false
         :passenger:
           :rails_env: development
+        :user: <%= %x[whoami].chomp %>
+        :group: <%= %x[whoami].chomp %>
       :stage_moonshines:
         :pat:
           :staging:
