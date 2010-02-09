@@ -25,8 +25,6 @@
 <% end %>
   RailsSpawnMethod <%= configuration[:passenger][:rails_spawn_method] || 'smart-lv2' %>
 
-  PassengerDefaultUser www-data
-
   <Directory <%= configuration[:deploy_to] + "/current/public" %>>
     Options FollowSymLinks
     AllowOverride None

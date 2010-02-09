@@ -23,7 +23,7 @@ apps.each do |app, params|
       w.start = "rake jobs:work"
  
       w.uid = 'deploy'
-      w.gid = 'www-data'
+      w.gid = '<%= configuration[:user] %>'
  
       # retart if memory gets too high
       w.transition(:up, :restart) do |on|
