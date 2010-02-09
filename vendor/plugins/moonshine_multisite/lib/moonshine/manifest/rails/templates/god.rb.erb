@@ -1,4 +1,3 @@
-<%
 require 'yaml'
 
 # load each yaml in /apps
@@ -22,8 +21,8 @@ apps.each do |app, params|
       w.log = "#{rails_root}/log/god.log"
       w.start = "rake jobs:work"
  
-      w.uid = 'deploy'
-      w.gid = '<%= configuration[:user] %>'
+      w.uid = '<%= configuration[:user] %>'
+      w.gid = '<%= configuration[:group] %>'
  
       # retart if memory gets too high
       w.transition(:up, :restart) do |on|
