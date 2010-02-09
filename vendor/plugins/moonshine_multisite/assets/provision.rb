@@ -30,15 +30,18 @@ end
 
 # add rake, git (which will install ruby as well)
 if os == :debian || os == :ubuntu
-  system "sudo apt-get install -q -y git-core libopenssl-ruby1.8 rake git-core"
+  system "sudo apt-get install -q -y git-core libopenssl-ruby1.8 rake git-core libiconv-ruby"
   unless system("gem list --local | grep capistrano")
-    system "sudo gem install capistrano capistrano-ext --no-rdoc"
+    system "sudo gem install capistrano capistrano-ext --no-rdoc --no-ri"
+  end
+  unless system("gem list --local | grep activerecord")
+    system "sudo gem install activerecord --no-rdoc --no-ri"
   end
 end
 
 # cap
 unless system("gem list --local | grep capistrano")
-  system "sudo gem install capistrano capistrano-ext --no-rdoc"
+  system "sudo gem install capistrano capistrano-ext --no-rdoc --no-ri"
 end
 
 # add openssh-server
@@ -70,4 +73,4 @@ type = ARGV.first == 'server' ? 'server' : 'dev'
 system "rake -f vendor/plugins/moonshine_multisite/lib/tasks/provision.rake provision:this:#{type}"
 
 # install cap again with the new gems
-system "sudo gem install capistrano capistrano-ext --no-rdoc"
+system "sudo gem install capistrano capistrano-ext --no-rdoc --no-ri"
