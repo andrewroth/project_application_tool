@@ -18,19 +18,19 @@ namespace :provision do
     task :dev do
       STDOUT.print "Enter the password for deploy@localhost: "
       @password = STDIN.gets.chomp
-      STDOUT.print "Enter the password for deploy@pat.powertochange.org: "
-      @p2c_password = STDIN.gets.chomp
       ENV['HOSTS'] = '127.0.0.1'
       provision(:c4c, multisite_config_hash[:servers][:c4c], true)
       ENV['skipsetup'] = 'true'
       provision(:p2c, multisite_config_hash[:servers][:p2c], true)
-      # p2c
-      ENV.delete 'HOSTS'
-      @cap_config = nil
-      @password = @p2c_password
-      new_cap nil, nil, nil, true
-      run_cap nil, "pull:dbs:utopian"
-      Rake::Task["aliases"].execute
+      puts %|
+
+Provisioning your local computer is complete.
+
+To download all the database info, run:
+
+      rake pull:dbs:utopian
+
+|
     end
     task :server do
       STDOUT.print "Enter the password for deploy@localhost: "
