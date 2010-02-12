@@ -34,6 +34,6 @@ class ReferenceInstancesController < InstanceController
   end
 
   def sweep
-    expire_fragment(%r{your_projects.project_id=#{@profile[:project_id]}&role=.*&section=Submitted})
+    expire_fragment(%r{your_projects.project_id=#{@profile[:project_id]}&role=.*&section=Applying})
   end
 end 
