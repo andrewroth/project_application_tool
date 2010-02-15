@@ -19,6 +19,14 @@ class ProcessorController < ApplicationController
   
   # locks a processor entry, then goes to evaluate view
   def evaluate
+    if @profile.locked_by == @viewer
+      redirect_to :controller => 'profiles_viewer', :id => @profile.id, :action => 'entire'
+      return
+    elsif @profile[:locked_by]
+      redirect_to :action => 'actions', :profile_id => @profile.id
+      return
+    end
+
     # lock
     @profile[:locked_by] = @viewer.id
     @profile.save!
