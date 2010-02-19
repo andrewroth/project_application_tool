@@ -1,0 +1,5 @@
+<% if instruction.parent_id %>
+  <span class="readonly_question_text"><%= instruction.text %></span><br/>
+<% else %>
+  <tr><td></td><td><span class="readonly_question_text"><%= instruction.text %></span><br/></td></tr>
+<% end %>
