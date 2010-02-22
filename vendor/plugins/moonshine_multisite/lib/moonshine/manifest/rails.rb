@@ -30,8 +30,8 @@ class Moonshine::Manifest::Rails < Moonshine::Manifest
   include Moonshine::Manifest::Rails::Apache
   require File.join(File.dirname(__FILE__), 'rails', 'rails.rb')
   include Moonshine::Manifest::Rails::Rails
-  require File.join(File.dirname(__FILE__), 'rails', 'god.rb')
-  include Moonshine::Manifest::Rails::God
+  require File.join(File.dirname(__FILE__), 'rails', 'monit.rb')
+  include Moonshine::Manifest::Rails::Monit
   require File.join(File.dirname(__FILE__), 'rails', 'os.rb')
   include Moonshine::Manifest::Rails::Os
 
@@ -52,7 +52,7 @@ class Moonshine::Manifest::Rails < Moonshine::Manifest
       self.class.recipe :sqlite3
     end
     self.class.recipe :rails_rake_environment, :rails_gems, :rails_directories, :rails_bootstrap, :rails_migrations, :rails_logrotate
-    self.class.recipe :god
+    self.class.recipe :monit
     self.class.recipe :ntp, :time_zone, :postfix, :cron_packages, :motd, :security_updates
   end
 end
