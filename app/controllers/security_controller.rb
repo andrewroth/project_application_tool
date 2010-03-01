@@ -232,6 +232,7 @@ class SecurityController < ApplicationController
   def clear_cas_session
     session[:user_id] = nil
     session[:needs_read_login_message_confirm] = true
+    session[:cas_user] = nil
   end
 
   def setup_given_viewer_id(viewer_id)
