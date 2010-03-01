@@ -23,3 +23,7 @@ ciministry_development:
 ciministry_production:
   database: c4c_intranet_dev
   <<: *defaults
+
+ciministry_test:
+  database: c4c_intranet_test
+  <<: *defaults

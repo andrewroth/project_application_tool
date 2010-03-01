@@ -235,7 +235,8 @@ def provision(server, server_config, utopian)
       end
 
       run_cap cap_stage, "deploy"
-      run_remote_rake "git:branches", @cap_config.current_path, @cap_config
+      run_remote_rake("git:branches", @cap_config.current_path, @cap_config)
+      run_remote_rake("db:reloader", @cap_config.current_path, @cap_config) if utopian
     end
   end
 end
