@@ -16,7 +16,7 @@ namespace :provision do
     # Canada's method is here as an example
     desc "provisions this computer"
     task :dev do
-      STDOUT.print "Enter the password for deploy@localhost: "
+      STDOUT.print "Enter the password for #{%x[whoami].chomp}@localhost: "
       @password = STDIN.gets.chomp
       ENV['HOSTS'] = '127.0.0.1'
       provision(:c4c, multisite_config_hash[:servers][:c4c], true)

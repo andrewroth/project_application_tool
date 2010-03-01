@@ -52,11 +52,11 @@ utility_repo = 'git://github.com/andrewroth/c4c_utility.git'
 utility_branch = 'c4c.dev'
 if File.directory?(utility_dir)
   Dir.chdir utility_dir
-  system "sudo git pull"
+  system "git pull"
 else
-  system "sudo git clone #{utility_repo}"
+  system "git clone #{utility_repo}"
   Dir.chdir utility_dir
-  system "sudo git checkout -b #{utility_branch} origin/#{utility_branch}"
+  system "git checkout -b #{utility_branch} origin/#{utility_branch}"
 end
 
 # special case for colinux -- put /var/www on the windows drive

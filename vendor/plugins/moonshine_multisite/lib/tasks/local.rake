@@ -14,18 +14,23 @@ task :aliases do
   end
 end
 
+def track_branch(branch)
+  remote_branch = "origin/#{branch}"
+  if system("git branch -r | egrep '  #{remote_branch}$' > /dev/null") && !system("git branch | egrep '( |\\*) #{branch}$' > /dev/null")
+    system("git branch #{branch} #{remote_branch}")
+  end
+end
+
 namespace :git do
   desc "sets git branches for all remote branches"
   task :branches do
     multisite_config_hash[:servers].keys.each do |server|
       multisite_config_hash[:stages].each do |stage|
-        branch = "#{server}.#{stage}"
-        remote_branch = "origin/#{branch}"
-        if system("git branch -r | egrep '  #{remote_branch}$' > /dev/null") && !system("git branch | egrep '( |\\*) #{branch}$' > /dev/null")
-          system("git branch #{branch} #{remote_branch}")
-        end
+        track_branch "#{server}.#{stage}"
       end
     end
+    track_branch "dev"
+    track_branch "master"
   end
 end
 
