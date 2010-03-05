@@ -18,7 +18,7 @@
       :user: deploy
       :group: www-data
       :server: pat.powertochange.org
-      :lan_ip: 192.168.240.177
+      :lan_ip: 192.168.242.177
       :domain: campusforchrist.org
       :time_zone: PST
       :private_path: /home/deploy/private_repo2
@@ -92,8 +92,6 @@
                  # since there is only c4c.dev (no c4c.prod or c4c.staging) in pulse git
             :db_name: c4c_pulse_dev
             :server_name: pulse.local
-            :server_aliases:
-              - moose.local
           :staging: 
             :db_name: emu
             :skip_deploy: true
@@ -118,7 +116,7 @@
       :user: deploy
       :group: www-data
       :server: pat.powertochange.org
-      :lan_ip: 192.168.240.175
+      :lan_ip: 192.168.242.175
       :domain: powertochange.org
       :time_zone: PST
       :private_path: /home/deploy/private_repo2
@@ -156,6 +154,18 @@
           :db_name: spt_dev
           :server_name: pat.staging.powertochange.org
           :skip_deploy: true # there's no staging site for the pat yet
+      :mpdtool:
+        :prod: 
+          :db_name: mpdtool
+          :server_name: mpdtool.powertochange.org
+          :sensitive: true
+        :dev: 
+          :db_name: mpdtool_dev
+          :server_name: mpdtool.dev.powertochange.org
+        :staging: 
+          :db_name: mpdtool_dev
+          :server_name: mpdtool.staging.powertochange.org
+          :skip_deploy: true # there's no staging site for the mpdtool yet
     :local:
       :moonshine:
         :domain: local
@@ -176,9 +186,20 @@
           :prod:
             :db_name: p2c_pat_prod
             :skip_deploy: true
-
+        :mpdtool:
+          :prod:
+            :db_name: p2c_mpdtool_prod
+            :skip_deploy: true
+          :dev:
+            :db_name: p2c_mpdtool_dev
+            :skip_deploy: true
+          :staging:
+            :db_name: p2c_mpdtool_staging
+            :server_name: mpdtool.local
+ 
 :apps:
   :pat: git://github.com/andrewroth/project_application_tool.git
   :pulse: git://github.com/twinge/ministry-tracker.git
   :intranet: 
   :utility: git://github.com/andrewroth/c4c_utility.git
+  :mpdtool: git://github.com/twinge/mpd_tool.git
