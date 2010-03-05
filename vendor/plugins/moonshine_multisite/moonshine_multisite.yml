@@ -192,10 +192,11 @@
             :skip_deploy: true
           :dev:
             :db_name: p2c_mpdtool_dev
-            :skip_deploy: true
+            :server_name: mpdtool.local
+            :deploy_to: /var/www/mpdtool.local
           :staging:
             :db_name: p2c_mpdtool_staging
-            :server_name: mpdtool.local
+            :skip_deploy: true
  
 :apps:
   :pat: git://github.com/andrewroth/project_application_tool.git

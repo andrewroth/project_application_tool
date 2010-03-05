@@ -56,9 +56,31 @@ To download all the database info, run:
     task server do
       provision(server, server_config, false)
     end
+
     namespace server do
-      desc "Provision the #{server} server"
+      multisite_config_hash[:apps].keys.each do |app|
+        if server_has_app(server, app)
+          desc "Provision the #{app} app on the #{server} server"
+          task app do
+            provision(server, server_config, false, [ app ])
+          end
+          desc "Provision the #{app} app on the #{server} server for a development system"
+          namespace app do
+            task :utopian do
+              throw "You probably want to specify the host" unless ENV['HOSTS']
+              ENV['skipsetup'] = 'true'
+              provision(server, server_config, true, [ app ])
+            end
+          end
+        end
+      end
+    end
+
+    namespace server do
+      desc "Provision the #{server} server for a development system"
       task :utopian do
+        throw "You probably want to specify the host" unless ENV['HOSTS']
+        ENV['skipsetup'] = 'true'
         provision(server, server_config, true)
       end
     end
@@ -178,12 +200,13 @@ def cap_upload_certs(stage)
 end
 =end
 
-def provision(server, server_config, utopian)
+def provision(server, server_config, utopian, apps_filter = nil)
   debug "[DBG] setup #{server} utopian=#{utopian}"
   debug "[DBG] config #{server_config.inspect}"
   tmp_dir = "#{RAILS_ROOT}/tmp"
   first_app = true
   for app, repo in multisite_config_hash[:apps]
+    next if apps_filter && !apps_filter.include?(app)
     debug "============================= #{app.to_s.ljust(20, " ")} ============================="
     next if repo.nil? || repo == ''
     app_root = "#{tmp_dir}/#{app}"

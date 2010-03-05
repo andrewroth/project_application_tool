@@ -5,10 +5,22 @@ def utopian_db_name(server, app, stage)
   "#{server || 'server'}_#{app || 'app'}_#{stage || 'stage'}"
 end
 
-def legacy_db_name(server, app, stage)
+def local_db_name(server, app, stage)
   #debug "[DBG] legacy_db_name server=#{server} app=#{app} stage=#{stage}"
+  hash_path = [ :servers, server.to_sym, :local, :stage_moonshines, app.to_sym, stage.to_sym, :db_name ]
+  traverse_hash(multisite_config_hash, hash_path)
+end
+
+def legacy_db_name(server, app, stage)
   hash_path = [ :servers, server.to_sym, :stage_moonshines, app.to_sym, stage.to_sym, :db_name ]
   traverse_hash(multisite_config_hash, hash_path)
+end
+
+def server_has_app(server, app)
+  multisite_config_hash[:stages].each do |stage|
+    return true if legacy_db_name(server, app, stage).present?
+  end
+  return false
 end
 
 def traverse_hash(hash, hash_path)
