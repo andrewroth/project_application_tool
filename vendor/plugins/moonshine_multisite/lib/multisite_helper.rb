@@ -18,7 +18,8 @@ end
 
 def server_has_app(server, app)
   multisite_config_hash[:stages].each do |stage|
-    return true if legacy_db_name(server, app, stage).present?
+    s = legacy_db_name(server, app, stage)
+    return true if s && s != ""
   end
   return false
 end
