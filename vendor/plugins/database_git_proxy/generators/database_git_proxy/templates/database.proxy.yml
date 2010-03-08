@@ -1,0 +1,37 @@
+<%=
+DEFAULT_CONFIG_FILE = "database.default.yml"
+
+branches_to_dbfile_arr = YAML::load(File.read("#{RAILS_ROOT}/config/databases.yml"))
+branches_to_dbfile = branches_to_dbfile_arr.inject({}) { |merged, config| merged.merge(config) }
+
+#git_branch = %x[git branch --no-color 2> /dev/null | sed -e '/^\[^*\]/d' -e 's/* \(.*\)/\1/']
+git_branches = %x[git branch --no-color]
+git_branches.split("\n").find{ |b| b =~ /^\* +(.+)/ }
+git_branch = $1
+
+unless git_branch
+  puts "database config: not found because git not set up, using default"
+  config = DEFAULT_CONFIG_FILE
+else
+  config = branches_to_dbfile[git_branch]
+end
+
+unless config
+  for key in branches_to_dbfile.keys
+    key =~ /\/(.*)\//
+    if $1 && Regexp.new($1).match(git_branch)
+      config = branches_to_dbfile[key]
+      break
+    end
+  end
+
+  unless config
+    puts "database config: no match found in databases.yml, using default"
+    config = DEFAULT_CONFIG_FILE
+  end
+  #throw "Couldn't find your git branch '#{git_branch}' in config/databases.yml." unless config
+end
+
+puts "database config file: branch '#{git_branch}' -> '#{config}'"
+ERB.new(File.read("#{RAILS_ROOT}/config/#{config}").chomp).result
+%>
