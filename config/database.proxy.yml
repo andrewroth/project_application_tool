@@ -1,8 +1,13 @@
 <%=
 DEFAULT_CONFIG_FILE = "database.default.yml"
+RAILS_ROOT = ENV['RAILS_ROOT'] unless defined?(RAILS_ROOT)
 
 branches_to_dbfile_arr = YAML::load(File.read("#{RAILS_ROOT}/config/databases.yml"))
 branches_to_dbfile = branches_to_dbfile_arr.inject({}) { |merged, config| merged.merge(config) }
+
+# cd to RAILS_ROOT so git command works
+wd_before = Dir.pwd
+Dir.chdir RAILS_ROOT
 
 #git_branch = %x[git branch --no-color 2> /dev/null | sed -e '/^\[^*\]/d' -e 's/* \(.*\)/\1/']
 git_branches = %x[git branch --no-color]
@@ -32,6 +37,7 @@ unless config
   #throw "Couldn't find your git branch '#{git_branch}' in config/databases.yml." unless config
 end
 
+Dir.chdir wd_before
 puts "database config file: branch '#{git_branch}' -> '#{config}'"
 ERB.new(File.read("#{RAILS_ROOT}/config/#{config}").chomp).result
 %>
