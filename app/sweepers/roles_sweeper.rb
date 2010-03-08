@@ -21,6 +21,6 @@ class RolesSweeper < ActionController::Caching::Sweeper
   def expire(role)
     return unless role.project
 
-    expire_fragment(%r{your_projects.project_id=#{role.project.id}&role=.*&section=#{Acceptance}})
+    expire_fragment(%r{your_projects.project_id=#{role.project.id}&role=.*&section=Acceptance})
   end
 end

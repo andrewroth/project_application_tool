@@ -44,22 +44,18 @@
           <% @can_evaluate = @viewer.is_eventgroup_coordinator?(@eg) || (project && @viewer.is_processor?) %>
 
           <% 
-	  if @profile.status != 'completed'
-	    if @profile.status == 'started'
-	      @evaluate = ''
-	    else
-              @evaluate = 'waiting for refs'
-	    end
-          elsif @profile.locked_by.nil?
-            @evaluate = evaluate_link @profile.id, @profile.project_id
-          else
-            you = (@profile.locked_by == @viewer) ? "<br>(you! -- click to continue evaluating)" : ""
-            @evaluate = "<I>being evaluated by #{@profile.locked_by.name} #{you}</I>"
-            if !you.empty?
-              @evaluate = continue_evaluate_link @evaluate, @profile.id, @profile.project_id
-            end
-          end 
-	  %>
+            if @profile.status != 'completed'
+              if @profile.status == 'started'
+                @evaluate = ''
+              else
+                @evaluate = 'waiting for refs'
+              end
+            elsif @profile.locked_by.nil?
+              @evaluate = evaluate_link @profile.id, @profile.project_id
+            else
+              @evaluate = "<I>being evaluated by #{@profile.locked_by.name}</I>"
+            end 
+          %>
 
           <% @view = view_entire_processor_link @profile.id %>
           <%= render :partial => "processor_pile_appln" %>

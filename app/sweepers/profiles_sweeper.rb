@@ -3,7 +3,7 @@ class ProfilesSweeper < ActionController::Caching::Sweeper
 
   PROFILE_ATTS_USED_BY_SECTIONS = {
     'Acceptance' => [ :accepted_at, :support_claimed, :support_coach_id, :as_intern ],
-    'Applying' => [ :accepted_at, :support_claimed, :support_coach_id, :as_intern ],
+    'Applying' => [ :accepted_at, :support_claimed, :support_coach_id, :as_intern, :locked_by ],
     'StaffProfile' => [ :motivation_code ],
     'Withdrawn' => [ :status, :class_when_withdrawn, :status_when_withdrawn, :withdrawn_by, :withdrawn_at, :reason, :notes ]
   }

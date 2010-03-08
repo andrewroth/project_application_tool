@@ -1,7 +1,7 @@
 class CostItemsController < ApplicationController
   before_filter :set_menu_titles
   before_filter :set_project_access_list
-  before_filter :get_cost_item, :only => [ :show, :set_applies_to, :destroy, :edit, :update ]
+  before_filter :get_cost_item, :only => [ :show, :set_applies_to, :set_optional, :destroy, :edit, :update ]
   in_place_edit_for :cost_item, :description
   in_place_edit_for :cost_item, :amount
 	
@@ -23,6 +23,19 @@ class CostItemsController < ApplicationController
     
     @just_modified_id = @cost_item.id if @cost_item
     @just_modified_id ||= flash[:just_modified_id]
+  end
+
+  def set_optional
+    if (@cost_item.class == YearCostItem && @project_access.rassoc('all').nil?) || 
+      (@cost_item.class == ProjectCostItem && @project_access.rassoc(@cost_item.try(:project_id)).nil?)
+      render :inline => 'No access to change optional flag'
+      return
+    end
+
+    logger.info 'here 2'
+
+    @cost_item.optional = params[:cost_item_optional] == '1'
+    @cost_item.save!
   end
 
   def set_applies_to
@@ -73,15 +86,6 @@ class CostItemsController < ApplicationController
       list
     else
       render :action => 'new'
-    end
-  end
-
-  def update
-    if @cost_item.update_attributes(params[:cost_item])
-      flash[:notice] = 'CostItem was successfully updated.'
-      redirect_to :action => 'show', :id => @cost_item
-    else
-      render :action => 'edit'
     end
   end
 
