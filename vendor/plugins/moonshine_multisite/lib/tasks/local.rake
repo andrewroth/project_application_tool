@@ -33,12 +33,3 @@ namespace :git do
     track_branch "master"
   end
 end
-
-namespace :db do
-  desc "Backs up database.yml then copies database.reloader.yml to database.yml"
-  task :reloader do
-    system "cp #{Rails.root}/config/database.yml #{Rails.root}/config/database.yml.backup"
-    system "cp #{Rails.root}/config/database.reloader.yml #{Rails.root}/config/database.yml"
-    puts "Backed up database.yml then copied database.reloader.yml to database.yml"
-  end
-end
