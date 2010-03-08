@@ -241,7 +241,8 @@ def provision(server, server_config, utopian, apps_filter = nil)
 
       # copy the database file
       if utopian
-        db_file = File.read(File.join(MOONSHINE_MULTISITE_ROOT, "/assets/public/database_configs/database.#{utopian_name}.yml"))
+        #db_file = File.read(File.join(MOONSHINE_MULTISITE_ROOT, "/assets/public/database_configs/database.#{utopian_name}.yml"))
+        db_file = File.read(File.join(RAILS_ROOT, "/vendor/plugins/database_git_proxy/generators/database_git_proxy/templates/database.proxy.yml"))
       else
         db_file = File.read("app/manifests/assets/private/database_configs/database.#{utopian_name}.yml")
       end
