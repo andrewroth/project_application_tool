@@ -1,0 +1,11 @@
+# This file is used by database git proxy (run rake db:proxy to copy 
+# database.proxy.yml to database.yml to enable)
+#
+# The entries here can be regular expressions, designated by the /
+# at the beginning and end of the string, or text strings.  Matching
+# is done in order listed here and stops on the first match.
+#
+- /p2c.dev/: database/database.p2c_pat_dev.yml
+- /p2c.prod/: database/database.p2c_pat_prod.yml
+- /p2c.staging/: database/database.p2c_pat_staging.yml
+- /deploy/: database/database.p2c_pat_dev.yml
