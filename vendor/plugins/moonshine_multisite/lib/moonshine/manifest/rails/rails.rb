@@ -234,6 +234,7 @@ private
     exec("rake #{name}", {
       :command => "rake #{name} 2>&1 | tee -a /var/log/moonshine_rake.log",
       :user => configuration[:user],
+      :group => configuration[:group],
       :cwd => rails_root,
       :environment => "RAILS_ENV=#{ENV['RAILS_ENV']}",
       :require => exec('rake tasks'),

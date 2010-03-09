@@ -62,6 +62,7 @@ To download all the database info, run:
         if server_has_app(server, app)
           desc "Provision the #{app} app on the #{server} server"
           task app do
+            ENV['skipsetup'] = 'true'
             provision(server, server_config, false, [ app ])
           end
           desc "Provision the #{app} app on the #{server} server for a development system"
