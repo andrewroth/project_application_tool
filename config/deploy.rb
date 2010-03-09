@@ -83,6 +83,8 @@ unless ENV['target'] == 'demo'
       link_shared 'config/environments/development.rb', :overwrite => true
     end
     # TODO: test ln's for pat2. www.pat and www.pat2
-    #run "ln -s #{release_path}/tmp/cache/views/pat.powertochange.org #{release_path}/tmp/cache/views/pat2.powertochange.org"
+    run "rm -Rf #{release_path}/tmp/cache/*"
+    run "mkdir -p #{release_path}/tmp/cache/views/pat.powertochange.org"
+    run "ln -s #{release_path}/tmp/cache/views/pat.powertochange.org #{release_path}/tmp/cache/views/pat2.powertochange.org"
   end
 end
