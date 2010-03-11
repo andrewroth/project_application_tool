@@ -19,7 +19,6 @@ module Moonshine::Manifest::Rails::Monit
   def monit_restart
     exec "monit_restart", 
       :command => "sudo /etc/init.d/monit restart",
-      :require => package("monit"),
-      :after => exec("rake db:migrate")
+      :require => package("monit")
   end
 end

@@ -41,7 +41,7 @@ module Moonshine::Manifest::Rails::Rails
   # Runs Rails migrations. These are run on each deploy to ensure consistency!
   # No more 500s when you forget to <tt>cap deploy:migrations</tt>
   def rails_migrations
-    rake 'db:migrate'
+    rake 'db:migrate', :before => exec('monit_restart')
   end
 
   # Rotates the logs for this rails app
