@@ -88,7 +88,16 @@ CONFIG
       :content => template(File.join(File.dirname(__FILE__), "templates", "unattended_upgrades.erb"))
   end
 
-private
+  def cron_cleanup
+    file "/etc/cron.daily/cleanup_#{configuration[:server_name]}",
+      :ensure => :present,
+      :content => template(File.join(File.dirname(__FILE__), 'templates', 'cleanup_cron')),
+      :owner => 'root',
+      :group => 'root',
+      :mode => '775'
+  end
+
+  private
 
   #Provides a helper for creating logrotate config for various parts of your
   #stack. For example:

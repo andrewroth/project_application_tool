@@ -28,7 +28,7 @@ Provisioning your local computer is complete.
 
 To download all the database info, run:
 
-      rake pull:dbs:utopian
+      cap pull:dbs:utopian
 
 |
     end
