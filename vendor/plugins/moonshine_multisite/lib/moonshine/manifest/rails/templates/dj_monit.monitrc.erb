@@ -1,4 +1,4 @@
-check process delayed_job
+check process dj_<%= configuration[:branch] %>
   with pidfile <%= configuration[:deploy_to] %>/shared/pids/delayed_job.pid
   start program = "/usr/bin/env RAILS_ENV=production <%= configuration[:deploy_to] %>/current/script/delayed_job start"
   stop program = "/usr/bin/env RAILS_ENV=production <%= configuration[:deploy_to] %>/current/script/delayed_job stop"
