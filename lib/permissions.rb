@@ -255,7 +255,7 @@ module Permissions
   end
 
   def method_missing(m, *args)
-    #puts "in method_missing: #{m.inspect}"
+    puts "in permission method_missing: #{m.inspect}"
     m_s = m.to_s
     #puts m_s
     #puts m_s.index('ensure').to_s

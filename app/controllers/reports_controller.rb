@@ -144,7 +144,8 @@ class ReportsController < ApplicationController
             }
           }
       ],
-      :select => mk_sel("Person.person_lname, Person.person_fname, Person.gender_id, Campus.campus_shortDesc, Assignment.assignmentstatus_id, YearInSchool.year_desc, Project.title, Profile.status, Profile.type, Person.person_local_phone, Person.cell_phone, Person.person_email")
+      :select => mk_sel("Person.person_lname, Person.person_fname, Person.gender_id, Campus.campus_shortDesc, Assignment.assignmentstatus_id, YearInSchool.year_desc, Project.title, Profile.status, Profile.type, Person.person_local_phone, Person.cell_phone, Person.person_email"),
+      :conditions => params[:hide_interns] == 'true' ? "as_intern is false OR as_intern is null" : ""
     )
 
     #@rows = [ [  ] ]
@@ -539,7 +540,7 @@ class ReportsController < ApplicationController
     render_report @registrants
   end
   
-  StatEntry = Struct.new(:project, :started, :submitted, :completed, :accepted, :total, :declined, :withdrawn)
+  StatEntry = Struct.new(:project, :started, :submitted, :completed, :accepted, :interns, :total, :declined, :withdrawn)
   def project_stats
     
     @columns = MyOrderedHash.new [
@@ -548,7 +549,8 @@ class ReportsController < ApplicationController
     :submitted, 'int',
     :completed, 'int',
     :accepted, 'int',
-    :total_first_4, 'int',
+    :interns, 'int',
+    :total_first_5, 'int',
     :declined, 'int',
     :withdrawn, 'int'
     ]
@@ -570,13 +572,15 @@ class ReportsController < ApplicationController
       
       Applying.find_all_by_project_id_and_status(p.id, 'completed').size,
       
-      Acceptance.find_all_by_project_id(p.id).size,
+      Acceptance.find_all_by_project_id_and_as_intern(p.id, false).size + 
+      Acceptance.find_all_by_project_id_and_as_intern(p.id, nil).size,
+      Acceptance.find_all_by_project_id_and_as_intern(p.id, true).size,
       nil,
       Withdrawn.find_all_by_status_and_project_id('declined', p.id).size,
       Withdrawn.find_all_by_status_and_project_id(['self_withdrawn','admin_withdrawn'], p.id).size)
       
       # set total for first 4 columns
-      stat[:total] = stat[:started] + stat[:submitted] + stat[:completed] + stat[:accepted]
+      stat[:total] = stat[:started] + stat[:submitted] + stat[:completed] + stat[:accepted] + stat[:interns]
       
       @stats << stat
       
@@ -589,7 +593,8 @@ class ReportsController < ApplicationController
     end
     @stats << StatEntry.new('', totals[:started].to_s, 
     totals[:submitted].to_s, totals[:completed].to_s, 
-    totals[:accepted].to_s, totals[:total].to_s, totals[:declined].to_s, totals[:withdrawn].to_s) if @many_projects
+    totals[:accepted].to_s, totals[:interns].to_s,
+    totals[:total].to_s, totals[:declined].to_s, totals[:withdrawn].to_s) if @many_projects
     @page_title = "#{@eg.title} #{@project_title} Summer Stats"
     render_report @stats
   end

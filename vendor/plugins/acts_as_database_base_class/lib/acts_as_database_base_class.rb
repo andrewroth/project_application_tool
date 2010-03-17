@@ -15,11 +15,7 @@ module ActiveRecord
 
           self.abstract_class = true
 
-          if (RAILS_ENV =~ /test/).nil?
-            establish_connection(configuration)
-          else
-            establish_connection(RAILS_ENV)
-          end
+          establish_connection(RAILS_ENV)
         end
       end
       
@@ -41,7 +37,7 @@ module ActiveRecord
         end
 
         def configuration
-          (RAILS_ENV =~ /test/) ? "test" : "#{acts_as_database_base_class_options[:database]}_#{RAILS_ENV}"
+          "#{acts_as_database_base_class_options[:database]}_#{RAILS_ENV}"
         end
         
         def db_name
@@ -51,7 +47,6 @@ module ActiveRecord
 
         def table_name_prefix
           return '' unless acts_as_database_base_class_options
-          return '' if RAILS_ENV == 'test'
 
           db_name.empty? ? '' : db_name + '.'
         end  
