@@ -10,7 +10,7 @@ class Multicheckbox < Question
   
   def get_verbose_answer(instance_id, params)
     checkboxfields.collect { |checkbox|
-      checkbox.text if checkbox.get_answer(instance_id, params) == '1'
+      checkbox.text if %w(true 1).include?(checkbox.get_answer(instance_id, params))
     }.compact.join(', ')
   end
 
