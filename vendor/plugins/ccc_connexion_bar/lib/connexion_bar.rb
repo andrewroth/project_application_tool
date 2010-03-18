@@ -14,8 +14,15 @@ module ActionView
           uri = URI.parse(uri) unless uri.kind_of? URI
           https = Net::HTTP.new(uri.host, uri.port)
           https.use_ssl = (uri.scheme == 'https')
-          raw_res = https.start do |conn|
-            conn.get("#{uri}")
+          https.open_timeout = 3
+          https.read_timeout = 3
+          begin
+            raw_res = https.start do |conn|
+              conn.get("#{uri}")
+            end
+          rescue Timeout::Error
+            logger.info('Connexionbar fetch timed out')
+            return ""
           end
           begin
             doc = REXML::Document.new(raw_res.body)
