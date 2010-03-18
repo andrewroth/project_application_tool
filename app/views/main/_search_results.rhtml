@@ -39,7 +39,14 @@
             <td><%=h 'gcx' unless viewer.guid.empty? %></td>
             <td><%=h viewer.profiles.length %></td>
             <td><%=h viewer.viewer_lastLogin %></td>
-          <td><% if @viewer.is_projects_coordinator? %> <%= link_to 'merge..', merge_viewer_url(viewer) %> <% end %></td>
+          <td>
+            <% if @viewer.is_projects_coordinator? %>
+              <%= link_to 'merge..', merge_viewer_url(viewer) %>
+            <% end %>
+            <% if @viewer.is_eventgroup_coordinator?(@eg) && (@viewer.is_projects_coordinator? || !viewer.eventgroups_coordinating.present?) %>
+              <%= link_to 'impersonate', impersonate_viewer_url(viewer) %>
+            <% end %>
+          </td>
             <td>
               <span id="finding_viewer_specifics_<%= viewer.id %>" style="clear:both; display:none;">
                 <%=image_tag('spinner.gif')%><br />

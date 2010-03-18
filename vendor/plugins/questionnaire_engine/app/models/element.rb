@@ -66,9 +66,9 @@ class Element < ActiveRecord::Base
               a.question_id <=> id            #  then question id
           }
           @answer = a_pos ? params[:cache][a_pos] : nil
-	else
+        else
           @answer = params[:cache].detect {|a| a.instance_id == instance.id && a.question_id == id }
-	end
+        end
       end
       if !params[:use_cache_only]
         @answer = instance.answers.detect {|a| a.question_id == id} if @answer.nil?
