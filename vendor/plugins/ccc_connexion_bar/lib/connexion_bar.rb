@@ -42,7 +42,7 @@ module ActionView
 
           # Replace the logout link
           if options[:logout]
-            old_link = (doc/'a').detect {|e| e.inner_html == /LOGOUT/}
+            old_link = (doc/'a').detect {|e| e.inner_html =~ /LOGOUT/}
             old_link.parent.inner_html = options[:logout]
           end
           # Remove the search and help links since they use relative urls
