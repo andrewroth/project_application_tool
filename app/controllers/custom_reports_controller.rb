@@ -162,7 +162,7 @@ class CustomReportsController < ApplicationController
               ri.questionnaire == q
             }
 
-            ri || appln # use appln if can't find anything else
+            instance = ri || appln # use appln if can't find anything else
           end
 
           row << e.get_verbose_answer(instance, :cache => answers_cache, :cache_sorted => sort, :use_cache_only => true).to_s
