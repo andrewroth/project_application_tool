@@ -136,7 +136,7 @@
         - config/database.yml
         - log
         - tmp
-        # TODO shared public dir for attachment_fu
+        - public/event_groups
       :certs:
         "app/manifests/assets/private/certs/powertochange.org.cert": "/etc/apache2/certs/powertochange.org.cert"
         "app/manifests/assets/private/certs/powertochange.org.key": "/etc/apache2/certs/powertochange.org.key"
