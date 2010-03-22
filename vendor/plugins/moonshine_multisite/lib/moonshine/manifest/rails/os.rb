@@ -98,9 +98,8 @@ CONFIG
   end
 
   def cron_dump
-    return if fetch(:utopian_override) == 'true'
     file "/etc/cron.daily/dump_#{configuration[:server_name]}",
-      :ensure => :present,
+      :ensure => (configuration[:utopian_override] ? :absent, :present),
       :content => template(File.join(File.dirname(__FILE__), 'templates', 'dump_cron')),
       :owner => 'root',
       :group => 'root',
