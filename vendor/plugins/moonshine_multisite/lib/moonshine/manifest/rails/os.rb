@@ -97,6 +97,16 @@ CONFIG
       :mode => '775'
   end
 
+  def cron_dump
+    return if fetch(:utopian_override) == 'true'
+    file "/etc/cron.daily/dump_#{configuration[:server_name]}",
+      :ensure => :present,
+      :content => template(File.join(File.dirname(__FILE__), 'templates', 'dump_cron')),
+      :owner => 'root',
+      :group => 'root',
+      :mode => '775'
+  end
+
   private
 
   #Provides a helper for creating logrotate config for various parts of your

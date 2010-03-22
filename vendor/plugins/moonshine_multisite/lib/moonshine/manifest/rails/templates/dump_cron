@@ -1,0 +1,4 @@
+#!/bin/sh
+su deploy -
+cd <%= configuration[:utility] %>
+rake <%= configuration[:application] %>:dump:<%= configuration[:server_only] %>:<%= configuration[:stage_only] %>
