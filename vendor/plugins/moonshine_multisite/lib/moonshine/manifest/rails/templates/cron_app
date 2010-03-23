@@ -1,8 +1,7 @@
 #!/bin/sh
-su deploy -
 cd <%= configuration[:deploy_to] + "/current" %>
-rake db:sessions:clear
-rake tmp:cache:clear
+sudo -i <%= configuration[:user] %> rake db:sessions:clear
+rake -i <%= configuration[:user] %> tmp:cache:clear
 
 cd <%= configuration[:utility] %>
-rake <%= configuration[:application] %>:dump:<%= configuration[:server_only] %>:<%= configuration[:stage_only] %>
+rake -i <%= configuration[:user] %> <%= configuration[:application] %>:dump:<%= configuration[:server_only] %>:<%= configuration[:stage_only] %>
