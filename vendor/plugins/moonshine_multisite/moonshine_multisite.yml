@@ -50,6 +50,7 @@
           :db_name: emu
           :server_name: pulse.campusforchrist.org
           :sensitive: true
+          :delayed_job: false # don't conflict with the task already running
         :dev: 
           :db_name: emu_dev
           :server_name: pulse.dev.campusforchrist.org
