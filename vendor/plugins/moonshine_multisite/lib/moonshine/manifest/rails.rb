@@ -45,7 +45,11 @@ class Moonshine::Manifest::Rails < Moonshine::Manifest
     self.class.recipe :passenger_gem, :passenger_configure_gem_path, :passenger_apache_module, :passenger_site
     case database_environment[:adapter]
     when 'mysql'
-      self.class.recipe :mysql_server, :mysql_gem, :mysql_database, :mysql_user, :mysql_fixup_debian_start
+      if configuration[:utopian_override]
+        self.class.recipe :mysql_server, :mysql_gem, :mysql_database, :mysql_user, :mysql_fixup_debian_start
+      else
+        self.class.recipe :mysql_gem
+      end
     when 'postgresql'
       self.class.recipe :postgresql_server, :postgresql_gem, :postgresql_user, :postgresql_database
     when 'sqlite' || 'sqlite3'
