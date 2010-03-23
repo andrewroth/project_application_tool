@@ -66,6 +66,7 @@ EOF
   # Noop <tt>/etc/mysql/debian-start</tt>, which does some nasty table scans on
   # MySQL start.
   def mysql_fixup_debian_start
+    return unless File.exists?('/etc/mysql/debian-start')
     file '/etc/mysql/debian-start',
       :ensure => :present,
       :content => "#!/bin/bash\nexit 0",
