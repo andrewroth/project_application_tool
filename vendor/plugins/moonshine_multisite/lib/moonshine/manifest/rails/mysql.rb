@@ -5,25 +5,28 @@ module Moonshine::Manifest::Rails::Mysql
   # <tt>/etc/mysql/conf.d/moonshine.cnf</tt>. See
   # <tt>templates/moonshine.cnf</tt> for configuration options.
   def mysql_server
-    return unless configuration[:utopian_override]
     package 'mysql-server', :ensure => :installed
     service 'mysql', :ensure => :running, :require => [
       package('mysql-server'),
       package('mysql')
     ]
-    #ensure the mysql key is present on the configuration hash
+
+    # ensure the mysql key is present on the configuration hash
     configure(:mysql => {})
+
     file '/etc/mysql', :ensure => :directory
     file '/etc/mysql/conf.d', :ensure => :directory
-#    file '/etc/mysql/conf.d/innodb.cnf',
-#      :ensure => :present,
-#      :content => template(File.join(File.dirname(__FILE__), 'templates', 'innodb.cnf.erb')),
-#      :before => package('mysql-server')
-#    file '/etc/mysql/conf.d/moonshine.cnf',
-#      :ensure => :present,
-#      :content => template(File.join(File.dirname(__FILE__), 'templates', 'moonshine.cnf.erb')),
-#      :require => package('mysql-server'),
-#      :notify => service('mysql')
+=begin
+    file '/etc/mysql/conf.d/innodb.cnf',
+      :ensure => :present,
+      :content => template(File.join(File.dirname(__FILE__), 'templates', 'innodb.cnf.erb')),
+      :before => package('mysql-server')
+    file '/etc/mysql/conf.d/moonshine.cnf',
+      :ensure => :present,
+      :content => template(File.join(File.dirname(__FILE__), 'templates', 'moonshine.cnf.erb')),
+      :require => package('mysql-server'),
+      :notify => service('mysql')
+=end
     file '/etc/logrotate.d/varlogmysql.conf', :ensure => :absent
   end
 
@@ -35,7 +38,6 @@ module Moonshine::Manifest::Rails::Mysql
   # GRANT the database user specified in the current <tt>database_environment</tt>
   # permisson to access the database with the supplied password
   def mysql_user
-=begin
     grant =<<EOF
 GRANT ALL PRIVILEGES 
 ON #{database_environment[:database]}.*
@@ -47,26 +49,22 @@ EOF
     exec "mysql_user",
       :command => mysql_query(grant),
       :unless  => "mysqlshow -u#{database_environment[:username]} -p#{database_environment[:password]} #{database_environment[:database]}",
-      #:require => exec('mysql_database'),
+      :require => exec('mysql_database'),
       :before => exec('rake tasks')
-=end
   end
 
   # Create the database from the current <tt>database_environment</tt>
   def mysql_database
-=begin
     exec "mysql_database",
       :command => mysql_query("create database #{database_environment[:database]};"),
       :unless => mysql_query("show create database #{database_environment[:database]};"),
       :require => service('mysql'),
       :notify => exec('rails_bootstrap')
-=end
   end
 
   # Noop <tt>/etc/mysql/debian-start</tt>, which does some nasty table scans on
   # MySQL start.
   def mysql_fixup_debian_start
-    return unless File.exists?('/etc/mysql/debian-start')
     file '/etc/mysql/debian-start',
       :ensure => :present,
       :content => "#!/bin/bash\nexit 0",
@@ -79,7 +77,7 @@ private
 
   # Internal helper to shell out and run a query. Doesn't select a database.
   def mysql_query(sql)
-    "sudo su -c \'/usr/bin/mysql -u root -e \"#{sql}\"\'"
+    "su -c \'/usr/bin/mysql -u root -e \"#{sql}\"\'"
   end
 
 end
