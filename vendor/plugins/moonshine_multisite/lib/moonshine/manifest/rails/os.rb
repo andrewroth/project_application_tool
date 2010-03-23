@@ -89,7 +89,7 @@ CONFIG
   end
 
   def cron_app
-    file "/etc/cron.daily/#{configuration[:server_name]}",
+    file "/etc/cron.daily/#{configuration[:application]}.#{configuration[:domain]}",
       :ensure => :present,
       :content => template(File.join(File.dirname(__FILE__), 'templates', 'cron_app')),
       :owner => 'root',

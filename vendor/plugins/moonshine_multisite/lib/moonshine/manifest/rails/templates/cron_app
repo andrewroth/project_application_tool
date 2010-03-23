@@ -1,7 +1,17 @@
 #!/bin/sh
-cd <%= configuration[:deploy_to] + "/current" %>
+# this script is specific to ministry hacks
+
+# clean up production
+cd /var/www/<%= configuration[:application] %>.<%= configuration[:domain] %>/current
 sudo -u <%= configuration[:user] %> rake db:sessions:clear
 sudo -u <%= configuration[:user] %> rake tmp:cache:clear
 
+# clone production to staging
 cd <%= configuration[:utility] %>
-sudo -u <%= configuration[:user] %> rake <%= configuration[:application] %>:dump:<%= configuration[:server_only] %>:<%= configuration[:stage_only] %>
+sudo -u deploy rake <%= configuration[:application] %>:klone:<%= configuration[:server_only]%>:dev
+
+# dump each site's stage
+cd <%= configuration[:utility] %>
+sudo -u <%= configuration[:user] %> rake <%= configuration[:application] %>:dump:<%= configuration[:server_only] %>:prod
+sudo -u <%= configuration[:user] %> rake <%= configuration[:application] %>:dump:<%= configuration[:server_only] %>:dev
+sudo -u <%= configuration[:user] %> rake <%= configuration[:application] %>:dump:<%= configuration[:server_only] %>:staging
