@@ -5,6 +5,7 @@ module Moonshine::Manifest::Rails::Mysql
   # <tt>/etc/mysql/conf.d/moonshine.cnf</tt>. See
   # <tt>templates/moonshine.cnf</tt> for configuration options.
   def mysql_server
+    return unless configuration[:utopian_override]
     package 'mysql-server', :ensure => :installed
     service 'mysql', :ensure => :running, :require => [
       package('mysql-server'),
