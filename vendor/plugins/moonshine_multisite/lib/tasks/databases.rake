@@ -8,7 +8,7 @@ query_databases
 for_dbs(:dump) do |p|
   desc "dumps #{p[:utopian]}"
   task p[:stage] do
-    clone :prod => p[:legacy], :file => "tmp/#{p[:utopian]}.sql.gz"
+    clone :prod => p[:legacy], :file => "tmp/#{p[:utopian]}.sql.gz", :force => (ENV['force'] == 'true')
   end
 end
 

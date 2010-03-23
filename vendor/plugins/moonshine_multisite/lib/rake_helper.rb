@@ -46,6 +46,7 @@ def clone(params)
   prod = params[:prod]
   dev = params[:dev]
   file = params[:file]
+  force = params[:force]
   dbserver = root_config[:host]
   dbuser = root_config[:username]
   dbpass = root_config[:password]
@@ -57,7 +58,12 @@ def clone(params)
   options = "--extended-insert --skip-lock-tables --skip-add-locks  --skip-set-charset --skip-disable-keys"
 
   if file
-    dest = "| gzip > #{Rails.root.join(file)}"
+    if !force && File.exists?(Rails.root.join(file)) && File.new(Rails.root.join(file)).ctime > 24.hours.ago
+      puts "Note: #{file} is newer than 24 hours ago, skipping dump"
+      return
+    else
+      dest = "| gzip > #{Rails.root.join(file)}"
+    end
   else
     dest = "| mysql -h #{dbserver} -u #{dbuser} --password=#{dbpass} #{dev}"
     unless @databases && @databases.include?(dev)
