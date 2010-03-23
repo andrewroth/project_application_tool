@@ -12,6 +12,10 @@ module Moonshine::Manifest::Rails::Monit
         :ensure => :present,
         :content => template(File.join(File.dirname(__FILE__), 'templates', 'dj_monit.monitrc.erb')),
         :before => exec("monit_restart")
+    else
+      file "/etc/monit.d/dj_#{configuration[:server_name]}.monitrc",
+        :ensure => :absent,
+        :before => exec("monit_restart")
     end
     file "/etc/monit/monitrc",
       :ensure => :present,
