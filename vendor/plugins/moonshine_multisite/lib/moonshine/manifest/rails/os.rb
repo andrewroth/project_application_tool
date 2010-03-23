@@ -88,19 +88,10 @@ CONFIG
       :content => template(File.join(File.dirname(__FILE__), "templates", "unattended_upgrades.erb"))
   end
 
-  def cron_cleanup
-    file "/etc/cron.daily/cleanup_#{configuration[:server_name]}",
+  def cron_app
+    file "/etc/cron.daily/#{configuration[:server_name]}",
       :ensure => :present,
-      :content => template(File.join(File.dirname(__FILE__), 'templates', 'cleanup_cron')),
-      :owner => 'root',
-      :group => 'root',
-      :mode => '775'
-  end
-
-  def cron_dump
-    file "/etc/cron.daily/dump_#{configuration[:server_name]}",
-      :ensure => (configuration[:utopian_override] ? :absent : :present),
-      :content => template(File.join(File.dirname(__FILE__), 'templates', 'dump_cron')),
+      :content => template(File.join(File.dirname(__FILE__), 'templates', 'cron_app')),
       :owner => 'root',
       :group => 'root',
       :mode => '775'

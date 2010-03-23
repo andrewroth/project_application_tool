@@ -42,7 +42,7 @@
         "app/manifests/assets/private/certs/campusforchrist.org.cert": "/etc/apache2/certs/campusforchrist.org.cert"
         "app/manifests/assets/private/certs/campusforchrist.org.key": "/etc/apache2/certs/campusforchrist.org.key"
       :ruby: ree187 
-      :utility: /var/www/c4c_utility.campusforchrist.org/current
+      :utility: /var/www/utility.campusforchrist.org/current
       :skip_deploy: false
     :stage_moonshines:
       :pulse:
@@ -124,7 +124,7 @@
       :private_user: deploy
       :ssl: true
       :ruby: ree187 
-      :utility: /var/www/c4c_utility.campusforchrist.org/current
+      :utility: /var/www/utility.campusforchrist.org/current
       :shared_children:
         - config
         - log
