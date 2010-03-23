@@ -1,0 +1,331 @@
+---
+
+# stages are required -- sets the stages you want your sites to work with
+:stages: 
+- :prod
+- :staging
+- :dev
+
+# legacy_stages are optional - sets up some stages for use without capistrano-ext
+# this is useful if you have a sysadmin who doesn't want to use moonshine
+:legacy_stages: 
+- :dev
+- :prod
+
+:servers:
+  :c4c:
+    :moonshine:
+      :user: deploy
+      :group: www-data
+      :server: pat.powertochange.org
+      :lan_ip: 192.168.242.177
+      :domain: campusforchrist.org
+      :time_zone: PST
+      :private_path: /home/deploy/private_repo2
+      :private_host: 208.87.54.217
+      :private_user: deploy
+      :ssl: true
+      :delayed_job: true
+      :shared_children:
+        - config
+        - log
+        - tmp
+        - tmp/sessions
+        - tmp/pids
+        - public
+      :shared_config:
+        - config/database.yml
+        - log
+        - tmp
+        # TODO shared public dir for attachment_fu
+      :certs:
+        "app/manifests/assets/private/certs/campusforchrist.org.cert": "/etc/apache2/certs/campusforchrist.org.cert"
+        "app/manifests/assets/private/certs/campusforchrist.org.key": "/etc/apache2/certs/campusforchrist.org.key"
+      :ruby: ree187 
+      :utility: /var/www/c4c_utility.campusforchrist.org/current
+      :skip_deploy: false
+    :stage_moonshines:
+      :pulse:
+        :prod: 
+          :db_name: emu
+          :server_name: pulse.campusforchrist.org
+          :sensitive: true
+        :dev: 
+          :db_name: emu_dev
+          :server_name: pulse.dev.campusforchrist.org
+          :server_aliases:
+            - moose.campusforchrist.org
+        :staging: 
+          :db_name: emu_stage
+          :server_name: pulse.staging.campusforchrist.org
+      :intranet:
+        :prod:
+          :db_name: ciministry
+          :skip_deploy: true
+          :sensitive: true
+        :dev:
+          :db_name: dev_campusforchrist
+          :skip_deploy: true
+        :staging:
+          :db_name: dev_campusforchrist
+          :skip_deploy: true
+      :utility:
+        :dev:
+          :delayed_job: false
+          :db_name: c4c_utility
+          :server_name: utility.campusforchrist.org
+          :skip_pull: true
+    :local:
+      :moonshine:
+        :domain: local
+        :ssl: false
+        :passenger:
+          :rails_env: development
+        :user: <%= %x[whoami].chomp %>
+        :group: <%= %x[whoami].chomp %>
+      :stage_moonshines:
+        :pulse:
+          :prod: 
+            :db_name: c4c_pulse_prod
+            :skip_deploy: true
+          :dev:  # only dev is installed in /var/www, the other stages are for db only
+                 # since there is only c4c.dev (no c4c.prod or c4c.staging) in pulse git
+            :db_name: c4c_pulse_dev
+            :server_name: pulse.local
+          :staging: 
+            :db_name: emu
+            :skip_deploy: true
+        :intranet: # for db only
+          :prod:
+            :db_name: c4c_intranet_prod
+            :skip_deploy: true
+          :dev:
+            :db_name: c4c_intranet_dev
+            :skip_deploy: true
+          :staging:
+            :db_name: c4c_intranet_staging
+            :skip_deploy: true
+        :utility:
+          :dev:
+            #:db_name: c4c_utility
+            :delayed_job: false
+            :server_name: utility.local
+            :deploy_to: /var/www/utility.local
+  :p2c:
+    :moonshine:
+      :user: deploy
+      :group: www-data
+      :server: pat.powertochange.org
+      :lan_ip: 192.168.242.175
+      :domain: powertochange.org
+      :time_zone: PST
+      :private_path: /home/deploy/private_repo2
+      :private_host: 208.87.54.217
+      :private_user: deploy
+      :ssl: true
+      :ruby: ree187 
+      :utility: /var/www/c4c_utility.campusforchrist.org/current
+      :shared_children:
+        - config
+        - log
+        - tmp
+        - tmp/sessions
+        - tmp/pids
+        - public
+      :shared_config:
+        - config/database.yml
+        - log
+        - tmp
+        - public/event_groups
+      :certs:
+        "app/manifests/assets/private/certs/powertochange.org.cert": "/etc/apache2/certs/powertochange.org.cert"
+        "app/manifests/assets/private/certs/powertochange.org.key": "/etc/apache2/certs/powertochange.org.key"
+      :skip_deploy: false
+    :stage_moonshines:
+      :pat:
+        :prod: 
+          :db_name: summerprojecttool
+          :server_name: pat.powertochange.org
+          :sensitive: true
+        :dev: 
+          :db_name: spt_dev
+          :server_name: pat.dev.powertochange.org
+        :staging: 
+          :db_name: spt_dev
+          :server_name: pat.staging.powertochange.org
+          :skip_deploy: true # there's no staging site for the pat yet
+      :mpdtool:
+        :prod: 
+          :db_name: mpdtool
+          :server_name: mpdtool.powertochange.org
+          :sensitive: true
+        :dev: 
+          :db_name: mpdtool_dev
+          :server_name: mpdtool.dev.powertochange.org
+        :staging: 
+          :db_name: mpdtool_dev
+          :server_name: mpdtool.staging.powertochange.org
+          :skip_deploy: true # there's no staging site for the mpdtool yet
+    :local:
+      :moonshine:
+        :domain: local
+        :ssl: false
+        :passenger:
+          :rails_env: development
+        :user: <%= %x[whoami].chomp %>
+        :group: <%= %x[whoami].chomp %>
+      :stage_moonshines:
+        :pat:
+          :staging:
+            :db_name: p2c_pat_staging
+            :skip_deploy: true
+          :dev:
+            :db_name: p2c_pat_dev
+            :server_name: pat.local
+            :deploy_to: /var/www/pat.local
+          :prod:
+            :db_name: p2c_pat_prod
+            :skip_deploy: true
+        :mpdtool:
+          :prod:
+            :db_name: p2c_mpdtool_prod
+            :skip_deploy: true
+          :dev:
+            :db_name: p2c_mpdtool_dev
+            :server_name: mpdtool.local
+            :deploy_to: /var/www/mpdtool.local
+          :staging:
+            :db_name: p2c_mpdtool_staging
+            :skip_deploy: true
+  :mh:
+    :moonshine:
+      :user: deploy
+      :group: www-data
+      :server: ministryhacks.com
+      :lan_ip: *
+      :domain: ministryhacks.com
+      :time_zone: EST
+      :private_path: /home/deploy/private_repo2
+      :private_host: 208.87.54.217
+      :private_user: deploy
+      :ssl: true
+      :ruby: ree187 
+      :utility: /var/www/utility.ministryhacks.com/current
+      :shared_children:
+        - config
+        - log
+        - tmp
+        - tmp/sessions
+        - tmp/pids
+        - public
+      :shared_config:
+        - config/database.yml
+        - log
+        - tmp
+        # TODO shared public dir for attachment_fu
+      #:certs:
+      #  "app/manifests/assets/private/certs/powertochange.org.cert": "/etc/apache2/certs/powertochange.org.cert"
+      #  "app/manifests/assets/private/certs/powertochange.org.key": "/etc/apache2/certs/powertochange.org.key"
+      :skip_deploy: false
+    :stage_moonshines:
+      :pat:
+        :prod: 
+          :db_name: mh_pat_prod
+          :server_name: pat.ministryhacks.com
+          :sensitive: true
+          :delayed_job: false
+        :dev: 
+          :db_name: mh_pat_dev
+          :server_name: pat.dev.ministryhacks.com
+          :delayed_job: false
+        :staging: 
+          :db_name: mh_pat_staging
+          :server_name: pat.staging.ministryhacks.com
+          :delayed_job: false
+      :mpdtool:
+        :prod: 
+          :db_name: mh_mpdtool_prod
+          :server_name: mpdtool.ministryhacks.com
+          :sensitive: true
+          :delayed_job: false
+        :dev: 
+          :db_name: mh_mpdtool_dev
+          :server_name: mpdtool.dev.ministryhacks.com
+          :delayed_job: false
+        :staging: 
+          :db_name: mh_mpdtool_staging
+          :server_name: mpdtool.staging.ministryhacks.com
+          :delayed_job: false
+      :pulse:
+        :prod: 
+          :db_name: mh_mt_prod
+          :server_name: mt.ministryhacks.com
+          :sensitive: true
+          :delayed_job: true
+        :dev: 
+          :db_name: mh_mt_dev
+          :server_name: mt.dev.ministryhacks.com
+          :delayed_job: true
+        :staging: 
+          :db_name: mh_mt_staging
+          :server_name: mt.staging.ministryhacks.com
+          :delayed_job: true
+      :utility:
+        :dev:
+          :delayed_job: false
+          :db_name: c4c_utility
+          :server_name: utility.campusforchrist.org
+          :skip_pull: true
+    :local:
+      :moonshine:
+        :domain: local
+        :ssl: false
+        :passenger:
+          :rails_env: development
+        :user: <%= %x[whoami].chomp %>
+        :group: <%= %x[whoami].chomp %>
+      :stage_moonshines:
+        :pat:
+          :prod:
+            :db_name: mh_pat_prod
+            :skip_deploy: true
+          :dev: 
+            :db_name: mh_pat_dev
+            :deploy_to: /var/www/pat.local
+            :delayed_job: false
+          :staging:
+            :db_name: mh_pat_staging
+            :skip_deploy: true
+        :mpdtool:
+          :prod:
+            :db_name: mh_mpdtool_prod
+            :skip_deploy: true
+          :dev: 
+            :db_name: mh_mpdtool_dev
+            :deploy_to: /var/www/mpdtool.local
+            :delayed_job: false
+          :staging:
+            :db_name: mh_mpdtool_staging
+            :skip_deploy: true
+        :pulse:
+          :prod:
+            :db_name: mh_pulse_prod
+            :skip_deploy: true
+          :dev: 
+            :db_name: mh_mt_dev
+            :deploy_to: /var/www/pulse.local
+            :delayed_job: true
+          :staging:
+            :db_name: mh_mt_staging
+            :skip_deploy: true
+        :utility:
+          :dev:
+            :db_name: c4c_utility
+            :deploy_to: /var/www/utility.local
+            :skip_pull: true 
+:apps:
+  :pat: git://github.com/andrewroth/project_application_tool.git
+  :pulse: git://github.com/twinge/ministry-tracker.git
+  :intranet: 
+  :utility: git://github.com/andrewroth/c4c_utility.git
+  :mpdtool: git://github.com/twinge/mpd_tool.git

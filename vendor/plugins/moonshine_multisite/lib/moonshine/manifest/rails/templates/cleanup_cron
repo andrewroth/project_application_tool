@@ -1,0 +1,5 @@
+#!/bin/sh
+su deploy -
+cd <%= configuration[:deploy_to] + "/current" %>
+rake db:sessions:clear
+rake tmp:cache:clear
