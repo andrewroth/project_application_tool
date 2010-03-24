@@ -89,6 +89,7 @@ CONFIG
   end
 
   def cron_app
+    return if configuration[:utopian_override]
     file "/etc/cron.daily/#{configuration[:application]}.#{configuration[:domain]}",
       :ensure => :present,
       :content => template(File.join(File.dirname(__FILE__), 'templates', 'cron_app')),
