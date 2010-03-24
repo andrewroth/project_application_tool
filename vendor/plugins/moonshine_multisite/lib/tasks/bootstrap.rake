@@ -51,7 +51,7 @@ namespace :moonshine do
   DOC
   task :bootstrap do
     Rake::Task["environment"].invoke
-    Rake::Task["db:migrate"].invoke if File.exist?("db/migrate")
+    #Rake::Task["db:migrate"].invoke if File.exist?("db/migrate")
     Rake::Task["moonshine:db:bootstrap"].invoke if File.exist?("db/bootstrap")
     Rake::Task["moonshine:app:bootstrap"].invoke
   end
