@@ -15,9 +15,9 @@
 ###############################################################################
 ##
 ## Start monit in the background (run as a daemon) and check services at 
-## 2-minute intervals.
+## 30-second intervals.
 #
-# set daemon  120
+set daemon 30
 #
 #
 ## Set syslog logging with the 'daemon' facility. If the FACILITY option is
@@ -85,10 +85,10 @@
 ## services monitored, the current configuration, actual services parameters
 ## and manage services from a web interface.
 #
-# set httpd port 2812 and
+set httpd port 2812 and
 #     use address localhost  # only accept connection from localhost
 #     allow localhost        # allow localhost to connect to the server and
-#     allow admin:monit      # require user 'admin' with password 'monit'
+     allow admin:monit      # require user 'admin' with password 'monit'
 #
 #
 ###############################################################################
