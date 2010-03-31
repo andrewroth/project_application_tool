@@ -34,7 +34,6 @@ module Permissions
     @viewer.is_eventgroup_coordinator?(@eg)
   end
 
-
   def set_can_view_summary
     if @viewer && @viewer.is_eventgroup_coordinator?(@eg)
       @can_view_summary = true

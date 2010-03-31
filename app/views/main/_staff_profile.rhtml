@@ -12,6 +12,7 @@
       <% if @viewer.is_eventgroup_coordinator?(@eg) %>
         <%= manual_donations_link staff_profile.motivation_code %>
         <%= withdraw_move_link staff_profile.id, 'move' %>
+        <%= personal_crisis_info_link staff_profile.viewer.id %>
       <% end %>
   </td>
 </tr>
