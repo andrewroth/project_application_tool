@@ -73,16 +73,16 @@ def clone(params)
   execute_shell "mysqldump #{options} -h #{dbserver} -u #{dbuser} --password=#{dbpass} #{prod} | sed \"2 s/.*/SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO';/\" #{dest}"
 end
 
-def prepare_for_sql
-  unless defined?(ActiveRecord) && @sql
+def prepare_for_sql(database = '', force_new_connection = false)
+  unless (defined?(ActiveRecord) && @sql) && !force_new_connection
     require "rubygems"
     require "active_record"
     root_config
-    ActiveRecord::Base.establish_connection root_config.merge('database' => '')
+    ActiveRecord::Base.establish_connection root_config.merge('database' => database)
   end
 
   # grab a connection if there's not one already
-  unless @sql
+  unless @sql && !force_new_connection
     @sql = ActiveRecord::Base.connection
   end
 end
