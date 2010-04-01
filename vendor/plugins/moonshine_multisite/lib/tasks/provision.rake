@@ -28,7 +28,8 @@ Provisioning your local computer is complete.
 
 To download all the database info, run:
 
-      cap pull:dbs:utopian
+      cap c4c pull:dbs:utopian sensitive=true user=deploy
+      cap p2c pull:dbs:utopian sensitive=true user=deploy
 
 |
     end
