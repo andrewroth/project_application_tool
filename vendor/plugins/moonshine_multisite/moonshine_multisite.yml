@@ -209,7 +209,7 @@
       :private_path: /home/deploy/private_repo2
       :private_host: 208.87.54.217
       :private_user: deploy
-      :ssl: true
+      :ssl: false
       :ruby: ree187 
       :utility: /var/www/utility.ministryhacks.com/current
       :shared_children:
