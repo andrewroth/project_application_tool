@@ -75,13 +75,13 @@ Provisioning your local computer is complete.
         @p2c_password = STDIN.gets.chomp
         # download private
         @password = @p2c_password
-        new_cap "p2c", nil, nil, true
+        new_cap "mh", nil, nil, true
         run_cap nil, "moonshine:secure:download_private"
         # now provision
         @password = @local_password
         @cap_config = nil # force new password to take effect
         ENV['HOSTS'] = '127.0.0.1'
-        provision(:p2c, multisite_config_hash[:servers][:p2c], false)
+        provision(:mh, multisite_config_hash[:servers][:mh], false)
       end
     end
   end
