@@ -229,54 +229,54 @@
       #  "app/manifests/assets/private/certs/powertochange.org.key": "/etc/apache2/certs/powertochange.org.key"
       :skip_deploy: false
     :stage_moonshines:
-      :pat:
-        :prod: 
-          :db_name: mh_pat_prod
-          :server_name: pat.ministryhacks.com
-          :sensitive: true
-          :delayed_job: false
-        :dev: 
-          :db_name: mh_pat_dev
-          :server_name: pat.dev.ministryhacks.com
-          :delayed_job: false
-        :staging: 
-          :db_name: mh_pat_staging
-          :server_name: pat.staging.ministryhacks.com
-          :delayed_job: false
-      :mpdtool:
-        :prod: 
-          :db_name: mh_mpdtool_prod
-          :server_name: mpdtool.ministryhacks.com
-          :sensitive: true
-          :delayed_job: false
-        :dev: 
-          :db_name: mh_mpdtool_dev
-          :server_name: mpdtool.dev.ministryhacks.com
-          :delayed_job: false
-        :staging: 
-          :db_name: mh_mpdtool_staging
-          :server_name: mpdtool.staging.ministryhacks.com
-          :delayed_job: false
+#      :pat:
+#        :prod: 
+#          :db_name: mh_pat_prod
+#          :server_name: pat.ministryhacks.com
+#          :sensitive: true
+#          :delayed_job: false
+#        :dev: 
+#          :db_name: mh_pat_dev
+#          :server_name: pat.dev.ministryhacks.com
+#          :delayed_job: false
+#        :staging: 
+#          :db_name: mh_pat_staging
+#          :server_name: pat.staging.ministryhacks.com
+#          :delayed_job: false
+#      :mpdtool:
+#        :prod: 
+#          :db_name: mh_mpdtool_prod
+#          :server_name: mpdtool.ministryhacks.com
+#          :sensitive: true
+#          :delayed_job: false
+#        :dev: 
+#          :db_name: mh_mpdtool_dev
+#          :server_name: mpdtool.dev.ministryhacks.com
+#          :delayed_job: false
+#        :staging: 
+#          :db_name: mh_mpdtool_staging
+#          :server_name: mpdtool.staging.ministryhacks.com
+#          :delayed_job: false
       :pulse:
         :prod: 
-          :db_name: mh_mt_prod
-          :server_name: mt.ministryhacks.com
+          :db_name: mh_pulse_prod
+          :server_name: pulse.ministryhacks.com
           :sensitive: true
           :delayed_job: true
         :dev: 
-          :db_name: mh_mt_dev
-          :server_name: mt.dev.ministryhacks.com
+          :db_name: mh_pulse_dev
+          :server_name: pulse.dev.ministryhacks.com
           :delayed_job: true
         :staging: 
-          :db_name: mh_mt_staging
-          :server_name: mt.staging.ministryhacks.com
+          :db_name: mh_pulse_staging
+          :server_name: pulse.staging.ministryhacks.com
           :delayed_job: true
-      :utility:
-        :dev:
-          :delayed_job: false
-          :db_name: c4c_utility
-          :server_name: utility.campusforchrist.org
-          :skip_pull: true
+#      :utility:
+#        :dev:
+#          :delayed_job: false
+#          :db_name: c4c_utility
+#          :server_name: utility.ministryhacks.org
+#          :skip_pull: true
     :local:
       :moonshine:
         :domain: local
@@ -286,44 +286,44 @@
         :user: <%= %x[whoami].chomp %>
         :group: <%= %x[whoami].chomp %>
       :stage_moonshines:
-        :pat:
-          :prod:
-            :db_name: mh_pat_prod
-            :skip_deploy: true
-          :dev: 
-            :db_name: mh_pat_dev
-            :deploy_to: /var/www/pat.local
-            :delayed_job: false
-          :staging:
-            :db_name: mh_pat_staging
-            :skip_deploy: true
-        :mpdtool:
-          :prod:
-            :db_name: mh_mpdtool_prod
-            :skip_deploy: true
-          :dev: 
-            :db_name: mh_mpdtool_dev
-            :deploy_to: /var/www/mpdtool.local
-            :delayed_job: false
-          :staging:
-            :db_name: mh_mpdtool_staging
-            :skip_deploy: true
+#        :pat:
+#          :prod:
+#            :db_name: mh_pat_prod
+#            :skip_deploy: true
+#          :dev: 
+#            :db_name: mh_pat_dev
+#            :deploy_to: /var/www/pat.local
+#            :delayed_job: false
+#          :staging:
+#            :db_name: mh_pat_staging
+#            :skip_deploy: true
+#        :mpdtool:
+#          :prod:
+#            :db_name: mh_mpdtool_prod
+#            :skip_deploy: true
+#          :dev: 
+#            :db_name: mh_mpdtool_dev
+#            :deploy_to: /var/www/mpdtool.local
+#            :delayed_job: false
+#          :staging:
+#            :db_name: mh_mpdtool_staging
+#            :skip_deploy: true
         :pulse:
           :prod:
             :db_name: mh_pulse_prod
             :skip_deploy: true
           :dev: 
-            :db_name: mh_mt_dev
+            :db_name: mh_pulse_dev
             :deploy_to: /var/www/pulse.local
             :delayed_job: true
           :staging:
-            :db_name: mh_mt_staging
+            :db_name: mh_pulse_staging
             :skip_deploy: true
-        :utility:
-          :dev:
-            :db_name: c4c_utility
-            :deploy_to: /var/www/utility.local
-            :skip_pull: true 
+#        :utility:
+#          :dev:
+#            :db_name: c4c_utility
+#            :deploy_to: /var/www/utility.local
+#            :skip_pull: true 
 :apps:
   :pat: git://github.com/andrewroth/project_application_tool.git
   :pulse: git://github.com/twinge/ministry-tracker.git

@@ -12,17 +12,16 @@ require 'ftools'
 
 namespace :provision do
   namespace :this do
-    # *** replace this task with your countries provision method
-    # Canada's method is here as an example
-    desc "provisions this computer"
-    task :dev do
-      STDOUT.print "Enter the password for #{%x[whoami].chomp}@localhost: "
-      @password = STDIN.gets.chomp
-      ENV['HOSTS'] = '127.0.0.1'
-      provision(:c4c, multisite_config_hash[:servers][:c4c], true)
-      ENV['skipsetup'] = 'true'
-      provision(:p2c, multisite_config_hash[:servers][:p2c], true)
-      puts %|
+    namespace :dev do
+      desc "provisions this computer for Canadian development"
+      task :canada do
+        STDOUT.print "Enter the password for #{%x[whoami].chomp}@localhost: "
+        @password = STDIN.gets.chomp
+        ENV['HOSTS'] = '127.0.0.1'
+        provision(:c4c, multisite_config_hash[:servers][:c4c], true)
+        ENV['skipsetup'] = 'true'
+        provision(:p2c, multisite_config_hash[:servers][:p2c], true)
+        puts %|
 
 Provisioning your local computer is complete.
 
@@ -32,23 +31,58 @@ To download all the database info, run:
       cap p2c pull:dbs:utopian sensitive=true user=deploy
 
 |
+      end
+      task :mh do
+        STDOUT.print "Enter the password for #{%x[whoami].chomp}@localhost: "
+        @password = STDIN.gets.chomp
+        ENV['HOSTS'] = '127.0.0.1'
+        provision(:mh, multisite_config_hash[:servers][:mh], true)
+        puts %|
+
+Provisioning your local computer is complete.
+
+        TODO: how to download mh data?
+
+|
+      end
     end
-    task :server do
-      STDOUT.print "Enter the password for deploy@localhost: "
-      @local_password = STDIN.gets.chomp
-      STDOUT.print "Enter the password for deploy@pat.powertochange.org: "
-      @p2c_password = STDIN.gets.chomp
-      # download private
-      @password = @p2c_password
-      new_cap "p2c", nil, nil, true
-      run_cap nil, "moonshine:secure:download_private"
-      # now provision
-      @password = @local_password
-      @cap_config = nil # force new password to take effect
-      ENV['HOSTS'] = '127.0.0.1'
-      provision(:c4c, multisite_config_hash[:servers][:c4c], false)
-      ENV['skipsetup'] = 'true'
-      provision(:p2c, multisite_config_hash[:servers][:p2c], false)
+    namespace :server do
+      desc "provision this computer as a Canadian server"
+      task :canada do
+        STDOUT.print "Enter the password for deploy@localhost: "
+        @local_password = STDIN.gets.chomp
+        STDOUT.print "Enter the password for deploy@pat.powertochange.org: "
+        @p2c_password = STDIN.gets.chomp
+        # download private
+        @password = @p2c_password
+        new_cap "p2c", nil, nil, true
+        run_cap nil, "moonshine:secure:download_private"
+        # now provision
+        @password = @local_password
+        @cap_config = nil # force new password to take effect
+        ENV['HOSTS'] = '127.0.0.1'
+        provision(:c4c, multisite_config_hash[:servers][:c4c], false)
+        ENV['skipsetup'] = 'true'
+        provision(:p2c, multisite_config_hash[:servers][:p2c], false)
+      end
+    end
+    namespace :server do
+      desc "provision this computer as a Ministry Hacks server"
+      task :mh do
+        STDOUT.print "Enter the password for deploy@localhost: "
+        @local_password = STDIN.gets.chomp
+        STDOUT.print "Enter the password for deploy@pat.powertochange.org: "
+        @p2c_password = STDIN.gets.chomp
+        # download private
+        @password = @p2c_password
+        new_cap "p2c", nil, nil, true
+        run_cap nil, "moonshine:secure:download_private"
+        # now provision
+        @password = @local_password
+        @cap_config = nil # force new password to take effect
+        ENV['HOSTS'] = '127.0.0.1'
+        provision(:p2c, multisite_config_hash[:servers][:p2c], false)
+      end
     end
   end
 
