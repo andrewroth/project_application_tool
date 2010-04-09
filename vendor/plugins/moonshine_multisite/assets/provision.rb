@@ -1,4 +1,5 @@
 type = ARGV.first == 'server' ? 'server' : 'dev'
+country = ARGV[1] || 'canada'
 
 if RUBY_PLATFORM['linux']
   issue = File.read "/etc/issue"
@@ -68,7 +69,7 @@ end
 
 # provision
 system "sudo cp config/database_root.yml.sample database_root.yml" unless File.exists?('config/database_root.yml')
-system "rake -f vendor/plugins/moonshine_multisite/lib/tasks/provision.rake provision:this:#{type} --trace"
+system "rake -f vendor/plugins/moonshine_multisite/lib/tasks/provision.rake provision:this:#{type}:#{country} --trace"
 
 # install cap again with the new gems
 system "sudo gem install capistrano capistrano-ext --no-rdoc --no-ri"
