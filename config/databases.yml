@@ -8,5 +8,6 @@
 - /p2c.dev/: database/database.p2c_pat_dev.yml
 - /p2c.prod/: database/database.p2c_pat_prod.yml
 - /p2c.staging/: database/database.p2c_pat_staging.yml
+- /prod_cdm/: database/database.p2c_pat_prod.yml
 - /deploy/: database/database.p2c_pat_dev.yml
 - /master/: database/database.p2c_pat_prod.yml

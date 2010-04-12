@@ -1,0 +1,8 @@
+# Table Name mappings
+tables:
+  my_class: legacy_table_name
+  
+# Column Mappings
+my_class:
+  id: legacy_id_column
+  
