@@ -166,8 +166,16 @@ class ProfilesController < ApplicationController
   end
 
   def crisis_info
+    if params[:viewer_id]
+      if !ensure_eventgroup_coordinator
+        return
+      end
+      viewer = Viewer.find params[:viewer_id]
+    else
+      viewer = @viewer
+    end
     @submenu_title = 'Personal Info and Crisis Info'
-    @person = @appln_person = @viewer.person
+    @person = @appln_person = viewer.person
     @emerg = @person.emerg
   end
   
