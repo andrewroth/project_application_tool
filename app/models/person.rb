@@ -12,10 +12,6 @@ class Person < ActiveRecord::Base
   belongs_to :perm_country, :foreign_key => "country_id", :class_name => "Country"
   belongs_to :title2, :foreign_key => "title_id", :class_name => "Title"
   
-  has_one :emerg_relation, :class_name => 'Emerg'
-  has_many :person_years
-  has_many :year_in_schools, :through => :person_years
-
   has_many :viewers, :through => :access
 
   def self.search_by_name(name)
@@ -38,81 +34,9 @@ class Person < ActiveRecord::Base
   def title=(v) title2 = v end
   def title() if title2 then title2.desc else '' end end
 
-  def person_local_province() loc_province end
-  def person_province() perm_province end
-  def person_province_id() province_id end
-  def person_province_id=(val) self[:province_id] = val end
-
-  def person_local_country() loc_country end
-  def person_country() perm_country end
-  def person_country_id() country_id end
-  def person_country_id=(val) self[:country_id] = val end
-
-  def emerg
-    return emerg_relation if emerg_relation
-
-    # A bunch of emergency contact info stuff can't be nil
-    e = Emerg.create(:person_id => id, :emerg_birthdate => Time.now,
-                 :emerg_passportExpiry => Time.now, 
-                 :emerg_contact2Mobile => '',
-                 :emerg_contact2Rship => '',
-                 :emerg_contact2Home => '',
-                 :emerg_contact2Work => '',
-                 :emerg_contact2Email => '',
-                 :emerg_contact2Name => ''
-    )
-    e.save!
-    e.emerg_birthdate = e.emerg_passportExpiry = nil
-    e.save!
-
-    e
-  end
-
-  def is_staff?
-    !cim_hrdb_staff.nil?
-  end
-
-  def permanent_same_as_local
-    match = %w(city addr pc phone)
-    match << %w(province_id person_local_province_id)
-    for c in match
-      if c.class == Array then
-        p, l = c
-      else
-        p = "person_#{c}"
-        l = "person_local_#{c}"
-      end
-
-      lv = send(l)
-      return false if lv.nil?
-      pv = send(p)
-
-      if lv != pv then return false end
-    end
-
-    true
-  end
-
-  def person_year
-    person_year = person_years.first
-    unless person_year
-      person_year = person_years.create(:year_id => YearInSchool::DEFAULT_YEAR, :grad_date => Time.now)
-    end
-    return person_year
-  end
-
-  def year_in_school
-    return nil unless person_year
-    person_year.year_in_school
-  end
-
-  def year_in_school_id
-    person_year.year_id
-  end
-
-  def grad_date
-    person_year.grad_date
-  end
+  # alias to use CDM version
+  def grad_date() graduation_date end
+  def emerg() get_emerg end
 
   def viewer
     viewers[0]
