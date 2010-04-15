@@ -43,7 +43,9 @@ module ActionView
           # Replace the logout link
           if options[:logout]
             old_link = (doc/'a').detect {|e| e.inner_html =~ /LOGOUT/}
-            old_link.parent.inner_html = options[:logout]
+            if old_link && old_link.parent
+              old_link.parent.inner_html = options[:logout]
+            end
           end
           # Remove the search and help links since they use relative urls
           doc.search("li[text()*='SEARCH']").remove
