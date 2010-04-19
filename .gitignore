@@ -1,5 +1,6 @@
 app/views/active_scaffold_overrides/_update_form.rhtml
 config/database.yml
+config/database/database_header.yml
 log
 public/blank.html
 public/images/active_scaffold/
