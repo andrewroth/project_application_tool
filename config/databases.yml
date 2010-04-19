@@ -12,3 +12,4 @@
 - /staging_cdm/: database/database.p2c_pat_staging.yml
 - /deploy/: database/database.p2c_pat_dev.yml
 - /master/: database/database.p2c_pat_prod.yml
+- /dev/: database/database.dev.yml
