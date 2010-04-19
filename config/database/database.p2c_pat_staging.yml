@@ -20,6 +20,10 @@ ciministry_development:
   database: c4c_intranet_staging
   <<: *defaults
 
+ciministry_test:
+  database: c4c_intranet_test
+  <<: *defaults
+
 ciministry_production:
   database: c4c_intranet_staging
   <<: *defaults

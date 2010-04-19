@@ -6,10 +6,6 @@ class Person < ActiveRecord::Base
   # this overrides the has_many :campsues :through => :campus_involvements
   has_many :campuses, :through => :assignments, :source => :campus
 
-  belongs_to :loc_province, :foreign_key => "person_local_province_id", :class_name => "Province"
-  belongs_to :loc_country, :foreign_key => "person_local_country_id", :class_name => "Country"
-  belongs_to :perm_province, :foreign_key => "province_id", :class_name => "Province"
-  belongs_to :perm_country, :foreign_key => "country_id", :class_name => "Country"
   belongs_to :title2, :foreign_key => "title_id", :class_name => "Title"
   
   has_many :viewers, :through => :access
@@ -36,7 +32,6 @@ class Person < ActiveRecord::Base
 
   # alias to use CDM version
   def grad_date() graduation_date end
-  def emerg() get_emerg end
   def campus() hrdb_student_campus end
   def name() full_name end
   def email() person_email end

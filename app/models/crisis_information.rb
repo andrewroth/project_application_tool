@@ -5,7 +5,7 @@ class CrisisInformation < CustomElement
 
   def save_answer(instance, params, answers)
     @person = instance.viewer.person
-    @emerg = @person.emerg
+    @emerg = @person.get_emerg
 
     CrisisInformation.save_from_params(@person, params)
   end

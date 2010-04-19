@@ -1,5 +1,5 @@
 ActiveRecord::Base.class_eval do
-  @mapping_filename = File.join(RAILS_ROOT, Rails.env.test? ? 'test' : 'config', 'mappings.yml')
+  @mapping_filename = File.join(RAILS_ROOT, 'config', 'mappings.yml')
   if File.exists?(  @mapping_filename )
     @@map_hash ||= YAML::load(ERB.new(File.read(@mapping_filename)).result)
 

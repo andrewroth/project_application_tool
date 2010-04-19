@@ -176,7 +176,7 @@ class ProfilesController < ApplicationController
     end
     @submenu_title = 'Personal Info and Crisis Info'
     @person = @appln_person = viewer.person
-    @emerg = @person.emerg
+    @emerg = @person.get_emerg
   end
   
   def update_crisis_info # also updates personal info
