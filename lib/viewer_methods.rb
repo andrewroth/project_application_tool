@@ -6,9 +6,9 @@ module ViewerMethods
       has_many :profiles
 
       has_many :applns
-      has_many :tickets
+      #has_many :tickets # this not used?
 
-      has_many :persons, :through => :access
+      #has_many :persons, :through => :access
 
       has_many :notification_acknowledgments
       has_one :projects_coordinator
@@ -46,18 +46,13 @@ module ViewerMethods
         end
       end
 
-      def person
-        # note - persons.first didn't use the eager loaded values
-        @person ||= persons[0] if !persons.empty?
-      end
-
       # shortcut
       def name
-        (person.nil?) ? viewer_userID : person.name
+        (person.nil?) ? username : person.name
       end
 
       def email
-        (person == nil) ? "no_email_for_student@campusforchrist.org" : person.person_email
+        (person == nil) ? "no_email_for_student@campusforchrist.org" : person.email
       end
 
       def phone

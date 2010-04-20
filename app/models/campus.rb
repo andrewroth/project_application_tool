@@ -1,7 +1,5 @@
 class Campus < ActiveRecord::Base
   load_mappings
-  include Common::Core::Campus
-  include Common::Core::Ca::Campus
 
   has_many :assignments
   has_many :persons, :through => :assignments
