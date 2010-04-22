@@ -1,27 +1,21 @@
-<%= custom_element_text_field("#{label_prefix} Address: ", :appln_person, :"person_#{mid}addr") %>
+<%= custom_element_text_field("#{label_prefix} Address: ", :appln_person, :"#{mid}_address1_line") %>
 
-<%= custom_element_text_field("#{label_prefix} City: ", :appln_person, :"person_#{mid}city") %>
+<%= custom_element_text_field("#{label_prefix} City: ", :appln_person, :"#{mid}_city") %>
 
-<%= custom_element_item("#{label_prefix} Country: ", :appln_person, :"person_#{mid}country_id") do |m,c,classes|
-      r = collection_select(m, c, Country.find(:all), :id, :country_desc, 
-                 { :include_blank => true }, { :class => classes })
+<%= custom_element_item("#{label_prefix} Country: ", :appln_person, :"#{mid}_country") do |m,c,classes|
+      r = select_tag("#{m}_#{c}", options_for_select([[""]] + Country.all.collect{ |ct| [ ct.country, ct.code ] }, @appln_person.send(c)), :class => classes, :name => "#{m}[#{c}]")
       r += observe_field "#{m}_#{c}", :function => "update_province_select('#{mid}')"
       r
     end
 %>
 
-<%= custom_element_item("#{label_prefix} Province: ", :appln_person, :"person_#{mid}province_id") do |m,c,classes|
+<%= custom_element_item("#{label_prefix} Province: ", :appln_person, :"#{mid}_state") do |m,c,classes|
 
-      r = ''
-      for country in Country.find(:all)
-        id = "#{m}_#{c}_#{country.id}"
-        r += collection_select(m, c, country.provinces, :id, :province_desc, 
-          { :include_blank => true }, { 
-            :class => classes,
-            :style => "display:none;",
-            :name => id,
-            :id => id
-          })
+      id = "#{m}_#{c}"
+      r = ""
+      for country in Country.all
+        id = "#{m}_#{c}_#{country.code}"
+        r += select_tag("#{m}_#{c}", options_for_select([[""]] + CmtGeo.states_for_country(country.iso_code), @appln_person.send(c).to_s), :class => classes, :style => "display:none;", :name => id, :id => id)
       end
 
       r
@@ -33,6 +27,6 @@
   update_province_select('<%= mid %>');
 </script>
 
-<%= custom_element_text_field("#{label_prefix} Postal Code: ", :appln_person, :"person_#{mid}pc") %>
+<%= custom_element_text_field("#{label_prefix} Postal Code: ", :appln_person, :"#{mid}_postal_code") %>
 
-<%= custom_element_text_field("#{label_prefix} Phone (include area code): ", :appln_person, :"person_#{mid}phone") %>
+<%= custom_element_text_field("#{label_prefix} Phone (include area code): ", :appln_person, :"#{mid}_phone") %>

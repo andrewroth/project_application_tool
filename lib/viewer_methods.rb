@@ -48,7 +48,7 @@ module ViewerMethods
 
       # shortcut
       def name
-        (person.nil?) ? username : person.name
+        (person.nil?) ? username : person.full_name
       end
 
       def email
@@ -66,7 +66,7 @@ module ViewerMethods
       end
 
       def is_staff?(eg)
-        person.is_staff? || is_eventgroup_coordinator?(eg) || !projects_with_any_role.empty?
+        person.is_staff_somewhere? || is_eventgroup_coordinator?(eg) || !projects_with_any_role.empty?
       end
 
       def is_eventgroup_coordinator?(eg)

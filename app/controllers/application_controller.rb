@@ -185,4 +185,13 @@ class ApplicationController < ActionController::Base
       end
     }
   end
+
+  def parse_date_from_hash(hash, key)
+    i1 = hash.delete "#{key.to_s}(1i)"
+    i2 = hash.delete "#{key.to_s}(2i)"
+    i3 = hash.delete "#{key.to_s}(3i)"
+    if i1 && i2 && i3
+      hash[key.to_sym] = Date.new(i1, i2, i3)
+    end
+  end
 end

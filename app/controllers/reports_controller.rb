@@ -557,7 +557,7 @@ class ReportsController < ApplicationController
     
     # special case for people assigned to the regional/national campus
     # they can see everything
-    if @viewer.person && @viewer.person.campuses.find_by_campus_shortDesc('Reg/Nat')
+    if @viewer.person && @viewer.person.campuses.find(:first, :conditions => { Campus._(:abbrv) => 'Reg/Nat' })
       @projects = @eg.projects
     end
 

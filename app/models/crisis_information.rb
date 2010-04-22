@@ -11,10 +11,7 @@ class CrisisInformation < CustomElement
   end
 
   def self.save_from_params(person, params)
-    emerg = person.emerg
-
-    # create a new emerg if necessary
-    emerg ||= Emerg.new :person_id => person.id
+    emerg = person.get_emerg
 
     # note that you can't have a null emerg_passportExpiry or emerg_birthdate
     if params[:emerg]
@@ -23,7 +20,17 @@ class CrisisInformation < CustomElement
     end
 
     if params[:appln_person]
-      person_params = params[:appln_person].clone
+      data_to_take = [ :first_name, :last_name ] # legal first/last name
+      person_params = {}
+      for key in data_to_take
+        if params[:appln_person][key].present?
+          person_params[key] = params[:appln_person][key]
+        end
+      end
+      # manually pull in birth_date
+      if bd = DateParamsParser.parse(params[:appln_person], "birth_date")
+        person_params[:birth_date] = bd
+      end
       person.update_attributes(person_params)
       person.save!
     end

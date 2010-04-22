@@ -3,26 +3,32 @@
 <P>
 What do you normally go by?<BR/>
 
+<%- if Pat::CONFIG[:person_has_title] -%>
 <%= custom_element_item('Title: ', :appln_person, :title_id) do |m,c,classes|
       collection_select :appln_person, :title_id, Title.find(:all), :id, :desc, { :include_blank => true }, { :class => classes }
     end
 %>
+<%- end -%>
 
-<%= custom_element_text_field('First name: ', :appln_person, :person_fname) %>
+<%= custom_element_text_field('First name: ', :appln_person, :first_name) %>
 
-<%= custom_element_text_field('Last name: ', :appln_person, :person_lname) %>
+<%= custom_element_text_field('Last name: ', :appln_person, :last_name) %>
 
-<%= custom_element_item('Gender: ', :appln_person, :gender_id) do |m,c,classes|
-      collection_select :appln_person, :gender_id, Gender.find(:all), :id, :gender_desc, {}, { :class => classes }
+<%= custom_element_item('Gender: ', :appln_person, :gender) do |m,c,classes|
+      #collection_select :appln_person, :gender_id, Gender.find(:all), :id, :gender_desc, {}, { :class => classes }
+      #collection_select :appln_person, :gender_id, , :id, :gender_desc, {}, { :class => classes }
+      select_tag "appln_person[gender]", options_for_select(["M", "F", "?"])
     end
 %>
 
+<%- if Pat::CONFIG[:person_has_cell_phone] -%>
 <%= custom_element_text_field('Cell phone (include area code): ', :appln_person, :cell_phone) %>
-<%= custom_element_text_field('Email: ', :appln_person, :person_email) %>
+<%- end -%>
+<%= custom_element_text_field('Email: ', :appln_person, :email) %>
 
 <HR/>
 <P><STRONG> Current Address </STRONG></P>
-<%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Current ', :mid => 'local_' } %>
+<%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Current ', :mid => 'local' } %>
 
 <%= custom_element_item("Current address valid until: ", :appln_person, :local_valid_until) do |m,c,classes|
       date_select m, c, :start_year => Time.now.year, :end_year => 10.years.from_now.year, :class => classes, :include_blank => true
@@ -43,7 +49,7 @@ What do you normally go by?<BR/>
 <% end %>
 
 <div id='permanent_address' style='<%= 'display:none;' if @appln_person && @appln_person.permanent_same_as_local %>'>
-<%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Permanent ', :mid => '' } %>
+<%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Permanent ', :mid => 'permanent' } %>
 </div>
 
 <P> 
