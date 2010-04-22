@@ -31,13 +31,8 @@ namespace :db do
       ag_pc = Accessgroup.create :accessgroup_key => '[accessgroup_projects_coordinator]'
       ag_st = Accessgroup.create :accessgroup_key => '[accessgroup_student]'
 
-      # now create a default ministry and default event group
-      if Ministry.find(:all).empty?
-        ministry = Ministry.create :name => "Default Ministry"
-      end
-
       if EventGroup.find(:all).empty?
-        @eg = EventGroup.create :ministry_id => ministry.id, :title => "Default Event Group"
+        @eg = EventGroup.create :title => "Default Event Group"
       end
 
       # create default viewers, admin and student
