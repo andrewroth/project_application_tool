@@ -3,7 +3,7 @@
 <%= custom_element_text_field("#{label_prefix} City: ", :appln_person, :"#{mid}_city") %>
 
 <%= custom_element_item("#{label_prefix} Country: ", :appln_person, :"#{mid}_country") do |m,c,classes|
-      r = select_tag("#{m}_#{c}", options_for_select([[""]] + Country.all.collect{ |ct| [ ct.country, ct.code ] }, @appln_person.send(c)), :class => classes, :name => "#{m}[#{c}]")
+      r = select_tag("#{m}_#{c}", options_for_select([[""]] + Country.all.collect{ |ct| [ ct.country, ct.code ] }, @appln_person.send(:try, c)), :class => classes, :name => "#{m}[#{c}]")
       r += observe_field "#{m}_#{c}", :function => "update_province_select('#{mid}')"
       r
     end
@@ -15,7 +15,7 @@
       r = ""
       for country in Country.all
         id = "#{m}_#{c}_#{country.code}"
-        r += select_tag("#{m}_#{c}", options_for_select([[""]] + CmtGeo.states_for_country(country.iso_code), @appln_person.send(c).to_s), :class => classes, :style => "display:none;", :name => id, :id => id)
+        r += select_tag("#{m}_#{c}", options_for_select([[""]] + CmtGeo.states_for_country(country.iso_code), @appln_person.send(:try, c).to_s), :class => classes, :style => "display:none;", :name => id, :id => id)
       end
 
       r
