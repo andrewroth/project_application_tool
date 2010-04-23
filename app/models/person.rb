@@ -1,7 +1,7 @@
 class Person < ActiveRecord::Base
-  load_mappings
   include Common::Core::Person
-  #include Pat::Ca::Person # enable this in cdn branch
+  include Common::Core::Ca::Person
+  load_mappings
 
   #def province_id=(val) permanent_address.state = val end
   def person_localprovince_id=(val) current_address.state = val end

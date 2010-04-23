@@ -15,6 +15,7 @@ class CrisisInformation < CustomElement
 
     # note that you can't have a null emerg_passportExpiry or emerg_birthdate
     if params[:emerg]
+      DateParamsParser.parse(params[:emerg], "passport_expiry")
       emerg.update_attributes(params[:emerg])
       emerg.save!
     end
