@@ -10,9 +10,9 @@ What do you normally go by?<BR/>
 %>
 <%- end -%>
 
-<%= custom_element_text_field('First name: ', :appln_person, :first_name) %>
+<%= custom_element_text_field('First name: ', :appln_person, :preferred_first_name) %>
 
-<%= custom_element_text_field('Last name: ', :appln_person, :last_name) %>
+<%= custom_element_text_field('Last name: ', :appln_person, :preferred_last_name) %>
 
 <%= custom_element_item('Gender: ', :appln_person, :gender) do |m,c,classes|
       #collection_select :appln_person, :gender_id, Gender.find(:all), :id, :gender_desc, {}, { :class => classes }

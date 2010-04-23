@@ -56,7 +56,7 @@ module ViewerMethods
       end
 
       def phone
-        (person == nil) ? "" : person.person_phone
+        person.try(:current_address).try(:phone)
       end
 
       # helper methods for access groups

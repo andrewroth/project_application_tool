@@ -33,7 +33,7 @@
                 <% @init_js = view_result_params if @viewers.length == 1 %>
             </td>
             <td><%=h viewer.id %></td>
-            <td><%=h viewer.viewer_userID %></td>
+            <td><%=h viewer.username %></td>
             <td><%=h viewer.person.person_email if viewer.person %></td>
             <td><%=h viewer.person.campus_shortDesc %></td>
             <td><%=h 'gcx' unless viewer.guid.empty? %></td>

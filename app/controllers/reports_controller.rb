@@ -52,7 +52,8 @@ class ReportsController < ApplicationController
   end
 
   def mk_sel(s)
-    for klass in [ Person, Campus, Assignment, YearInSchool, Project, Profile ]
+    #for klass in [ Person, Campus, Assignment, YearInSchool, Project, Profile ]
+    for klass in [ Person, Campus, SchoolYear, Project, Profile ]
       s.gsub!(klass.name, klass.table_name)
     end
     logger.info s
@@ -79,6 +80,9 @@ class ReportsController < ApplicationController
     @page_title = (@many_projects ? @eg.title : @project_title) + " Registrants"
 
     # this is gonna be awesome
+# as awesome as this may be, I'm disabling it to get the reports working in utopian
+# schema
+=begin
     applns = Appln.find_all_by_preference1_id(@projects_ids, :include =>
       [ :preference1, :preference2,
         { :profiles =>
@@ -94,6 +98,14 @@ class ReportsController < ApplicationController
       ],
       :select => mk_sel("Person.last_name, Person.first_name, Person.gender_id, Campus.campus_shortDesc, Assignment.assignmentstatus_id, YearInSchool.year_desc, Project.title, Profile.status, Profile.type, Person.person_local_phone, Person.person_email")
     )
+=end
+    applns = Appln.find_all_by_preference1_id(@projects_ids, :include => 
+      [ :preference1, :preference2,
+        { :profiles => 
+          [ :project ],
+        }
+      ]
+    )
 
     #@rows = [ [  ] ]
     @rows = applns.collect{ |appln|
@@ -105,14 +117,14 @@ class ReportsController < ApplicationController
         person.last_name,
         person.first_name,
         person.gender,
-        @eg.has_your_campuses ? person.campus_shortDesc(:search_arrays => true) : :skip,
-        @eg.has_your_campuses ? person.year_in_school.year_desc : :skip,
+        @eg.has_your_campuses ? person.campus_abbrev(:search_arrays => true) : :skip,
+        @eg.has_your_campuses ? person.try(:year_in_school).try(:name) : :skip,
         profile.status,
         appln.preference1.title,
         (appln.preference2.title if appln.preference2),
         if profile.class == Acceptance then profile.project.title end,
-        person.person_local_phone,
-        person.person_email
+        person.current_address.phone,
+        person.email
       ].delete_if{ |i| i == :skip }
     }
 

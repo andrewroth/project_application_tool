@@ -1,4 +1,4 @@
-<p>Change profile for <%= @profile.viewer ? "#{@profile.viewer.name} (username '#{@profile.viewer.viewer_userID}')": '?' %> for <%= @profile.project ? @profile.project.title : '[no project chosen]' %> (Currently profile type is <%= @profile.class.name %><% if @profile.respond_to?(:status) %> status <%= @profile.status %><% end %>) </p>
+<p>Change profile for <%= @profile.viewer ? "#{@profile.viewer.name} (username '#{@profile.viewer.username}')": '?' %> for <%= @profile.project ? @profile.project.title : '[no project chosen]' %> (Currently profile type is <%= @profile.class.name %><% if @profile.respond_to?(:status) %> status <%= @profile.status %><% end %>) </p>
 <br />
 
 <% form_tag :action => :update, :id => @profile.id do -%>

@@ -4,8 +4,8 @@
    if !v.nil? %>
         <tr>
           <td><%= v.name %></td>
-          <td><%= v.viewer_userID %></td>
-          <td><%= v.person.campus_shortDesc %>
+          <td><%= v.username %></td>
+          <td><%= v.person.campus_abbrev %>
           <td><%= @profile.status %></td>
 	  <td><%= @profile.project ? @profile.project.title : 'not chosen' %></td>
           <td><%= format_datetime(@appln.submitted_at) %></td>
