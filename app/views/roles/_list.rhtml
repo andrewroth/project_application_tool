@@ -4,7 +4,7 @@
   staff_viewers_in_role = @project.send(@role)
   # legacy databases means I can't do an :include statement
   viewers = staff_viewers_in_role.collect{ |staff| staff.viewer }
-  viewers.sort!{ |x,y| x.viewer_userID <=> y.viewer_userID }
+  viewers.sort!{ |x,y| x.username <=> y.username }
   
   i = 0
   for viewer in viewers
@@ -12,7 +12,7 @@
      %>
     <tr>
       <td width="200"><%= viewer.name %></td>
-      <td width="150"><%= viewer.viewer_userID %></td>
+      <td width="150"><%= viewer.username %></td>
       <td width="200"><%= viewer.email %></td>
       <td width="75">
         <div id="list_<%=@role%>_<%=i%>">

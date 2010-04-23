@@ -44,7 +44,7 @@
                     <% person = student_profile.student; profile = student_profile.profile %>
                     <TR>
                         <TD align="center"><%= person.name %></TD>
-                        <TD align="center"><%= person.viewer.viewer_userID %></TD>
+                        <TD align="center"><%= person.viewer.username %></TD>
                         <TD align="center"><%= campus.campus_shortDesc %></TD>
                         <TD align="center"><%= profile.status %></TD>
                         <TD align="center"><%= if profile.class == Acceptance then format_currency profile.support_claimed end %></TD>

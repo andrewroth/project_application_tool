@@ -4,7 +4,7 @@
    if !v.nil? %>
         <tr>
           <td><%= v.name %></td>
-          <td><%= v.viewer_userID %></td>
+          <td><%= v.username %></td>
           <td><%= v.person.campus_shortDesc %>
           <td><%= @profile.status %></td>
 	  <td><%= @profile.project ? @profile.project.title : 'not chosen' %></td>

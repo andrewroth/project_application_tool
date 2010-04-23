@@ -2,7 +2,7 @@
   <% i = 0 %>
   <% for viewer in @found_viewers %>
     <% i = i + 1 %>
-    <% userid = viewer.name + " (" + viewer.viewer_userID + ") Last login #{viewer.viewer_lastLogin}" %>
+    <% userid = viewer.name + " (" + viewer.username + ") Last login #{viewer.viewer_lastLogin}" %>
     <div id="<%=@role%>_result_<%=i%>">
         <%= link_to_remote(userid, 
             :url => { :action => "add", 
