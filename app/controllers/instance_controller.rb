@@ -23,7 +23,7 @@ class InstanceController < BaseViewController
   def set_person_and_emerg()
     begin
       @person = @instance.viewer.person
-      @emerg = @person.emerg
+      @emerg = @person.get_emerg
       #throw 'P: ' + @person.inspect
     rescue Exception
     end

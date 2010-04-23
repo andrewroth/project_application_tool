@@ -1,0 +1,1 @@
+require File.dirname(__FILE__) + '/lib/validates_no_association_data'

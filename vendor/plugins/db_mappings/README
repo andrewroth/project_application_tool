@@ -1,0 +1,18 @@
+DB Mappings
+===========
+
+Allows you to define your database structure in a mappings.yml file.
+
+Useful for working with legacy databases, and for deploying the same code on multiple database schemas.
+
+Usage
+======
+
+Create a mappings.yml file in your config folder. A sample can be found included with this plugin.
+Follow the format in the sample.
+
+In each class that requires custom mapping, add the line 
+
+  load_mappings
+  
+just after the class declaration

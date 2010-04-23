@@ -88,6 +88,7 @@ module ReportsHelper
   def project_specific_scope(report, params)
       scope_report(report, params) do |include_blank, include_all|
           include_pref1s_option = (params && params[:include_pref1s_option])
+          hide_interns_option = (params && params[:hide_interns_option])
           
           dropdown_choices = []
           dropdown_choices << ['',''] if include_blank
@@ -105,6 +106,7 @@ module ReportsHelper
           
           required_params = [ 'project_id' ]
           required_params << 'include_pref1s' if include_pref1s_option
+          required_params << 'hide_interns' if hide_interns_option
           
           extra_form_content, extra_required_params = (yield(report) if block_given?) || ''
           required_params += extra_required_params.to_a
@@ -115,11 +117,17 @@ module ReportsHelper
               Include in-progress applications with preference 1 as this project
           | 
           
-          [ 'project',
+          hide_interns_tag = %|
+              <br />#{check_box_tag(report+"_hide_interns", "true", false,
+                  :onChange => update_view_links_js(report, required_params, params[:formats]))}
+              Hide interns from this report
+          | 
+           [ 'project',
             dropdown_choices,
             required_params,
             %|#{extra_form_content}
               #{include_pref1s_tag if include_pref1s_option}
+              #{hide_interns_tag if hide_interns_option}
             |
           ]
       end

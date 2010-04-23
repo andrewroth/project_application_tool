@@ -26,18 +26,18 @@ class ProfilesController < ApplicationController
 
     conditions = if filters.size == 1
         filter = filters.first
-        [ 'person_fname like ? or person_lname like ?', "%#{filter}%", "%#{filter}%" ]
+        [ "#{Person._(:preferred_first_name)} like ? or #{Person._(:last_name)} like ?", "%#{filter}%", "%#{filter}%" ]
       elsif filters.size == 2
         filter_1, filter_2 = filters
 	filter_2.gsub!(' ','%')
-        [ '(person_fname like ? and person_lname like ?) or (person_fname like ? or person_lname like ?)', 
+        [ "(#{Person._(:preferred_first_name)} like ? and #{Person._(:last_name)} like ?) or (#{Person._(:preferred_first_name)} like ? or #{Person._(:last_name)} like ?)", 
              "%#{filter_1}%", "%#{filter_2}%", "%#{filter_s}%", "%#{filter_s}%" ]
       end
 
     ps = Person.find :all, :conditions => conditions,
-         :include => :viewers, :order => [ 'person_lname, person_fname' ]
+         :include => :viewers, :order => [ "#{Person._(:last_name)}, #{Person._(:preferred_first_name)}" ]
 
-    vs = Viewer.find :all, :conditions => [ 'viewer_userID like ? ', "%#{filter_s}%" ]
+    vs = Viewer.find :all, :conditions => [ "#{Viewer._(:username)} like ? ", "%#{filter_s}%" ]
 
     @viewers = ps.collect(&:viewers).flatten.compact + vs
     @viewers.uniq!
@@ -166,9 +166,17 @@ class ProfilesController < ApplicationController
   end
 
   def crisis_info
+    if params[:viewer_id]
+      if !ensure_eventgroup_coordinator
+        return
+      end
+      viewer = Viewer.find params[:viewer_id]
+    else
+      viewer = @viewer
+    end
     @submenu_title = 'Personal Info and Crisis Info'
-    @person = @appln_person = @viewer.person
-    @emerg = @person.emerg
+    @person = @appln_person = viewer.person
+    @emerg = @person.get_emerg
   end
   
   def update_crisis_info # also updates personal info

@@ -346,24 +346,11 @@ render :partial => "viewer_specifics"
   def users_campuses
     campuses = nil
 
-    if (@viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_assigned_regional_or_national?)
-      campuses_find = :all
+    if @viewer.is_eventgroup_coordinator?(@eg)
+      campuses = Campus.all
     else
-      campuses_find = @viewer.person.campuses.collect(&:id)
+      campuses = @viewer.person.campuses
     end
-
-    campuses = unless Assignmentstatus.campus_student_ids.empty?
-        Campus.find(campuses_find, :include => { :persons => { :viewers => { :profiles => :appln } } }, 
-          :select => "#{Campus.table_name}.campus_desc, #{Campus.table_name}.campus_shortDesc, " + 
-                 "#{Appln.table_name}.form_id, #{Person.table_name}.person_fname, #{Person.table_name}.person_lname," + 
-                 "#{Viewer.table_name}.viewer_userID, #{Profile.table_name}.status, #{Profile.table_name}.type," +
-		             "#{Appln.table_name}.preference1_id, #{Profile.table_name}.project_id",
-          :conditions => "#{Assignment.table_name}.assignmentstatus_id in (#{Assignmentstatus.campus_student_ids.join(',')})" )
-      else
-        [ ]
-      end
-
-    if campuses.class == Array then campuses else [ campuses ] end
   end
  
   private

@@ -62,12 +62,7 @@ class SecurityController < ApplicationController
   end
 
   def do_link_gcx_new
-    fn = params[:first_name] || cas_first_name
-    ln = params[:last_name] || cas_last_name
-    uid = params[:email] || session[:cas_user]
-    guid = cas_sso_guid
-
-    v = Viewer.create_new_cim_hrdb_account guid, fn, ln, uid
+    v = Viewer.find_or_create_from_cas session[:cas_last_valid_ticket]
 
     setup_given_viewer_id v.id
   end
@@ -208,6 +203,11 @@ class SecurityController < ApplicationController
       redirect_to $cim_url
     elsif session[:login_source] == 'gcx'
       redirect_to CASClient::Frameworks::Rails::Filter.client.logout_url
+    elsif session[:login_source] == 'impersonate'
+      session[:user_id] = session[:viewer_before_impersonate]
+      session[:login_source] = session[:login_source_before_impersonate]
+      redirect_to :controller => 'main'
+      return
     end
 
     clear_login_session_info
@@ -250,12 +250,14 @@ class SecurityController < ApplicationController
 
     logger.debug('login ' + @viewer.inspect)
 
-    #flash[:downtime] ||= "<br />There will be two short periods of downtime (approx 10 mins each) sometime before 9:30 AM EST (6:30 PST) on Tuesday Jan 22, 2007 for maintenance"
-    
-    # update last login stuff
-    @viewer.viewer_isActive = true
-    @viewer.viewer_lastLogin = Time.now
-    @viewer.save!
+
+    if @viewer
+      if @viewer.respond_to?(:login_callback)
+        @viewer.login_callback
+      end
+      @viewer.last_login = Time.now
+      @viewer.save
+    end
 
     redirect_to :controller => "main"
   end

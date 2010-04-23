@@ -18,7 +18,7 @@ class CustomElement < Element
 
   def validate!(page, instance)
     @person = instance.viewer.person
-    @emerg = @person.emerg
+    @emerg = @person.get_emerg
   
     for section in custom_element_required_sections
       sa = section.attribute

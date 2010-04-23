@@ -1,8 +1,8 @@
-defaults: &defaults
-  adapter: mysql
-  username: root
-  password: 
-  host: localhost
+<%= 
+dbh = "#{Rails.root}/config/database/database_header.yml"; dbhd = dbh+".default";
+file = File.exists?(dbh) ? dbh : dbhd
+File.read(file).chomp
+%>
 
 development:
   database: p2c_pat_dev
@@ -22,4 +22,8 @@ ciministry_development:
 
 ciministry_production:
   database: c4c_intranet_dev
+  <<: *defaults
+
+ciministry_test:
+  database: c4c_intranet_test
   <<: *defaults

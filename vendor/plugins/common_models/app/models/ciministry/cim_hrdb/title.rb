@@ -1,2 +1,0 @@
-class Title < CimHrdb
-end

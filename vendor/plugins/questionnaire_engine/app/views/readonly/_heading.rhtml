@@ -1,0 +1,6 @@
+<% if heading.parent_id? -%>
+  <span class="readonly_question_text"><%= heading.text%></span><br />
+<% else -%>
+  <tr><td class="app" colspan="2"><span class="readonly_question_text"><%= heading.text%></span></td></tr>
+<% end -%>
+

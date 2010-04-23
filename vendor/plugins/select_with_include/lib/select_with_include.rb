@@ -1,1 +1,0 @@
-Dir[File.join(File.dirname(__FILE__), 'select_with_include/**/*.rb')].sort.each { |lib| require lib }

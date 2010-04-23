@@ -92,7 +92,7 @@ class ReportsController < ApplicationController
           ]
         }
       ],
-      :select => mk_sel("Person.person_lname, Person.person_fname, Person.gender_id, Campus.campus_shortDesc, Assignment.assignmentstatus_id, YearInSchool.year_desc, Project.title, Profile.status, Profile.type, Person.person_local_phone, Person.person_email")
+      :select => mk_sel("Person.last_name, Person.first_name, Person.gender_id, Campus.campus_shortDesc, Assignment.assignmentstatus_id, YearInSchool.year_desc, Project.title, Profile.status, Profile.type, Person.person_local_phone, Person.person_email")
     )
 
     #@rows = [ [  ] ]
@@ -102,8 +102,8 @@ class ReportsController < ApplicationController
       person = viewer.person
 
       [
-        person.person_lname,
-        person.person_fname,
+        person.last_name,
+        person.first_name,
         person.gender,
         @eg.has_your_campuses ? person.campus_shortDesc(:search_arrays => true) : :skip,
         @eg.has_your_campuses ? person.year_in_school.year_desc : :skip,
@@ -144,7 +144,8 @@ class ReportsController < ApplicationController
             }
           }
       ],
-      :select => mk_sel("Person.person_lname, Person.person_fname, Person.gender_id, Campus.campus_shortDesc, Assignment.assignmentstatus_id, YearInSchool.year_desc, Project.title, Profile.status, Profile.type, Person.person_local_phone, Person.cell_phone, Person.person_email")
+      :select => mk_sel("Person.last_name, Person.first_name, Person.gender_id, Campus.campus_shortDesc, Assignment.assignmentstatus_id, YearInSchool.year_desc, Project.title, Profile.status, Profile.type, Person.person_local_phone, Person.cell_phone, Person.person_email"),
+      :conditions => params[:hide_interns] == 'true' ? "as_intern is false OR as_intern is null" : ""
     )
 
     #@rows = [ [  ] ]
@@ -153,8 +154,8 @@ class ReportsController < ApplicationController
       person = viewer.person
 
       [
-        person.person_lname,
-        person.person_fname,
+        person.last_name,
+        person.first_name,
         person.gender,
         acceptance.project.title,
         @eg.has_your_campuses ? person.campus_shortDesc(:search_arrays => true) : :skip,
@@ -203,7 +204,7 @@ class ReportsController < ApplicationController
       gender = p.gender
       
       @participants << ProjectParticipant.new(
-        p.person_lname, p.person_fname, gender, p.person_email, phone, cell, (p.campus ? p.campus_shortDesc : ''), 
+        p.preferred_last_name, p.preferred_first_name, gender, p.person_email, phone, cell, (p.campus ? p.campus_shortDesc : ''), 
         extract_form_answer(:campus_year, a), ac.project.title, leadership, training,
         (ac && ac.as_intern? ? 'intern' : '')
       )
@@ -283,7 +284,7 @@ class ReportsController < ApplicationController
       
       gender = p.gender
       
-      @participants << [ p.person_lname.capitalize, p.person_fname.capitalize, legal_name, gender, v.is_student?(@eg) ? '' : 'staff',
+      @participants << [ p.last_name.capitalize, p.first_name.capitalize, legal_name, gender, v.is_student?(@eg) ? '' : 'staff',
         @include_pref1_applns ? (ac ? 'accepted' : a.status) : nil, ac ? ac.project.title : a.preference1.title, 
         birthdate, departure, passport_number, passport_country, passport_expiry, cm2007, 
         ((ac && ac.as_intern?) || (ac.nil? && a.as_intern?) ? 'intern' : ''), notes ].compact
@@ -301,7 +302,7 @@ class ReportsController < ApplicationController
     
     loop_reports_viewers(@projects_ids, false, true) do |profile,a,v,person|
       name = if person then person.name elsif v then 
-         v.viewer_userID else "? (profile id=#{profile.id})" end
+         v.username else "? (profile id=#{profile.id})" end
       @profiles << [ name, profile.project, profile ]
     end
 
@@ -526,7 +527,7 @@ class ReportsController < ApplicationController
       doc_info = DoctorsInfo.new(ec_entry.doctor_name.to_s, ec_entry.doctor_phone.to_s,
                                  ec_entry.dentist_name.to_s, ec_entry.dentist_phone.to_s) 
 
-      @registrants << [ p.person_lname.capitalize, p.person_fname.capitalize, @many_projects ? ac.project.title : nil, gender,
+      @registrants << [ p.last_name.capitalize, p.first_name.capitalize, @many_projects ? ac.project.title : nil, gender,
         v.is_student?(@eg) ? '' : 'staff', 
         (p && p.loc_province ? p.loc_province.province_shortDesc : ''),
         (p && p.perm_province ? p.perm_province.province_shortDesc : ''),
@@ -539,7 +540,7 @@ class ReportsController < ApplicationController
     render_report @registrants
   end
   
-  StatEntry = Struct.new(:project, :started, :submitted, :completed, :accepted, :total, :declined, :withdrawn)
+  StatEntry = Struct.new(:project, :started, :submitted, :completed, :accepted, :interns, :total, :declined, :withdrawn)
   def project_stats
     
     @columns = MyOrderedHash.new [
@@ -548,14 +549,15 @@ class ReportsController < ApplicationController
     :submitted, 'int',
     :completed, 'int',
     :accepted, 'int',
-    :total_first_4, 'int',
+    :interns, 'int',
+    :total_first_5, 'int',
     :declined, 'int',
     :withdrawn, 'int'
     ]
     
     # special case for people assigned to the regional/national campus
     # they can see everything
-    if @viewer.person && @viewer.person.campuses.find_by_campus_shortDesc('Reg/Nat')
+    if @viewer.person && @viewer.person.campuses.find(:first, :conditions => { Campus._(:abbrv) => 'Reg/Nat' })
       @projects = @eg.projects
     end
 
@@ -570,13 +572,15 @@ class ReportsController < ApplicationController
       
       Applying.find_all_by_project_id_and_status(p.id, 'completed').size,
       
-      Acceptance.find_all_by_project_id(p.id).size,
+      Acceptance.find_all_by_project_id_and_as_intern(p.id, false).size + 
+      Acceptance.find_all_by_project_id_and_as_intern(p.id, nil).size,
+      Acceptance.find_all_by_project_id_and_as_intern(p.id, true).size,
       nil,
       Withdrawn.find_all_by_status_and_project_id('declined', p.id).size,
       Withdrawn.find_all_by_status_and_project_id(['self_withdrawn','admin_withdrawn'], p.id).size)
       
       # set total for first 4 columns
-      stat[:total] = stat[:started] + stat[:submitted] + stat[:completed] + stat[:accepted]
+      stat[:total] = stat[:started] + stat[:submitted] + stat[:completed] + stat[:accepted] + stat[:interns]
       
       @stats << stat
       
@@ -589,7 +593,8 @@ class ReportsController < ApplicationController
     end
     @stats << StatEntry.new('', totals[:started].to_s, 
     totals[:submitted].to_s, totals[:completed].to_s, 
-    totals[:accepted].to_s, totals[:total].to_s, totals[:declined].to_s, totals[:withdrawn].to_s) if @many_projects
+    totals[:accepted].to_s, totals[:interns].to_s,
+    totals[:total].to_s, totals[:declined].to_s, totals[:withdrawn].to_s) if @many_projects
     @page_title = "#{@eg.title} #{@project_title} Summer Stats"
     render_report @stats
   end
@@ -633,7 +638,7 @@ class ReportsController < ApplicationController
       
       gender = p.gender
       
-      @participants << [ p.person_lname.capitalize, p.person_fname.capitalize, gender, v.is_student?(@eg) ? '' : 'staff', @many_projects ? ac.project.title : nil, ec ].compact
+      @participants << [ p.last_name.capitalize, p.first_name.capitalize, gender, v.is_student?(@eg) ? '' : 'staff', @many_projects ? ac.project.title : nil, ec ].compact
     end
         
     @page_title = "#{@eg.title} #{@project_title} Parental Emails"
@@ -811,11 +816,11 @@ class ReportsController < ApplicationController
       title = if p then p.title else '' end
       
       if v && p
-        last_name = p.person_lname.capitalize
-	first_name = p.person_fname.capitalize
+        last_name = p.last_name.capitalize
+	first_name = p.first_name.capitalize
       elsif v && !p
         last_name = 'no person'
-        first_name = "vid #{v.viewer_userID}"
+        first_name = "vid #{v.username}"
       elsif !v && !p
         last_name = 'no viewer'
 	first_name = ''
@@ -936,7 +941,7 @@ class ReportsController < ApplicationController
       if ac && ac.as_intern?
         gender = p.gender
       
-        @participants << [ p.person_lname.capitalize, p.person_fname.capitalize, 
+        @participants << [ p.last_name.capitalize, p.first_name.capitalize, 
           @many_projects ? (ac ? ac.project.title : a.preference1.title) : nil, 
           gender, p.person_email ].compact
       end
@@ -1256,7 +1261,7 @@ class ReportsController < ApplicationController
       
       gender = p.gender
       
-      registrant = Registrant.new(p.person_lname, p.person_fname, gender,
+      registrant = Registrant.new(p.last_name, p.first_name, gender,
                                   (if !@eg.has_your_campuses then :skip elsif p.campuses[0] then p.campuses[0].campus_shortDesc else '' end), 
                                   (if !@eg.has_your_campuses then :skip elsif p.campuses[0] then p.person_year.year_in_school.year_desc else '' end),
       status, p1, p2, acceptance, p.person_local_phone, p.person_email)

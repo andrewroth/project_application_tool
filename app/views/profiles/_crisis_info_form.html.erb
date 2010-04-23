@@ -1,7 +1,7 @@
 <% @appln_person ||= @instance.viewer.person if @instance %>
 <% @emerg = @appln_person.emerg if @appln_person %>
 
-<%= custom_element_item("Your Birthdate: ", :emerg, :emerg_birthdate) do |m,c,classes|
+<%= custom_element_item("Your Birthdate: ", :appln_person, :birth_date) do |m,c,classes|
       date_select m, c, :start_year => 100.years.ago.year, :end_year => 10.years.ago.year, :class => classes, :include_blank => true
     end
 %>
@@ -13,17 +13,19 @@
 
 <HR>
 
+<% if false %>
 <P> <STRONG>Emergency Contact 2:</STRONG><BR />
 <%= render :partial => 'profiles/crisis_info_emerg_contact', :locals => { :prefix => 'emerg_contact2' } %>
+<% end %>
 
 <HR>
 
-<%= custom_element_item("Do you have any medical conditions that could potentially become an emergency?  If so, please explain.: <BR />", :emerg, :emerg_medicalNotes) do |m,c,classes|
+<%= custom_element_item("Do you have any medical conditions that could potentially become an emergency?  If so, please explain.: <BR />", :emerg, :notes) do |m,c,classes|
       text_area m, c, :rows => 5, :cols => 80, :class => classes
     end
  %>
 
-<%= custom_element_item("<P> Medication(s) Needed:  Will you be traveling with this medication on project? <BR />", :emerg, :emerg_meds) do |m,c,classes|
+<%= custom_element_item("<P> Medication(s) Needed:  Will you be traveling with this medication on project? <BR />", :emerg, :meds) do |m,c,classes|
       text_area m, c, :rows => 5, :cols => 80, :class => classes
     end
  %>
@@ -36,8 +38,8 @@
 
 <P>
 
-<%= custom_element_item("Health care province: ", :emerg, :health_province_id) do |m,c,classes|
-        collection_select(m, c, Province.find(:all), :id, :province_desc, 
+<%= custom_element_item("Health care province: ", :emerg, :health_coverage_state) do |m,c,classes|
+        collection_select(m, c, State.find(:all), :id, :province_desc, 
             { :include_blank => true }, { :class => classes })
     end
 %>
@@ -65,18 +67,18 @@
 
 <P>What are the names on your passport?</P>
 
-<%= custom_element_text_field('Surname: ', :appln_person, :person_legal_lname) %>
+<%= custom_element_text_field('Surname: ', :appln_person, :last_name) %>
 
-<%= custom_element_text_field('Given names: ', :appln_person, :person_legal_fname) %>
+<%= custom_element_text_field('Given names: ', :appln_person, :first_name) %>
 
-<%= custom_element_text_field('Passport #: ', :emerg, :emerg_passportNum) %>
+<%= custom_element_text_field('Passport #: ', :emerg, :passport_num) %>
 
-<%= custom_element_item("Passport Expiry: ", :emerg, :emerg_passportExpiry) do |m,c,classes|
-      date_select :emerg, :emerg_passportExpiry, { :end_year => 10.years.from_now.year,
+<%= custom_element_item("Passport Expiry: ", :emerg, :passport_expiry) do |m,c,classes|
+      date_select :emerg, :passport_expiry, { :end_year => 10.years.from_now.year,
                      :include_blank => true, :class => classes }
     end
  %>
 
-<%= custom_element_text_field('Passport Nationality: ', :emerg, :emerg_passportOrigin) %>
+<%= custom_element_text_field('Passport Nationality: ', :emerg, :passport_origin) %>
 
 <HR />

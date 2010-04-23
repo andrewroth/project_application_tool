@@ -142,7 +142,7 @@ class ManageProjectsController < ApplicationController
     @role_staff_ids = @project.send(@role).find(:all).collect { |staff| staff.viewer_id }
 
     @phrase = "%" + params[:search_text].gsub(' ', '%') + "%"
-    select = "#{Viewer.table_name}.viewer_userID, #{Person.table_name}.person_fname, #{Person.table_name}.person_lname"
+    select = "#{Viewer.table_name}.viewer_userID, #{Person.__(:preferred_first_name)}, #{Person.__(:last_name)}, #{Viewer.__(:last_login)}"
 
     match_by_userID = Viewer.find(:all, :include => :persons, :conditions => ["viewer_userID like ?", @phrase], :select => select)
     match_by_name = Person.search_by_name(params[:search_text]).collect(&:viewer).compact

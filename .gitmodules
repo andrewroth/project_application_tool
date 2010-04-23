@@ -1,0 +1,3 @@
+[submodule "vendor/plugins/mh_common"]
+	path = vendor/plugins/mh_common
+	url = git@github.com:andrewroth/mh_common.git
