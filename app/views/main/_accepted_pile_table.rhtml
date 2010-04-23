@@ -39,9 +39,9 @@
             <% else %>
               <td><%=h viewer.name %></td>
               <td><% if viewer.person %>
-	        <%= h viewer.person.campus_shortDesc %>
+	        <%= h viewer.person.campus_abbrev %>
 		  <% else %>
-		    no person for viewer '<%= viewer.viewer_userID %>' id <%= viewer.id %>
+		    no person for viewer '<%= viewer.username %>' id <%= viewer.id %>
 		  <% end %>
 	       </td>
 
