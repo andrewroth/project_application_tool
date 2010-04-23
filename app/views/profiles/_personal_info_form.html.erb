@@ -15,10 +15,12 @@ What do you normally go by?<BR/>
 <%= custom_element_text_field('Last name: ', :appln_person, :preferred_last_name) %>
 
 <%= custom_element_item('Gender: ', :appln_person, :gender) do |m,c,classes|
-      #collection_select :appln_person, :gender_id, Gender.find(:all), :id, :gender_desc, {}, { :class => classes }
-      #collection_select :appln_person, :gender_id, , :id, :gender_desc, {}, { :class => classes }
-      select_tag "appln_person[gender]", options_for_select(["M", "F", "?"])
-    end
+      if Pat::CONFIG[:gender_is_lookup_table]
+        collection_select :appln_person, :gender_id, Gender.find(:all), :id, :gender_desc, {}, { :class => classes }
+      else
+        select_tag "appln_person[gender]", options_for_select(["M", "F", "?"])
+      end
+   end
 %>
 
 <%- if Pat::CONFIG[:person_has_cell_phone] -%>
