@@ -5,7 +5,7 @@ module ElementsHelper
   include ReadonlyHelper
 
   INITIALLY_REQUIRED = {
-    :appln_person => { :person_fname => true, :person_lname => true, :gender_id => true, :person_email => true},
+    :appln_person => { :first_name => true, :last_name => true, :gender => true, :email => true},
     :emerg => {}
   }
 
