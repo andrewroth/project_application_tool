@@ -13,7 +13,7 @@
 
 <HR>
 
-<% if false %>
+<% if Pat::CONFIG[:emerg_contact_cdn_style] %>
 <P> <STRONG>Emergency Contact 2:</STRONG><BR />
 <%= render :partial => 'profiles/crisis_info_emerg_contact', :locals => { :prefix => 'emerg_contact2' } %>
 <% end %>
