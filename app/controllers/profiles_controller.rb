@@ -13,6 +13,8 @@ class ProfilesController < ApplicationController
   before_filter :get_profile, :except => [ :index, :list, :set_profile_going, :new, :create ] + INFO_ACTIONS
   before_filter :ensure_profile_ownership, :except => [ :view, :index, :list, :update, :set_profile_going, 
                                                         :class_options, :new, :viewer_id_dropdown, :populate_applications, :create ] + INFO_ACTIONS
+  before_filter :set_subject, :only => INFO_ACTIONS
+  before_filter :ensure_self_or_eventgroup_coordinator, :only => INFO_ACTIONS
   before_filter :ensure_profile_ownership_or_eventgroup_coordinator, :only => [ :view, :update ]
   before_filter :ensure_eventgroup_coordinator, :only => [ :new, :create ]
 
@@ -166,31 +168,24 @@ class ProfilesController < ApplicationController
   end
 
   def crisis_info
-    if params[:viewer_id]
-      if !ensure_eventgroup_coordinator
-        return
-      end
-      viewer = Viewer.find params[:viewer_id]
-    else
-      viewer = @viewer
-    end
     @submenu_title = 'Personal Info and Crisis Info'
-    @person = @appln_person = viewer.person
+    @person = @appln_person = @subject.person
     @emerg = @person.get_emerg
   end
   
   def update_crisis_info # also updates personal info
     @submenu_title = 'Personal Info and Crisis Info'
 
-    @person = @appln_person = @viewer.person
+    @subject_person = @appln_person = @subject.person
 
-    success_p = PersonalInformation.save_from_params @person, params
-    success_c = CrisisInformation.save_from_params @person, params
+    success_p = PersonalInformation.save_from_params @subject_person, params
+    success_c = CrisisInformation.save_from_params @subject_person, params
 
     if success_p && success_p
-      flash[:notify] = 'Successfully updated your crisis info.'
+      subject_name = @subject_person == @person ? "your" : @subject_person.name
+      flash[:notify] = "Successfully updated #{subject_name} crisis info."
     else
-      flash[:notify] = 'There was an error updating your crisis info.  Please try again.'
+      flash[:notify] = "There was an error updating your crisis info.  Please try again."
     end
 
     crisis_info
@@ -223,4 +218,18 @@ class ProfilesController < ApplicationController
   protected
     def set_title() @page_title = "Profiles" end
     def get_profile() @profile = Profile.find params[:id] if params[:id] end
+
+    def set_subject
+      if params[:viewer_id]
+        @subject = Viewer.find params[:viewer_id]
+      else
+        @subject = @viewer
+      end
+    end
+
+    def ensure_self_or_eventgroup_coordinator
+      unless @subject == @viewer || is_eventgroup_coordinator
+        render :inline => "no permission"
+      end
+    end
 end
