@@ -69,6 +69,10 @@ module ViewerMethods
         person.is_staff_somewhere? || is_eventgroup_coordinator?(eg) || !projects_with_any_role.empty?
       end
 
+      def is_current_staff?(eg)
+        person.is_staff? || is_eventgroup_coordinator?(eg) || !current_projects_with_any_role(eg).empty?
+      end
+
       def is_eventgroup_coordinator?(eg)
         return true if is_projects_coordinator?
         return false unless eg
