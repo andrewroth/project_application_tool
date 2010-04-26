@@ -40,18 +40,21 @@ module ActionView
             (doc/'style').first.inner_html = "@import url(\"#{options[:css]}\");"
           end
 
-          # Replace the logout link
-          if options[:logout]
-            old_link = (doc/'a').detect {|e| e.inner_html =~ /LOGOUT/}
-            old_link.parent.inner_html = options[:logout]
+          begin
+            # Replace the logout link
+            if options[:logout]
+              old_link = (doc/'a').detect {|e| e.inner_html =~ /LOGOUT/}
+              old_link.parent.inner_html = options[:logout]
+            end
+            # Remove the search and help links since they use relative urls
+            doc.search("li[text()*='SEARCH']").remove
+            doc.search("li[text()*='HELP']").remove
+            # Remove the nested li's on the logout link, to remove the vertical bar beside Logout link
+            logout_link = doc.search("a[text()*='LOGOUT']").first
+            p = logout_link.parent; pp = p.parent
+            pp.replace_child(p, logout_link)
+          rescue
           end
-          # Remove the search and help links since they use relative urls
-          doc.search("li[text()*='SEARCH']").remove
-          doc.search("li[text()*='HELP']").remove
-          # Remove the nested li's on the logout link, to remove the vertical bar beside Logout link
-          logout_link = doc.search("a[text()*='LOGOUT']").first
-          p = logout_link.parent; pp = p.parent
-          pp.replace_child(p, logout_link)
 
           session[:connexion_bar] = (doc/'reportdata').html
         end
