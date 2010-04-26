@@ -3,11 +3,6 @@ class Person < ActiveRecord::Base
   include Common::Core::Ca::Person
   load_mappings
 
-  #def province_id=(val) permanent_address.state = val end
-  def person_localprovince_id=(val) current_address.state = val end
-  def person_permanentprovince_id=(val) permanent_address.state = val end
-  def person_emergencyprovince_id=(val) emergency_address.state = val end
-
   def viewer
     viewers[0]
   end

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100422155152) do
+ActiveRecord::Schema.define(:version => 20100426181222) do
 
   create_table "addresses", :force => true do |t|
     t.integer "person_id"
@@ -241,6 +241,7 @@ ActiveRecord::Schema.define(:version => 20100422155152) do
     t.string  "dentist_phone"
     t.string  "blood_type"
     t.string  "blood_rh_factor"
+    t.string  "health_coverage_country"
   end
 
   create_table "event_groups", :force => true do |t|
