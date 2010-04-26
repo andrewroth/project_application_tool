@@ -284,7 +284,7 @@ class ReportsController < ApplicationController
       
       gender = p.gender
       
-      @participants << [ p.person_lname.capitalize, p.person_fname.capitalize, legal_name, gender, v.is_student?(@eg) ? '' : 'staff',
+      @participants << [ p.person_lname.capitalize, p.person_fname.capitalize, legal_name, gender, v.is_current_staff?(@eg) ? 'staff' : '',
         @include_pref1_applns ? (ac ? 'accepted' : a.status) : nil, ac ? ac.project.title : a.preference1.title, 
         birthdate, departure, passport_number, passport_country, passport_expiry, cm2007, 
         ((ac && ac.as_intern?) || (ac.nil? && a.as_intern?) ? 'intern' : ''), notes ].compact
@@ -528,7 +528,7 @@ class ReportsController < ApplicationController
                                  ec_entry.dentist_name.to_s, ec_entry.dentist_phone.to_s) 
 
       @registrants << [ p.person_lname.capitalize, p.person_fname.capitalize, @many_projects ? ac.project.title : nil, gender,
-        v.is_student?(@eg) ? '' : 'staff', 
+        v.is_current_staff?(@eg) ? 'staff' : '', 
         (p && p.loc_province ? p.loc_province.province_shortDesc : ''),
         (p && p.perm_province ? p.perm_province.province_shortDesc : ''),
         birthdate, passport_info,
@@ -638,7 +638,7 @@ class ReportsController < ApplicationController
       
       gender = p.gender
       
-      @participants << [ p.person_lname.capitalize, p.person_fname.capitalize, gender, v.is_student?(@eg) ? '' : 'staff', @many_projects ? ac.project.title : nil, ec ].compact
+      @participants << [ p.person_lname.capitalize, p.person_fname.capitalize, gender, v.is_current_staff?(@eg) ? 'staff' : '', @many_projects ? ac.project.title : nil, ec ].compact
     end
         
     @page_title = "#{@eg.title} #{@project_title} Parental Emails"
@@ -827,7 +827,7 @@ class ReportsController < ApplicationController
 	first_name = ''
       end
 
-      student = if v then (v.is_student?(@eg) ? '' : 'staff') else '?' end
+      student = if v then (v.is_current_staff?(@eg) ? 'staff' : '') else '?' end
 
       @participants << [ title, last_name, first_name,
         @include_pref1_applns ? (ac ? 'accepted' : a.status) : nil, 
