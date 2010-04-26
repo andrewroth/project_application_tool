@@ -182,7 +182,7 @@ class ProfilesController < ApplicationController
     success_c = CrisisInformation.save_from_params @subject_person, params
 
     if success_p && success_p
-      subject_name = @subject_person == @person ? "your" : @subject_person.name
+      subject_name = @subject_person == @person ? "your" : @subject_person.full_name
       flash[:notify] = "Successfully updated #{subject_name} crisis info."
     else
       flash[:notify] = "There was an error updating your crisis info.  Please try again."
