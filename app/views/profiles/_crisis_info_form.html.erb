@@ -38,11 +38,30 @@
 
 <P>
 
-<%= custom_element_item("Health care province: ", :emerg, :health_coverage_state) do |m,c,classes|
-        collection_select(m, c, State.find(:all), :id, :province_desc, 
-            { :include_blank => true }, { :class => classes })
+<% mid = "health_coverage" %>
+<% label_prefix = "Health coverage " %>
+<%= custom_element_item("#{label_prefix} country: ", :emerg, :"#{mid}_country") do |m,c,classes|
+      r = select_tag("#{m}_#{c}", options_for_select([[""]] + Country.all.collect{ |ct| [ ct.country, ct.code ] }, @emerg.send(:try, c)), :class => classes, :name => "#{m}[#{c}]")
+      r += observe_field "#{m}_#{c}", :function => "update_province_select('#{mid}', 'emerg')"
+      r
     end
 %>
+
+<%= custom_element_item("#{label_prefix} province: ", :emerg, :"#{mid}_state") do |m,c,classes|
+      id = "#{m}_#{c}"
+      r = ""
+      for country in Country.all
+        id = "#{m}_#{c}_#{country.code}"
+        r += select_tag("#{m}_#{c}", options_for_select([[""]] + CmtGeo.states_for_country(country.iso_code), @emerg.send(:try, c).to_s), :class => classes, :style => "display:none;", :name => id, :id => id)
+      end
+
+      r
+    end
+%>
+
+<script>
+update_province_select('<%= mid %>', 'emerg');
+</script>
 
 <%= custom_element_text_field('Provincial/State insurance number: ', :emerg, :health_number) %>
 <%= custom_element_text_field('Extended medical plan number: ', :emerg, :medical_plan_number) %>
