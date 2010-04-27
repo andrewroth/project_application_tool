@@ -149,16 +149,12 @@ class CustomReportsController < ApplicationController
         end
 
         q = e.traverse_to_questionnaire
-        unless q
-          row << "Error: Question id #{e.id} has been removed from the form.  Try editing the custom report, and choosing the question from the form again -- maybe it was replaced by a new question."
-          next
-        end
 
         # find answer by question_id and instance_id
         #row << if appln
         if appln
           #instance = if q.name == 'Processor Form'
-          if q.name == 'Processor Form'
+          if q.try(:name) == 'Processor Form'
             instance = appln.processor_form
           else
             # try to find a reference questionnaire
@@ -172,6 +168,10 @@ class CustomReportsController < ApplicationController
           row << e.get_verbose_answer(instance, :cache => answers_cache, :cache_sorted => sort, :use_cache_only => true).to_s
         else
           row << ''
+        end
+
+        if row.last.empty? && q.nil?
+          row << "Warning: Element #{h e.text_summary(:include_type => true)} is no longer in a form."
         end
 
       elsif re.class == ReportElementModelMethod
