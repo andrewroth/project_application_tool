@@ -149,6 +149,10 @@ class CustomReportsController < ApplicationController
         end
 
         q = e.traverse_to_questionnaire
+        unless q
+          row << "Error: Question id #{e.id} has been removed from the form.  Try editing the custom report, and choosing the question from the form again -- maybe it was replaced by a new question."
+          next
+        end
 
         # find answer by question_id and instance_id
         #row << if appln

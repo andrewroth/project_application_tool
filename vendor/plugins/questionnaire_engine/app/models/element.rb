@@ -153,6 +153,7 @@ class Element < ActiveRecord::Base
     while node.parent_id
       node = node.parent 
       yield node if block_given?
+      return nil if node.nil?
     end
 
     yield node.pages[0] if block_given?
