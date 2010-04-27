@@ -149,6 +149,10 @@ class CustomReportsController < ApplicationController
         end
 
         q = e.traverse_to_questionnaire
+        warnings = []
+        if q
+          warnings << "Element #{h e.text_summary(:include_type => true)} is no longer in a form.)"
+        end
 
         # find answer by question_id and instance_id
         #row << if appln
@@ -168,10 +172,6 @@ class CustomReportsController < ApplicationController
           row << e.get_verbose_answer(instance, :cache => answers_cache, :cache_sorted => sort, :use_cache_only => true).to_s
         else
           row << ''
-        end
-
-        if row.last.empty? && q.nil?
-          row << "Warning: Element #{h e.text_summary(:include_type => true)} is no longer in a form."
         end
 
       elsif re.class == ReportElementModelMethod
@@ -195,6 +195,8 @@ class CustomReportsController < ApplicationController
         end
       end
     end
+
+    row << "Warning: #{warnings.join("; ")}" if warnings.present?
 
     row
   end
