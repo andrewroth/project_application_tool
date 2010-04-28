@@ -1093,7 +1093,9 @@ class ReportsController < ApplicationController
     # ensure profile_prep_items is current
     @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
     @profiles = @prep_items.collect(&:profiles).flatten.uniq
-    @profiles.delete_if{ |profile| !@projects.include?(profile.project) }
+    @profiles.delete_if{ |profile| 
+      !@projects.include?(profile.project) || !([StaffProfile, Acceptance].include?(profile.class))
+    }
     @participants = []
     
     for profile in @profiles
