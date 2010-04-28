@@ -165,11 +165,11 @@ namespace :klone do
         namespace stage do
           desc "runs rake #{app}:klone:<server>:#{stage}"
           task :remotely do
-            run_rake_remotely "#{app}:klone:#{fetch(:server)}:#{stage}"
+            run_remote_utility_rake "#{app}:klone:#{fetch(:server_only)}:#{stage}"
           end
           desc "runs rake #{app}:klone:<server>:#{stage}:legacy"
           task :legacy_remotely do
-            run_rake_remotely "#{app}:klone:#{fetch(:server)}:#{stage}:legacy"
+            run_remote_utility_rake "#{app}:klone:#{fetch(:server_only)}:#{stage}"
           end
         end
       end
