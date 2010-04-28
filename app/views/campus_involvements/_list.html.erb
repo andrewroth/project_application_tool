@@ -1,0 +1,14 @@
+<%- @appln_person ||= @instance.viewer.person if @instance -%>
+<%- if @appln_person.nil? || @appln_person.campus_involvements.empty? -%>
+You have no campus involvements set.
+<%- else -%>
+Please ensure the following campus involvements are correct:
+
+<UL>
+  <%- for ci in @appln_person.campus_involvements -%>
+    <LI><%= ci.campus.name %> <%= ci.school_year.name %></LI>
+  <%- end -%>
+</UL>
+<%- end -%>
+
+To update your campus involvements, please go to the pulse using <A HREF="https://pulse.campusforchrist.org/people/<%= @appln_person.try(:id) %>">this link</A>.
