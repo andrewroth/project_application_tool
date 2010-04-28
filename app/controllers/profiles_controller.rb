@@ -161,6 +161,10 @@ class ProfilesController < ApplicationController
   
   def campus_info
     @submenu_title = 'Campus Info'
+  end
+
+  def campus_info_cdn
+    @submenu_title = 'Campus Info'
     @person = @appln_person = @viewer.person
     @assignments = @person.assignments
 
