@@ -28,7 +28,7 @@
       :method => :delete,
       :loading => "$('loading').show();",
       :loaded => "$('loading').hide();",
-      :confirm => 'Are you sure?'
+      :confirm => "Are you sure?  There are #{prep_item.profile_prep_items.count} people who have data relating to this prep item which will also be deleted."
     %>
   </div>
 
