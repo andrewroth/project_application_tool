@@ -9,7 +9,9 @@
 <% else %>
   <% content_for "submenu" do %>
     <%= sub_menu_item 'Your Profiles', :profiles, :list %>
-    <%= sub_menu_item 'Campus Info', :profiles, :campus_info %>
+    <%- if @eg.has_your_campuses -%>
+      <%= sub_menu_item 'Campus Info', :profiles, :campus_info %>
+    <%- end -%>
     <%= sub_menu_item 'Personal Info and Crisis Info', :profiles, :crisis_info %>
   <% end %>
 <% end %>
