@@ -18,7 +18,7 @@ What do you normally go by?<BR/>
       if Pat::CONFIG[:gender_is_lookup_table]
         collection_select :appln_person, :gender_id, Gender.find(:all), :id, :gender_desc, {}, { :class => classes }
       else
-        select_tag "appln_person[gender]", options_for_select(["Male", "Female", [ "?", nil ]], @appln_person.human_gender)
+        select_tag "appln_person[gender]", options_for_select(["Male", "Female", [ "?", nil ]], @appln_person.try(:human_gender))
       end
    end
 %>
