@@ -1,7 +1,8 @@
 class CostItemsController < ApplicationController
   before_filter :set_menu_titles
   before_filter :set_project_access_list
-  before_filter :get_cost_item, :only => [ :show, :set_applies_to, :set_optional, :destroy, :edit, :update ]
+  before_filter :get_cost_item, :only => [ :show, :set_applies_to, :set_optional, :destroy, :edit, :update, :set_cost_item_amount, :set_cost_item_description ]
+  before_filter :check_permission, :only => [ :set_cost_item_amount, :set_cost_item_description ]
   in_place_edit_for :cost_item, :description
   in_place_edit_for :cost_item, :amount
 	
@@ -122,5 +123,13 @@ class CostItemsController < ApplicationController
 
     def get_cost_item
       @cost_item = CostItem.find(params[:id])
+    end
+
+    def check_permission
+      if (@cost_item.class == YearCostItem && @project_access.rassoc('all').nil?) || 
+        (@cost_item.class == ProjectCostItem && @project_access.rassoc(@cost_item.try(:project_id)).nil?)
+        render :inline => 'No access'
+        return
+      end
     end
 end

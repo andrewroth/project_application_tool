@@ -45,7 +45,8 @@ describe ProfilePrepItemsController do
     it "should render index" do
       @profile.stub!(:all_prep_items => [ @prep_item ])
       @profile.stub!(:profile_prep_items => mock('results', 
-                        :find_or_create_by_prep_item_id => @profile_prep_item))
+                        :find_or_create_by_prep_item_id => @profile_prep_item,
+                        :each => nil))
       @profile_prep_item.should_receive(:save!)
       post 'index', :id => @profile.id
       response.should be_success

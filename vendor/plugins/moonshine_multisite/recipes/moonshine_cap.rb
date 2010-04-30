@@ -293,7 +293,7 @@ namespace :ruby do
       'rm -rf ruby-enterprise-1.8.6-20090610* || true',
       'wget -q http://assets.railsmachine.com/other/ruby-enterprise-1.8.6-20090610.tar.gz',
       'tar xzf ruby-enterprise-1.8.6-20090610.tar.gz',
-      'sudo /tmp/ruby-enterprise-1.8.6-20090610/installer --dont-install-useful-gems -a /usr'
+      'sudo /tmp/ruby-enterprise-1.8.6-20090610/installer -a /usr'
     ].join(" && ")
   end
 
@@ -304,7 +304,7 @@ namespace :ruby do
       'rm -rf ruby-enterprise-1.8.7-2009.10.tar.gz* || true',
       'wget -q http://rubyforge.org/frs/download.php/66162/ruby-enterprise-1.8.7-2009.10.tar.gz',
       'tar xzf ruby-enterprise-1.8.7-2009.10.tar.gz',
-      'sudo /tmp/ruby-enterprise-1.8.7-2009.10/installer --dont-install-useful-gems -a /usr'
+      'sudo /tmp/ruby-enterprise-1.8.7-2009.10/installer -a /usr'
     ].join(" && ")
   end
 
