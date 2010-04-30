@@ -114,9 +114,9 @@ class ReportsController < ApplicationController
       person = viewer.person
 
       [
-        person.last_name,
-        person.first_name,
-        person.gender,
+        person.preferred_last_name,
+        person.preferred_first_name,
+        person.gender_short,
         @eg.has_your_campuses ? person.campus_abbrev(:search_arrays => true) : :skip,
         @eg.has_your_campuses ? person.try(:year_in_school).try(:name) : :skip,
         profile.status,
@@ -160,9 +160,9 @@ class ReportsController < ApplicationController
       person = viewer.person
 
       [
-        person.last_name,
-        person.first_name,
-        person.gender,
+        person.preferred_last_name,
+        person.preferred_first_name,
+        person.gender_short,
         acceptance.project.title,
         @eg.has_your_campuses ? person.campus_abbrev(:search_arrays => true) : :skip,
         @eg.has_your_campuses ? person.year_in_school.year_desc : :skip,
@@ -701,7 +701,7 @@ class ReportsController < ApplicationController
     target = ac.funding_target(@eg)
     claimed = ac.support_claimed.to_f.to_s
 
-    gender = if p then p.gender else 'unknown' end
+    gender = if p then p.gender_short else 'unknown' end
     staff = if v.nil? then 'missing viewer' else (v.is_current_staff?(@eg) ? 'staff' : '') end
      
     participant = [ p ? p.full_name : 'unknown' , gender, staff, (@many_projects ? ac.project.title : nil),
@@ -1099,7 +1099,9 @@ class ReportsController < ApplicationController
     # ensure profile_prep_items is current
     @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
     @profiles = @prep_items.collect(&:profiles).flatten.uniq
-    @profiles.delete_if{ |profile| !@projects.include?(profile.project) }
+    @profiles.delete_if{ |profile| 
+      !@projects.include?(profile.project) || !([StaffProfile, Acceptance].include?(profile.class))
+    }
     @participants = []
     
     for profile in @profiles
@@ -1267,7 +1269,7 @@ class ReportsController < ApplicationController
       
       gender = p.gender
       
-      registrant = Registrant.new(p.last_name, p.first_name, gender,
+      registrant = Registrant.new(p.preferred_last_name, p.preferred_first_name, gender,
                                   (if !@eg.has_your_campuses then :skip elsif p.campuses[0] then p.campuses[0].campus_shortDesc else '' end), 
                                   (if !@eg.has_your_campuses then :skip elsif p.campuses[0] then p.person_year.year_in_school.year_desc else '' end),
       status, p1, p2, acceptance, p.person_local_phone, p.person_email)
