@@ -119,6 +119,7 @@ class CustomReportsController < ApplicationController
   end
 
   def render_row(sort, answers_cache, viewer, person, profile, appln)
+
     row = [ ]
 
     project = profile.project
@@ -148,23 +149,29 @@ class CustomReportsController < ApplicationController
         end
 
         q = e.traverse_to_questionnaire
+        warnings = []
+        if q
+          warnings << "Element #{h e.text_summary(:include_type => true)} is no longer in a form.)"
+        end
 
         # find answer by question_id and instance_id
-        row << if appln
-                 instance = if q.name == 'Processor Form'
-                              appln.processor_form
-                            else
-                              # try to find a reference questionnaire
-                              ri = appln.reference_instances.detect { |ri|
-                                ri.questionnaire == q
-                              }
+        #row << if appln
+        if appln
+          #instance = if q.name == 'Processor Form'
+          if q.try(:name) == 'Processor Form'
+            instance = appln.processor_form
+          else
+            # try to find a reference questionnaire
+            ri = appln.reference_instances.detect { |ri|
+              ri.questionnaire == q
+            }
 
-                              ri || appln # use appln if can't find anything else
-                            end
+            instance = ri || appln # use appln if can't find anything else
+          end
 
-                 e.get_verbose_answer(instance, :cache => answers_cache, :cache_sorted => sort, :use_cache_only => true).to_s
+          row << e.get_verbose_answer(instance, :cache => answers_cache, :cache_sorted => sort, :use_cache_only => true).to_s
         else
-        ''
+          row << ''
         end
 
       elsif re.class == ReportElementModelMethod
@@ -188,6 +195,8 @@ class CustomReportsController < ApplicationController
         end
       end
     end
+
+    row << "Warning: #{warnings.join("; ")}" if warnings.present?
 
     row
   end

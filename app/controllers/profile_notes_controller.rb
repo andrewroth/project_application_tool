@@ -65,6 +65,7 @@ class ProfileNotesController < ApplicationController
   def set_menu_titles() @submenu_title = 'Notes' end
   
   def set_references
+    return unless @appln
     @references = @appln.references_text_list
   end
     

@@ -17,7 +17,7 @@ module ApplicationHelper
     rescue ActionView::MissingTemplate
       return nil
     rescue # any other errors are ok, just a :locals => ... issue
-      return true
+      return ""
     end
   end
 

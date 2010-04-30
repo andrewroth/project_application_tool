@@ -208,6 +208,11 @@ class SecurityController < ApplicationController
       redirect_to $cim_url
     elsif session[:login_source] == 'gcx'
       redirect_to CASClient::Frameworks::Rails::Filter.client.logout_url
+    elsif session[:login_source] == 'impersonate'
+      session[:user_id] = session[:viewer_before_impersonate]
+      session[:login_source] = session[:login_source_before_impersonate]
+      redirect_to :controller => 'main'
+      return
     end
 
     clear_login_session_info

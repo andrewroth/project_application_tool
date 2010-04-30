@@ -2,7 +2,18 @@ class ViewersController < ApplicationController
   include Permissions
 
   before_filter :set_subject
-  before_filter :ensure_projects_coordinator
+  before_filter :ensure_projects_coordinator, :except => [ :impersonate ]
+  before_filter :ensure_eventgroup_coordinator, :only => [ :impersonate ]
+
+  def impersonate
+    unless session[:login_source] == 'impersonate'
+      session[:viewer_before_impersonate] = @viewer.id
+      session[:login_source_before_impersonate] = session[:login_source]
+      session[:login_source] = 'impersonate'
+    end
+    session[:user_id] = params[:id]
+    redirect_to :controller => 'main'
+  end
 
   def merge
     if request.post?

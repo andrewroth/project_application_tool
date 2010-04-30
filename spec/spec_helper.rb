@@ -75,6 +75,14 @@ def mock_viewer_as_staff(params = {})
               :set_project => true }.merge(params))
 end
 
+def mock_viewer_as_student(params = {})
+  mock_viewer({ :is_student? => true, :is_eventgroup_coordinator? => false, 
+              :is_projects_coordinator? => false, 
+              :is_project_administrator? => false, :is_project_director? => false,
+              :is_any_project_staff => false,
+              :set_project => true }.merge(params))
+end
+
 def mock_viewer(params = {})
   @viewer = mock_model(Viewer, { 
     :viewer_userID => 'copter', :viewer_passWord => '9cdfb439c7876e703e307864c9167a15', # password is lol
@@ -87,6 +95,7 @@ def mock_viewer(params = {})
   if @profile
     @profile.stub!(:viewer => @viewer)
   end
+  @viewer
 end
 
 def mock_event_group(params = {})
@@ -160,6 +169,10 @@ def stub_viewer_as_event_group_coordinator(params = {}, person_params = {})
   stub_viewer_short params.merge(:egc => true), person_params
 end
 
+def stub_viewer_as_student(params = {}, person_params = {})
+  stub_viewer_short params.merge(:st => false), person_params
+end
+
 def stub_viewer_short(p = {}, person_params = {})
   full_params = {
     :project_director_projects => (p[:pd] ? [ @project ] : []),
@@ -229,6 +242,7 @@ def stub_model_find(v)
   inst.class.stub!(:find).with(inst.id.to_s).and_return(inst)
   inst.class.stub!(:find).with([inst.id]).and_return(inst)
   inst.class.stub!(:find).with([inst.id.to_s]).and_return(inst)
+  inst
 end
 
 FIXTURE_CLASS = {

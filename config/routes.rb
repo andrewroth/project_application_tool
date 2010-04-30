@@ -64,7 +64,11 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :event_groups, :collection => [ :scope ], :member => [ :set_as_scope ]
 
-  map.resources :viewers, :member => { :merge => [ :get, :post ], :merge_search => [ :get ] }
+  map.resources :viewers, :member => { 
+    :merge => [ :get, :post ], 
+    :merge_search => [ :get ],
+    :impersonate => [ :get ]
+  }
 
   map.connect 'javascripts/questionnaire2.js', :controller => "main", :action => "questionnaire"
   

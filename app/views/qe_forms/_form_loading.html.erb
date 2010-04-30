@@ -6,6 +6,8 @@
      <%= # make a form title as best we can
      if @instance.class == Appln || @instance.class == ApplnReference 
        @instance.viewer.name
+     elsif @instance.class == ProcessorForm
+       @instance.appln.profile.viewer.name
      end
      %> 
      <%= @questionnaire.title %>

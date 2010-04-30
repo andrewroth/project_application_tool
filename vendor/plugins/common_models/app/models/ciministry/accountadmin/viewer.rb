@@ -15,6 +15,9 @@ class Viewer < Accountadmin
   has_many :notification_acknowledgments
   has_one :projects_coordinator
 
+  has_many :eventgroup_coordinators
+  has_many :eventgroups_coordinating, :class_name => "EventGroup", :through => :eventgroup_coordinators, :source => :event_group
+
   # ------ roles
   def Viewer.roles() [ :project_staff, :project_director, :project_administrator, :support_coach, :processor ] end
   def Viewer.roles_pair() roles.collect { |r| [ r, r.to_s.pluralize.to_sym ] } end
@@ -74,6 +77,10 @@ class Viewer < Accountadmin
   
   def is_staff?(eg)
     person.is_staff? || is_eventgroup_coordinator?(eg) || !projects_with_any_role.empty?
+  end
+
+  def is_current_staff?(eg)
+    person.is_staff? || is_eventgroup_coordinator?(eg) || !current_projects_with_any_role(eg).empty?
   end
 
   def is_eventgroup_coordinator?(eg)

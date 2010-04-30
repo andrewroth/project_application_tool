@@ -1,9 +1,10 @@
 
 
 namespace :db do
-  namespace :setup => :environment do
+  namespace :setup do
     desc "Setup for the pat, to be run while installing.  Loads all schemas in db/schema* and installs some required database rows (ex default user)."
-    task :pat do
+    task :pat => :environment do
+=begin
       def adapter() ActiveRecord::Base.configurations[RAILS_ENV]['adapter'] end
       def dbfile() ActiveRecord::Base.configurations[RAILS_ENV]['dbfile'] end
 
@@ -16,46 +17,49 @@ namespace :db do
           File.delete dbfile
         end
       end
+=end
 
+=begin
       # make sure to load schema_production last if it exists
       for schema in Dir.glob('db/schema*').sort{ |a,b| if a == 'schema_production.rb' then 1 elsif b == 'schema_production' then -1 else a <=> b end }
         puts "load #{schema}"
         load schema
       end
+=end
+
+      puts %|
+1. cp config/database.proxy.yml config/database.yml
+
+2. edit config/database/database.p2c_pat_prod.yml with your database info.
+
+3. load the schemas with something like
+
+      cat p2c_pat_prod.sql \| mysql --user root p2c_pat_prod
+      cat c4c_intranet_prod.sql \| mysql --user root c4c_intranet_prod
+      |
 
       # the spt expects two accessgroups 
-      ag_pc = Accessgroup.create :accessgroup_key => '[accessgroup_projects_coordinator]'
-      ag_st = Accessgroup.create :accessgroup_key => '[accessgroup_student]'
-
-      # now create a default ministry and default event group
-      if Ministry.find(:all).empty?
-        ministry = Ministry.create :name => "Default Ministry"
-      end
+      ag_pc = Accessgroup.find_or_create_by_accessgroup_key '[accessgroup_projects_coordinator]'
+      ag_st = Accessgroup.find_or_create_by_accessgroup_key '[accessgroup_student]'
+      ag_k1 = Accessgroup.find_or_create_by_accessgroup_key '[accessgroup_key1]'
 
       if EventGroup.find(:all).empty?
-        @eg = EventGroup.create :ministry_id => ministry.id, :title => "Default Event Group"
+        @eg = EventGroup.create :title => "Default Event Group"
       end
 
-      # create default viewers, admin and student
-      admin = Viewer.create :viewer_userID => 'admin', :viewer_passWord => '21232f297a57a5a743894a0e4a801fc3', :accountgroup_id => Accessgroup.find_by_accessgroup_key('[accessgroup_projects_coordinator]'), :viewer_lastLogin => 0
-      student = Viewer.create :viewer_userID => 'student', :viewer_passWord => 'cd73502828457d15655bbd7a63fb0bc8', :accountgroup_id => Accessgroup.find_by_accessgroup_key('[accessgroup_student]'), :viewer_lastLogin => 0
-      processor = Viewer.create :viewer_userID => 'processor', :viewer_passWord => 'cd73502828457d15655bbd7a63fb0bc8', :accountgroup_id => Accessgroup.find_by_accessgroup_key('[accessgroup_student]'), :viewer_lastLogin => 0
+      sql = ActiveRecord::Base.connection
+      db = ActiveRecord::Base.configurations["ciministry_#{RAILS_ENV}"]['database']
+      begin
+        sql.execute "insert into #{db}.accountadmin_accountgroup (accountgroup_id, accountgroup_key, english_value) values (15, '[accountgroup_key15]', 'Unknown');"
+      rescue
+      end
 
-      # need people models
-      p = Person.create :person_fname => 'John', :person_lname => 'Smith'
-      Access.create :viewer_id => student.id, :person_id => p.id
+      puts "Now run the PAT in another window, and log in.  Hit 'No' on the question about having logged in before.  Press enter once you've logged in."
+      STDIN.gets
 
-      p = Person.create :person_fname => 'Ted', :person_lname => 'Jones'
-      Access.create :viewer_id => processor.id, :person_id => p.id
+      ProjectsCoordinator.find_or_create_by_viewer_id Viewer.first.id
 
-      p = Person.create :person_fname => 'David', :person_lname => 'Robinson'
-      Access.create :viewer_id => admin.id, :person_id => p.id
-
-      # add them to their respective groups
-      Vieweraccessgroup.create :viewer_id => admin.id, :accessgroup_id => ag_pc.id
-      # Vieweraccessgroup.create :viewer_id => student.id, :accessgroup_id => ag_st.id
-      
-      setup_demo # optional, comment out by default
+      puts "Great!  #{Viewer.first.person.name} now has projects coordinator access.  Reload the page."
     end
   end
 end

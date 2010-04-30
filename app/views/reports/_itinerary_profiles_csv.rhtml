@@ -1,7 +1,7 @@
 <% if @include_profiles -%>
 <%= (TravelSegment.restricted.keys.collect{ |k|
   k.to_s
-} + [ 'profile notes', 'eticket' ]).join(',') %>
+} + [ 'profile notes', 'eticket', 'confirmation #' ]).join(',') %>
 <% end -%>
 <% itinerary_profiles_csv.each do |name_project_profile| -%>
 <% name, project, profile = name_project_profile -%>
@@ -19,7 +19,7 @@
   v = ts.send(k)
   v = format_datetime(v, :ts) if v.class == Time || v.class == Date
   "\"#{v}\""
-} + [ "\"#{pts.notes}\"", "\"#{pts.eticket}\"" ]).join(',') %>
+} + [ "\"#{pts.notes}\"", "\"#{pts.eticket}\"", "\"#{pts.confirmation_number}\"" ]).join(',') %>
 <% end %>
 <% end -%>
 <% end -%>

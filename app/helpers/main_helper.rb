@@ -57,6 +57,10 @@ module MainHelper
      link label, "/profiles/move/#{id}"
   end
   
+  def personal_crisis_info_link(id, label = 'personal/crisis info')
+     link label, "/profiles/crisis_info?viewer_id=#{id}"
+  end
+
   def ref(ref) 
     if ref.nil?
       "none"

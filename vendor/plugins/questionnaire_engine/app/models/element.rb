@@ -60,15 +60,15 @@ class Element < ActiveRecord::Base
       @answer = nil
       if params[:cache]
         if params[:cache_sorted]
-          a_pos = params[:cache].bsearch_first{ |a| 
-	    a.instance_id != instance.id ?
-	      a.instance_id <=> instance.id : # match on instance id first
+          a_pos = params[:cache].bsearch_first { |a| 
+            a.instance_id != instance.id ?
+              a.instance_id <=> instance.id : # match on instance id first
               a.question_id <=> id            #  then question id
-	    }
+          }
           @answer = a_pos ? params[:cache][a_pos] : nil
-	else
+        else
           @answer = params[:cache].detect {|a| a.instance_id == instance.id && a.question_id == id }
-	end
+        end
       end
       if !params[:use_cache_only]
         @answer = instance.answers.detect {|a| a.question_id == id} if @answer.nil?
@@ -153,6 +153,7 @@ class Element < ActiveRecord::Base
     while node.parent_id
       node = node.parent 
       yield node if block_given?
+      return nil if node.nil?
     end
 
     yield node.pages[0] if block_given?
