@@ -160,9 +160,9 @@ class ReportsController < ApplicationController
       person = viewer.person
 
       [
-        person.last_name,
-        person.first_name,
-        person.gender,
+        person.preferred_last_name,
+        person.preferred_first_name,
+        person.gender_short,
         acceptance.project.title,
         @eg.has_your_campuses ? person.campus_abbrev(:search_arrays => true) : :skip,
         @eg.has_your_campuses ? person.year_in_school.year_desc : :skip,
@@ -701,7 +701,7 @@ class ReportsController < ApplicationController
     target = ac.funding_target(@eg)
     claimed = ac.support_claimed.to_f.to_s
 
-    gender = if p then p.gender else 'unknown' end
+    gender = if p then p.gender_short else 'unknown' end
     staff = if v.nil? then 'missing viewer' else (v.is_current_staff?(@eg) ? 'staff' : '') end
      
     participant = [ p ? p.full_name : 'unknown' , gender, staff, (@many_projects ? ac.project.title : nil),
