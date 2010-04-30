@@ -250,7 +250,15 @@ class Profile < ActiveRecord::Base
   end
   
   def all_profile_prep_items
-    self.profile_prep_items
+    ppis = self.profile_prep_items(:include => :prep_item)
+    for ppi in ppis
+      if ppi.prep_item.nil?
+        ppi.destroy
+        reload_ppis = true
+      end
+    end
+    ppis = self.profile_prep_items(:include => :prep_item) if reload_ppis
+    ppis
   end
 
   def profile_prep_item(pi)
