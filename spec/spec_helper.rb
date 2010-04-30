@@ -236,12 +236,13 @@ def stub_form
   @event_group.stub!(:application_form).and_return(@form)
 end
 
-def stub_model_find(v)
+def stub_model_find(v, klass = nil)
   inst = instance_variable_get("@#{v}")
-  inst.class.stub!(:find).with(inst.id).and_return(inst)
-  inst.class.stub!(:find).with(inst.id.to_s).and_return(inst)
-  inst.class.stub!(:find).with([inst.id]).and_return(inst)
-  inst.class.stub!(:find).with([inst.id.to_s]).and_return(inst)
+  klass ||= inst.class
+  klass.stub!(:find).with(inst.id).and_return(inst)
+  klass.stub!(:find).with(inst.id.to_s).and_return(inst)
+  klass.stub!(:find).with([inst.id]).and_return(inst)
+  klass.stub!(:find).with([inst.id.to_s]).and_return(inst)
   inst
 end
 
