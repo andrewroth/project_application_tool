@@ -114,9 +114,9 @@ class ReportsController < ApplicationController
       person = viewer.person
 
       [
-        person.last_name,
-        person.first_name,
-        person.gender,
+        person.preferred_last_name,
+        person.preferred_first_name,
+        person.gender_short,
         @eg.has_your_campuses ? person.campus_abbrev(:search_arrays => true) : :skip,
         @eg.has_your_campuses ? person.try(:year_in_school).try(:name) : :skip,
         profile.status,
@@ -1267,7 +1267,7 @@ class ReportsController < ApplicationController
       
       gender = p.gender
       
-      registrant = Registrant.new(p.last_name, p.first_name, gender,
+      registrant = Registrant.new(p.preferred_last_name, p.preferred_first_name, gender,
                                   (if !@eg.has_your_campuses then :skip elsif p.campuses[0] then p.campuses[0].campus_shortDesc else '' end), 
                                   (if !@eg.has_your_campuses then :skip elsif p.campuses[0] then p.person_year.year_in_school.year_desc else '' end),
       status, p1, p2, acceptance, p.person_local_phone, p.person_email)

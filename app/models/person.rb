@@ -7,10 +7,10 @@ class Person < ActiveRecord::Base
   end
 
   def campus_abbrev(o = {})
-    self.campus(o) ? self.campus(o).campus_abbrev : ''
+    self.campus(o) ? self.campus(o).abbrv : ''
   end
   
   def campus_name(o = {})
-    self.campus(o) ? self.campus(o).campus_name : ''
+    self.campus(o) ? self.campus(o).name : ''
   end
 end
