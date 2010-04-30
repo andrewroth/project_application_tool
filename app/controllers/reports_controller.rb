@@ -148,13 +148,7 @@ class ReportsController < ApplicationController
     @page_title = @projects.collect(&:title).join(', ') + " Participants"
 
     acceptances = Acceptance.find_all_by_project_id(@projects_ids, :include => [
-            :project,
-          { :viewer =>
-            { :persons =>
-              { :person_years => :year_in_school, :assignments => :campus
-              }
-            }
-          }
+        :project
       ],
       :select => mk_sel("Person.last_name, Person.first_name, Person.gender_id, Campus.campus_shortDesc, Assignment.assignmentstatus_id, YearInSchool.year_desc, Project.title, Profile.status, Profile.type, Person.person_local_phone, Person.cell_phone, Person.person_email"),
       :conditions => params[:hide_interns] == 'true' ? "as_intern is false OR as_intern is null" : ""
@@ -170,7 +164,7 @@ class ReportsController < ApplicationController
         person.first_name,
         person.gender,
         acceptance.project.title,
-        @eg.has_your_campuses ? person.campus_shortDesc(:search_arrays => true) : :skip,
+        @eg.has_your_campuses ? person.campus_abbrev(:search_arrays => true) : :skip,
         @eg.has_your_campuses ? person.year_in_school.year_desc : :skip,
         person.person_local_phone,
         person.cell_phone,
@@ -313,7 +307,7 @@ class ReportsController < ApplicationController
     @include_profiles = true.to_s
     
     loop_reports_viewers(@projects_ids, false, true) do |profile,a,v,person|
-      name = if person then person.name elsif v then 
+      name = if person then person.full_name elsif v then 
          v.username else "? (profile id=#{profile.id})" end
       @profiles << [ name, profile.project, profile ]
     end
@@ -533,16 +527,16 @@ class ReportsController < ApplicationController
 
       passport_info = get_passport_info(ac, p, a, ec_entry)
       
-      hp = ec_entry.health_province ? ec_entry.health_province.province_shortDesc : ''
+      hp = ec_entry.health_state.try(:name)
       health_info = HealthInfo.new(ec_entry.health_number, hp)
       ins_info = InsuranceInfo.new(ec_entry.medical_plan_carrier, ec_entry.medical_plan_number)
       doc_info = DoctorsInfo.new(ec_entry.doctor_name.to_s, ec_entry.doctor_phone.to_s,
                                  ec_entry.dentist_name.to_s, ec_entry.dentist_phone.to_s) 
 
-      @registrants << [ p.last_name.capitalize, p.first_name.capitalize, @many_projects ? ac.project.title : nil, gender,
+      @registrants << [ p.preferred_last_name.capitalize, p.preferred_first_name.capitalize, @many_projects ? ac.project.title : nil, gender,
         v.is_current_staff?(@eg) ? 'staff' : '', 
-        (p && p.loc_province ? p.loc_province.province_shortDesc : ''),
-        (p && p.perm_province ? p.perm_province.province_shortDesc : ''),
+        p.try(:local_state) || '',
+        p.try(:permanent_state) || '',
         birthdate, passport_info,
         emergency_info, emergency_contact_1, emergency_contact_2,
         health_info, ins_info, doc_info ].compact
@@ -708,9 +702,9 @@ class ReportsController < ApplicationController
     claimed = ac.support_claimed.to_f.to_s
 
     gender = if p then p.gender else 'unknown' end
-    staff = if v.nil? then 'missing viewer' elsif v.is_student?(@eg) then '' else 'staff' end 
+    staff = if v.nil? then 'missing viewer' else (v.is_current_staff?(@eg) ? 'staff' : '') end
      
-    participant = [ p ? p.name : 'unknown' , gender, staff, (@many_projects ? ac.project.title : nil),
+    participant = [ p ? p.full_name : 'unknown' , gender, staff, (@many_projects ? ac.project.title : nil),
     received, claimed, target, target - received, target - claimed.to_f ].compact
   end
 
@@ -824,19 +818,19 @@ class ReportsController < ApplicationController
       birthdate = ec_entry ? ec_entry.emerg_birthdate : ' '
       passport_info = get_passport_info(ac, p, a, ec_entry)
 
-      gender = if p then p.gender else '?' end
-      title = if p then p.title else '' end
+      gender = p.try(:gender) || '?'
+      title = p.try(:title).try(:desc) || ''
       
       if v && p
-        last_name = p.last_name.capitalize
-	first_name = p.first_name.capitalize
+        last_name = p.preferred_last_name.capitalize
+        first_name = p.preferred_first_name.capitalize
       elsif v && !p
         last_name = 'no person'
         first_name = "vid #{v.username}"
       elsif !v && !p
         last_name = 'no viewer'
-	first_name = ''
-	first_name = ''
+        first_name = ''
+        first_name = ''
       end
 
       student = if v then (v.is_current_staff?(@eg) ? 'staff' : '') else '?' end
