@@ -70,7 +70,7 @@ module ViewerMethods
       end
 
       def is_current_staff?(eg)
-        person.is_staff? || is_eventgroup_coordinator?(eg) || !current_projects_with_any_role(eg).empty?
+        person.is_hrdb_staff? || is_eventgroup_coordinator?(eg) || !current_projects_with_any_role(eg).empty?
       end
 
       def is_eventgroup_coordinator?(eg)
