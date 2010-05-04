@@ -153,7 +153,7 @@ class SecurityController < ApplicationController
     rescue NoMethodError => e
       # bizarre error, happens randomly.  try again
       Viewer.reset_column_information
-      login_viewer = Viewer.find_by_viewer_userID params[:username]
+      login_viewer = Viewer.find :first, :conditions => { Viewer._(:user_name) => params[:username] }
     end
 
     return { :error => "Username '#{params[:username]}' doesn't exist.", :keep_trying => true } unless login_viewer
@@ -256,7 +256,7 @@ class SecurityController < ApplicationController
         @viewer.login_callback
       end
       @viewer.last_login = Time.now
-      @viewer.save
+      @viewer.save!
     end
 
     redirect_to :controller => "main"

@@ -86,7 +86,7 @@ end
 def mock_viewer(params = {})
   @viewer = mock_model(Viewer, { 
     :viewer_userID => 'copter', :viewer_passWord => '9cdfb439c7876e703e307864c9167a15', # password is lol
-    :viewer_isActive= => 1, :viewer_lastLogin= => Time.now, :save! => '', :person => '', :name => 'Cop Ter',
+    :viewer_isActive= => 1, :last_login= => Time.now, :save! => '', :person => '', :name => 'Cop Ter',
     :profile_cost_items => []
   }.merge(params))
   Viewer.stub!(:find).and_return(@viewer)
@@ -246,6 +246,7 @@ def stub_model_find(v, klass = nil)
   inst
 end
 
+=begin
 FIXTURE_CLASS = {
   :cim_hrdb_campus => Campus,
   :accountadmin_viewer => Viewer,
@@ -253,6 +254,7 @@ FIXTURE_CLASS = {
   :cim_hrdb_assignment => Assignment,
   :cim_hrdb_assignmentstatus => Assignmentstatus,
 } unless defined?(FIXTURE_CLASS)
+=end
 
 def load_fixtures(*fixtures_array)
   set_fixture_class FIXTURE_CLASS
