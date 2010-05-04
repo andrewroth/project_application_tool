@@ -1,0 +1,17 @@
+<%= 
+dbh = "#{Rails.root}/config/database/database_header.yml"; dbhd = dbh+".default";
+file = File.exists?(dbh) ? dbh : dbhd
+File.read(file).chomp
+%>
+
+development:
+  database: utopian_pat_dev
+  <<: *defaults
+
+test:
+  database: utopian_pat_test
+  <<: *defaults
+
+production:
+  database: utopian_pat_dev
+  <<: *defaults
