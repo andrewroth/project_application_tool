@@ -35,6 +35,16 @@ class ToolsController < ApplicationController
     for p in all_profiles
       @profiles[p.motivation_code] = p
     end
+
+    # totals
+    @totals = { :curr_amount => 0, :curr_final => 0, :new_final => 0 }
+    for d in @manual_donations
+      @totals[:curr_amount] += d.original_amount
+      @totals[:curr_final] += d.amount
+      d.new_final = d.original_amount.to_f * @new_conversion_rate
+      @totals[:new_final] += d.new_final
+    end
+
   end
 
   def update_motivation_codes
