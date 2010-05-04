@@ -28,7 +28,6 @@ ciministry_production:
   database: c4c_intranet_staging
   <<: *defaults
 
-<<<<<<< HEAD:config/database/database.p2c_pat_staging.yml
 pulse_development:
   database: c4c_pulse_staging
   <<: *defaults
