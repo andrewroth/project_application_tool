@@ -27,3 +27,7 @@ ciministry_test:
 ciministry_production:
   database: c4c_intranet_staging
   <<: *defaults
+
+ciministry_test:
+  database: c4c_intranet_test
+  <<: *defaults

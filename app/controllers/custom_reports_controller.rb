@@ -149,12 +149,16 @@ class CustomReportsController < ApplicationController
         end
 
         q = e.traverse_to_questionnaire
+        warnings = []
+        if q
+          warnings << "Element #{h e.text_summary(:include_type => true)} is no longer in a form.)"
+        end
 
         # find answer by question_id and instance_id
         #row << if appln
         if appln
           #instance = if q.name == 'Processor Form'
-          if q.name == 'Processor Form'
+          if q.try(:name) == 'Processor Form'
             instance = appln.processor_form
           else
             # try to find a reference questionnaire
@@ -191,6 +195,8 @@ class CustomReportsController < ApplicationController
         end
       end
     end
+
+    row << "Warning: #{warnings.join("; ")}" if warnings.present?
 
     row
   end

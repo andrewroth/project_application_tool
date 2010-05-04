@@ -63,10 +63,10 @@ describe CostItemsController do
       end
 
       it "should update cost item" do
-        @cost_item.should_receive(:amount=).with(2)
+        @cost_item.should_receive(:amount=).with("2")
         @cost_item.should_receive(:save).and_return(true)
-        post 'update', :id => @cost_item.id, :cost_item => { :amount => 2 }
-        flash[:notice].should == 'CostItem was successfully updated.'
+        post 'set_cost_item_amount', :id => @cost_item.id, :value => 2
+        response.should be_success
       end
 
       it "should destroy cost item" do
@@ -139,8 +139,9 @@ describe CostItemsController do
         stub_viewer_as_staff
         stub_profile
         setup_login
-        @cost_item = stub_model(CostItem, :update_attributes => nil)
+        @cost_item = stub_model(YearCostItem, :update_attributes => nil)
         stub_model_find(:cost_item)
+        stub_model_find(:cost_item, CostItem)
       end
       
       it "should not create (with no access)" do
@@ -150,7 +151,7 @@ describe CostItemsController do
       end
   
       it "should not update" do
-        post 'update', :id => @cost_item.id, :cost_item => { :amount => 2 }
+        post 'set_cost_item_amount', :id => @cost_item.id, :value => 2
         flash[:notice].should_not == 'CostItem was successfully updated.'
       end
       
