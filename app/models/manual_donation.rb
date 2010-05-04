@@ -20,6 +20,8 @@ class ManualDonation < ActiveRecord::Base
   # yet, will leave it commented
   #has_many :profiles, :foreign_key => 'motivation_code', :primary_key => 'motivation_code'
 
+  attr :new_final, true
+
   def donation_type
     self[:donation_type]
   end
