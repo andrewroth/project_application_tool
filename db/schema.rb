@@ -9,7 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD:db/schema.rb
 ActiveRecord::Schema.define(:version => 20100511211337) do
+=======
+ActiveRecord::Schema.define(:version => 20100319192222) do
+>>>>>>> origin/dev:db/schema.rb
 
   create_table "airports", :force => true do |t|
     t.string   "code"
