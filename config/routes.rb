@@ -66,6 +66,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :viewers, :member => { 
     :merge => [ :get, :post ], 
+    :deactivate => [ :get, :post ], 
     :merge_search => [ :get ],
     :impersonate => [ :get ]
   }

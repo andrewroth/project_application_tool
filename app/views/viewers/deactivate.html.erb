@@ -1,0 +1,26 @@
+<STYLE>
+  #deactivate_list div { margin: 10px; }
+</STYLE>
+
+<DIV id="deactivate_list">
+  <DIV>Deactivate <%= @subject.name %>.</DIV>
+
+  <DIV>
+    <%= form_tag deactivate_viewer_url(@subject) %>
+    <%= sortable_table %>
+    <THEAD>
+      <TR>
+        <TH>Action</TH>
+        <%= th 'Role', 'String', true %>
+        <TH>Event Group</TH>
+        <TH>Project</TH>
+        <TH>Current Status</TH>
+      </TR>
+    </THEAD>
+    <%= render :partial => "access", :collection => @accesses %>
+    </TABLE>
+    <BR/>
+    <%= submit_tag "Apply" %>
+  </form>
+</DIV>
+</DIV>

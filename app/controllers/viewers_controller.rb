@@ -56,6 +56,34 @@ class ViewersController < ApplicationController
     @viewers.delete @subject
   end
 
+  def deactive_action_for(params_key)
+    (params[params_key.to_sym] || {}).each_pair do |key, value|
+        key =~ /(.*)_(.*)/
+        klass = $1
+        id = $2
+        yield klass.constantize.find(id)
+    end
+  end
+
+  def deactivate
+    if request.post?
+      @subject = Viewer.find params[:id]
+      deactive_action_for("reinstate") do |access|
+        access.end_date = nil
+        access.save!
+      end
+      deactive_action_for("revoke") do |access|
+        access.end_date = Date.today
+        access.save!
+      end
+    end
+
+    @accesses = []
+    @accesses << @subject.all_projects_coordinator if @subject.all_projects_coordinator.present?
+    @accesses += @subject.all_eventgroup_coordinators + 
+      Viewer.roles.collect{ |role| @subject.send("all_#{role.to_s.pluralize}") }.flatten
+  end
+
   protected
 
   def set_subject
