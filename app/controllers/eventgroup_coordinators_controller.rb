@@ -42,6 +42,7 @@ class EventgroupCoordinatorsController < ApplicationController
   # POST /eventgroup_coordinators.xml
   def create
     @eventgroup_coordinator = EventgroupCoordinator.find_or_create_by_event_group_id_and_viewer_id @eg2.id, params[:eventgroup_coordinator][:viewer_id]
+    @eventgroup_coordinator.end_date = nil
 
     respond_to do |format|
       if @eventgroup_coordinator.save
@@ -77,7 +78,8 @@ class EventgroupCoordinatorsController < ApplicationController
   def destroy
     @eventgroup_coordinator = EventgroupCoordinator.find(params[:id])
     @eg2 = @eventgroup_coordinator.event_group
-    @eventgroup_coordinator.destroy
+    @eventgroup_coordinator.end_date = Date.today
+    @eventgroup_coordinator.save!
 
     respond_to do |format|
       format.html { redirect_to(eventgroup_coordinators_url) }
