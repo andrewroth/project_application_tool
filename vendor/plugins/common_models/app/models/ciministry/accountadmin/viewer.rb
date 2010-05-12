@@ -13,9 +13,11 @@ class Viewer < Accountadmin
   has_many :persons, :through => :access
   
   has_many :notification_acknowledgments
-  has_one :projects_coordinator
+  has_one :projects_coordinator, :conditions => { :end_date => nil }
+  has_one :all_projects_coordinator, :class_name => "ProjectsCoordinator"
 
-  has_many :eventgroup_coordinators
+  has_many :eventgroup_coordinators, :conditions => { :end_date => nil }
+  has_many :all_eventgroup_coordinators, :class_name => "EventgroupCoordinator"
   has_many :eventgroups_coordinating, :class_name => "EventGroup", :through => :eventgroup_coordinators, :source => :event_group
 
   # ------ roles
@@ -25,7 +27,8 @@ class Viewer < Accountadmin
   def Viewer.project_role_syms() Viewer.roles.collect{ |r| :"#{r}_projects" } end
 
   for role_s, role_p in Viewer.roles_pair
-    has_many :"#{role_p}"
+    has_many :"#{role_p}", :conditions => { :end_date => nil }
+    has_many :"all_#{role_p}", :class_name => role_s.to_s.camelize
   end
   
   for role_s, role_p in Viewer.roles_pair

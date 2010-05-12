@@ -278,4 +278,6 @@ class Profile < ActiveRecord::Base
       end
     end
   end
+
+  def event_group() project.try(:event_group) end
 end
