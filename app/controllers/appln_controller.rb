@@ -81,7 +81,7 @@ class ApplnController < InstanceController
           @appln["preference#{i}_id"] = params[:answers]["preference#{i}_id"]
         end
       
-	profile = @appln.profile
+        profile = @appln.profile
         profile.project_id = params[:answers]["preference1_id"]
         profile.save!
       end      
@@ -109,10 +109,12 @@ class ApplnController < InstanceController
           [ "processor_always_editable", "always_editable" ]
         elsif @viewer.is_processor?
           [ "processor_always_editable" ]
-	else
-	  [ "always_editable" ]
+        else
+          [ "always_editable" ]
         end
       { :filter => filter, :default => false }
+    elsif @viewer == @appln.viewer && @appln.profile.reuse_appln.present?
+      { :filter => [ "in_returning_applicant_form" ], :default => false }
     else nil
     end
   end  

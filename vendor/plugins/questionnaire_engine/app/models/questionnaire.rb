@@ -22,4 +22,10 @@ class Questionnaire < ActiveRecord::Base
   def xml_children
     pages 
   end
+
+  def copy_answers(source_instance, dest_instance)
+    pages.each do |page|
+      page.copy_answers(source_instance, dest_instance)
+    end
+  end
 end

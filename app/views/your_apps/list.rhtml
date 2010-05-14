@@ -1,3 +1,13 @@
+<% if @acceptances.length > 0 %>
+  <p>Your application has been accepted to the projects listed below!  Click on the link to go to an acceptance page.
+  <ul>
+    <% for acceptance in @acceptances %>
+      <li><%= link_to acceptance.project.title, :action => "acceptance", :profile_id => acceptance.id %> (accepted)</li>
+    <% end %>
+  </ul>
+  </p>
+<% end %>
+
 <% if @started.length > 0 %>
   <p>You can continue the following applications:
   <ul>
@@ -36,16 +46,6 @@
   <ul>
     <% for profile in @unsubmitted %>
       <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (unsubmitted)</li>
-    <% end %>
-  </ul>
-  </p>
-<% end %>
-
-<% if @acceptances.length > 0 %>
-  <p>Your application has been accepted to the projects listed below!  Click on the link to go to an acceptance page.
-  <ul>
-    <% for acceptance in @acceptances %>
-      <li><%= link_to acceptance.project.title, :action => "acceptance", :profile_id => acceptance.id %> (accepted)</li>
     <% end %>
   </ul>
   </p>

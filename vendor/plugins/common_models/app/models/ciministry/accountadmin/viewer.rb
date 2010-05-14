@@ -246,4 +246,7 @@ There's a bunch of logic for creating users in cim_hrdb.
     is_projects_coordinator? || is_processor?   
   end
 
+  def accepted_profiles(eg, min_accepted_at = 16.months.ago)
+    @accepted_profiles ||= profiles.find(:all, :conditions => [ "type = 'Acceptance' AND accepted_at > ?", min_accepted_at ] )
+  end
 end

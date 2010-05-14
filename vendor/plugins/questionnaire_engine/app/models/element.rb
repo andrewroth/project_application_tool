@@ -197,4 +197,24 @@ class Element < ActiveRecord::Base
     end
     @@cache[id] || []
   end
+
+  def copy_answer(source_instance, dest_instance)
+    a = source_instance.answers.find_by_question_id self.id
+    puts "Try element id #{self.id} to find answer instance #{source_instance.id}"
+    if a
+      puts "Copy #{a.answer}"
+      dest_a = dest_instance.answers.find_by_question_id self.id
+      if dest_a
+        puts "Not going to overwrite answer"
+      else
+        dest_instance.answers.create! :question_id => self.id, :answer => a.answer 
+      end
+    else
+      puts "No answer found"
+    end
+
+    elements.each do |sub_element|
+      sub_element.copy_answer source_instance, dest_instance
+    end
+  end
 end

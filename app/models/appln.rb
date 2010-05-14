@@ -185,4 +185,12 @@ class Appln < ActiveRecord::Base
       { :text => ref.text, :instance_id => (ri ? ri.id : nil) }
     }
   end
+
+  def copy_answers(source_instance)
+    if source_instance.form != form
+      throw "In copy_answers, the source and destination need to be the same form."
+    else
+      form.questionnaire.copy_answers(source_instance, self)
+    end
+  end
 end
