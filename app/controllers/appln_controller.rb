@@ -62,6 +62,14 @@ class ApplnController < InstanceController
   end
   
   def after_submit
+    if @profile.reuse_appln.present?
+      @appln.reference_instances.each do |ref_inst|
+        ref_inst.bypass!
+      end
+      @profile.complete!
+      return
+    end
+
     # If we haven't yet done so, send reference invitations
     refs = get_references
     refs.each do |reference|
