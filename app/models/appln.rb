@@ -114,11 +114,11 @@ class Appln < ActiveRecord::Base
     #return false if self.reference_instances.empty?  # no references even saved (assuming all apps have at least 1)
     # ^^^ this shouldn't affect applyings.. and needs to be removed for apps w/o refs
     
-    done = false
+    not_done = false
     self.reference_instances.each do |r|
-      done ||= !(r.completed? || r.bypassed? || r == ref)   # if ref completed, or about to be completed
+      not_done ||= !(r.completed? || r.bypassed? || r == ref)   # if ref completed, or about to be completed
     end
-    return false if done
+    return false if not_done
     return self.profile.complete!
   end
   
