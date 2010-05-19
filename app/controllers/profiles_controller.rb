@@ -7,7 +7,9 @@ class ProfilesController < ApplicationController
   INFO_ACTIONS = [ :crisis_info, :update_crisis_info, :campus_info, :update_campus_info, :campus_info_new ]
 
   skip_before_filter :restrict_students, :only => [ :index, :list, :view, :update, 
-                                              :travel, :support_received, :costing, :prep_items, :update_support ] + INFO_ACTIONS
+                                              :travel, :support_received, :costing, 
+                                              :prep_items, :update_support, :use_past_appln ] + 
+                                              INFO_ACTIONS
                                               
   before_filter :set_title
   before_filter :get_profile, :except => [ :index, :list, :set_profile_going, :new, :create ] + INFO_ACTIONS
@@ -217,6 +219,19 @@ class ProfilesController < ApplicationController
       flash[:notice] = 'Support amount was successfully updated.'
     end
     redirect_to :action => :view, :id => @profile.id
+  end
+
+  def use_past_appln
+    debugger
+    requested_appln = @viewer.applns.find(params[:requested_appln_id])
+    if requested_appln.profile.accepted_at < 16.months.ago
+      flash[:notice] = "Sorry, that application was accepted too long ago."
+    else
+      @profile.reuse_appln = requested_appln
+      @profile.appln.copy_answers(requested_appln)
+      @profile.save!
+    end
+    redirect_to :controller => :appln, :action => :index, :profile_id => @profile.id
   end
 
   protected

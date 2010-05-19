@@ -6,6 +6,7 @@ class ProcessorController < ApplicationController
   before_filter :get_profile_and_project
   before_filter :set_view_permissions
   before_filter :set_references
+  before_filter :ensure_evaluate_permission
   
   def actions
     @project = @profile.project
@@ -60,7 +61,7 @@ class ProcessorController < ApplicationController
   
   def decline
     @profile.manual_update :type => 'Withdrawn', :status => 'declined',
-      :user => @viewer
+      :viewer => @viewer
     
     flash[:notice] = "#{@appln.viewer.name} declined"
     redirect_to :controller => "main", :action => "your_projects"

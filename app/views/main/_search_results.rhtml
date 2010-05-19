@@ -42,6 +42,7 @@
           <td>
             <% if @viewer.is_projects_coordinator? %>
               <%= link_to 'merge..', merge_viewer_url(viewer) %>
+              <%= link_to 'deactivate..', deactivate_viewer_url(viewer) %>
             <% end %>
             <% if @viewer.is_eventgroup_coordinator?(@eg) && (@viewer.is_projects_coordinator? || !viewer.eventgroups_coordinating.present?) %>
               <%= link_to 'impersonate', impersonate_viewer_url(viewer) %>

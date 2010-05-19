@@ -1,0 +1,7 @@
+<TR>
+  <TD><%= action = access.end_date.present? ? "reinstate" : "revoke"; check_box_tag "#{action}[#{access.class.name}_#{access.id}]", "1", true %> <%= action %></TD>
+  <TD><%= access.class.name.underscore.humanize %></TD>
+  <TD><%= eg = access.try(:event_group); eg == :all ? "all" : (eg.try(:eg_path) || "?") %></TD>
+  <TD><%= p = access.try(:project); p == :all ? "all" : (p.try(:name) || "?") %></TD>
+  <TD><%= access.end_date.present? ? "revoked at #{access.end_date}" : "active" %></TD>
+</TR>

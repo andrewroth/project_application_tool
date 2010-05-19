@@ -9,7 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD:db/schema.rb
+ActiveRecord::Schema.define(:version => 20100511211337) do
+=======
 ActiveRecord::Schema.define(:version => 20100319192222) do
+>>>>>>> origin/dev:db/schema.rb
 
   create_table "airports", :force => true do |t|
     t.string   "code"
@@ -98,6 +102,7 @@ ActiveRecord::Schema.define(:version => 20100319192222) do
     t.integer  "event_group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "end_date"
   end
 
   create_table "feedbacks", :force => true do |t|
@@ -310,6 +315,7 @@ ActiveRecord::Schema.define(:version => 20100319192222) do
   create_table "processors", :force => true do |t|
     t.integer "project_id"
     t.integer "viewer_id"
+    t.date    "end_date"
   end
 
   add_index "processors", ["project_id"], :name => "processors_project_id_index"
@@ -399,6 +405,7 @@ ActiveRecord::Schema.define(:version => 20100319192222) do
   create_table "project_administrators", :force => true do |t|
     t.integer "project_id"
     t.integer "viewer_id"
+    t.date    "end_date"
   end
 
   add_index "project_administrators", ["project_id"], :name => "project_administrators_project_id_index"
@@ -407,6 +414,7 @@ ActiveRecord::Schema.define(:version => 20100319192222) do
   create_table "project_directors", :force => true do |t|
     t.integer "project_id"
     t.integer "viewer_id"
+    t.date    "end_date"
   end
 
   add_index "project_directors", ["project_id"], :name => "project_directors_project_id_index"
@@ -428,6 +436,7 @@ ActiveRecord::Schema.define(:version => 20100319192222) do
   create_table "project_staffs", :force => true do |t|
     t.integer "project_id"
     t.integer "viewer_id"
+    t.date    "end_date"
   end
 
   add_index "project_staffs", ["project_id"], :name => "project_staffs_project_id_index"
@@ -449,6 +458,7 @@ ActiveRecord::Schema.define(:version => 20100319192222) do
     t.integer  "viewer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "end_date"
   end
 
   create_table "questionnaires", :force => true do |t|
@@ -540,6 +550,7 @@ ActiveRecord::Schema.define(:version => 20100319192222) do
   create_table "support_coaches", :force => true do |t|
     t.integer "project_id"
     t.integer "viewer_id"
+    t.date    "end_date"
   end
 
   add_index "support_coaches", ["project_id"], :name => "support_coaches_project_id_index"

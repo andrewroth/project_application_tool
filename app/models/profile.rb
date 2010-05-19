@@ -2,6 +2,7 @@ class Profile < ActiveRecord::Base
   belongs_to :project
   belongs_to :viewer
   belongs_to :appln
+  belongs_to :reuse_appln, :class_name => "Appln"
   
   has_many :profile_cost_items
   has_many :profile_travel_segments, :order => "position ASC"
@@ -278,4 +279,6 @@ class Profile < ActiveRecord::Base
       end
     end
   end
+
+  def event_group() project.try(:event_group) end
 end

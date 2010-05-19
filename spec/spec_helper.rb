@@ -4,6 +4,14 @@ begin
 rescue LoadError
 end
 
+def uses_factories
+  require 'factory_girl'
+
+  Dir[Rails.root.join("spec/factories/**/*.rb")].each do |file|
+    require file
+  end
+end
+
 # This file is copied to ~/spec when you run 'ruby script/generate rspec'
 # from the project root directory.
 ENV["RAILS_ENV"] = "test"
@@ -169,19 +177,27 @@ def stub_viewer_as_event_group_coordinator(params = {}, person_params = {})
   stub_viewer_short params.merge(:egc => true), person_params
 end
 
+def stub_viewer_as_projects_coordinator(params = {}, person_params = {}, viewer_params = {})
+  viewer_params[:all_projects_coordinator] ||= mock_model(ProjectsCoordinator, { 
+    :name => "ProjectsCoordinator_1001" 
+  })
+  stub_viewer_short(params.merge(:pc => true), person_params, viewer_params)
+end
+
 def stub_viewer_as_student(params = {}, person_params = {})
   stub_viewer_short params.merge(:st => false), person_params
 end
 
-def stub_viewer_short(p = {}, person_params = {})
+def stub_viewer_short(p = {}, person_params = {}, viewer_params = {})
   full_params = {
     :project_director_projects => (p[:pd] ? [ @project ] : []),
     :project_administrator_projects => (p[:pa] ? [ @project ] : []),
     :support_coach_projects => (p[:sc] ? [ @project ] : []),
     :project_staff_projects => (p[:st] ? [ @project ] : []),
     :processor_projects => (p[:pr] ? [ @project ] : []),
-    :is_eventgroup_coordinator? => p[:egc]
-  }
+    :is_eventgroup_coordinator? => p[:pc] || p[:egc],
+    :is_projects_coordinator? => p[:pc]
+  }.merge(viewer_params)
   stub_viewer(full_params, person_params)
 end
 
@@ -237,7 +253,7 @@ def stub_form
 end
 
 def stub_model_find(v, klass = nil)
-  inst = instance_variable_get("@#{v}")
+  inst = v.is_a?(Symbol) ? instance_variable_get("@#{v}") : v
   klass ||= inst.class
   klass.stub!(:find).with(inst.id).and_return(inst)
   klass.stub!(:find).with(inst.id.to_s).and_return(inst)

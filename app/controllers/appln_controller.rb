@@ -62,6 +62,18 @@ class ApplnController < InstanceController
   end
   
   def after_submit
+    if @profile.reuse_appln.present?
+      @appln.form.questionnaire.references.each do |ref_elem|
+        reference_instances.find_or_create_by_reference_id ref_elem.id
+        reference_instances.save!
+      end
+      @appln.reference_instances.each do |ref_inst|
+        ref_inst.bypass!
+      end
+      @profile.complete!
+      return
+    end
+
     # If we haven't yet done so, send reference invitations
     refs = get_references
     refs.each do |reference|
@@ -81,7 +93,7 @@ class ApplnController < InstanceController
           @appln["preference#{i}_id"] = params[:answers]["preference#{i}_id"]
         end
       
-	profile = @appln.profile
+        profile = @appln.profile
         profile.project_id = params[:answers]["preference1_id"]
         profile.save!
       end      
@@ -109,10 +121,12 @@ class ApplnController < InstanceController
           [ "processor_always_editable", "always_editable" ]
         elsif @viewer.is_processor?
           [ "processor_always_editable" ]
-	else
-	  [ "always_editable" ]
+        else
+          [ "always_editable" ]
         end
       { :filter => filter, :default => false }
+    elsif @viewer == @appln.viewer && @appln.profile.reuse_appln.present?
+      { :filter => [ "in_returning_applicant_form" ], :default => false }
     else nil
     end
   end  

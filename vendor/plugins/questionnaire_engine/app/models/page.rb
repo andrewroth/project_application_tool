@@ -79,4 +79,10 @@ class Page < ActiveRecord::Base
   
   def xml_children() elements end
   def never_has_children() false end
+
+  def copy_answers(source_instance, dest_instance)
+    elements.each do |element|
+      element.copy_answer(source_instance, dest_instance)
+    end
+  end
 end
