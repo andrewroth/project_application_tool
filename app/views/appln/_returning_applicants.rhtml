@@ -1,0 +1,16 @@
+If you have an accepted application in the last 16 months, you can choose to fill out a shorter form.  Your references will also be reused, so that those who filled out your references are not asked to fill them out again.
+
+</TD><TD class="app">
+
+<% profiles = (@appln.viewer.accepted_profiles(@eg) - [ @profile ]); if profiles.present? %>
+
+<UL>
+  <% profiles.each do |profile| %>
+    <LI><%= link_to "Use #{profile.appln.form.title} for #{profile.project.title} as my past accepted application, so that I can fill out the returning applicants form.", :controller => "profiles", :action => "use_past_appln", :profile_id => @profile.id, :requested_appln_id => profile.appln.id %></LI>
+  <% end %>
+
+  After clicking the link, the form will reload with the condensed version.
+</UL>
+<% else %>
+You don't have any accepted applications in the last 16 months.
+<% end %>

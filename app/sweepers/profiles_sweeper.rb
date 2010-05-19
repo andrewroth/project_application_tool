@@ -61,5 +61,6 @@ class ProfilesSweeper < ActionController::Caching::Sweeper
         expire_fragment(%r{your_projects.project_id=#{profile[:project_id]}&role=.*&section=#{section}})
       end
     end
+    true
   end
 end

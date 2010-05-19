@@ -17,7 +17,7 @@ class Form < ActiveRecord::Base
   protected
 
   def create_questionnaire_for_this_form
-    return if !questionnaire_id.nil?
+    return if !questionnaire_id.nil? || Rails.env == "test"
     q = Questionnaire.create(:title => title_for_questionnaire)
     q.type = "FormQuestionnaire"
     q.save!

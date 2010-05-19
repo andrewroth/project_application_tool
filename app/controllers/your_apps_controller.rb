@@ -44,13 +44,18 @@ class YourAppsController < ApplicationController
 #    }
 #    @accepted_applns = @acceptances.collect(&:appln).compact
     
-    # get all possible forms
-    all_form_ids = @eg.forms.find_all_by_hidden(false).collect &:id
+    if @eg.allows_multiple_applications_with_same_form
+      @already_have_forms = profiles.collect{ |p| p.appln.form if p.appln.form }.compact
+      @not_started = @eg.forms.find_all_by_hidden(false)
+    else
+      # get all possible forms
+      all_form_ids = @eg.forms.find_all_by_hidden(false).collect &:id
 
-    # now figure out which haven't been started (easy)
-    not_started_ids = all_form_ids - profiles.collect{ |p| p.appln.form.id if p.appln.form }.compact
+      # now figure out which haven't been started (easy)
+      not_started_ids = all_form_ids - profiles.collect{ |p| p.appln.form.id if p.appln.form }.compact
 
-    @not_started = Form.find(not_started_ids)
+      @not_started = Form.find(not_started_ids)
+    end
   end
   
   def continue
@@ -63,7 +68,7 @@ class YourAppsController < ApplicationController
 
     # look for ane already
     appln = @viewer.applns.find_by_form_id(form.id)
-    if appln
+    if appln && !@eg.allows_multiple_applications_with_same_form
       @profile = appln.profile
     else
       appln = Appln.create :form_id => form.id,

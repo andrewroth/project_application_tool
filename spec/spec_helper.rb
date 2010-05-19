@@ -4,6 +4,14 @@ begin
 rescue LoadError
 end
 
+def uses_factories
+  require 'factory_girl'
+
+  Dir[Rails.root.join("spec/factories/**/*.rb")].each do |file|
+    require file
+  end
+end
+
 # This file is copied to ~/spec when you run 'ruby script/generate rspec'
 # from the project root directory.
 ENV["RAILS_ENV"] = "test"
