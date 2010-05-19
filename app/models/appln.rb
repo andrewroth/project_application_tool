@@ -188,9 +188,28 @@ class Appln < ActiveRecord::Base
 
   def copy_answers(source_instance)
     if source_instance.form != form
-      throw "In copy_answers, the source and destination need to be the same form."
+      throw "In copy_answers, the source and destination need to have same form."
     else
       form.questionnaire.copy_answers(source_instance, self)
+    end
+
+    references = self.form.questionnaire.references
+    for ref_elem in references
+      ref_source_instance = source_instance.reference_instances.find_by_reference_id ref_elem.id
+      if ref_source_instance
+        ref_inst = self.reference_instances.find_or_create_by_instance_id_and_reference_id self.id, ref_elem.id
+        # make sure the questionnaire still matches -- ie the questionnaire the reference
+        # uses may have changed since the source appln was created
+        source_questionnaire = ref_source_instance.try(:reference).try(:questionnaire)
+        dest_questionnaire = ref_elem.try(:questionnaire)
+        if !source_questionnaire.nil? && source_questionnaire == dest_questionnaire
+          dest_questionnaire.copy_answers(ref_source_instance, ref_inst)
+        else
+          logger.info "Warning: when copying appln #{source_instance.id} to #{id}, reference element #{ref_elem.id} is different (was #{source_questionnaire.try(:id)} is now #{dest_questionnaire.try(:id)})"
+        end
+      else
+        logger.info "Warning: when copying appln #{source_instance.id} to #{id}, reference element #{ref_elem.id} couldn't find an instance in the source app to copy answers from."
+      end
     end
   end
 end

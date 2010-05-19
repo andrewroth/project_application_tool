@@ -63,6 +63,10 @@ class ApplnController < InstanceController
   
   def after_submit
     if @profile.reuse_appln.present?
+      @appln.form.questionnaire.references.each do |ref_elem|
+        reference_instances.find_or_create_by_reference_id ref_elem.id
+        reference_instances.save!
+      end
       @appln.reference_instances.each do |ref_inst|
         ref_inst.bypass!
       end

@@ -17,3 +17,17 @@ config.action_controller.perform_caching             = false
 # The :test delivery method accumulates sent emails in the
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
+
+config.gem 'sheldond_fgs', :lib => 'factory_girl'
+
+# Our factory_girl improvements
+class Factory
+  undef id
+  undef type
+
+  class Sequence
+    def reset
+      @value = 0
+    end
+  end
+end
