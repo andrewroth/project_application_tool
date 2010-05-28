@@ -26,6 +26,10 @@ end
 ENV['deploy_to'] ||= "/var/www/#{if ENV['target'] == 'prod' then 
                        ENV['domain'] else "#{ENV['target']}.#{ENV['domain']}" end}"
 
+if ENV['target'] == 'dev'
+  set :branch, "p2c.dev"
+end
+
 if ENV['env']
   RAILS_ENV = ENV['env']
 elsif ENV['target'] == 'dev'
