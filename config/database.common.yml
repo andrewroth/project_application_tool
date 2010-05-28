@@ -1,0 +1,2 @@
+<% require 'vendor/plugins/moonshine_multisite/lib/database_yml' %>
+<%= DatabaseYml.database_yml %>
