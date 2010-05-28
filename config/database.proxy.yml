@@ -22,11 +22,15 @@ else
 end
 
 unless config
-  for key in branches_to_dbfile.keys
+  for key_path in branches_to_dbfile_arr
+    key = key_path.keys.first
+    path = key_path.values.first
     key =~ /\/(.*)\//
     if $1 && Regexp.new($1).match(git_branch)
-      config = branches_to_dbfile[key]
+      config = path
       break
+    elsif key == git_branch
+      config = path
     end
   end
 

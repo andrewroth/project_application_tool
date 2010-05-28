@@ -9,11 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD:db/schema.rb
-ActiveRecord::Schema.define(:version => 20100511211337) do
-=======
-ActiveRecord::Schema.define(:version => 20100319192222) do
->>>>>>> origin/dev:db/schema.rb
+ActiveRecord::Schema.define(:version => 20100525193338) do
 
   create_table "airports", :force => true do |t|
     t.string   "code"
@@ -84,17 +80,18 @@ ActiveRecord::Schema.define(:version => 20100319192222) do
     t.string  "location_type"
     t.integer "location_id"
     t.string  "long_desc"
-    t.integer "default_text_area_length", :default => 4000
+    t.integer "default_text_area_length",                    :default => 4000
     t.boolean "has_your_campuses"
     t.string  "outgoing_email"
-    t.boolean "hidden",                   :default => false
+    t.boolean "hidden",                                      :default => false
     t.string  "content_type"
     t.string  "filename"
     t.string  "thumbnail"
     t.integer "size"
     t.integer "width"
     t.integer "height"
-    t.boolean "show_mpdtool",             :default => false
+    t.boolean "show_mpdtool",                                :default => false
+    t.boolean "allows_multiple_applications_with_same_form"
   end
 
   create_table "eventgroup_coordinators", :force => true do |t|
@@ -390,6 +387,7 @@ ActiveRecord::Schema.define(:version => 20100319192222) do
     t.datetime "support_claimed_updated_at"
     t.datetime "confirmed_at"
     t.decimal  "cached_costing_total",       :precision => 8, :scale => 2
+    t.integer  "reuse_appln_id"
   end
 
   add_index "profiles", ["accepted_by"], :name => "profiles_accepted_by_index"

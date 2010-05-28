@@ -1,5 +1,5 @@
 <%= 
-dbh = "#{Rails.root}/config/database/database_header.yml"; dbhd = dbh+".default";
+dbh = "#{RAILS_ROOT}/config/database/database_header.yml"; dbhd = dbh+".default";
 file = File.exists?(dbh) ? dbh : dbhd
 File.read(file).chomp
 %>
@@ -14,4 +14,28 @@ test:
 
 production:
   database: utopian_pat_dev
+  <<: *defaults
+
+cdm_development:
+  database: utopian_cdm_dev
+  <<: *defaults
+
+cdm_test:
+  database: utopian_cdm_test
+  <<: *defaults
+
+cdm_production:
+  database: utopian_cdm_dev
+  <<: *defaults
+
+pulse_development:
+  database: utopian_pulse_dev
+  <<: *defaults
+
+pulse_test:
+  database: utopian_pulse_test
+  <<: *defaults
+
+pulse_production:
+  database: utopian_pulse_dev
   <<: *defaults
