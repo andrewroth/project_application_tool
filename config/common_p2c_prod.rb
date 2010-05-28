@@ -1,1 +1,6 @@
-Knock knock.  Who's there?  Git is too smart.  Is this a rename?
+module Cdm
+  APP = "pat"
+  SERVER = "p2c"
+  STAGE = "prod"
+  DISABLE_MOONSHINE = "true"
+end
