@@ -4,3 +4,6 @@
 [submodule "vendor/plugins/moonshine_multisite"]
 	path = vendor/plugins/moonshine_multisite
 	url = git@github.com:andrewroth/moonshine_multisite.git
+[submodule "vendor/plugins/git_branch_configs"]
+	path = vendor/plugins/git_branch_configs
+	url = git@github.com:andrewroth/git_branch_configs.git
