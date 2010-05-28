@@ -3,7 +3,7 @@
 # Make sure to edit that file, not the one in RAILS_ROOT/config/mappings.yml
 #
 databases:
-  <%= "ciministry_#{RAILS_ENV}" %>: user, viewer, person, access, campus, school_year, year_in_school, campus, assignment, assignmentstatus, cim_hrdb_current_address, cim_hrdb_permanent_address, country, title, emerg, gender, region, state, cim_hrdb_admin, cim_hrdb_priv, cim_hrdb_staff, cim_hrdb_person_year, accountadmin_accessgroup, accountadmin_accountadminaccess, accountadmin_accesscategory, accountadmin_accountgroup, accountadmin_language, accountadmin_vieweraccessgroup, site_multilingual_label, month, prc, prcmethod, semester, week, weeklyreport, year
+  <%= "intranet_#{RAILS_ENV}" %>: user, viewer, person, access, campus, school_year, year_in_school, campus, assignment, assignmentstatus, cim_hrdb_current_address, cim_hrdb_permanent_address, country, title, emerg, gender, region, state, cim_hrdb_admin, cim_hrdb_priv, cim_hrdb_staff, cim_hrdb_person_year, accountadmin_accessgroup, accountadmin_accountadminaccess, accountadmin_accesscategory, accountadmin_accountgroup, accountadmin_language, accountadmin_vieweraccessgroup, site_multilingual_label, month, prc, prcmethod, semester, week, weeklyreport, year
   <%= "pulse_#{RAILS_ENV}" %>: ministry, ministry_role, ministry_involvement, campus_involvement, person_extra
 
 tables:
