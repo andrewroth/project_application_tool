@@ -18,6 +18,8 @@ end
 
 # questionnaire engine config
 Rails::Initializer.run do |config|
+  require "#{RAILS_ROOT}/vendor/plugins/git_branch_configs/init"
+
   # Settings in config/environments/* take precedence those specified here
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded.
