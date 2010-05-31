@@ -18,6 +18,8 @@ end
 
 # questionnaire engine config
 Rails::Initializer.run do |config|
+  require "#{RAILS_ROOT}/vendor/plugins/git_branch_configs/init"
+
   # Settings in config/environments/* take precedence those specified here
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded.
@@ -59,7 +61,7 @@ Rails::Initializer.run do |config|
   # Use SQL instead of Active Record's schema dumper when creating the test database.
   # This is necessary if your schema can't be completely dumped by the schema dumper, 
   # like if you have constraints or database-specific column types
-  config.active_record.schema_format = :ruby
+  config.active_record.schema_format = :sql
 
   # make actions work even if there's an error sending emails, that way a page will still load for the user
   config.action_mailer.raise_delivery_errors = false

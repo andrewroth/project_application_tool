@@ -1,0 +1,11 @@
+# This file specified which config should be loaded, based on the current branch.
+#
+# For example:
+#
+# - superbranch: super.rb
+# - /dev/: dev.rb
+# - /master/: master.rb
+#
+# The config file of the first match, from top to bottom, is loaded.
+
+- /dev/: common_utopian_dev.rb
