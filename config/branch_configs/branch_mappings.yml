@@ -9,3 +9,4 @@
 # The config file of the first match, from top to bottom, is loaded.
 
 - /dev/: common_utopian_dev.rb
+- /p2c.staging/: common_p2c_staging.rb
