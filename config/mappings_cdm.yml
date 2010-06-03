@@ -1,2 +1,0 @@
-databases:
-  <%= "common_#{RAILS_ENV}" %>: address, campus, campus_involvement, college, country, county, current_address, dorm, emergency_address, high_school, involvement_history, ministry, ministry_campus, ministry_involvement, ministry_role, other_role, permanent_address, person, profile_picture, school_year, staff, staff_role, state, student_role, user, emerg
