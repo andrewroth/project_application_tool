@@ -655,4 +655,4 @@ CREATE TABLE `travel_segments` (
   KEY `travel_segments_year_index` (`year`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO schema_migrations (version) VALUES ('20100525193338');
+INSERT INTO schema_migrations (version) VALUES ('20100614153103');
