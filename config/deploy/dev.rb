@@ -23,11 +23,12 @@ elsif %w(p2c pc).include? ENV['system']
   ENV['port'] ||= '22'
 end
 
-ENV['deploy_to'] ||= "/var/www/#{if ENV['target'] == 'prod' then 
-                       ENV['domain'] else "#{ENV['target']}.#{ENV['domain']}" end}"
+#ENV['deploy_to'] ||= "/var/www/#{if ENV['target'] == 'prod' then 
+#                       ENV['domain'] else "#{ENV['target']}.#{ENV['domain']}" end}"
+ENV['deploy_to'] = "/var/www/dev.cdm.powertochange.org"
 
 if ENV['target'] == 'dev'
-  set :branch, "p2c.dev"
+  set :branch, "p2c.dev.live"
 end
 
 if ENV['env']
