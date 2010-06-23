@@ -12,10 +12,6 @@
   <%= # let apps use their own form choice if they want 
     render :partial => 'reference_form_questionnaire' %>
   
-  <% puts @questionnaire %>
-  <% puts @page %>
-  <% puts @current_element %>
-  
   <% if @controller.action_name != 'show_element_form' -%>
     <%= observe_field('element_questionnaire_id', 
                       :url => set_questionnaire_id_reference_element_url(@questionnaire, @page, @current_element),
@@ -23,15 +19,14 @@
     									:loading => "Element.show('spinner2')",
                       :loaded => "Element.hide('spinner2')")%>
     <%= image_tag "spinner.gif", :id => 'spinner2', :style => 'display:none' %>
+    <p>
+      <%
+      # we use the variable @current_element instead of @element to avoid poluting recursion
+      @current_element = element -%>
+      Text: (click to change):
+      <%= in_place_editor_field :current_element, :text, {}, :url => set_element_text_element_url(@questionnaire, @page, @current_element) %>
+    </p>
+  <% else -%>
+    <%= text_field :element, :text %>
   <% end -%>
-
-
-  <p>
-    <%
-    # we use the variable @current_element instead of @element to avoid poluting recursion
-    @current_element = element -%>
-    Text: (click to change):
-    <%= in_place_editor_field :current_element, :text, {}, :url => set_element_text_element_url(@questionnaire, @page, @current_element) %>
-  </p>
-
 <% end -%>

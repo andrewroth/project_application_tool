@@ -28,4 +28,8 @@ class Reference < Element
   end
 
   def pdf_url() "#{text.underscore}_#{id}.pdf".gsub(" ","_") end
+
+  def after_create_with_params(params)
+    self.questionnaire_id = params[:element][:questionnaire_id]
+  end
 end
