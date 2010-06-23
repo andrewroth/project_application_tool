@@ -25,7 +25,7 @@ end
 
 #ENV['deploy_to'] ||= "/var/www/#{if ENV['target'] == 'prod' then 
 #                       ENV['domain'] else "#{ENV['target']}.#{ENV['domain']}" end}"
-ENV['deploy_to'] = "/var/www/dev.cdm.powertochange.org"
+ENV['deploy_to'] = "/var/www/pat.cdm.powertochange.org"
 
 if ENV['target'] == 'dev'
   set :branch, "p2c.dev.live"
@@ -94,5 +94,6 @@ unless ENV['target'] == 'demo'
     run "rm -Rf #{release_path}/tmp/cache/*"
     run "mkdir -p #{release_path}/tmp/cache/views/pat.powertochange.org"
     run "ln -s #{release_path}/tmp/cache/views/pat.powertochange.org #{release_path}/tmp/cache/views/pat2.powertochange.org"
+    run "cd #{release_path} && git submodule init && git submodule update"
   end
 end
