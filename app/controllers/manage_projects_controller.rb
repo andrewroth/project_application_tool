@@ -142,18 +142,18 @@ class ManageProjectsController < ApplicationController
     @role_staff_ids = @project.send(@role).find(:all).collect { |staff| staff.viewer_id }
 
     @phrase = "%" + params[:search_text].gsub(' ', '%') + "%"
-    select = "#{Viewer.table_name}.viewer_userID, #{Person.__(:preferred_first_name)}, #{Person.__(:last_name)}, #{Viewer.__(:last_login)}"
+    select = "#{Viewer.table_name}.viewer_username, #{Person.__(:preferred_first_name)}, #{Person.__(:last_name)}, #{Viewer.__(:last_login)}"
 
-    match_by_userID = Viewer.find(:all, :include => :persons, :conditions => ["viewer_userID like ?", @phrase], :select => select)
+    match_by_userID = Viewer.find(:all, :include => :person, :conditions => ["username like ?", @phrase], :select => select)
     match_by_name = Person.search_by_name(params[:search_text]).collect(&:viewer).compact
     
     # remove those that already have roles, and duplicates
     @have_viewer = {}
     delete_proc = Proc.new { |v|
-      if @role_staff_ids.include?(v.viewer_id) || @have_viewer[v.viewer_id]
+      if @role_staff_ids.include?(v.id) || @have_viewer[v.id]
         true
       else
-        @have_viewer[v.viewer_id] = true
+        @have_viewer[v.id] = true
         false
       end
     }

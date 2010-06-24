@@ -243,6 +243,17 @@ There's a bunch of logic for creating users in cim_hrdb.
         is_projects_coordinator? || is_processor?   
       end
 
+      def viewer_userID
+        self.username
+      end
+
+      def viewer_lastLogin
+        self.last_login
+      end
+
+      def viewer_id
+        self.id
+      end
     end
   end
 end
