@@ -7,7 +7,6 @@
    end
 -%>
 
-<% form_tag elements_url(@questionnaire, @page) do -%>
 
   <%= # let apps use their own form choice if they want 
     render :partial => 'reference_form_questionnaire' %>
@@ -29,4 +28,4 @@
   <% else -%>
     <%= text_field :element, :text %>
   <% end -%>
-<% end -%>
+
