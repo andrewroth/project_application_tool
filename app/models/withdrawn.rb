@@ -54,7 +54,7 @@ class Withdrawn < Profile
         project.send(role, :include => :viewer).collect(&:viewer)
       }.flatten
 
-      recipients += more_viewers.collect{ |v| v.person.person_email }
+      recipients += more_viewers.collect{ |v| v.person.email }
     end
 
     SpApplicationMailer.deliver_withdrawn_notification(self, recipients.join(','))

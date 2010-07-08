@@ -183,7 +183,7 @@ ActiveRecord::Schema.define(:version => 128) do
 
   create_table "form_question_options", :force => true do |t|
     t.integer  "question_id"
-    t.string   "option",      :limit => 256
+    t.string   "option",      :limit => 255
     t.string   "value",       :limit => 50
     t.integer  "position"
     t.datetime "created_at"

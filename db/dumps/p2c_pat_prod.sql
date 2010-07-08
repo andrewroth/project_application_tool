@@ -336,7 +336,7 @@ SET character_set_client = utf8;
 CREATE TABLE `form_question_options` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `question_id` int(11) DEFAULT NULL,
-  `option` varchar(256) DEFAULT NULL,
+  `option` varchar(255) DEFAULT NULL,
   `value` varchar(50) DEFAULT NULL,
   `position` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
