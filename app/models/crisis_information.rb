@@ -21,7 +21,9 @@ class CrisisInformation < CustomElement
     end
 
     if params[:appln_person]
-      data_to_take = [ :first_name, :last_name ] # legal first/last name
+      data_to_take = [ :first_name, :last_name, 
+:emergency_address1_line, :emergency_city, :emergency_postal_code, 
+:emergency_state, :emergency_country, :emergency_phone ] # legal first/last name and emergency contact
       person_params = {}
       for key in data_to_take
         if params[:appln_person][key].present?
