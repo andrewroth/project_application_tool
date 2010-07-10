@@ -1,7 +1,6 @@
-<%= select_tag 'prep_items', options_for_select( 
+<%= options_for_select( 
       (params[:include_all] ? ['all'] : []) + 
       (params[:include_blank] ? [''] : []) + 
       @prep_items.collect { |pi| [pi.title, pi.id ] } 
-    ),
-    :id => @id 
+    )
 %>

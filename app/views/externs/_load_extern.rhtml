@@ -41,7 +41,8 @@ load_externs = {
   :dragdrop => [ :custom_reports ],
   :update_view_links => [ :custom_reports ],
   :active_scaffold => [ :custom_reports, :report_elements, :report_models, :report_model_methods, :airports, :countries, :notifications ],
-  :no_script_removal => [ :main ]
+  :no_script_removal => [ :main ],
+  :reports => [ { :reports => :index } ]
 }
 
 do_load_externs load_externs
