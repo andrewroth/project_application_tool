@@ -15,6 +15,7 @@
   <% content_for(:form) do %>
     Processor Forms for
     <%= project_select("processor_forms") %>
+    for
     <%= project_observe_to_viewers('processor_forms') %>
     <%= html_pdf_submit_links("processor_forms") %>
     <br/>
@@ -26,6 +27,7 @@
   <% content_for(:form) do %>
     Summary Forms for
     <%= project_select("summary_forms") %>
+    for
     <%= project_observe_to_viewers('summary_forms') %>
     <%= html_pdf_submit_links("summary_forms") %>
     <br/>
