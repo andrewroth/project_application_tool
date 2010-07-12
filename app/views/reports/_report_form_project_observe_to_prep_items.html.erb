@@ -1,0 +1,5 @@
+<%= observe_field "#{action}_project_id", :url => { :controller => "reports", :action => "prep_items_for_project", :include_all => "true", :include_blank => "true", :enclosing => "span_#{action}_prep_items", :select => "#{action}_prep_item_id", :form => "#{action}" }, :with => 'project_id', :loading => "$('#{action}_prep_items_spinner').show();", :complete => "$('#{action}_prep_items_spinner').hide()" %>
+<%= image_tag "spinner.gif", :id => "#{action}_prep_items_spinner", :style => "display:none" %>
+<span id="span_<%=action%>_prep_items" style="display:none">
+  <%= select_tag 'viewers', [], :id => "#{action}_prep_item_id", :name => "prep_item_id" %>
+</span>

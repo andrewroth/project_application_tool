@@ -1,170 +1,157 @@
-<%= javascript_include_tag "update_view_links" %>
-
-<script>
-function new_window(url) {
-    created_window = window.open(url);
-    if (window.focus) {
-        created_window.focus();
-    }
-}
-
-<%
-  @init_js = '' 
-%>
-
-</script>
-
 <div id="list_reports">
-    
-    <i>All staff have access to reports now.  Your report will open in a new window.  Click the CSV link to have the report open in excel.</i>
-    
-    <% if @is_staff %>
+
+<I>All staff have access to reports now.  Your report will open in a new window.  Click the CSV link to have the report open in excel.</I>
+<br/>
+<br/>
+<B>Questionnaire Dependent Reports</B>
+<br/>
+<P>
+  Please contact russ.martin@c4c.ca if there is a report you need to work that is not.  
+  <B>If a report is not here that you want, you can try and create it in the custom reports.</B>
+</P>
+
+<OL>
+  <LI>
+  <% content_for(:form) do %>
+    Processor Forms for
+    <%= project_select("processor_forms") %>
+    for
+    <%= project_observe_to_viewers('processor_forms') %>
+    <%= html_pdf_submit_links("processor_forms") %>
     <br/>
+  <% end %>
+  <%= render :partial => "report_form", :locals => { :action => "processor_forms" } %>
+  <I>This report can take a few minutes for a full project.</I>
+  </LI>
+  <LI>
+  <% content_for(:form) do %>
+    Summary Forms for
+    <%= project_select("summary_forms") %>
+    for
+    <%= project_observe_to_viewers('summary_forms') %>
+    <%= html_pdf_submit_links("summary_forms") %>
     <br/>
-    <b>Questionnaire Dependent Reports</b>
-    <br/>
-    <p>Please contact russ.martin@c4c.ca if there is a report you need to work that is not.  <b>If a report is not here that you want, you can try and create it in the custom reports.</b></p>
-    <ol>
-        
-        <% if !@project_director_projects.empty? %>
-            <li><%= project_specific_report 'Processor Forms', 'processor_forms', 
-                        :formats => [ 'pdf','html' ], :include_blank => true,
-                        :projects_list => 'director' do |report|
-                      viewers_with_profile_for_project_choice report, :formats => [ 'pdf','html' ], :include_all => true
-                    end
-                %>
-                <span style="font-style: italic;">This report can take a few minutes for a full project.</span>
-            </li>
-            <li><%= project_specific_report 'Summary Forms', 'summary_forms', 
-                        :formats => [ 'pdf','html' ], :include_blank => true, 
-                        :projects_list => 'director' do |report|
-                      viewers_with_profile_for_project_choice report, :formats => [ 'pdf','html' ], :include_all => true
-                    end
-                %>
-                <span style="font-style: italic;">This report can take a few minutes for a full project.</span>
-            </li>
-         <% end %>
-        
-      </ol>
-      
-      <br/>
-   <b>Standard Reports (for all projects and event groups)</b><br/>
-      
-      <ol>
-         <i>Lists all registrants -- people applying for a given project, who indicated this project as their first preference.</i>
-         <li><%= project_specific_report 'Registrants', 'registrants', :include_all => true %></li>
-      
-         <br/>
+  <% end %>
+  <%= render :partial => "report_form", :locals => { :action => "summary_forms" } %>
+  <I>This report can take a few minutes for a full project.</I>
+  </LI>
+</OL>
 
-         <i>Lists participants -- people accepted for a given project</i>
-         <li><%= project_specific_report 'Accepted', 'participants', :include_all => true, :hide_interns_option => true %></li>
-      
-         <br/>
-         
-         <i>For this event group, lists all projects and relevant statistics of how many started, submitted, completed, accepted and withdrawn applications each project has.</i>
-         <li><%= report 'Project Stats', 'project_stats', :include_all => true %></li>
-      
-         <br/>
-      
-         <i>Lists financial status of all project participants for the given project.</i>      
-         <li><%= project_specific_report 'Funding Status', 'funding_status', :include_all => true %></li>
-         
-         <br/>
-         
-         <i>Lists the financial situation of an individual project participant.</i>
-         <li><%= project_specific_report 'Funding Details', 'funding_details_costing', :include_blank => true do |report|
-         viewers_with_profile_for_project_choice(report)
-         end
-         %>
-         </li>
-         
-         <br/>
-      
-         <i>Lists all applicants and their passport information such as birthdate, passport number, passport expiry and passport country.</i>
-        <li><%= project_specific_report 'Travel List', 'travel_list', :include_all => true, :include_pref1s_option => true %></li>
-      
-      
-      <br/>
-      
-         <i>Lists all project participants and their individual travel itineraries.</i>
-        <li><%= project_specific_report 'Itinerary', 'itinerary', :include_all => true, 
-                :include_pref1s_option => false %>
-        </li>
-                
-        <br/>
-        
-        <i>Lists all project participants assigned to a given travel segment (flight).</i>
-        <li><%= travel_segment_specific_report 'Profiles with travel segment ', 'travel_segment', 
-                :include_all => true, :include_profiles_option => true do
-                  @append = " | " + link_to("custom", {:action => "custom_itinerary_report"})
-                  ""
-                end %>
-        </li>
-        
-        <br/>
-        
-        <i>Lists all applicants that have been accepted as interns.  To include the people currently applying as interns use the checkbox.</i>
-        <li><%= project_specific_report 'Interns', 'interns', :include_all => true, :include_pref1s_option => true %></li>
-        
-        <br/>
-        
-        <i>Lists all participants who have a given cost item applied to them.</i>
-        <li><%= project_specific_report 'Cost Items', 'cost_items', 
-                     :include_blank => true, :include_all => true, 
-                     :projects_list => 'director' do |report|
-                   cost_items_for_project report
-                 end
-                %>
-         </li>
-        
-        <br/> 
+<B>Standard Reports (for all projects and event groups)</B>
 
-        <i>Lists all manual donations for a project.</i>
-        <li><%= project_specific_report 'Manual Donations', 'manual_donations',  
-                    :include_blank => true, :include_all => true do |report| 
-                [  %|
-              type #{select_tag 'manual_donations_type', 
-                options_for_select(['all' ] + DonationType.find(:all).collect(&:description), 'USDMANUAL')}
-                #{observe_field 'manual_donations_type', :function => 'set_manual_donation_status_visibility();'}
-                <span id='manual_donations_status_span'>
-                status #{select_tag 'manual_donations_status', options_for_select(['any' ] + ManualDonation::STATUSES, 'all')}
-                </span>
-              |, [ 'type', 'status' ] ]
-                end %></li>
-          <script>
-            function set_manual_donation_status_visibility() {
-              if ($('manual_donations_type').options[$('manual_donations_type').selectedIndex].text == 'USDMANUAL') {
-                $('manual_donations_status_span').show();
-              } else {
-                $('manual_donations_status_span').hide();
-              }
-            }
-            set_manual_donation_status_visibility();
-          </script>
-        <br/>
-        
-        <i>Lists the status of paperwork items.</i>
-        <li><%= project_specific_report 'Prep Items', 'prep_items', 
-                     :include_blank => true, :include_all => true, 
-                     :projects_list => 'director' do |report|
-                   prep_items_for_project report, :include_all => true
-                 end
-                %>
-         </li>
-
-        <i>Lists crisis information for everyone accepted to a project</i>
-        <li><%= project_specific_report 'Crisis Info', 'crisis_management', :include_all => true,
-                :include_blank => true,
-                :include_pref1s_option => false %>
-        </li>
-
-   </ol>
-
+<OL>
+  <LI>
+    <% content_for(:form) do %>
+      Registrants for <%= project_select("summary_forms", :default_first => true, :include_all => true) %> <%= html_excel_submit_links("registrants") %>
     <% end %>
-    
+    <%= render :partial => "report_form", :locals => { :action => "registrants" } %>
+    <I>Lists all registrants -- people applying for a given project, who indicated this project as their first preference.</I>
+  </LI>
+  <LI>
+    <% content_for(:form) do %>
+      Accepted for <%= project_select("participants", :default_first => true, :include_all => true) %> <%= html_excel_submit_links("participants") %><BR/>
+      <I>Lists participants -- people accepted for a given project.</I><BR/>
+      <%= check_box_tag "hide_interns", "true" %> Hide interns from this report
+    <% end %>
+    <%= render :partial => "report_form", :locals => { :action => "participants" } %>
+  </LI>
+  <LI>
+    <% content_for(:form) do %>
+      Project Stats <%= html_excel_submit_links("project_stats") %>
+    <% end %>
+    <%= render :partial => "report_form", :locals => { :action => "project_stats" } %>
+    <I>For this event group, lists all projects and relevant statistics of how many started, submitted, completed, accepted and withdrawn applications each project has.</I>
+  </LI>
+  <LI>
+    <% content_for(:form) do %>
+      Funding Status <%= project_select("funding_status", :default_first => true, :include_all => true) %> <%= html_excel_submit_links("funding_status") %>
+    <% end %>
+    <%= render :partial => "report_form", :locals => { :action => "funding_status" } %>
+    <I>Lists financial status of all project participants for the given project.</I>
+  </LI>
+  <LI>
+    <% content_for(:form) do %>
+      Funding Details for <%= project_select("funding_details", :default_first => false) %> for <%= project_observe_to_viewers('funding_details') %> <%= html_excel_submit_links("funding_details") %> 
+    <% end %>
+    <%= render :partial => "report_form", :locals => { :action => "funding_details" } %>
+    <I>Lists the financial situation of an individual project participant.</I>
+  </LI>
+  <LI>
+    <% content_for(:form) do %>
+      Travel List for <%= project_select("travel_list", :default_first => false) %> <%= html_excel_submit_links("travel_list") %><BR/>
+      <I>Lists all applicants and their passport information such as birthdate, passport number, passport expiry and passport country.</I><BR/>
+      <%= check_box_tag "include_pref1s", "true" %> Include in-progress applications with preference 1 as this project
+    <% end %>
+    <%= render :partial => "report_form", :locals => { :action => "travel_list" } %>
+  </LI>
+  <LI>
+    <% content_for(:form) do %>
+      Itinerary for <%= project_select("itinerary", :default_first => true, :include_all => true) %> <%= html_excel_submit_links("itinerary") %>
+    <% end %>
+    <%= render :partial => "report_form", :locals => { :action => "itinerary" } %>
+    <I>Lists all project participants and their individual travel itineraries.</I>
+  </LI>
+  <LI>
+    <% content_for(:form) do %>
+      Profiles with travel segment <%= select_tag "travel_segment_id", options_for_select([["All", "all"], ""] + TravelSegment.current.find_all { |ts| ts.profiles.detect { |p| p.project && p.project.event_group_id == @eg.id } }.collect { |ts| [ ts.short_desc, ts.id] } ) %> 
+      <%= html_excel_submit_links("travel_segment") %> | <%= link_to "custom", :action => "custom_itinerary_report" %>
+      <BR/>
+      <I>Lists all project participants assigned to a given travel segment (flight).</I><BR/>
+      <%= check_box_tag "include_profiles", "true" %> Include each person's entire profile, and highlight this travel segment
+    <% end %>
+    <%= render :partial => "report_form", :locals => { :action => "travel_segment" } %>
+  </LI>
+  <LI>
+    <% content_for(:form) do %>
+      Interns for <%= project_select("interns", :default_first => true, :include_all => true) %> <%= html_excel_submit_links("interns") %><BR/>
+      <I>Lists all applicants that have been accepted as interns. To include the people currently applying as interns use the checkbox.</I><BR/>
+      <%= check_box_tag "include_pref1s", "true" %> Include in-progress applications with preference 1 as this project
+    <% end %>
+    <%= render :partial => "report_form", :locals => { :action => "interns" } %>
+  </LI>
+  <LI>
+    <% content_for(:form) do %>
+      Cost Items for <%= project_select("cost_items", :default_first => false, :include_all => true) %> for <%= project_observe_to_cost_items("cost_items") %> <%= html_excel_submit_links("cost_items") %>
+    <% end %>
+    <%= render :partial => "report_form", :locals => { :action => "cost_items" } %>
+    <I>Lists all participants who have a given cost item applied to them.</I>
+  </LI>
+  <LI>
+    <% content_for(:form) do %>
+      Manual Donations for <%= project_select("manual_donations", :include_all => true) %>
+      <span id="manual_donations_type_span">
+        for 
+        <%= select_tag "manual_donations_type", options_for_select(["all"] + DonationType.find(:all).collect(&:description)), :name => "type" %>
+      </span>
+      <span id="manual_donations_status_span">
+        for
+        <%= select_tag "manual_donations_status", options_for_select(["any"] + ManualDonation::STATUSES, "all"), :name => "status" %>
+      </span>
+      <%= html_excel_submit_links("manual_donations") %>
+      <BR/>
+      <%= observe_field "manual_donations_project_id", :function => "toggle_manual_donations_type()" %>
+      <%= observe_field "manual_donations_type", :function => "toggle_manual_donations_status()" %>
+      <script>toggle_manual_donations_type(); toggle_manual_donations_status();</script>
+      <I>Lists all manual donations for a project.</I>
+    <% end %>
+    <%= render :partial => "report_form", :locals => { :action => "manual_donations" } %>
+  </LI>
+  <LI>
+    <% content_for(:form) do %>
+      Prep Items for <%= project_select("prep_items", :include_blank => true, :include_all => true) %> for <%= project_observe_to_prep_items("prep_items") %> <%= html_excel_submit_links("prep_items") %>
+    <% end %>
+    <%= render :partial => "report_form", :locals => { :action => "prep_items" } %>
+    <I>Lists the status of paperwork items.</I>
+  </LI>
+  <LI>
+    <% content_for(:form) do %>
+      Crisis Info for <%= project_select("crisis_management", :default_first => true, :include_all => true) %> <%= html_excel_submit_links("crisis_management") %>
+    <% end %>
+    <%= render :partial => "report_form", :locals => { :action => "interns" } %>
+    <I>Lists crisis information for everyone accepted to a project.</I>
+  </LI>
+
+</OL>
 
 </div>
 
-<script>
-<%= @init_js %>
-</script>
