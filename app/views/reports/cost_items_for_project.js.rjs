@@ -1,0 +1,3 @@
+page[params[:select]].replace_html(render :partial => "cost_items_for_project")
+page[params[:enclosing]].setVisibility(params[:project_id].present?)
+page << "update_hrefs_visibility('#{params[:form]}');"

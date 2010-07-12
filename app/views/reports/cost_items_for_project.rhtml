@@ -1,7 +1,0 @@
-<%= select_tag 'cost_items', options_for_select( 
-      (params[:include_all] ? ['all'] : []) + 
-      (params[:include_blank] ? [''] : []) + 
-      @cost_items.collect { |ci| [ci.shortDesc, ci.id ] } 
-    ),
-    :id => @id 
-%>

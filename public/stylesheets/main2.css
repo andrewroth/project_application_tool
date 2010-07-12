@@ -682,3 +682,7 @@ img.new_window {
 .inactive {
   color: gray;
 }
+
+#list_reports i {
+  color: gray;
+}

@@ -1,0 +1,6 @@
+<%= form_tag({ :action => action }, :id => action, :target => "_blank") %>
+  <%= hidden_field_tag "#{action}_format", "html", :name => "format" %>
+  <%= yield :form %>
+  <% @content_for_form = "" %>
+  <script>update_hrefs_visibility('<%= action %>'); observe_form_update_submit('<%= action %>');</script>
+</form>
