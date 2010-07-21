@@ -216,4 +216,31 @@ module ReportsHelper
       ]
   end
 
+  def submit_js(format, form_id)
+    "$('#{form_id}_format').value = '#{format}'; $('#{form_id}').submit();"
+  end
+
+  def html_pdf_submit_links(form_id)
+    "#{link_to_function("html", submit_js("html", form_id))} | #{link_to_function("pdf", submit_js("pdf", form_id))}"
+  end
+
+  def html_excel_submit_links(form_id)
+    "#{link_to_function("html", submit_js("html", form_id))} | #{link_to_function("excel (csv)", submit_js("csv", form_id))}"
+  end
+
+  def project_select(action, options = {})
+    render :partial => 'report_form_project_select', :locals => { :action => action }.merge(options)
+  end
+
+  def project_observe_to_viewers(action)
+    render :partial => 'report_form_project_observe_to_viewers', :locals => { :action => action }
+  end
+
+  def project_observe_to_cost_items(action)
+    render :partial => 'report_form_project_observe_to_cost_items', :locals => { :action => action }
+  end
+
+  def project_observe_to_prep_items(action)
+    render :partial => 'report_form_project_observe_to_prep_items', :locals => { :action => action }
+  end
 end
