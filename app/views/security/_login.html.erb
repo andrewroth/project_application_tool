@@ -14,8 +14,10 @@
     </td>
   </tr>
   <tr>
-    <td><%= link_to %|<img src="http://technology.ccci.org/gcx/images/288-GCX-logo.gif" width="100px"/>|, CASClient::Frameworks::Rails::Filter.login_url(controller) %></td>
-    <td><%= link_to 'Login with GCX', CASClient::Frameworks::Rails::Filter.login_url(controller) %></td>
+    <td><%= link_to image_tag('logo_thekey.png', :height => '50px', :width => '100px', 
+                              :style => 'vertical-align: middle'),
+                          CASClient::Frameworks::Rails::Filter.login_url(controller) %></td>
+    <td><%= link_to 'Login with TheKey (formerly GCX)', CASClient::Frameworks::Rails::Filter.login_url(controller) %></td>
   </tr>
 </table>
 
