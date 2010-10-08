@@ -1,3 +1,16 @@
+<%
+
+def brand_link(link)
+  if link.include? "?"
+    link << "&"
+  else
+    link << "?"
+  end
+  link << "template=https://d15ip9v2bx8xzx.cloudfront.net/media/sso/c4ctemplate.css"
+  link.gsub("login?", "login.htm?")
+end
+
+%>
 <table id='login_table' border='0'>
   <!--
   <tr>
@@ -16,8 +29,8 @@
   <tr>
     <td><%= link_to image_tag('logo_thekey.png', :height => '50px', :width => '100px', 
                               :style => 'vertical-align: middle'),
-                          CASClient::Frameworks::Rails::Filter.login_url(controller) %></td>
-    <td><%= link_to 'Login with TheKey (formerly GCX)', CASClient::Frameworks::Rails::Filter.login_url(controller) %></td>
+                          brand_link CASClient::Frameworks::Rails::Filter.login_url(controller) %></td>
+    <td><%= link_to 'Login with TheKey (formerly GCX)', brand_link CASClient::Frameworks::Rails::Filter.login_url(controller) %></td>
   </tr>
 </table>
 
