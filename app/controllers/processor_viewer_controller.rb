@@ -36,7 +36,7 @@ class ProcessorViewerController < InstanceController
       # when not doing bulk processor forms and not in the pdf form view (why was the
       # @pdf check added? I forget)
       if !@pdf && !@for_pdf && !(params[:action] == 'bulk_processor_form') &&
-        (@viewer.is_eventgroup_coordinator?(@eg) || (@viewer.set_project(@project) && @viewer.is_processor?))
+        (@viewer.is_eventgroup_coordinator?(eg) || (@viewer.set_project(@project) && @viewer.is_processor?))
         nil
       elsif @can_view_confidential
         nil
@@ -50,7 +50,12 @@ class ProcessorViewerController < InstanceController
     end
 
     def get_questionnaire
-      @questionnaire = @eg.forms.find_by_name("Processor Form").questionnaire
+      @questionnaire = eg.forms.find_by_name("Processor Form").questionnaire
+    end
+
+    def eg
+      # use the event group of the appln itself if possible
+      @eg2 ||= @appln.try(:profile).try(:event_group) || @eg
     end
 
     ### end questionnaire methods
