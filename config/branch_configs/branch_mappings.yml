@@ -8,4 +8,6 @@
 #
 # The config file of the first match, from top to bottom, is loaded.
 
+- /p2c.staging/: common_p2c_staging.rb
+- /p2c.prod/: common_p2c_prod.rb
 - /dev/: common_utopian_dev.rb

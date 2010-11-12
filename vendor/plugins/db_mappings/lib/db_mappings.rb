@@ -31,7 +31,12 @@ ActiveRecord::Base.class_eval do
     def self.load_mappings
       if @@map_hash 
         # Set the table name for the class, if defined
-        set_table_name @@map_hash['tables'][self.name.underscore] if @@map_hash['tables'] && @@map_hash['tables'][self.name.underscore]   
+        if @@map_hash['tables'] && @@map_hash['tables'][self.name.underscore]
+          set_table_name @@map_hash['tables'][self.name.underscore]
+        elsif db = @@map_hash['databases'].find{ |db, tables| tables.index(self.name.underscore) }.try(:first)
+          db_name = ActiveRecord::Base.configurations[db]["database"]
+          set_table_name "#{db_name}.#{table_name.split('.').last}"
+        end
 
         handle_databases
         map_column_names

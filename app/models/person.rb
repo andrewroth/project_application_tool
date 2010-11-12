@@ -1,6 +1,12 @@
 class Person < ActiveRecord::Base
-  load_mappings
   include Common::Core::Person
+  include Common::Core::Ca::Person
+  load_mappings
+
+  def viewer
+    viewers[0]
+  end
+
   belongs_to :viewer, :foreign_key => :user_id
 
   def campus_abbrev(o = {})

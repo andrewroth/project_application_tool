@@ -27,3 +27,15 @@ ciministry_production:
 ciministry_test:
   database: c4c_intranet_test
   <<: *defaults
+
+pulse_development:
+  database: c4c_pulse_staging
+  <<: *defaults
+
+pulse_test:
+  database: c4c_pulse_test
+  <<: *defaults
+
+pulse_production:
+  database: c4c_pulse_staging
+  <<: *defaults
