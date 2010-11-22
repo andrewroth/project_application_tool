@@ -3,9 +3,9 @@ module ViewerMethods
   def self.included(base)
     base.class_eval do
       has_one :preferences
-      has_many :profiles
+      has_many :profiles, :foreign_key => "viewer_id"
 
-      has_many :applns
+      has_many :applns, :foreign_key => "viewer_id"
       #has_many :tickets # this not used?
 
       #has_many :persons, :through => :access
@@ -243,9 +243,9 @@ There's a bunch of logic for creating users in cim_hrdb.
         is_projects_coordinator? || is_processor?   
       end
 
-      def viewer_userID
-        self.username
-      end
+      #def viewer_userID
+      #  self.username
+      #end
 
       def viewer_lastLogin
         self.last_login
