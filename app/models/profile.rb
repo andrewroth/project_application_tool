@@ -19,13 +19,13 @@ class Profile < ActiveRecord::Base
   has_many :auto_donations, :class_name => "AutoDonation", :finder_sql =>
       "SELECT #{AutoDonation.columns.collect{ |ad| "d."+ad.name }.join(', ')} " +
       "FROM profiles p, #{AutoDonation.table_name} d " +
-      'WHERE p.id = #{id} and d.participant_motv_code = \'#{motivation_code}\'' + 
+      'WHERE p.id = #{id} and d.participant_motv_code = \'#{motivation_code}\' ' + 
       'ORDER BY d.donation_date'
       
   has_many :manual_donations, :class_name => "ManualDonation", :finder_sql =>
       "SELECT #{ManualDonation.columns.collect{ |ad| "d."+ad.name }.join(', ')} " +
       "FROM profiles p, manual_donations d " +
-      'WHERE p.id = #{id} and d.motivation_code = \'#{motivation_code}\'' +
+      'WHERE p.id = #{id} and d.motivation_code = \'#{motivation_code}\' ' +
       'ORDER BY d.created_at'
   
   # so include will work
