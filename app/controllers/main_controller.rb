@@ -343,7 +343,8 @@ render :partial => "viewer_specifics"
         group_concat(#{Campus.__(:abbrv)} SEPARATOR ', ') as campus 
       |, :joins => %|
         INNER JOIN #{User.table_name} ON #{User.__(:id)} = #{@profile_table_name}.viewer_id
-        INNER JOIN #{Person.table_name} ON #{Person.__(:user_id)} = #{User.__(:id)}
+        INNER JOIN #{Access.table_name} ON #{Access.__(:viewer_id)} = #{@profile_table_name}.viewer_id
+        INNER JOIN #{Person.table_name} ON #{Person.__(:person_id)} = #{Access.__(:id)}
         INNER JOIN #{Appln.table_name} ON #{@profile_table_name}.appln_id = #{Appln.__(:id)}
         INNER JOIN #{CampusInvolvement.table_name} ON #{CampusInvolvement.__(:person_id)} = #{Person.__(:id)}
         INNER JOIN #{Campus.table_name} ON #{CampusInvolvement.__(:campus_id)} = #{Campus.__(:id)} AND #{CampusInvolvement.__(:end_date)} IS NULL
@@ -372,7 +373,8 @@ render :partial => "viewer_specifics"
       |, :joins => %|
         INNER JOIN #{CampusInvolvement.table_name} ON #{CampusInvolvement.__(:campus_id)} = #{Campus.__(:id)} AND #{CampusInvolvement.__(:end_date)} IS NULL 
         INNER JOIN #{Person.table_name} ON #{CampusInvolvement.__(:person_id)} = #{Person.__(:id)}
-        INNER JOIN #{User.table_name} ON #{Person.__(:user_id)} = #{User.__(:id)}
+        INNER JOIN #{Access.table_name} ON #{Access.__(:person_id)} = #{Person.__(:id)}
+        INNER JOIN #{Viewer.table_name} ON #{Viewer.__(:id)} = #{Access.__(:viewer_id)}
         INNER JOIN #{@profile_table_name} ON #{User.__(:id)} = #{@profile_table_name}.viewer_id AND
           #{@profile_table_name}.type IN (#{types.collect{|t| "'#{t}'"}.join(",")})
         INNER JOIN #{@appln_table_name} ON #{@profile_table_name}.appln_id = #{@appln_table_name}.id AND
@@ -402,8 +404,8 @@ render :partial => "viewer_specifics"
  
   def relevant_campus_ids
     return @relevant_campus_ids if @relevant_campus_ids
-    # change CA to your country
-    @relevant_campus_ids = CmtGeo.campuses_for_country("CA").collect(&:id)
+    # change Canada to your country
+    @relevant_campus_ids = CmtGeo.campuses_for_country("CAN").collect(&:id)
   end
 
   private
