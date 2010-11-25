@@ -162,15 +162,17 @@ class ProfilesController < ApplicationController
   end
   
   def campus_info
+    @appln_person = @viewer.person
     @submenu_title = 'Campus Info'
   end
 
-  def campus_info_cdn
-    @submenu_title = 'Campus Info'
-    @person = @appln_person = @viewer.person
-    @assignments = @person.assignments
-
-    render :template => 'assignments/index'
+  def update_campus_info
+    if CampusInformation.save_from_params(@viewer.person, params)
+      flash[:notice] = "Campus info updated"
+    else
+      flash[:notice] = "Not enough information to set your campus info"
+    end
+    redirect_to :action => :campus_info
   end
 
   def crisis_info
