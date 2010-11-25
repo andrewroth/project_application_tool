@@ -50,7 +50,7 @@ class PersonalInformation < CustomElement
 
       person.initialize_addresses
       person.update_attributes(person_params)
-      person.save!
+      person.save(false)
     end
   end
 end
