@@ -15,41 +15,7 @@ class CampusInformation < Element
     #page.add_invalid_element(self)
   end
 
-=begin
-  def self.save_from_params(person, params)
-    # person[:email] is in the campus project app as a q with programmer
-    # options, it messes up the update_attributes save since it's a defined
-    # method and not a column
-    if params[:person]
-      person_params = params[:person].clone
-      person_params.delete 'email'
-      person.update_attributes(person_params)
-      person.save!
-    end
-  end
-=end
-
   def CampusInformation.save_from_params(person, params)
-    if params[:assignment] && params[:assignment][:new]
-      for new_map in params[:assignment][:new].values
-        a = Assignment.new new_map
-        a.person_id = person.id
-        a.save!
-      end
-    end
-
-    if params[:assignment] && params[:assignment][:update]
-      for id, upd_map in params[:assignment][:update]
-        begin
-          a = person.assignments.find id
-        rescue Exception
-        end
-        a.update_attributes upd_map
-        a.person_id = person.id
-        a.save!
-      end
-    end
-
     if params[:appln_person].present? && 
       params[:appln_person][:school_year_id].present? &&
       params[:appln_person][:grad_date].present? &&
