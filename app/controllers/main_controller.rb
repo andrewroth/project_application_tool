@@ -66,6 +66,16 @@ class MainController < ApplicationController
 
     @project_ids_to_title = Hash[*@eg.projects.collect{ |p| [ p.id.to_s, p.title ] }.flatten]
     generate_campus_stats(@campuses)
+    @campus_stats.keys.sort!{ |k1, k2|
+      c1 = @campus_stats[k1]
+      c2 = @campus_stats[k2]
+      d1 = c2.accepted_cnt.to_i <=> c1.accepted_cnt.to_i
+      if d1 != 0
+        d1
+      else
+        c2.applied_cnt.to_i <=> c1.applied_cnt.to_i
+      end
+    }
     
     @page_title = "Your Campuses"
   end
@@ -304,7 +314,7 @@ render :partial => "viewer_specifics"
   end
 
   def generate_campus_stats(campuses)
-    @campus_stats = { }
+    @campus_stats = MyOrderedHash.new
     profile_ids = []
 
     for campus in campuses
