@@ -46,7 +46,7 @@ class PersonalInformation < CustomElement
       end
 =end
       DateParamsParser.parse(person_params, "local_valid_until")
-      DateParamsParser.parse(person_params, "permanent_valid_until")
+      #DateParamsParser.parse(person_params, "permanent_valid_until")
 
       person.initialize_addresses
       person.update_attributes(person_params)
