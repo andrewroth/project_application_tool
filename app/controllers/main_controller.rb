@@ -322,7 +322,7 @@ render :partial => "viewer_specifics"
     end
     accepted = get_profiles_for_status(:accepted)
     for campus in accepted
-      @campus_stats[campus].applied_cnt = campus.total
+      @campus_stats[campus].accepted_cnt = campus.total
       profile_ids += campus.profile_ids.split(",")
     end
 
