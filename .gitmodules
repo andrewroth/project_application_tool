@@ -7,6 +7,3 @@
 [submodule "vendor/plugins/git_branch_configs"]
 	path = vendor/plugins/git_branch_configs
 	url = git://github.com/andrewroth/git_branch_configs.git
-[submodule "vendor/plugins/ccc_rubycas_client"]
-	path = vendor/plugins/ccc_rubycas_client
-	url = git://github.com/twinge/ccc_rubycas_client.git
