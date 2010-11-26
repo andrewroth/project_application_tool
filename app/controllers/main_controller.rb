@@ -64,9 +64,7 @@ class MainController < ApplicationController
   def your_campuses
     @current_projects_form = @eg.application_form
 
-    # getting the project name as a join is simply too slow
-    @projects_cache = Hash[*@eg.projects.collect{ |p| [ p.id, p.title ] }.flatten]
-    
+    @project_ids_to_title = Hash[*@eg.projects.collect{ |p| [ p.id.to_s, p.title ] }.flatten]
     generate_campus_stats(@campuses)
     
     @page_title = "Your Campuses"
@@ -307,40 +305,91 @@ render :partial => "viewer_specifics"
 
   def generate_campus_stats(campuses)
     @campus_stats = { }
+    profile_ids = []
+
     for campus in campuses
       @campus_stats[campus] = CampusStats.new
       
       @campus_stats[campus].students_cnt = 0
-      @campus_stats[campus].student_profiles = [ ]
-      @campus_stats[campus].students_no_profiles = [ ] # not used
       @campus_stats[campus].accepted_cnt = 0
       @campus_stats[campus].applied_cnt = 0
-      
-      next if @current_projects_form.nil?
-
-      for person in campus.students
-        @campus_stats[campus].students_cnt += 1
-
-        for viewer in person.viewers
-          for profile in viewer.profiles
-            next unless profile.appln && profile.appln.form_id == @current_projects_form.id
-
-            @campus_stats[campus].student_profiles << StudentProfile.new(person, profile)
-          
-            if profile.class == Acceptance
-              @campus_stats[campus].accepted_cnt += 1
-              @campus_stats[campus].applied_cnt += 1
-            elsif profile.class == Applying
-              @campus_stats[campus].applied_cnt += 1
-	    end
-          end
-        end
-      end
     end
+
+    applied = get_profiles_for_status(:applied)
+    for campus in applied
+      @campus_stats[campus].applied_cnt = campus.total
+      profile_ids += campus.profile_ids.split(",")
+    end
+    accepted = get_profiles_for_status(:accepted)
+    for campus in accepted
+      @campus_stats[campus].accepted_cnt = campus.total
+      profile_ids += campus.profile_ids.split(",")
+    end
+
+    @profiles = [] and return unless profile_ids.length > 0
+
+    @profiles = Profile.find(:all, :select => %|
+        #{@profile_table_name}.id as id,
+        #{@profile_table_name}.status as status,
+        #{@profile_table_name}.type as type,
+        #{@profile_table_name}.project_id as project_id,
+        #{@profile_table_name}.support_claimed as support_claimed,
+        #{@profile_table_name}.motivation_code as motivation_code,
+        #{@profile_table_name}.cached_costing_total as cached_costing_total,
+        #{Person.__(:id)} as person_id,
+        #{Person.__(:preferred_first_name)} as first_name, 
+        #{Person.__(:preferred_last_name)} as last_name,
+        #{Appln.__(:preference1_id)} as preference1_id,
+        group_concat(#{Campus.__(:abbrv)} SEPARATOR ', ') as campus 
+      |, :joins => %|
+        INNER JOIN #{User.table_name} ON #{User.__(:id)} = #{@profile_table_name}.viewer_id
+        INNER JOIN #{Access.table_name} ON #{Access.__(:viewer_id)} = #{@profile_table_name}.viewer_id
+        INNER JOIN #{Person.table_name} ON #{Person.__(:id)} = #{Access.__(:person_id)}
+        INNER JOIN #{Appln.table_name} ON #{@profile_table_name}.appln_id = #{Appln.__(:id)}
+        INNER JOIN #{CampusInvolvement.table_name} ON #{CampusInvolvement.__(:person_id)} = #{Person.__(:id)}
+        INNER JOIN #{Campus.table_name} ON #{CampusInvolvement.__(:campus_id)} = #{Campus.__(:id)} AND #{CampusInvolvement.__(:end_date)} IS NULL
+      |, :conditions => %|
+        #{@profile_table_name}.id IN (#{profile_ids.join(",")})
+      |, :group => "#{@profile_table_name}.id"
+    )
+
+  end
+  
+  def get_profiles_for_status(s)
+    @profile_table_name ||= "#{Profile.connection.current_database}.#{Profile.table_name}"
+    @appln_table_name ||= "#{Appln.connection.current_database}.#{Appln.table_name}"
+    @forms ||= @eg.forms.collect(&:id)
+
+    if s == :applied
+      types = %w(Applying Submitted Completed)
+    elsif s == :accepted
+      types = %w(Acceptance)
+    end
+    return [] unless relevant_campus_ids.length > 0 && @forms.length > 0
+    cs = Campus.all(:select => %|
+        #{Campus.__(:id)}, #{Campus.__(:name)}, #{Campus.__(:abbrv)}, 
+        count(#{CampusInvolvement.__(:id)}) as total,
+        group_concat(#{@profile_table_name}.id) as profile_ids
+      |, :joins => %|
+        INNER JOIN #{CampusInvolvement.table_name} ON #{CampusInvolvement.__(:campus_id)} = #{Campus.__(:id)} AND #{CampusInvolvement.__(:end_date)} IS NULL 
+        INNER JOIN #{Person.table_name} ON #{CampusInvolvement.__(:person_id)} = #{Person.__(:id)}
+        INNER JOIN #{Access.table_name} ON #{Access.__(:person_id)} = #{Person.__(:id)}
+        INNER JOIN #{Viewer.table_name} ON #{Viewer.__(:id)} = #{Access.__(:viewer_id)}
+        INNER JOIN #{@profile_table_name} ON #{User.__(:id)} = #{@profile_table_name}.viewer_id AND
+          #{@profile_table_name}.type IN (#{types.collect{|t| "'#{t}'"}.join(",")})
+        INNER JOIN #{@appln_table_name} ON #{@profile_table_name}.appln_id = #{@appln_table_name}.id AND
+          #{@appln_table_name}.form_id IN (#{@forms.join(",")})
+      |,
+      :group => Campus.__(:id),
+      :conditions => %|
+          #{Campus.__(:id)} IN (#{relevant_campus_ids.join(',')})
+      |
+    )
   end
   
   def set_campuses
     @campuses = @viewer ? users_campuses : []
+    @campuses.reject!{ |c| !relevant_campus_ids.include?(c.id) }
   end
   
   def users_campuses
@@ -349,10 +398,16 @@ render :partial => "viewer_specifics"
     if @viewer.is_eventgroup_coordinator?(@eg)
       campuses = Campus.all
     else
-      campuses = @viewer.person.campuses
+      campuses = @viewer.person.ministry_involvements.collect(&:ministry).collect(&:campuses).flatten.uniq
     end
   end
  
+  def relevant_campus_ids
+    return @relevant_campus_ids if @relevant_campus_ids
+    # change Canada to your country
+    @relevant_campus_ids = CmtGeo.campuses_for_country("CAN").collect(&:id)
+  end
+
   private
 
   #def start_profiling() RubyProf.start end

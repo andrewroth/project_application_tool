@@ -16,7 +16,7 @@
             <tbody>
             <% for campus in @campuses %>
                 <TR>
-                    <TD align="center"><%= campus.campus_desc %> (<%= campus.campus_shortDesc%>)</TD>
+                    <TD align="center"><%= campus.name %> (<%= campus.abbrv %>)</TD>
                     <TD align="center"><%= @campus_stats[campus].applied_cnt %></TD>
                     <TD align="center"><%= @campus_stats[campus].accepted_cnt %></TD>
                 </TR>
@@ -28,7 +28,6 @@
         <%= sortable_table %>
             <thead><TR>
                 <TH>Name</TH>
-                <TH>User ID</TH>
                 <TH>Campus</TH>
                 <TH>Status</TH>
                 <TH>Support Claimed</TH>
@@ -38,23 +37,19 @@
                 <TH>Accepted</TH>
             </TR></thead>
             <tbody>
-            <% def title(pid) pid.nil? ? "" : @projects_cache[pid] end %>
-            <% for campus in @campuses %>
-                <% for student_profile in @campus_stats[campus].student_profiles %>
-                    <% person = student_profile.student; profile = student_profile.profile %>
+                <% for profile in @profiles %>
+                    <%- logger.info "Profile #{profile.inspect}" -%>
                     <TR>
-                        <TD align="center"><%= person.name %></TD>
-                        <TD align="center"><%= person.viewer.username %></TD>
-                        <TD align="center"><%= campus.campus_shortDesc %></TD>
+                        <TD align="center"><%= profile.first_name %> <%= profile.last_name %></TD>
+                        <TD align="center"><%= profile.campus %></TD>
                         <TD align="center"><%= profile.status %></TD>
                         <TD align="center"><%= if profile.class == Acceptance then format_currency profile.support_claimed end %></TD>
                         <TD align="center"><%= if profile.class == Acceptance then format_currency profile.donations_total end %></TD>
                         <TD align="center"><%= if profile.class == Acceptance then format_currency profile.cached_costing_total end %></TD>
-                        <TD align="center"><%= title(profile.appln.preference1_id) %></TD>
-                        <TD align="center"><%= title(if profile.class == Acceptance then profile.project_id else nil end) %></TD>
+                        <TD align="center"><%= project_title(profile.preference1_id) %></TD>
+                        <TD align="center"><%= project_title(if profile.class == Acceptance then profile.project_id else nil end) %></TD>
                     </TR>
                 <% end %>
-            <% end %>
             </tbody>
         </TABLE>
     </BLOCKQUOTE>

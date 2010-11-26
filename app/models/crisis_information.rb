@@ -35,7 +35,7 @@ class CrisisInformation < CustomElement
         person_params[:birth_date] = bd
       end
       person.update_attributes(person_params)
-      person.save!
+      person.save(false)
     end
 
   end

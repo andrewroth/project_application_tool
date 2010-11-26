@@ -71,4 +71,8 @@ module MainHelper
     end
   end
   
+  def project_title(pid)
+    pid.nil? ? "" : @project_ids_to_title[pid.to_s]
+  end
+
 end

@@ -7,7 +7,7 @@ class Person < ActiveRecord::Base
     viewers[0]
   end
 
-  belongs_to :viewer, :foreign_key => :user_id
+  #belongs_to :viewer, :foreign_key => :user_id
 
   def campus_abbrev(o = {})
     self.campus(o) ? self.campus(o).abbrv : ''

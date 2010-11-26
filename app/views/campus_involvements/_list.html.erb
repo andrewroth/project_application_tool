@@ -1,14 +1,23 @@
 <%- @appln_person ||= @instance.viewer.person if @instance -%>
-<%- if @appln_person.nil? || @appln_person.campus_involvements.empty? -%>
-You have no campus involvements set.
-<%- else -%>
-Please ensure the following campus involvements are correct:
-
-<UL>
-  <%- for ci in @appln_person.campus_involvements -%>
-    <LI><%= ci.campus.name %> <%= ci.school_year.name %></LI>
+<%- if @appln_person -%>
+  <%- custom_element_item("Campus: ", :appln_person, :campus_id) do |m, c, classes| -%>
+    <label>Campus:</label><br/>
+    <%= select_tag "campus_id", options_for_select(
+      [""] + CmtGeo.campuses_for_country("CAN").sort{|c1, c2| c1.name <=> c2.name }.collect{ |c| [ c.name, c.id ] }, 
+      @appln_person.primary_campus_involvement.try(:campus_id)
+    ), :class => classes, :name => "appln_person[campus_id]" %>
   <%- end -%>
-</UL>
+  <br/>
+  <%- custom_element_item("School Year: ", :appln_person, :school_year_id) do |m, c, classes| -%>
+    <label>School Year:</label><br/>
+    <%= select_tag "school_year_id", options_for_select(
+      [""] + SchoolYear.all.collect{ |y| [ y.name, y.id ] },
+      @appln_person.primary_campus_involvement.try(:school_year_id)
+    ), :class => classes, :name => "appln_person[school_year_id]" %>
+  <%- end -%>
+  <br/>
+  <%- custom_element_item("Grad Date: ", :appln_person, :school_year_id) do |m, c, classes| -%>
+    <label>Grad Date: (give approximately if you don't know exactly)</label><br/>
+    <%= select_date @appln_person.primary_campus_involvement.try(:graduation_date), :prefix => "appln_person[grad_date]", :end_year => 10.years.from_now.year %>
+  <%- end -%>
 <%- end -%>
-
-To update your campus involvements, please go to the pulse using <A HREF="https://pulse.campusforchrist.org/people/<%= @appln_person.try(:id) %>">this link</A>.
