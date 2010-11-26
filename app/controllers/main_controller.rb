@@ -322,7 +322,7 @@ render :partial => "viewer_specifics"
     end
     accepted = get_profiles_for_status(:accepted)
     for campus in accepted
-      @campus_stats[campus].applied_cnt = campus.total
+      @campus_stats[campus].accepted_cnt = campus.total
       profile_ids += campus.profile_ids.split(",")
     end
 
@@ -344,7 +344,7 @@ render :partial => "viewer_specifics"
       |, :joins => %|
         INNER JOIN #{User.table_name} ON #{User.__(:id)} = #{@profile_table_name}.viewer_id
         INNER JOIN #{Access.table_name} ON #{Access.__(:viewer_id)} = #{@profile_table_name}.viewer_id
-        INNER JOIN #{Person.table_name} ON #{Person.__(:person_id)} = #{Access.__(:id)}
+        INNER JOIN #{Person.table_name} ON #{Person.__(:id)} = #{Access.__(:person_id)}
         INNER JOIN #{Appln.table_name} ON #{@profile_table_name}.appln_id = #{Appln.__(:id)}
         INNER JOIN #{CampusInvolvement.table_name} ON #{CampusInvolvement.__(:person_id)} = #{Person.__(:id)}
         INNER JOIN #{Campus.table_name} ON #{CampusInvolvement.__(:campus_id)} = #{Campus.__(:id)} AND #{CampusInvolvement.__(:end_date)} IS NULL
