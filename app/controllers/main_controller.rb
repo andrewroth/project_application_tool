@@ -317,22 +317,18 @@ render :partial => "viewer_specifics"
     @campus_stats = MyOrderedHash.new
     profile_ids = []
 
-    for campus in campuses
-      @campus_stats[campus] = CampusStats.new
-      
-      @campus_stats[campus].students_cnt = 0
-      @campus_stats[campus].accepted_cnt = 0
-      @campus_stats[campus].applied_cnt = 0
-    end
-
     applied = get_profiles_for_status(:applied)
     for campus in applied
-      @campus_stats[campus].applied_cnt = campus.total
+      @campus_stats[campus] ||= CampusStats.new
+      @campus_stats[campus].accepted_cnt ||= 0
+      @campus_stats[campus].applied_cnt = campus.total.to_i
       profile_ids += campus.profile_ids.split(",")
     end
     accepted = get_profiles_for_status(:accepted)
     for campus in accepted
-      @campus_stats[campus].accepted_cnt = campus.total
+      @campus_stats[campus] ||= CampusStats.new
+      @campus_stats[campus].applied_cnt ||= 0
+      @campus_stats[campus].accepted_cnt = campus.total.to_i
       profile_ids += campus.profile_ids.split(",")
     end
 
@@ -374,7 +370,7 @@ render :partial => "viewer_specifics"
     elsif s == :accepted
       types = %w(Acceptance)
     end
-    return [] unless relevant_campus_ids.length > 0 && @forms.length > 0
+    return [] unless @campuses.length > 0 && @forms.length > 0
     cs = Campus.all(:select => %|
         #{Campus.__(:id)}, #{Campus.__(:name)}, #{Campus.__(:abbrv)}, 
         count(#{CampusInvolvement.__(:id)}) as total,
@@ -390,7 +386,7 @@ render :partial => "viewer_specifics"
       |,
       :group => Campus.__(:id),
       :conditions => %|
-          #{Campus.__(:id)} IN (#{relevant_campus_ids.join(',')})
+          #{Campus.__(:id)} IN (#{@campuses.collect(&:id).join(',')})
       |
     )
   end
@@ -401,12 +397,10 @@ render :partial => "viewer_specifics"
   end
   
   def users_campuses
-    campuses = nil
-
     if @viewer.is_eventgroup_coordinator?(@eg)
-      campuses = Campus.all
+      Campus.all
     else
-      campuses = @viewer.person.campus_list
+      @viewer.person.most_nested_ministry.try(:unique_campuses) || []
     end
   end
  
