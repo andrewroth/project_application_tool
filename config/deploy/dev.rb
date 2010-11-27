@@ -28,6 +28,8 @@ ENV['deploy_to'] ||= "/var/www/#{if ENV['target'] == 'prod' then
 
 if ENV['target'] == 'dev'
   set :branch, "p2c.dev"
+elsif ENV['target'] == 'prod'
+  set :branch, "p2c.prod"
 end
 
 if ENV['env']
