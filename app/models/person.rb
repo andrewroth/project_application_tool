@@ -2,6 +2,10 @@ class Person < ActiveRecord::Base
   load_mappings
   include Common::Core::Person
 
+  def viewers
+    users
+  end
+
   def viewer
     user
   end

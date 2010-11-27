@@ -406,7 +406,7 @@ render :partial => "viewer_specifics"
     if @viewer.is_eventgroup_coordinator?(@eg)
       campuses = Campus.all
     else
-      campuses = @viewer.person.ministry_involvements.collect(&:ministry).collect(&:campuses).flatten.uniq
+      campuses = @viewer.person.campus_list
     end
   end
  
