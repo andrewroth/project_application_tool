@@ -256,6 +256,7 @@ class SecurityController < ApplicationController
         @viewer.login_callback
       end
       @viewer.last_login = Time.now
+      @viewer.username = session[:casfilteruser]
       @viewer.save!
     end
 
