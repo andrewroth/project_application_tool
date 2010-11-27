@@ -181,11 +181,11 @@ class SecurityController < ApplicationController
     return { :keep_trying => true } unless session[:cas_user]
 
     begin
-      viewer = Viewer.find_by_guid cas_sso_guid
+      viewer = User.find_or_create_from_cas(session[:cas_last_valid_ticket])
     rescue NoMethodError => e
       # try the darned thing again..
       Viewer.reset_column_information
-      viewer = Viewer.find_by_guid cas_sso_guid
+      viewer = User.find_or_create_from_cas(session[:cas_last_valid_ticket])
     end
 
     if viewer
