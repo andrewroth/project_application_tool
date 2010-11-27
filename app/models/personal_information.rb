@@ -20,8 +20,12 @@ class PersonalInformation < CustomElement
       copy = params[:appln_person].delete :permanent_same_as_local
       if copy == '1'
         for suffix in Common::Core::Person::ADDRESS_SUFFIX_TO_COLUMN.keys
-          params[:"person_#{suffix}"] = params[:appln_person][:"person_local_#{suffix}"]
-          params[:appln_person][:"permanent_#{suffix}"] = params[:appln_person][:"person_local#{suffix}"]
+          if params[:appln_person][:"person_local_#{suffix}"].present?
+            params[:"person_#{suffix}"] = params[:appln_person][:"person_local_#{suffix}"]
+          end
+          if params[:appln_person][:"person_local#{suffix}"].present?
+            params[:appln_person][:"permanent_#{suffix}"] = params[:appln_person][:"person_local#{suffix}"]
+          end
         end
       end
 
