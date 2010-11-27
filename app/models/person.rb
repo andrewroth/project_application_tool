@@ -3,6 +3,10 @@ class Person < ActiveRecord::Base
   include Common::Core::Ca::Person
   load_mappings
 
+  def viewers
+    users
+  end
+
   def viewer
     viewers[0]
   end

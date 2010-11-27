@@ -247,10 +247,6 @@ There's a bunch of logic for creating users in cim_hrdb.
       #  self.username
       #end
 
-      def viewer_lastLogin
-        self.last_login
-      end
-
       def viewer_id
         self.id
       end

@@ -8,7 +8,7 @@
           <%= th 'person record' %>
           <%= th 'name' %>
           <%= th 'viewer id', :type => 'int' %>
-          <%= th 'username' %>
+          <%= th 'person id', :type => 'int' %>
           <%= th 'email' %>
           <%= th 'campus' %>
           <%= th 'gcx' %>
@@ -33,12 +33,12 @@
                 <% @init_js = view_result_params if @viewers.length == 1 %>
             </td>
             <td><%=h viewer.id %></td>
-            <td><%=h viewer.username %></td>
+            <td><%=h viewer.person.id %></td>
             <td><%=h viewer.person.person_email if viewer.person %></td>
-            <td><%=h viewer.person.campus_shortDesc %></td>
+            <td><%=h viewer.person.campus_or_team %></td>
             <td><%=h 'gcx' unless viewer.guid.empty? %></td>
             <td><%=h viewer.profiles.length %></td>
-            <td><%=h viewer.viewer_lastLogin %></td>
+            <td><%=h viewer.last_login %></td>
           <td>
             <% if @viewer.is_projects_coordinator? %>
               <%= link_to 'merge..', merge_viewer_url(viewer) %>
