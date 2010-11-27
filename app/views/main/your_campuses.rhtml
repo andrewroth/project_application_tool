@@ -14,7 +14,7 @@
             </TR></thead>
             
             <tbody>
-            <% for campus in @campuses %>
+            <% for campus in @campus_stats.keys %>
                 <TR>
                     <TD align="center"><%= campus.name %> (<%= campus.abbrv %>)</TD>
                     <TD align="center"><%= @campus_stats[campus].applied_cnt %></TD>
