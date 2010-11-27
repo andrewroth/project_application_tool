@@ -257,7 +257,7 @@ class SecurityController < ApplicationController
       end
       @viewer.last_login = Time.now
       @viewer.username = session[:casfilteruser]
-      @viewer.save!
+      @viewer.save(false)
     end
 
     redirect_to :controller => "main"
