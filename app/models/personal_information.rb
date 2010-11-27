@@ -1,4 +1,6 @@
 class PersonalInformation < CustomElement
+  def address2=(val) end
+
   def text()
     "Personal Information Form"
   end
