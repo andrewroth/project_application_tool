@@ -1,0 +1,13 @@
+  <% @appln_person ||= @instance.viewer.person %>
+  <% @cis ||= (@appln_person ? @appln_person.campus_involvements : []) %>
+
+  <script>next_new_id = 0</script>
+  <table id='assignments'><tr><th style='width:300px'>Campus</th><th style='width:200px'>Year</th><th></th></tr>
+    <%- for ci in @cis -%>
+      <tr>
+        <td><%= ci.try(:campus).try(:name) %></td>
+        <td><%= ci.try(:school_year).try(:name) %></td>
+      </tr>
+    <%- end -%>
+  </table>
+  <BR />
