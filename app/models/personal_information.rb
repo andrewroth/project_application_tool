@@ -42,6 +42,8 @@ class PersonalInformation < CustomElement
       person_params.delete 'birth_date(2i)'
       person_params.delete 'birth_date(3i)'
       person_params.delete 'birth_date'
+      person_params.delete 'campus_id'
+      person_params.delete 'school_year_id'
 
       # Need all three of date fields chosen, otherwise it crashes
 =begin
