@@ -23,7 +23,7 @@
             <% viewer = acceptance.viewer %>
             <tr>
               <td><%=h viewer.name %></td>
-              <td><%=h viewer.person.campus_shortDesc %></td>
+              <td><%=h viewer.person.try(:primary_campus_involvement).try(:campus).try(:abbrv) %></td>
               <td><%=h viewer.person.email %></td>
               <td><%=h viewer.person.person_phone %></td>
               <td><%=h viewer.person.person_local_phone %></td>
