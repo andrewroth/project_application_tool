@@ -144,7 +144,7 @@ class ManageProjectsController < ApplicationController
     @phrase = "%" + params[:search_text].gsub(' ', '%') + "%"
     select = "#{Viewer.table_name}.viewer_username, #{Person.__(:preferred_first_name)}, #{Person.__(:last_name)}, #{Viewer.__(:last_login)}"
 
-    match_by_userID = Viewer.find(:all, :include => :person, :conditions => ["username like ?", @phrase], :select => select)
+    match_by_userID = User.find(:all, :include => :person, :conditions => ["#{User._(:username)} like ?", @phrase], :select => select)
     match_by_name = Person.search_by_name(params[:search_text]).collect(&:viewer).compact
     
     # remove those that already have roles, and duplicates
