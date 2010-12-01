@@ -82,8 +82,9 @@ class ProfilesController < ApplicationController
     end
 
     @applns = v.applns
-    @applns.reject!{ |a|
-      (a.profile.project && a.profile.project.event_group_id != @eg.id) || (a.form.event_group_id != @eg.id)
+    @applns.find_all{ |a|
+      a.profiles.detect{ |profile| profile.project && profile.project.event_group_id == @eg.id } ||
+        a.form.event_group_id == @eg.id
     }
   end
 
