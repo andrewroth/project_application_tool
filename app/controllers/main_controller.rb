@@ -402,7 +402,11 @@ render :partial => "viewer_specifics"
     if @viewer.is_eventgroup_coordinator?(@eg)
       Campus.all
     else
-      @viewer.person.most_nested_ministry.try(:unique_campuses) || []
+      if @viewer.person.is_staff_somewhere?
+        @viewer.person.campuses_under_my_ministries_with_children.uniq
+      else
+        @viewer.person.campuses.uniq
+      end
     end
   end
  
