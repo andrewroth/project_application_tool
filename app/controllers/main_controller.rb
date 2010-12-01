@@ -403,7 +403,9 @@ render :partial => "viewer_specifics"
       Campus.all
     else
       if @viewer.person.is_staff_somewhere?
-        @viewer.person.campuses_under_my_ministries_with_children.uniq
+        @@team_leader ||= MinistryRole.find_by_name "Team Leader"
+        @@team_member ||= MinistryRole.find_by_name "Team Member"
+        @viewer.person.campuses_under_my_ministries_with_children([ @@team_leader, @@team_member ]).uniq
       else
         @viewer.person.campuses.uniq
       end
