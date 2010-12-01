@@ -10,7 +10,10 @@ module DateParamsParser
       i3 = hash[key.to_s].delete "day"
     end
     if i1.present? && i2.present? && i3.present?
-      hash[key.to_sym] = Date.new(i1.to_i, i2.to_i, i3.to_i)
+      begin
+        hash[key.to_sym] = Date.new(i1.to_i, i2.to_i, i3.to_i)
+      rescue
+      end
     end
   end
 end
