@@ -33,9 +33,9 @@
                 <% @init_js = view_result_params if @viewers.length == 1 %>
             </td>
             <td><%=h viewer.id %></td>
-            <td><%=h viewer.person.id %></td>
-            <td><%=h viewer.person.person_email if viewer.person %></td>
-            <td><%=h viewer.person.campus_or_team %></td>
+            <td><%=h viewer.person.try(:id) %></td>
+            <td><%=h viewer.person.try(:person_email) %></td>
+            <td><%=h viewer.person.try(:campus_or_team) %></td>
             <td><%=h 'gcx' unless viewer.guid.empty? %></td>
             <td><%=h viewer.profiles.length %></td>
             <td><%=h viewer.last_login %></td>
