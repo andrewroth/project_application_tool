@@ -7,6 +7,7 @@
           <%= th 'person record' %>
           <%= th 'name' %>
           <%= th 'viewer id', :type => 'int' %>
+          <%= th 'person id', :type => 'int' %>
           <%= th 'username' %>
           <%= th 'email' %>
           <%= th 'campus' %>
@@ -23,6 +24,7 @@
             <% end %>
             <td><%= viewer.name %></td>
             <td><%=h viewer.id %></td>
+            <td><%=h viewer.person.try(:id) %></td>
             <td>
               <% 
                 view_result_params = { 
@@ -36,8 +38,8 @@
                  %>
                 <%= link_to_remote viewer.viewer_userID, view_result_params %>
             </td>
-            <td><%=h viewer.person.person_email if viewer.person %></td>
-            <td><%=h viewer.person.campus_shortDesc %></td>
+            <td><%=h viewer.person.try(:person_email) %></td>
+            <td><%=h viewer.person.try(:campus_or_team) %></td>
             <td><%=h 'gcx' unless viewer.guid.empty? %></td>
             <td><%=h viewer.profiles.length %></td>
             <td><%=h viewer.viewer_lastLogin %></td>
