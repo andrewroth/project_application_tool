@@ -147,7 +147,7 @@
     <% content_for(:form) do %>
       Crisis Info for <%= project_select("crisis_management", :default_first => true, :include_all => true) %> <%= html_excel_submit_links("crisis_management") %>
     <% end %>
-    <%= render :partial => "report_form", :locals => { :action => "interns" } %>
+    <%= render :partial => "report_form", :locals => { :action => "crisis_management" } %>
     <I>Lists crisis information for everyone accepted to a project.</I>
   </LI>
 
