@@ -11,11 +11,11 @@ module ViewerMethods
       #has_many :persons, :through => :access
 
       has_many :notification_acknowledgments
-      has_one :projects_coordinator, :conditions => { :end_date => nil }
-      has_one :all_projects_coordinator, :class_name => "ProjectsCoordinator"
+      has_one :projects_coordinator, :conditions => { :end_date => nil }, :foreign_key => "viewer_id"
+      has_one :all_projects_coordinator, :class_name => "ProjectsCoordinator", :foreign_key => "viewer_id"
 
-      has_many :eventgroup_coordinators, :conditions => { :end_date => nil }
-      has_many :all_eventgroup_coordinators, :class_name => "EventgroupCoordinator"
+      has_many :eventgroup_coordinators, :conditions => { :end_date => nil }, :foreign_key => "viewer_id"
+      has_many :all_eventgroup_coordinators, :class_name => "EventgroupCoordinator", :foreign_key => "viewer_id"
       has_many :eventgroups_coordinating, :class_name => "EventGroup", :through => :eventgroup_coordinators, :source => :event_group
 
       # ------ roles
