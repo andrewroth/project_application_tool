@@ -3,7 +3,7 @@
   <td><%= staff_profile.viewer ? staff_profile.viewer.username : 'no viewer' %></td>
   <td><%= staff_profile.motivation_code %></td>
   <% if @projects %>
-    <td><%= staff_profile.project.title %>
+    <td><%= staff_profile.project.try(:title) %>
   <% end %>
   <td>
       <%= costing_link staff_profile.id %>
