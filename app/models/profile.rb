@@ -1,5 +1,5 @@
 class Profile < ActiveRecord::Base
-  belongs_to :project
+  include Common::Pat::Profile
   belongs_to :viewer
   belongs_to :appln
   belongs_to :reuse_appln, :class_name => "Appln"
