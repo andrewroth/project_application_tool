@@ -3,9 +3,8 @@ module ViewerMethods
   def self.included(base)
     base.class_eval do
       has_one :preferences
-      has_many :profiles, :foreign_key => "viewer_id"
-
-      has_many :applns, :foreign_key => "viewer_id"
+      #NOTE: profile and appln refs are in Common::Pat::User
+      
       #has_many :tickets # this not used?
 
       #has_many :persons, :through => :access
