@@ -91,9 +91,24 @@ class ReferenceInstance < ActiveRecord::Base
   
   def get_answer(instance) end
   
+  def sanitize_email!
+    return unless self.email
+    if self.email =~ /\s+(\S+)/
+      self.email = $1
+      save
+    elsif self.email =~ /(\S+)\s+/
+      self.email = $1
+      save
+    end
+  end
+
   def valid_email?(ref = self)
+    sanitize_email!
     return nil if self.email.nil?
-    self.email =~ /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+    puts self.email.inspect
+    v = self.email =~ /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+    puts v.inspect
+    v
   end
   
   def ref_url
