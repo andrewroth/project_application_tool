@@ -4,7 +4,7 @@ module DateParamsParser
       i1 = hash.delete "#{key.to_s}(1i)"
       i2 = hash.delete "#{key.to_s}(2i)"
       i3 = hash.delete "#{key.to_s}(3i)"
-    elsif hash[key.to_s]["year"]
+    elsif hash[key.to_s] && hash[key.to_s]["year"]
       i1 = hash[key.to_s].delete "year"
       i2 = hash[key.to_s].delete "month"
       i3 = hash[key.to_s].delete "day"
