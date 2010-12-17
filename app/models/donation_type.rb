@@ -1,3 +1,4 @@
 class DonationType < ActiveRecord::Base
-  has_many :manual_donations
+  load_mappings
+  include Common::Core::Ca::DonationType
 end
