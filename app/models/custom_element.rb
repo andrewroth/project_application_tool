@@ -23,6 +23,13 @@ class CustomElement < Element
     for section in custom_element_required_sections
       sa = section.attribute
       sa_assoc = (sa =~ /(.*)_id/; $1)
+      case sa
+      when 'local_country'
+        sa = 'person_local_country_id'
+      when 'perm_country'
+        sa = 'person_country_id'
+      end
+
       if (section.name == 'appln_person' && (
             [nil, ''].include?(@person.send(sa)) ||
             sa_assoc && @person.send(sa_assoc).nil?)) ||
