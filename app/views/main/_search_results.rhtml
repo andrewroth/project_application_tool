@@ -36,7 +36,7 @@
             <td><%=h viewer.person.try(:id) %></td>
             <td><%=h viewer.person.try(:person_email) %></td>
             <td><%=h viewer.person.try(:campus_or_team) %></td>
-            <td><%=h 'gcx' unless viewer.guid.empty? %></td>
+            <td><%=h 'gcx' if viewer.guid.present? %></td>
             <td><%=h viewer.profiles.length %></td>
             <td><%=h viewer.last_login %></td>
           <td>
