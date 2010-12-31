@@ -41,11 +41,7 @@
     <div id="header">
       <div id="user_info">
         <% if @viewer %> 
-          <p>user: 
-            <%= @viewer.name %>
-            <% unless session[:login_source] == 'gcx' -%>
-               - <%= link_to "logout", :action => :logout, :controller => :security %>
-            <% end %>
+          <p>user: <%= @viewer.name %> - <%= link_to "logout", :action => :logout, :controller => :security %>
           </p>
         <% end %>
       </div>
