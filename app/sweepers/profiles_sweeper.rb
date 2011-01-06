@@ -1,5 +1,5 @@
 class ProfilesSweeper < ActionController::Caching::Sweeper
-  #observe Profile
+  observe Profile
 
   PROFILE_ATTS_USED_BY_SECTIONS = {
     'Acceptance' => [ :accepted_at, :support_claimed, :support_coach_id, :as_intern ],
