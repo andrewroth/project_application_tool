@@ -78,6 +78,11 @@ def link_shared(p, o = {})
 end
 
 unless ENV['target'] == 'demo'
+  deploy.task :before_symlink do
+    run "cd #{release_path} && git submodule init"
+    run "cd #{release_path} && git submodule update"
+  end
+
   deploy.task :after_symlink do
     # set up tmp dir
     run "mkdir -p -m 770 #{shared_path}/tmp/{cache,sessions,sockets,pids}"
