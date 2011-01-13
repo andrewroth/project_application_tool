@@ -1,1 +1,0 @@
-require_dependency 'mysql_retry_lost_connection'
