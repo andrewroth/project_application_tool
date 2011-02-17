@@ -502,7 +502,8 @@ class ReportsController < ApplicationController
       gender = p.gender
 
       ec_entry = nil # used in get_passport_info
-      ec_entry = p.emerg
+      #ec_entry = p.emerg
+      ec_entry = p.get_emerg
 
       empty_wc = EmergencyContact.new('','','','','','')
 
