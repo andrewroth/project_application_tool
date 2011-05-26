@@ -28,8 +28,8 @@ ENV['deploy_to'] ||= "/var/www/#{if ENV['target'] == 'prod' then
 
 if ENV['target'] == 'dev'
   set :branch, "p2c.dev"
-elsif ENV['target'] == 'prod'
-  set :branch, "p2c.prod"
+  ENV['host'] = "moose.campusforchrist.org"
+  ENV['deploy_to'] = "/var/www/elk.campusforchrist.org"
 end
 
 if ENV['env']
@@ -40,7 +40,6 @@ elsif ENV['target'] == 'demo'
   RAILS_ENV = 'production'
 elsif ENV['target'] == 'prod'
   RAILS_ENV = 'production'
-
 end
 
 puts
@@ -78,11 +77,6 @@ def link_shared(p, o = {})
 end
 
 unless ENV['target'] == 'demo'
-  deploy.task :before_symlink do
-    run "cd #{release_path} && git submodule init"
-    run "cd #{release_path} && git submodule update"
-  end
-
   deploy.task :after_symlink do
     # set up tmp dir
     run "mkdir -p -m 770 #{shared_path}/tmp/{cache,sessions,sockets,pids}"
