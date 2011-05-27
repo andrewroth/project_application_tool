@@ -12,7 +12,7 @@ class ReferenceMailer < ActionMailer::Base
   def invitation_confirmation(reference)
     setup(reference)
     @subject = 'Project Reference Invitation Confirmation'
-    @recipients = @instance.viewer.email
+    @recipients = "#{@instance.viewer.name} <#{@instance.viewer.email}>"
     @appln = @instance
     render_from_email 'ref_request_confirm'
   end
@@ -27,7 +27,7 @@ class ReferenceMailer < ActionMailer::Base
   def completed_confirmation(reference)
     setup(reference)
     @subject = reference.full_name + ' completed your reference'
-    @recipients = @instance.viewer.email
+    @recipients = "#{@instance.viewer.name} <#{@instance.viewer.email}>"
     @appln = @instance
     render_from_email 'ref_completed_confirm'
   end
@@ -42,7 +42,7 @@ class ReferenceMailer < ActionMailer::Base
   protected
     def setup(reference)
       @subject = 'Application Reference'
-      @recipients = reference.email
+      @recipients = "#{reference.full_name} <#{reference.email}>"
       @instance = reference.instance
       @from = reference.outgoing_email.to_s.empty? ? $sp_email : reference.outgoing_email
       @body = {:reference => reference,
