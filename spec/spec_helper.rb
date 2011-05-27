@@ -80,7 +80,7 @@ end
 def mock_viewer_as_staff(params = {})
   mock_viewer({ :is_student? => false, :is_eventgroup_coordinator? => false, :is_projects_coordinator? => false, 
               :is_project_administrator? => false, :is_project_director? => false,
-              :set_project => true }.merge(params))
+              :set_project => true, :username= => true }.merge(params))
 end
 
 def mock_viewer_as_student(params = {})
@@ -95,7 +95,7 @@ def mock_viewer(params = {})
   @viewer = mock_model(Viewer, { 
     :viewer_userID => 'copter', :viewer_passWord => '9cdfb439c7876e703e307864c9167a15', # password is lol
     :viewer_isActive= => 1, :last_login= => Time.now, :save! => '', :person => '', :name => 'Cop Ter',
-    :profile_cost_items => []
+    :profile_cost_items => [], :username= => true, :save => true
   }.merge(params))
   Viewer.stub!(:find).and_return(@viewer)
 
