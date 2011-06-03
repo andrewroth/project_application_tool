@@ -1,6 +1,6 @@
 class Access < ActiveRecord::Base
   load_mappings
 
-  #include Legacy::Accountadmin::Access
+  include Legacy::Accountadmin::Access
 end
 
