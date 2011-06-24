@@ -19,7 +19,7 @@
 
 <html>
   <head>
-    <title>Project Application Tool</title>
+    <title><%= application_title %></title>
     <%= stylesheet_link_tag 'main2', 'connexion_default' %>
     <%= render :partial => "externs/sortable_tables" %>
     <%= javascript_include_tag "prototype", "effects" %>
@@ -55,9 +55,9 @@
       </div>
       <% if session[:logo_url] -%>
           <%= image_tag session[:logo_url], :class => 'branding_logo' %>
-          <span id='branding_logo_title'>Project Application Tool</span>
+          <span id='branding_logo_title'><%= application_title %></span>
       <% else %> 
-        <h1>Project Application Tool</h1>
+        <h1><%= application_title %></h1>
       <% end -%>
     </div>
     

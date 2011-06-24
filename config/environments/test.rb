@@ -22,7 +22,7 @@ config.gem 'sheldond_fgs', :lib => 'factory_girl'
 
 # Our factory_girl improvements
 class Factory
-  undef id if defined?(id)
+  undef id
   undef type
 
   class Sequence

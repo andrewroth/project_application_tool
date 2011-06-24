@@ -49,6 +49,10 @@ class EventGroup < Node
     nil
   end
 
+  def pat_title
+    self[:pat_title] || parent.try(:pat_title)
+  end
+
   def classes(section = nil)
     classes = []
 

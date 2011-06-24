@@ -54,7 +54,7 @@ class SpApplicationMailer < ActionMailer::Base
     def setup(app)
       @eg = app.form.event_group
       @name = app.viewer.name
-      @recipients = app.viewer.email
+      @recipients = "#{@name} <#{app.viewer.email}>"
       eg = app.profile.project ? app.profile.project.event_group : app.form.event_group
       @from = eg.outgoing_email.to_s.empty? ? $sp_email : eg.outgoing_email
       @body = {:applicant_name => app.viewer.name,
