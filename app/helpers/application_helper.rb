@@ -5,6 +5,10 @@ require_dependency  'vendor/plugins/questionnaire_engine/app/helpers/application
 module ApplicationHelper
   include Formatting
   
+  def application_title
+    @eg.try(:pat_title) || Pat::CONFIG[:title] || "Project Application Tool"
+  end
+
   # TODO: I would really like to make this actually check for the file, rather than do this silly try to render thing
   def file_exists?(p)
     !render_if_possible(:template => p).nil? || 
