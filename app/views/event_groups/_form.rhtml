@@ -60,6 +60,13 @@
 
 </td></tr>
 
+<tr><td colspan='2'>
+  <p>
+  <b>Title</b> - If set, this replaces the default title "<%= Pat::CONFIG[:title] %>" in the top left of the PAT.<br/>
+    <%= f.text_field :pat_title %> 
+  </p>
+</td></tr>
+
 <% unless @event_group.nil? || @event_group.new_record? %>
 <tr><td colspan='2'>
 <p><b>Eventgroup Coordinators: </b><%= @event_group.eventgroup_coordinators_names %> <%= link_to 'Manage Coordinators', { :controller => :eventgroup_coordinators, :action => :list, :id => @event_group.id }, :target => :blank %> (Opens in new window)</p>
