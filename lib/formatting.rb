@@ -7,13 +7,19 @@ module Formatting
     end
   end
 
-  def format_date(value=nil)
+  def format_date(value = nil, style = :default)
     time = value_to_time(value)
     return time if time == ''
-    return time.strftime('%Y/%m/%d')
+
+    case style
+    when :default
+      return time.strftime('%Y/%m/%d')
+    when :distance
+      distance_of_time_in_words(value, Time.now)
+    end
   end
   
-  def format_datetime(value=nil, style=:default)
+  def format_datetime(value = nil, style = :default)
     return '' if value.to_s.empty?
     return format_date(value) if value.class == Date
 
@@ -22,6 +28,8 @@ module Formatting
 
     if style == :ts
       time.strftime("%b %d, %Y %H:%M")
+    elsif style == :distance
+      distance_of_time_in_words(value, Time.now)
     else
       time.strftime("%Y/%m/%d %H:%M %Z")
     end

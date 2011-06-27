@@ -31,7 +31,13 @@
       <td><%= withdrawn.class_when_withdrawn %></td>
       <td><%= withdrawn.status_when_withdrawn %></td>
       <td><%= wd = withdrawn.withdrawn_by; wd.name if wd %></td>
-      <td><%= format_datetime withdrawn.withdrawn_at %></td>
+      <td value="<%=format_datetime withdrawn.withdrawn_at%>">
+        <%- if @eg.show_dates_as_distance %>
+          <%= format_datetime withdrawn.withdrawn_at, :distance  %><%= " ago" if withdrawn.withdrawn_at %>
+        <%- else -%>
+          <%= format_datetime withdrawn.withdrawn_at %>
+        <%- end -%>
+      </td>
       <%- if @full_view || @restricted_full_view %>
       <td><%= format_currency withdrawn.support_claimed %><br /><%= format_date withdrawn.support_claimed_updated_at %></td>
       <td><%= format_currency withdrawn.donations_total %></td>

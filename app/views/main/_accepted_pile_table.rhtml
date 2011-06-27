@@ -11,7 +11,7 @@
         <%= th 'appln (summary)' %>
         <%= th 'accepted at', 'str', true %>
         <% if @full_view || @restricted_full_view %>
-            <%= th 'support claimed', 'currency' %>
+            <%= th 'support claimed', 'string' %>
             <%= th 'support recvd', 'currency' %>
             <%= th 'support goal', 'currency'%>
             <%= th 'support coach', 'dropdown' %>
@@ -59,9 +59,20 @@
               <%= view_summary_link acceptance.id %>
             </td>
 
-            <td><%= format_date(acceptance.accepted_at) %></td>
+            <%- if @eg.show_dates_as_distance %>
+              <td value="<%= format_date(acceptance.accepted_at) %>"><%= format_date(acceptance.accepted_at, :distance) %><%= " ago" if acceptance.accepted_at %></td>
+            <%- else -%>
+              <td><%= format_date(acceptance.accepted_at) %></td>
+            <%- end -%>
+
             <% if @full_view %>
-                <td><%= format_currency acceptance.support_claimed %><br /><%= format_date acceptance.support_claimed_updated_at %></td>
+              <td value="<%= '%010d' % (format_currency acceptance.support_claimed * 100).to_i %>_<%= format_date acceptance.support_claimed_updated_at %>">
+                <%= format_currency acceptance.support_claimed %><br />
+                <%- if @eg.show_dates_as_distance %>
+                  <%= format_date acceptance.support_claimed_updated_at %></td>
+                <%- else %>
+                  <%= format_date(acceptance.support_claimed_updated_at, :distance) %><%= " ago" if acceptance.support_claimed_updated_at %>
+                <%- end %>
                 <td><%= format_currency acceptance.donations_total(:cache => @cache) %></td>
                 <td><%= format_currency acceptance.cached_costing_total %></td>
                 <td>
