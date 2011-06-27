@@ -7,9 +7,14 @@
           <td><%= v.username %></td>
           <td><%= v.person.campus_abbrev %>
           <td><%= @profile.status %></td>
-	  <td><%= @profile.project ? @profile.project.title : 'not chosen' %></td>
-          <td><%= format_datetime(@appln.submitted_at) %></td>
-          <td><%= format_datetime(@appln.completed_at) %></td>
+          <td><%= @profile.project ? @profile.project.title : 'not chosen' %></td>
+          <%- if @eg.show_dates_as_distance %>
+            <td value="<%= format_datetime(@appln.submitted_at) %>"><%= format_datetime(@appln.submitted_at, :distance) %><%= " ago" if @appln.submitted_at %></td>
+            <td value="<%= format_datetime(@appln.completed_at) %>"><%= format_datetime(@appln.completed_at, :distance) %><%= " ago" if @appln.completed_at %></td>
+          <%- else -%>
+            <td><%= format_datetime(@appln.submitted_at) %></td>
+            <td><%= format_datetime(@appln.completed_at) %></td>
+          <%- end %>
           <% if @can_evaluate %>
               <td><%= @evaluate %>
               <td><%= @view %>

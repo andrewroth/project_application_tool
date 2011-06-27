@@ -119,7 +119,7 @@ update(SortableManager.prototype, {
             for (var j = 0; j < cols.length; j++) {
                 // scrape the text and build the appropriate object out of it
                 var cell = cols[j];
-                var obj = scrapeText(cell);
+                var obj = cols[j].getAttribute("value") || scrapeText(cell);
                 if (this.columns[j] == null) {
                     continue;
                 }
