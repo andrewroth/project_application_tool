@@ -30,6 +30,8 @@ if ENV['target'] == 'dev'
   set :branch, "p2c.dev"
   ENV['host'] = "moose.campusforchrist.org"
   ENV['deploy_to'] = "/var/www/elk.campusforchrist.org"
+elsif ENV['target'] == 'prod'
+  set :branch, "p2c.prod"
 end
 
 if ENV['env']
