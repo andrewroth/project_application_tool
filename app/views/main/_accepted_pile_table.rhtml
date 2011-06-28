@@ -66,7 +66,7 @@
             <%- end -%>
 
             <% if @full_view %>
-              <td value="<%= '%010d' % (format_currency acceptance.support_claimed * 100).to_i %>_<%= format_date acceptance.support_claimed_updated_at %>">
+              <td value="<%= '%010d' % (format_currency acceptance.support_claimed.to_i * 100).to_i %>_<%= format_date acceptance.support_claimed_updated_at %>">
                 <%= format_currency acceptance.support_claimed %><br />
                 <%- if @eg.show_dates_as_distance %>
                   <%= format_date acceptance.support_claimed_updated_at %></td>
