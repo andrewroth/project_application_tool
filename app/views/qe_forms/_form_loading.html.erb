@@ -19,7 +19,7 @@
   <div id="form_holder" style="display:none">
   </div>
   <div id="loading_form">
-    <p>Your application is being constructed this very moment.  This should only take a minute. <%=image_tag('spinner.gif')%> </p>
+    <p>Your application is being loaded.  This should only take a few seconds... <%=image_tag('spinner.gif')%> </p>
     <script>
       new Ajax.Updater('form_holder', "<%= url_for @pass_params.merge(:escape => false) %>", {
            asynchronous: true, 
