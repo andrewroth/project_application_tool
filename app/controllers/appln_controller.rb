@@ -62,6 +62,11 @@ class ApplnController < InstanceController
   end
   
   def after_submit
+    if @profile.project.nil?
+      @profile.project = @eg.projects.first
+      @profile.save!
+    end
+
     if @profile.reuse_appln.present?
       @appln.form.questionnaire.references.each do |ref_elem|
         reference_instances.find_or_create_by_reference_id ref_elem.id
@@ -82,6 +87,7 @@ class ApplnController < InstanceController
     @appln.profile.submit!
     
     @appln.complete # will try to go into completed for if there are no refs
+    @appln.accept # will try to go into accepted status if the event group is set to accept on submission for apps with no refs
   end
   
   # custom projects preferences save/display method

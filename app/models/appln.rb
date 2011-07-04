@@ -122,7 +122,22 @@ class Appln < ActiveRecord::Base
     return self.profile.complete!
   end
   
-  # The :frozen? method lets the QuestionnaireEngine know to not allow
+  # mark the whole application as complete if it's all finished (including refs)
+  def accept
+    if profile.project.event_group.automatic_acceptance
+      profile.manual_update :type => 'Acceptance', :appln_id => self.id, :project_id => self.profile.project.id,
+        :support_claimed => 0, :support_coach_id => nil,
+        :accepted_by_viewer_id => self.viewer.id, :as_intern => false,
+        :viewer_id => self.viewer_id, :viewer => self.viewer, :locked_by => nil
+
+      profile = Profile.find(self.profile.id) # reload to make the new type catch
+      profile.accept!
+
+      SpApplicationMailer.deliver_accepted(profile, @viewer.email)
+    end
+  end
+
+   # The :frozen? method lets the QuestionnaireEngine know to not allow
   # the user to change the answer to a question.
   def frozen?
     !%w(started unsubmitted).include?(self.status)
