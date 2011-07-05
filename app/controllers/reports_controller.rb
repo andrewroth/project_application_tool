@@ -11,7 +11,8 @@ class ReportsController < ApplicationController
   before_filter :set_projects, :only => [ :participants, :registrants, :crisis_management, :parental_emails, 
     :ticketing_requests, :funding_status, :funding_details, :viewers_with_profile_for_project,
     :funding_details_costing, :funding_details, :travel_list, :project_stats, :funding_costs,
-    :itinerary, :interns, :summary_forms, :cost_items_for_project, :cost_items, :manual_donations, :prep_items, :prep_items_for_project ]
+    :itinerary, :interns, :summary_forms, :cost_items_for_project, :cost_items, :manual_donations, :prep_items, 
+    :prep_items_for_project, :cost_items2 ]
   before_filter :set_viewer, :only => [ :funding_details_costing, :funding_details, :funding_costs ]
   before_filter :set_travel_segment, :only => [ :travel_segment, :custom_itinerary ]
   before_filter :set_cost_items, :only => [ :cost_items ]
@@ -913,6 +914,44 @@ class ReportsController < ApplicationController
     end
 
     render_report @participants, :action => :funding_status
+  end
+
+  def cost_items2
+    if params[:viewer_id] == "all" && params[:project_id] == "all"
+      @page_title = "Cost Items for all people for all projects"
+    elsif params[:viewer_id] == "all" && params[:project_id] != "all"
+      @page_title = "Cost Items for all people for #{@projects.collect(&:title).join(',')}"
+    elsif params[:viewer_id] != "all" && params[:project_id] != "all"
+      set_viewer
+      @page_title = "Cost Items for #{@report_viewer.name} people for #{@projects.collect(&:title).join(',')}"
+    end
+
+    @columns = MyOrderedHash.new [
+    :person, 'string',
+    @many_projects ? [ :project, 'string' ] : nil,
+    :cost_item_level, 'string',
+    :cost_item_description, 'string',
+    :cost_item_amount, 'currency',
+    :total, 'currency',
+    ].flatten.compact
+
+    @rows = []
+    @profiles = params[:viewer_id] == "all" ? @projects.collect(&:profiles).flatten : 
+      Profile.find_all_by_project_id_and_viewer_id(@projects.collect { |p| p.id }, @report_viewer.id)
+
+    @profiles.each do |profile|
+      name = profile.viewer.name
+      @rows << [ name, @many_projects ? profile.project.title : nil,
+        "", "", "", "", "" ].compact
+      if profile.respond_to?(:all_cost_items)
+        profile.all_cost_items(@eg, false, true).each do |ci|
+          @rows << [ name, @many_projects ? profile.project.title : nil, ci.short_type, ci.description, ci.amount, "" ].compact
+        end
+        @rows << [ name, @many_projects ? profile.project.title : nil, "", "", "", profile.funding_target(@eg) ].compact
+      end
+    end
+
+    render_report @rows
   end
 
   def cost_items_for_project
