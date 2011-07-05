@@ -1,4 +1,4 @@
-<%= observe_field "#{action}_project_id", :url => { :controller => "reports", :action => "viewers_with_profile_for_project", :include_all => "true", :include_blank => "true", :enclosing => "span_#{action}_viewer", :select => "#{action}_viewer_id", :form => "#{action}" }, :with => 'project_id', :loading => "$('#{action}_viewers_spinner').show();", :complete => "$('#{action}_viewers_spinner').hide()" %>
+<%= observe_field "#{action}_project_id", :url => { :controller => "reports", :action => "viewers_with_profile_for_project", :include_all => "true", :include_blank => "true", :enclosing => "span_#{action}_viewer", :select => "#{action}_viewer_id", :form => "#{action}" }.merge(options), :with => 'project_id', :loading => "$('#{action}_viewers_spinner').show();", :complete => "$('#{action}_viewers_spinner').hide()" %>
 <%= image_tag "spinner.gif", :id => "#{action}_viewers_spinner", :style => "display:none" %>
 <span id="span_<%=action%>_viewer" style="display:none">
   <%= select_tag 'viewers', [], :id => "#{action}_viewer_id", :name => "viewer_id" %>

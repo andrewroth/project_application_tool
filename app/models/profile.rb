@@ -234,7 +234,7 @@ class Profile < ActiveRecord::Base
     }
   end
   
-  def all_cost_items(eg, use_project_from_eg = false)
+  def all_cost_items(eg, use_project_from_eg = false, paying_only = false)
     project_to_use = if use_project_from_eg
         eg.projects.detect{ |p| p.id == project.id if project }
       else
@@ -242,7 +242,14 @@ class Profile < ActiveRecord::Base
       end
     return [ ] unless project_to_use
 
-    project_to_use.all_cost_items(eg) + profile_cost_items
+    cis = project_to_use.all_cost_items(eg) + profile_cost_items
+
+    if paying_only
+      optin_cost_item_ids = Hash[*optin_cost_items.inject([]) {|a,oci| a + [oci.cost_item_id, true ]}]
+      cis.find_all{ |ci| !ci.optional || optin_cost_item_ids[ci.id] }
+    else
+      return cis
+    end
   end
   
   def all_prep_items #return a list of all associated prep items

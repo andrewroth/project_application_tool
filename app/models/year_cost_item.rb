@@ -5,6 +5,8 @@
 class YearCostItem < ProjectCostItem
   belongs_to :event_group
 
+  def short_type() "year" end
+
   def update_costing_total_cache
     return false unless event_group
 
