@@ -3,6 +3,8 @@
 class ProjectCostItem < CostItem
   belongs_to :project
 
+  def short_type() "project" end
+
   def update_costing_total_cache
     ProjectCostItem.update_costing_total_cache_by_project [ project ]
   end

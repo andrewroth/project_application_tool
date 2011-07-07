@@ -232,8 +232,8 @@ module ReportsHelper
     render :partial => 'report_form_project_select', :locals => { :action => action }.merge(options)
   end
 
-  def project_observe_to_viewers(action)
-    render :partial => 'report_form_project_observe_to_viewers', :locals => { :action => action }
+  def project_observe_to_viewers(action, options = {})
+    render :partial => 'report_form_project_observe_to_viewers', :locals => { :action => action, :options => options }
   end
 
   def project_observe_to_cost_items(action)

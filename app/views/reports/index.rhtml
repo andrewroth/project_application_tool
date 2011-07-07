@@ -71,7 +71,7 @@
   </LI>
   <LI>
     <% content_for(:form) do %>
-      Funding Details for <%= project_select("funding_details", :default_first => false) %> for <%= project_observe_to_viewers('funding_details') %> <%= html_excel_submit_links("funding_details") %> 
+      Funding Details for <%= project_select("funding_details", :default_first => false) %> for <%= project_observe_to_viewers('funding_details', :include_blank => false, :include_all => false) %> <%= html_excel_submit_links("funding_details") %> 
     <% end %>
     <%= render :partial => "report_form", :locals => { :action => "funding_details" } %>
     <I>Lists the financial situation of an individual project participant.</I>
@@ -149,6 +149,13 @@
     <% end %>
     <%= render :partial => "report_form", :locals => { :action => "crisis_management" } %>
     <I>Lists crisis information for everyone accepted to a project.</I>
+  </LI>
+  <LI>
+    <% content_for(:form) do %>
+      Cost Items by person for <%= project_select("cost_items2", :include_blank => true, :include_all => true) %> for <%= project_observe_to_viewers("cost_items2") %> <%= html_excel_submit_links("cost_items2") %>
+    <% end %>
+    <%= render :partial => "report_form", :locals => { :action => "cost_items2" } %>
+    <I>Lists the status of cost items.</I>
   </LI>
 
 </OL>
