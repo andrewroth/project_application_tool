@@ -1,1 +1,8 @@
 page.visual_effect :highlight, "optional_#{@cost_item.id}_text"
+if @cost_item.optional
+  page["locked_#{@cost_item.id}"].show
+  page["locked_#{@cost_item.id}_text"].show
+else
+  page["locked_#{@cost_item.id}"].hide
+  page["locked_#{@cost_item.id}_text"].hide
+end

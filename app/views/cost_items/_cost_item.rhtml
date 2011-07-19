@@ -33,7 +33,9 @@ end
 <label>Description: </label><%= can_edit ? in_place_editor_field(:cost_item, :description) : cost_item.description %> <br />
 <label>Amount: </label><%= can_edit ? in_place_editor_field(:cost_item, :amount) : cost_item.amount %> <br />
 
-<%= check_box :cost_item, :optional, :id => 'optional_' + cost_item.id.to_s, :disabled => !can_edit %> <span id="optional_<%=cost_item.id%>_text">optional</span><br />
+<%= check_box :cost_item, :optional, :id => 'optional_' + cost_item.id.to_s, :disabled => !can_edit %> <span id="optional_<%=cost_item.id%>_text">optional</span>
+&nbsp;&nbsp;<%= check_box :cost_item, :locked, :id => 'locked_' + cost_item.id.to_s, :style => ("display:none" unless @cost_item.optional), 
+  :disabled => !can_edit %> <span id="locked_<%=cost_item.id%>_text", style="<%=("display:none" unless @cost_item.optional) %>">locked</span><br />
 
 <% if can_edit %>
 <%= observe_field 'optional_' + cost_item.id.to_s, 
@@ -41,6 +43,13 @@ end
         :loading => "$('spinner_#{cost_item.id}').show();",
         :loaded => "$('spinner_#{cost_item.id}').hide();",
         :with => 'cost_item_optional' %>
+
+<%= observe_field 'locked_' + cost_item.id.to_s, 
+        :url => {:controller => 'cost_items', :action => "set_locked", :id => cost_item.id},
+        :loading => "$('spinner_#{cost_item.id}').show();",
+        :loaded => "$('spinner_#{cost_item.id}').hide();",
+        :with => 'locked_optional' %>
+
 
 <%= observe_field 'applies_to_' + cost_item.id.to_s, 
         :update => 'list',
