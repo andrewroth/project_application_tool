@@ -1,0 +1,12 @@
+<%= stylesheet_link_tag 'list'  %>
+<%-
+  # Set cost items load here.  It's not the cleanest to do this in a view, but since it's a special
+  # magic page there's no better spot.
+
+  @cost_items = @profile.all_cost_items(@eg)
+  @cost_items.sort!
+  @opted = Hash[*@cost_items.collect{ |ci| [ci.id, !ci.optins.find_by_profile_id(@profile).nil?] }.flatten]
+  @total, *@sums = @profile.calculate_sums(@cost_items)
+%>
+
+<%= render :file => "optin_cost_items/list" %>
