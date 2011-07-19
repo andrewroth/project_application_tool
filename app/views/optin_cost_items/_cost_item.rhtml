@@ -37,7 +37,9 @@ title="Click to edit" style="background-color: transparent; background-image: no
 <% end %>
 
 <% name = "optin_#{cost_item.id}" %>
-<input type="checkbox" id="<%=name%>" name="<%=name%>" <%= (!cost_item.optional || opted) ? 'checked=\'true\'':''%> <%=cost_item.optional ? '' : 'disabled'%>/> I will support raise for this item
+<%- locked = cost_item.optional && cost_item.locked && !(@profile.is_a?(Applying) && @profile.status == "started") %>
+<input type="checkbox" <%- if locked %>disabled="true"<% end %> id="<%=name%>" name="<%=name%>" <%= (!cost_item.optional || opted) ? 'checked=\'true\'':''%> <%=cost_item.optional ? '' : 'disabled'%>/> I will support raise for this item
+<% if locked %><br/><i><%= image_tag "lock.png" %> This cost item is locked.  You can not opt in or out of it now.<i><% end %>
 
 <% if cost_item.optional %>
 
