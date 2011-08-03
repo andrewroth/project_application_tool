@@ -49,6 +49,17 @@ class EventGroupsController < AjaxTreeController
     index
   end
 
+  def scope_by_slug
+    eg = EventGroup.find_by_slug(params[:slug])
+    if eg
+      params[:id] = eg.id
+      session[:start] = true
+      set_as_scope
+    else
+      render :inline => "No event group with the key URL '#{params[:slug]}' found."
+    end
+  end
+
   def set_as_scope
     session[:event_group_id] = params[:id]
     session[:logo_img] = nil
@@ -63,7 +74,12 @@ class EventGroupsController < AjaxTreeController
       cookies.delete :event_group_id
     end
 
-    redirect_to :controller => :main
+    @eg = EventGroup.find(params[:id])
+    if session[:start] && (form = @eg.forms.find_by_hidden(false))
+      redirect_to :controller => :your_apps, :action => :start, :form_id => form.id
+    else
+      redirect_to :controller => :main
+    end
   end
 
   # GET /event_groups
