@@ -17,11 +17,13 @@
 	  <%= render :partial => 'optin_cost_items/list' %>
 	</div>
 	
-	<%= link_to_remote 'New Cost Item', 
-		:url => { :controller => 'optin_cost_items', :action => 'create', :profile_id => @profile.id },
-	  :loading => "$('spt_loading').show();",
-	  :loaded => "$('spt_loading').hide();"
-	%>
+  <%- unless @eg.hide_profile_cost_item_link %>
+    <%= link_to_remote 'New Cost Item', 
+      :url => { :controller => 'optin_cost_items', :action => 'create', :profile_id => @profile.id },
+      :loading => "$('spt_loading').show();",
+      :loaded => "$('spt_loading').hide();"
+    %>
+  <%- end -%>
 	
 	<div id='sums'>
 		<%= render :partial => 'optin_cost_items/sums' %>
