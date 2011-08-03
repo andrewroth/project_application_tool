@@ -87,8 +87,16 @@
 <tr><td colspan='2'>
   <p>
   <b>Cost Item Line</b> - If set, this replaces the default line on a cost item ("I will support raise for this item").<br/>
-    <%= f.text_area :cost_item_phrase, :rows => 2 %> 
+    <%= f.text_field :cost_item_phrase %> 
   </p>
+</td></tr>
+
+<tr><td colspan='2'>
+  <p>
+  <b>Slug</b> - This enables a url <b><%= request.protocol %><%= request.host %><%= (":" + request.port.to_s) if request.port != 80 %>/register/&lt;slug&gt;</b> that scopes this event group and starts the application form<br/>
+    &nbsp;<%= request.protocol %><%= request.host %><%= (":" + request.port.to_s) if request.port != 80 %>/register/<%= f.text_field :slug %> <%- if @event_group.slug.present? %>&nbsp;<%= link_to "Current slug url", request.protocol + request.host + ((":" + request.port.to_s) if request.port != 80).to_s + "/register/" + @event_group.slug %><% end %>
+  </p>
+
 </td></tr>
 
 <% unless @event_group.nil? || @event_group.new_record? %>

@@ -77,6 +77,9 @@ ActionController::Routing::Routes.draw do |map|
   # -- just remember to delete public/index.html.
   map.connect '', :controller => "main"
   
+  # register slug/url shortcut
+  map.connect '/register/:slug', :controller => "event_groups", :action => "scope_by_slug"
+
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id'
 end
