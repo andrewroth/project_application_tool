@@ -260,7 +260,12 @@ class SecurityController < ApplicationController
       @viewer.save(false)
     end
 
-    redirect_to :controller => "main"
+    if session[:url_to_redirect_when_logged_in].present?
+      redirect_to session[:url_to_redirect_when_logged_in]
+      flash.delete :url_to_redirect_when_logged_in
+    else
+      redirect_to :controller => "main"
+    end
   end
 
   def ensure_gcx_in_session

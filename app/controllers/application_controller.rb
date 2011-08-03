@@ -91,6 +91,7 @@ class ApplicationController < ActionController::Base
     #  redirect_to :controller => "security", :action => "motd"
     #elsif (session[:user_id].nil?)
     if (session[:user_id].nil?)
+      session[:url_to_redirect_when_logged_in] = request.path
       redirect_to :controller => "security", :action => "login"
       return false
     end
