@@ -2,6 +2,7 @@ class CustomElement < Element
   self.abstract_class = true
 
   has_many :custom_element_required_sections, :foreign_key => :element_id
+  has_many :custom_element_hidden_sections, :foreign_key => :element_id
 
   def after_create_with_params(params)
     for model in [:appln_person, :emerg]
