@@ -80,7 +80,7 @@ module ElementsHelper
       end
       # hidden
       id = "hidden_#{m}_#{c}"
-      hidden = @element.custom_element_required_sections.detect{ |cers| cers.name == m.to_s && cers.attribute == c.to_s } != nil
+      hidden = @element.custom_element_hidden_sections.detect{ |cers| cers.name == m.to_s && cers.attribute == c.to_s } != nil
       html += check_box_tag(id, 'hidden', hidden, :name => "hidden[#{m}][#{c}]") + " hidden?" + 
         observe_field(id, :url => { :controller => :custom_element_hidden_sections, :action => :set,
                       :element_id => @element.id, :name => m, :attribute => c },
