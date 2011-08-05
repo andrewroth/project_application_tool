@@ -6,19 +6,25 @@
     end
 %>
 
-<HR>
+<%- if custom_element_visible('emerg_contact_1') %>
+  <HR>
 
-<P> <STRONG>Emergency Contact 1:</STRONG><BR />
-<%= render :partial => 'profiles/crisis_info_emerg_contact', :locals => { :prefix => 'emerg_contact' } %>
-
-<HR>
+  <P> <STRONG>Emergency Contact 1:</STRONG><%= custom_element_item_footer("emerg_contact_1", "header") %><BR />
+  <%= render :partial => 'profiles/crisis_info_emerg_contact', :locals => { :prefix => 'emerg_contact' } %>
+<%- end %>
 
 <% if Pat::CONFIG[:emerg_contact_cdn_style] %>
-<P> <STRONG>Emergency Contact 2:</STRONG><BR />
-<%= render :partial => 'profiles/crisis_info_emerg_contact', :locals => { :prefix => 'emerg_contact2' } %>
+<%- if custom_element_visible('emerg_contact_2') %>
+  <HR>
+
+  <P> <STRONG>Emergency Contact 2:</STRONG><%= custom_element_item_footer("emerg_contact_2", "header") %><BR />
+  <%= render :partial => 'profiles/crisis_info_emerg_contact', :locals => { :prefix => 'emerg_contact2' } %>
+<%- end %>
 <% end %>
 
-<HR>
+<%- if custom_element_visible('med_hr') %>
+  <HR><%= custom_element_item_footer("med_hr", "header") %>
+<%- end %>
 
 <%= custom_element_item("Do you have any medical conditions that could potentially become an emergency?  If so, please explain.: <BR />", :emerg, :notes) do |m,c,classes|
       text_area m, c, :rows => 5, :cols => 80, :class => classes
@@ -30,13 +36,16 @@
     end
  %>
 
+<%- if custom_element_visible('health_info') %>
 <HR>
 
 <P>
 
-<STRONG>Health Info:</STRONG>
+<STRONG>Health Info:</STRONG> <%= custom_element_item_footer("health_info", "header") %>
 
 <P>
+
+<%- end %>
 
 <% mid = "health_coverage" %>
 <% label_prefix = "Health coverage " %>
@@ -80,11 +89,15 @@ update_province_select('<%= mid %>', 'emerg');
 %>
 <P>
 
+<%- if custom_element_visible('passport') %>
 <HR>
 
 <P><STRONG>Passport Info:</STRONG> complete if going on an international project.
 
-<P>What are the names on your passport?</P>
+<P>What are the names on your passport?  <%= custom_element_item_footer("passport", "header") %>
+</P>
+
+<%- end %>
 
 <%= custom_element_text_field('Surname: ', :appln_person, :last_name) %>
 
