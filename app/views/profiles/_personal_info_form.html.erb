@@ -1,7 +1,9 @@
 <% @appln_person ||= @instance.viewer.person if @instance %>
 
+<%- if custom_element_visible('name') %>
 <P>
-What do you normally go by?<BR/>
+What do you normally go by?<%= custom_element_item_footer("name", "header") %><BR/>
+<%- end %>
 
 <%- if Pat::CONFIG[:person_has_title] -%>
 <%= custom_element_item('Title: ', :appln_person, :title_id) do |m,c,classes|
@@ -28,8 +30,11 @@ What do you normally go by?<BR/>
 <%- end -%>
 <%= custom_element_text_field('Email: ', :appln_person, :email) %>
 
+<%- if custom_element_visible('current_address') %>
 <HR/>
-<P><STRONG> Current Address </STRONG></P>
+<P><STRONG> HERECurrent Address </STRONG><%= custom_element_item_footer("current_address", "header") %></P>
+<%- end %>
+
 <%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Current ', :mid => 'local' } %>
 
 <%= custom_element_item("Current address valid until: ", :appln_person, :local_valid_until) do |m,c,classes|
@@ -37,8 +42,10 @@ What do you normally go by?<BR/>
     end
 %>
 
+<%- if custom_element_visible('permanent_address') %>
 <HR>
-<P><STRONG> Permanent Address </STRONG></P>
+<P><STRONG> Permanent Address </STRONG><%= custom_element_item_footer("permanent_address", "header") %></P>
+<%- end -%>
 
 <% unless @readonly %>
 <p><%= check_box :appln_person, :permanent_same_as_local, :onClick => %|
@@ -47,7 +54,11 @@ What do you normally go by?<BR/>
   } else {
     $('permanent_address').show();
   }
-|%> Same as Current Address above.</p>
+  |%> 
+
+  <%- if custom_element_visible('same_as_current_address') %>
+    Same as Current Address above.<%= custom_element_item_footer("same_as_current_address", "header") %></p>
+  <%- end %>
 <% end %>
 
 <div id='permanent_address' style='<%= 'display:none;' if @appln_person && @appln_person.permanent_same_as_local %>'>
