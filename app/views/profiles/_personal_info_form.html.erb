@@ -32,7 +32,7 @@ What do you normally go by?<%= custom_element_item_footer("name", "header") %><B
 
 <%- if custom_element_visible('current_address') %>
 <HR/>
-<P><STRONG> HERECurrent Address </STRONG><%= custom_element_item_footer("current_address", "header") %></P>
+<P><STRONG> Current Address </STRONG><%= custom_element_item_footer("current_address", "header") %></P>
 <%- end %>
 
 <%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Current ', :mid => 'local' } %>
