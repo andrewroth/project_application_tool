@@ -1,4 +1,6 @@
 class CmtGeo
+  @@country_code_to_states_cache = {}
+
   def self.all_countries
     Country.all.collect{|c| [c.country_desc, c.country_shortDesc]}
   end
@@ -8,9 +10,17 @@ class CmtGeo
     }
   end
   def self.states_for_country(c)
-    country = find_country_from_code(c)
+    if c.is_a?(Country)
+      country = c
+    elsif c.is_a?(String)
+      country = find_country_from_code(c)
+    end
     return [] unless country
-    country.states.collect{ |s| [ s.name, s.abbrev ] }
+    if states = @@country_code_to_states_cache[c]
+      return states
+    else
+      return states = @@country_code_to_states_cache[c] = country.states.collect{ |s| [ s.name, s.abbrev ] }
+    end
   end
   def self.campuses_for_state(s, c)
     state = State.find_by_province_shortDesc(s)
