@@ -15,7 +15,7 @@
       r = ""
       for country in Country.all
         id = "#{m}_#{c}_#{country.code}"
-        r += select_tag("#{m}_#{c}", options_for_select([[""]] + CmtGeo.states_for_country(country.iso_code), @appln_person.send(:try, c).to_s), :class => classes, :style => "display:none;", :name => id, :id => id)
+        r += select_tag("#{m}_#{c}", options_for_select([[""]] + CmtGeo.states_for_country(country), @appln_person.send(:try, c).to_s), :class => classes, :style => "display:none;", :name => id, :id => id)
       end
 
       r
