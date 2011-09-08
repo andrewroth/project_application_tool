@@ -1,4 +1,6 @@
 class EventGroup < Node
+  include Common::Pat::EventGroup
+
   belongs_to :ministry
   belongs_to :location
 
@@ -14,8 +16,6 @@ class EventGroup < Node
   has_many :tags
   has_many :eventgroup_coordinators, :conditions => { :end_date => nil }
   has_many :prep_items
-
-  acts_as_tree
 
   has_attachment :content_type => :image, 
                  :storage => :file_system,
@@ -75,29 +75,6 @@ class EventGroup < Node
     end
   end
   alias_method_chain :children, :hidden_check
-
-  def to_s_with_eg_path
-    "#{eg_path}"
-  end
-
-  def eg_path
-    visited = { self => true }
-
-    eg_path = ''
-    node = self
-    while !node.nil?
-      eg_path = eg_path.empty? ? node.title : (node.title + ' - ' + eg_path)
-      node = node.parent
-
-      if visited[node]
-        node = nil
-      else
-        visited[node] = true
-      end
-    end
-
-    eg_path
-  end
 
   def to_s
     title
