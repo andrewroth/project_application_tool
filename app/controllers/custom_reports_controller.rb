@@ -124,6 +124,7 @@ class CustomReportsController < ApplicationController
 
     project = profile.project
     emerg = person.emerg if person
+    warnings = []
 
     for re in @report_elements
       if re.class == ReportElementCostItem
@@ -149,8 +150,7 @@ class CustomReportsController < ApplicationController
         end
 
         q = e.traverse_to_questionnaire
-        warnings = []
-        if q
+        unless q
           warnings << "Element #{h e.text_summary(:include_type => true)} is no longer in a form.)"
         end
 
