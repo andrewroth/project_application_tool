@@ -22,8 +22,14 @@ config.gem 'sheldond_fgs', :lib => 'factory_girl'
 
 # Our factory_girl improvements
 class Factory
+  begin
   undef id
+  rescue
+  end
+  begin
   undef type
+  rescue
+  end
 
   class Sequence
     def reset
