@@ -26,14 +26,16 @@ module ElementsHelper
   }
 
   def custom_element_visible(name, method = "header")
+    return true if @readonly
     return true if custom_element_edit_mode || custom_element_create_mode
     return true if @element.nil?
     !@element.custom_element_hidden_sections.find_by_name(name, method).present?
   end
 
   def custom_element_item(txt, m, c)
-    if @element.nil? || (!custom_element_edit_mode && !custom_element_create_mode && 
-                         @element.custom_element_hidden_sections.detect{ |s| s.name == m.to_s && s.attribute == c.to_s })
+    if (!@readonly && @element.nil?) || 
+         (!@readonly && !custom_element_edit_mode && !custom_element_create_mode && 
+          @element.custom_element_hidden_sections.detect{ |s| s.name == m.to_s && s.attribute == c.to_s })
       return ""
     end
 

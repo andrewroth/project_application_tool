@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100614153103) do
+ActiveRecord::Schema.define(:version => 20110829185446) do
 
   create_table "airports", :force => true do |t|
     t.string   "code"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20100614153103) do
     t.integer "project_id"
     t.integer "profile_id"
     t.integer "event_group_id"
+    t.boolean "locked",                                       :default => false
   end
 
   add_index "cost_items", ["event_group_id"], :name => "index_cost_items_on_event_group_id"
@@ -55,6 +56,14 @@ ActiveRecord::Schema.define(:version => 20100614153103) do
   create_table "countries", :force => true do |t|
     t.string   "code"
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "custom_element_hidden_sections", :force => true do |t|
+    t.integer  "element_id"
+    t.string   "name"
+    t.string   "attribute"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -92,6 +101,13 @@ ActiveRecord::Schema.define(:version => 20100614153103) do
     t.integer "height"
     t.boolean "show_mpdtool",                                :default => false
     t.boolean "allows_multiple_applications_with_same_form"
+    t.string  "pat_title"
+    t.boolean "show_dates_as_distance",                      :default => false
+    t.boolean "automatic_acceptance",                        :default => true
+    t.string  "slug"
+    t.string  "cost_item_instructions"
+    t.string  "cost_item_phrase"
+    t.boolean "hide_profile_cost_item_link",                 :default => false
   end
 
   create_table "eventgroup_coordinators", :force => true do |t|
@@ -192,7 +208,7 @@ ActiveRecord::Schema.define(:version => 20100614153103) do
 
   create_table "form_question_options", :force => true do |t|
     t.integer  "question_id"
-    t.string   "option",      :limit => 255
+    t.string   "option",      :limit => 256
     t.string   "value",       :limit => 50
     t.integer  "position"
     t.datetime "created_at"
@@ -447,7 +463,9 @@ ActiveRecord::Schema.define(:version => 20100614153103) do
     t.date    "end"
     t.integer "event_group_id"
     t.string  "cost_center"
-    t.boolean "hidden",         :default => false
+    t.boolean "hidden",            :default => false
+    t.boolean "hide_from_profile", :default => false
+    t.string  "pulse_name"
   end
 
   add_index "projects", ["event_group_id"], :name => "index_projects_on_event_group_id"
