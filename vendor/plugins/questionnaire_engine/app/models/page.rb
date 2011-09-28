@@ -85,4 +85,8 @@ class Page < ActiveRecord::Base
       element.copy_answer(source_instance, dest_instance)
     end
   end
+
+  def elements_flattened
+    elements.collect(&:self_plus_children_flattened).flatten
+  end
 end

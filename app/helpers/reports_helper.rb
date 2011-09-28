@@ -228,6 +228,10 @@ module ReportsHelper
     "#{link_to_function("html", submit_js("html", form_id))} | #{link_to_function("excel (csv)", submit_js("csv", form_id))}"
   end
 
+  def html_submit_links(form_id)
+    "#{link_to_function("html", submit_js("html", form_id))}"
+  end
+
   def project_select(action, options = {})
     render :partial => 'report_form_project_select', :locals => { :action => action }.merge(options)
   end

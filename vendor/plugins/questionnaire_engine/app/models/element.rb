@@ -217,4 +217,8 @@ class Element < ActiveRecord::Base
       sub_element.copy_answer source_instance, dest_instance
     end
   end
+
+  def self_plus_children_flattened
+    [ self ] + self.elements.collect(&:self_plus_children_flattened).flatten
+  end
 end

@@ -12,7 +12,7 @@ class ReportsController < ApplicationController
     :ticketing_requests, :funding_status, :funding_details, :viewers_with_profile_for_project,
     :funding_details_costing, :funding_details, :travel_list, :project_stats, :funding_costs,
     :itinerary, :interns, :summary_forms, :cost_items_for_project, :cost_items, :manual_donations, :prep_items, 
-    :prep_items_for_project, :cost_items2 ]
+    :prep_items_for_project, :cost_items2, :changed_always_editable_answer_after_date ]
   before_filter :set_viewer, :only => [ :funding_details_costing, :funding_details, :funding_costs ]
   before_filter :set_travel_segment, :only => [ :travel_segment, :custom_itinerary ]
   before_filter :set_cost_items, :only => [ :cost_items ]
@@ -1175,6 +1175,53 @@ class ReportsController < ApplicationController
     render_report @participants
   end
   
+  def changed_always_editable_answer_after_date
+    cutoff_date = DateParamsParser.parse(params, "date")
+    @columns = MyOrderedHash.new([
+      :name, 'string',
+      :project, 'string',
+      'full application', 'string',
+      'summary', 'string',
+    ])
+    @page_title = "Applications with always editable fields that have been changed on or after #{cutoff_date}"
+
+    # approach here is to get all elements that are in the always editable form, then search for answers on them
+    # based on updated_at
+    
+    @always_editable_elements = []
+    @eg.forms.collect(&:questionnaire).each do |q|
+      q.filter = { :filter => [ "always_editable" ], :default => false }
+      @always_editable_elements << q.pages.collect(&:elements_flattened).flatten
+    end
+    @always_editable_elements.flatten!
+
+    @rows = []
+    instance_ids = Answer.find(:all, :conditions => [ "question_id in (0, ?) AND updated_at >= ?",
+                               @always_editable_elements.collect(&:id), cutoff_date ] ).collect(&:instance_id).compact.uniq
+
+    # include applns that have a person whose emergency contact or personal info element has updated
+    Appln.find_all_by_form_id(@eg.forms.collect(&:id)).each do |app|
+      p = app.try(:viewer).try(:person)
+      if (p.updated_at && p.updated_at > cutoff_date) || 
+        (p.emerg.try(:updated_at) && p.emerg.try(:updated_at) > cutoff_date) ||
+        (p.person_extra.try(:updated_at) && p.person_extra.try(:updated_at) > cutoff_date)
+        instance_ids << app.id
+      end
+    end
+    instance_ids.uniq!
+
+    # compose the results
+    Appln.find_all_by_id(instance_ids, :include => :profiles).each do |app|
+      app.profiles.each do |profile|
+        next unless profile.is_a?(Acceptance) && @projects.include?(profile.project)
+        @rows << [ app.try(:viewer).try(:person).try(:full_name), app.profile.try(:project).try(:name), 
+          "<A HREF=\"#{summary_profiles_viewer_path(profile)}\" target=\"_blank\">summary</A>",
+          "<A HREF=\"#{entire_profiles_viewer_path(profile)}\" target=\"_blank\">entire</A>" ]
+      end
+    end
+
+    render_report @rows
+  end
   
   protected
   
