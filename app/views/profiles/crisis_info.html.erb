@@ -1,5 +1,6 @@
 <% form_for :person, :url => { :action => 'update_crisis_info', :viewer_id => @subject.id } do |p| %>
 
+  <% @visibility_override = true %>
   <%= render :partial => 'personal_info_form' %>
   <HR />
   <%= render :partial => 'crisis_info_form' %>

@@ -60,6 +60,7 @@ class Question < Element
     def try_to_save(instance, params)
       @answer = Answer.find_by_instance_id_and_question_id(instance.id, id) ||
                       Answer.new(:instance_id => instance.id, :question_id => id)
+      return if @answer.answer == params[:answers][id.to_s]
       @answer.answer = params[:answers][id.to_s]
       @answer.save!
     end

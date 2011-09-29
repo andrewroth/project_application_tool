@@ -1182,6 +1182,7 @@ class ReportsController < ApplicationController
       :project, 'string',
       'full application', 'string',
       'summary', 'string',
+      'elements that have changed', 'string',
     ])
     @page_title = "Applications with always editable fields that have been changed on or after #{cutoff_date}"
 
@@ -1196,27 +1197,73 @@ class ReportsController < ApplicationController
     @always_editable_elements.flatten!
 
     @rows = []
-    instance_ids = Answer.find(:all, :conditions => [ "question_id in (0, ?) AND updated_at >= ?",
-                               @always_editable_elements.collect(&:id), cutoff_date ] ).collect(&:instance_id).compact.uniq
+    answers = Answer.find(:all, :conditions => [ "question_id in (0, ?) AND updated_at >= ?",
+                               @always_editable_elements.collect(&:id), cutoff_date ] )
+    instance_ids = answers.collect(&:instance_id)
+    instance_ids_to_answers = answers.group_by(&:instance_id)
 
     # include applns that have a person whose emergency contact or personal info element has updated
+    person_attributes_changed_ids = []
+    emerg_attributes_changed_ids = []
     Appln.find_all_by_form_id(@eg.forms.collect(&:id)).each do |app|
       p = app.try(:viewer).try(:person)
+      next unless p
       if (p.updated_at && p.updated_at > cutoff_date) || 
-        (p.emerg.try(:updated_at) && p.emerg.try(:updated_at) > cutoff_date) ||
         (p.person_extra.try(:updated_at) && p.person_extra.try(:updated_at) > cutoff_date)
+        person_attributes_changed_ids << app.id
+        instance_ids << app.id
+      end
+      if (p.emerg.try(:updated_at) && p.emerg.try(:updated_at) > cutoff_date)
+        emerg_attributes_changed_ids << app.id
         instance_ids << app.id
       end
     end
     instance_ids.uniq!
 
-    # compose the results
+    # extract the results to a hash then build the html
     Appln.find_all_by_id(instance_ids, :include => :profiles).each do |app|
       app.profiles.each do |profile|
         next unless profile.is_a?(Acceptance) && @projects.include?(profile.project)
+        elements = (instance_ids_to_answers[app.id] || []).collect{ |ans|
+          answer = ans.element.get_answer(app)
+          if !answer.present?
+            nil
+          elsif ans.element.is_a?(Selectfield) # selectfields require special treatment to get the option text
+            if answer
+              option = ans.element.question_options.find_by_value answer
+              answer_txt = option.nil? ? '' : option.option
+            else
+              answer_txt = ""
+            end
+            #"<span class='element_text'>#{ans.element.text}:</span> <span class='element_answer'>#{answer_txt}</span>"
+            { :txt => ans.element.text, :answer => answer_txt }
+          else
+            #"<span class='element_text'>#{ans.element.text}:</span> <span class='element_answer'>#{answer}</span>"
+            { :txt => ans.element.text, :answer => answer }
+          end
+        }.compact
+        person_attributes = {}
+        if person_attributes_changed_ids.include?(app.id)
+          changed_hash = {}
+          changed_hash.merge!(app.viewer.person.changed_since_hash(cutoff_date))
+          changed_hash.merge!(app.viewer.person.person_extra.changed_since_hash(cutoff_date))
+          person_attributes = changed_hash.collect{ |att, val| { :txt => att, :answer => val } }
+        end
+        emerg_attributes = {}
+        if emerg_attributes_changed_ids.include?(app.id)
+          changed_hash = app.viewer.person.emerg.changed_since_hash(cutoff_date)
+          emerg_attributes = changed_hash.collect{ |att, val| { :txt => att, :answer => val } }
+        end
+
+        next unless elements.present? || person_attributes.present? || emerg_attributes.present?
+        
+        html = render_to_string(:partial => 'combined_changed_list', :locals => { :elements => elements,
+                               :person_attributes => person_attributes, :emerg_attributes => emerg_attributes })
+
         @rows << [ app.try(:viewer).try(:person).try(:full_name), app.profile.try(:project).try(:name), 
           "<A HREF=\"#{summary_profiles_viewer_path(profile)}\" target=\"_blank\">summary</A>",
-          "<A HREF=\"#{entire_profiles_viewer_path(profile)}\" target=\"_blank\">entire</A>" ]
+          "<A HREF=\"#{entire_profiles_viewer_path(profile)}\" target=\"_blank\">entire</A>",
+          html ]
       end
     end
 

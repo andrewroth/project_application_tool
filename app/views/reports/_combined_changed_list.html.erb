@@ -1,0 +1,17 @@
+<ul class='disc'>
+<%- if elements.present? %>
+  <li>Application Answers
+    <%= render(:partial => 'changed_list', :object => elements) %>
+  </li>
+<%- end %>
+<%- if person_attributes.present? %>
+  <li>Personal Attributes
+    <%= render(:partial => 'changed_list', :object => person_attributes) %>
+  </li>
+<%- end %>
+<%- if emerg_attributes.present? %>
+  <li>Emergency Attributes
+    <%= render(:partial => 'changed_list', :object => emerg_attributes) %>
+  </li>
+<%- end %>
+

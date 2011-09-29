@@ -85,6 +85,7 @@ class ElementsController < ApplicationController
   def change_type
     Element.connection.update("Update #{Element.table_name} SET type = '#{params[:type]}' WHERE id = #{@element.id}") if params[:type]
   end
+
   def update
     @element.attributes = params[:element]
     if @element.save

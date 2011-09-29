@@ -23,3 +23,11 @@ table.person_has_many_rows tr td:first-child {
 table.person_has_many_rows tr.new_item td:first-child {
   border-left-width: 1px;
 }
+
+span.element_text {
+  color: red;
+}
+
+span.element_answer {
+  color: blue;
+}

@@ -1,7 +1,11 @@
 class Person < ActiveRecord::Base
   include Common::Core::Person
   include Common::Core::Ca::Person
+  include RecordsAttributeUpdatedAt
   load_mappings
+
+  has_many :people
+  has_many :attributes_updated_ats
 
   def viewers
     users
@@ -23,5 +27,9 @@ class Person < ActiveRecord::Base
 
   def name
     self.full_name
+  end
+
+  def person
+    self
   end
 end
