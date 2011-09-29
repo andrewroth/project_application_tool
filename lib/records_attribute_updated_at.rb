@@ -17,6 +17,7 @@ module RecordsAttributeUpdatedAt
           next if %w(updated_at created_at).include?(att)
           #table_name = self.class.table_name.split('.').last
           table_name = self.class.table_name
+          return unless person
           updated_at = person.attributes_updated_ats.find_or_create_by_table_name_and_attr_name(table_name, att)
           updated_at.updated_at = DateTime.now
           updated_at.save!
