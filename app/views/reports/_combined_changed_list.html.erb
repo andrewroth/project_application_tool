@@ -1,8 +1,12 @@
 <ul class='disc'>
 <%- if elements.present? %>
-  <li>Application Answers
-    <%= render(:partial => 'changed_list', :object => elements) %>
-  </li>
+  <li>Application Answers</li>
+  <ul>
+    <%- elements.each do |h| %>
+      <%- element = h[:element]; instance = h[:instance]; answer = h[:answer] %>
+      <li><%= render(:partial => "element", :locals => { :answer => answer, :element => element, :instance => instance }) %></li>
+    <%- end %>
+  </ul>
 <%- end %>
 <%- if person_attributes.present? %>
   <li>Personal Attributes
@@ -14,4 +18,4 @@
     <%= render(:partial => 'changed_list', :object => emerg_attributes) %>
   </li>
 <%- end %>
-
+</ul>

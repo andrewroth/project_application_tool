@@ -1182,7 +1182,7 @@ class ReportsController < ApplicationController
       :project, 'string',
       'full application', 'string',
       'summary', 'string',
-      'elements that have changed', 'string',
+      "what's changed", 'string',
     ])
     @page_title = "Applications with always editable fields that have been changed on or after #{cutoff_date}"
 
@@ -1224,24 +1224,7 @@ class ReportsController < ApplicationController
     Appln.find_all_by_id(instance_ids, :include => :profiles).each do |app|
       app.profiles.each do |profile|
         next unless profile.is_a?(Acceptance) && @projects.include?(profile.project)
-        elements = (instance_ids_to_answers[app.id] || []).collect{ |ans|
-          answer = ans.element.get_answer(app)
-          if !answer.present?
-            nil
-          elsif ans.element.is_a?(Selectfield) # selectfields require special treatment to get the option text
-            if answer
-              option = ans.element.question_options.find_by_value answer
-              answer_txt = option.nil? ? '' : option.option
-            else
-              answer_txt = ""
-            end
-            #"<span class='element_text'>#{ans.element.text}:</span> <span class='element_answer'>#{answer_txt}</span>"
-            { :txt => ans.element.text, :answer => answer_txt }
-          else
-            #"<span class='element_text'>#{ans.element.text}:</span> <span class='element_answer'>#{answer}</span>"
-            { :txt => ans.element.text, :answer => answer }
-          end
-        }.compact
+        elements = (instance_ids_to_answers[app.id] || []).collect{ |ans| { :answer => ans, :element => ans.element, :instance => app } }
         person_attributes = {}
         if person_attributes_changed_ids.include?(app.id)
           changed_hash = {}

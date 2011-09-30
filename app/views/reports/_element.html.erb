@@ -1,0 +1,34 @@
+<% 
+answer_txt = ""
+if element.is_a?(Selectfield)
+  option_index = element.get_answer(instance)
+  option = answer.element.question_options.find_by_value option_index
+  answer_txt = option.nil? ? "" : option.option
+elsif element.is_a?(Multicheckbox)
+  for checkbox in multicheckbox.checkboxfields
+    answer_txt += "&nbsp;" * 3
+    answer_txt += (is_true(checkbox.get_answer(instance)) ? 
+                   "[<span class=\"element_text\">X</span>]" : "[&nbsp;&nbsp;]") + checkbox.text
+    answer_txt += "<br/>"
+  end
+elsif element.is_a?(Radiofield)
+  answer_txt += "<br/>"
+  for option in element.question_options
+    answer_txt += "&nbsp;" * 3
+    answer_txt += element.get_answer(instance) == option.value ? 
+      "[<span class=\"element_text\">X</span>] " : "[&nbsp;&nbsp;] "
+    answer_txt += option.option + "<br/>"
+  end
+elsif element.is_a?(Textarea)
+  answer_txt = element.get_answer(instance).gsub("\n", "<br />")
+elsif element.is_a?(YesNo)
+  answer_txt += (is_true(answer) ? '[<span class="element_text">X</span>]' : "[&nbsp;&nbsp;]") + " Yes" + ("&nbsp;"*3)
+  answer_txt += (answer && !is_true(answer) ? '[<span class="element_text">X</span>]' : "[&nbsp;&nbsp;]") + " No"
+elsif element.is_a?(Checkboxfield)
+  answer_txt += is_true(element.get_answer(instance)) ? '[<span class="element_text">X</span>]' : "[&nbsp;&nbsp;]"
+else
+  answer_txt = element.get_answer(instance)
+end
+%>
+
+<span class='element_text'><%= element.text %></span>: <span class='element_answer'><%= answer_txt %></a>
