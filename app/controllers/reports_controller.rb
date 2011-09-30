@@ -1230,12 +1230,15 @@ class ReportsController < ApplicationController
           changed_hash = {}
           changed_hash.merge!(app.viewer.person.changed_since_hash(cutoff_date))
           changed_hash.merge!(app.viewer.person.person_extra.changed_since_hash(cutoff_date))
-          person_attributes = changed_hash.collect{ |att, val| { :txt => att, :answer => val } }
+          person = profile.viewer.try(:person)
+          person_attributes = changed_hash.collect{ |att, val| changed_always_editable_follow_foreigns(att, val, person) }
         end
         emerg_attributes = {}
         if emerg_attributes_changed_ids.include?(app.id)
-          changed_hash = app.viewer.person.emerg.changed_since_hash(cutoff_date)
-          emerg_attributes = changed_hash.collect{ |att, val| { :txt => att, :answer => val } }
+          emerg = app.viewer.person.emerg
+          changed_hash = emerg.changed_since_hash(cutoff_date)
+          #emerg_attributes = changed_hash.collect{ |att, val| { :txt => att, :answer => val } }
+          emerg_attributes = changed_hash.collect{ |att, val| changed_always_editable_follow_foreigns(att, val, emerg) }
         end
 
         next unless elements.present? || person_attributes.present? || emerg_attributes.present?
@@ -1255,6 +1258,35 @@ class ReportsController < ApplicationController
   
   protected
   
+  def changed_always_editable_follow_foreigns(att, val, model)
+    # Try to follow foreign keys, like person_local_province_id should follow person_local_province.name
+    # If the object resolves to a String, use that, otherwise try sending .name
+    if att =~ /(.*)_id/
+      ref = $1
+      if model && model.respond_to?(ref)
+        element_txt = ref
+        obj = model.send(ref)
+        if obj.nil?
+          answer_txt = ""
+        elsif obj.is_a?(String)
+          answer_txt = obj
+        elsif obj.respond_to?(:name)
+          answer_txt = obj.name
+        else
+          answer_txt = val
+        end
+      else
+        element_txt = att
+        answer_txt = val
+      end
+    else
+      element_txt = att
+      answer_txt = val
+    end
+
+    { :txt => element_txt, :answer => answer_txt } 
+  end
+
   def csv_requested
     [ 'csv', 'excel (csv)' ].include? params[:format]
   end

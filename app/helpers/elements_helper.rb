@@ -69,7 +69,8 @@ module ElementsHelper
   def custom_element_item_footer(m,c)
     html = ""
     if custom_element_create_mode
-      html += check_box_tag("required_#{m}_#{c}", 'required', INITIALLY_REQUIRED[m][c], :name => "required[#{m}][#{c}]") + " required? "
+      initially_required = INITIALLY_REQUIRED[m] && INITIALLY_REQUIRED[m][c]
+      html += check_box_tag("required_#{m}_#{c}", 'required', initially_required, :name => "required[#{m}][#{c}]") + " required? "
       html += check_box_tag("hidden_#{m}_#{c}", 'hidden', false, :name => "hidden[#{m}][#{c}]") + " hidden?"
     elsif custom_element_edit_mode
       unless c == "header" # can't require headers
