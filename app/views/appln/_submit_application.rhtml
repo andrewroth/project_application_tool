@@ -3,20 +3,24 @@
 Your application has been submitted.
 <% else %>
 <table>
-<tr>
-	<td class="app" valign="middle" colspan="2">
-	   <br />
-	   <table cellspacing="0" cellpadding="0">
-	       <tr>
-	            <td>
-					If you are sure you are finished with the application, click "Submit Application". After you submit your application, you will not be able to edit your answers in your application.
-				</td>
-				<td class="app" width="33%" align="center" valign="middle">
-					<a class="button" href="javascript:submit_instance()">Submit Application</a>
-				</td>
-			</tr>
-		</table>
-	</td>
-</tr>
+  <tr>
+    <td class="app" valign="middle" colspan="2">
+      <br />
+      <table cellspacing="0" cellpadding="0">
+        <tr>
+          <td style='min-width: 600px; height: 100px;'>
+            <%- if @eg.submit_text.present? %>
+              <%= @eg.submit_text %>
+            <%- else %>
+              If you are sure you are finished with the application, click "Submit Application". After you submit your application, you will not be able to edit your answers in your application.
+            <%- end %>
+          </td>
+          <td class="app" width="33%" align="center" valign="middle">
+            <a class="button" href="javascript:submit_instance()">Submit Application</a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
 </table>
 <% end -%>
