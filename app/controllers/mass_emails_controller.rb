@@ -59,7 +59,7 @@ class MassEmailsController < ApplicationController
     end
     
     emails = profiles.collect{ |pr| pr.viewer.person.email if pr.viewer && pr.viewer.person }.compact.uniq
-    @result = if emails.empty? then '<I>Nothing found</I>' else emails.join(', ') end
+    @result = if emails.empty? then '<I>Nothing found</I>' else emails.join(params[:use_semicolon] == '1' ? '; ' : ', ') end
 
     render :inline => @result
   end
