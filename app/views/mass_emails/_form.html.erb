@@ -23,11 +23,11 @@
 
       <tr><td>
         <% id, value = check_options[i1] %>
-        <%= check_box_tag id %> <%= value %>
+        <%= check_box_tag id %> <%= label_tag id, value %>
       </td><td>
         <% id, value = check_options[i2] %>
         <% unless id.nil? || id.empty? -%>
-          <%= check_box_tag id %> <%= value %>
+          <%= check_box_tag id %> <%= label_tag id, value %>
         <% end -%>
       </td>
       <td>
@@ -36,6 +36,11 @@
       
       
     <% end %>
+
+    <tr><td colspan='2'>
+      <%= check_box_tag 'use_semicolon' %> <%= label_tag 'use_semicolon', 'Use semi-colon instead of comma' %>
+    </td> </tr>
+
     </table>
 
   </div>
