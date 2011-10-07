@@ -1243,13 +1243,18 @@ class ReportsController < ApplicationController
 
         next unless elements.present? || person_attributes.present? || emerg_attributes.present?
         
-        html = render_to_string(:partial => 'combined_changed_list', :locals => { :elements => elements,
+        elements_block = render_to_string(:partial => 'combined_changed_list', :locals => { :elements => elements,
                                :person_attributes => person_attributes, :emerg_attributes => emerg_attributes })
+        if params[:format] == 'csv'
+          summary_url = summary_profiles_viewer_url(profile)
+          entire_url = entire_profiles_viewer_url(profile)
+        else
+          summary_url = "<A HREF=\"#{summary_profiles_viewer_path(profile)}\" target=\"_blank\">summary</A>"
+          entire_url = "<A HREF=\"#{entire_profiles_viewer_path(profile)}\" target=\"_blank\">entire</A>"
+        end
 
         @rows << [ app.try(:viewer).try(:person).try(:full_name), app.profile.try(:project).try(:name), 
-          "<A HREF=\"#{summary_profiles_viewer_path(profile)}\" target=\"_blank\">summary</A>",
-          "<A HREF=\"#{entire_profiles_viewer_path(profile)}\" target=\"_blank\">entire</A>",
-          html ]
+          summary_url, entire_url, elements_block ]
       end
     end
 
@@ -1314,7 +1319,7 @@ class ReportsController < ApplicationController
     # so I'll do it the old-fashioned way    
     if csv_requested
       now = Time.now.strftime("%A %B %d %Y")
-      filename = @page_title || params[:action]
+      filename = @page_title || @filename || params[:action]
       filename.gsub!('  ', ' ')
       
       headers['Content-Type'] = "text/csv"

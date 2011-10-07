@@ -1,10 +1,9 @@
 <%- if changed_list.present? %>
   <ul class='disc'>
-  <%- changed_list.each do |hash| %>
-    <li class='disc'><span class='element_text'>
-      <%= hash[:txt] %></span>: <span class='element_answer'><%= hash[:answer] %></span>
-    </li>
-  <%- end %>
+    <%- changed_list.each do |hash| %>
+      <li class='disc'><span class='element_text'>
+        <%= hash[:txt] %></span>: <span class='element_answer'><%= hash[:answer] %></span>
+      </li>
+    <%- end %>
   </ul>
 <%- end %>
-

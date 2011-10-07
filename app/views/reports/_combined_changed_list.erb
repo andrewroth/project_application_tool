@@ -1,0 +1,17 @@
+<%- if elements.present? -%>
+Application Answers
+  <%- elements.each do |h| -%>
+    <%- element = h[:element]; instance = h[:instance]; answer = h[:answer] -%>
+  <%= render(:partial => "element", :locals => { :answer => answer, :element => element, :instance => instance }) -%>
+  <%- end -%>
+<%- end -%>
+<%- if person_attributes.present? -%>
+
+Personal Attributes
+<%= render(:partial => 'changed_list', :object => person_attributes) -%>
+<%- end -%>
+<%- if emerg_attributes.present? -%>
+
+Emergency Attributes
+<%= render(:partial => 'changed_list', :object => emerg_attributes) -%>
+<%- end -%>

@@ -1,21 +1,42 @@
-<ul class='disc'>
-<%- if elements.present? %>
-  <li>Application Answers</li>
-  <ul>
-    <%- elements.each do |h| %>
-      <%- element = h[:element]; instance = h[:instance]; answer = h[:answer] %>
-      <li><%= render(:partial => "element", :locals => { :answer => answer, :element => element, :instance => instance }) %></li>
+<%- if params[:format] == 'html' %>
+  <ul class='disc'>
+    <%- if elements.present? %>
+      <li>Application Answers</li>
+      <ul>
+        <%- elements.each do |h| %>
+          <%- element = h[:element]; instance = h[:instance]; answer = h[:answer] %>
+          <li><%= render(:partial => "element", :locals => { :answer => answer, :element => element, :instance => instance }) %></li>
+        <%- end %>
+      </ul>
+    <%- end %>
+    <%- if person_attributes.present? %>
+      <li>Personal Attributes
+      <%= render(:partial => 'changed_list', :object => person_attributes) %>
+      </li>
+    <%- end %>
+    <%- if emerg_attributes.present? %>
+      <li>Emergency Attributes
+      <%= render(:partial => 'changed_list', :object => emerg_attributes) %>
+      </li>
     <%- end %>
   </ul>
-<%- end %>
-<%- if person_attributes.present? %>
-  <li>Personal Attributes
-    <%= render(:partial => 'changed_list', :object => person_attributes) %>
-  </li>
-<%- end %>
-<%- if emerg_attributes.present? %>
-  <li>Emergency Attributes
-    <%= render(:partial => 'changed_list', :object => emerg_attributes) %>
-  </li>
-<%- end %>
-</ul>
+<% elsif params[:format] == 'csv' %>
+  <%- if elements.present? %>
+Application Answers
+        <%- elements.each do |h| %>
+          <%- element = h[:element]; instance = h[:instance]; answer = h[:answer] %>
+          <%= render(:partial => "element", :locals => { :answer => answer, :element => element, :instance => instance }) %>
+        <%- end %>
+      </ul>
+    <%- end %>
+    <%- if person_attributes.present? %>
+      
+Personal Attributes
+<%= render(:partial => 'changed_list', :object => person_attributes) %>
+    <%- end %>
+    <%- if emerg_attributes.present? %>
+
+Emergency Attributes
+<%= render(:partial => 'changed_list', :object => emerg_attributes) %>
+    <%- end %>
+<% end %>

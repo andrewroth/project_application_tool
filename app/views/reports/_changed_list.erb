@@ -1,0 +1,5 @@
+<%- if changed_list.present? -%>
+  <%- changed_list.each do |hash| -%>
+  <%= hash[:txt] %>: <%= hash[:answer] %>
+  <%- end -%>
+<%- end -%>

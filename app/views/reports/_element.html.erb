@@ -1,4 +1,4 @@
-<% 
+<%- 
 answer_txt = ""
 if element.is_a?(Selectfield)
   option_index = element.get_answer(instance)
@@ -30,5 +30,4 @@ else
   answer_txt = element.get_answer(instance)
 end
 %>
-
-<span class='element_text'><%= element.text %></span>: <span class='element_answer'><%= answer_txt %></a>
+  <span class='element_text'><%= element.text %></span>: <span class='element_answer'><%= answer_txt %></a>

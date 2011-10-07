@@ -159,7 +159,7 @@
   </LI>
   <LI>
     <% content_for(:form) do %>
-      Always editable changes for <%= project_select("crisis_management", :default_first => true, :include_all => true) %> on or after <%= select_date %> <%= html_submit_links("changed_always_editable_answer_after_date") %>
+      Always editable changes for <%= project_select("crisis_management", :default_first => true, :include_all => true) %> on or after <%= select_date %> <%= html_excel_submit_links("changed_always_editable_answer_after_date") %>
     <% end %>
     <%= render :partial => "report_form", :locals => { :action => "changed_always_editable_answer_after_date" } %>
     <i>Everyone who changed an always-editable field after a certain date by project</I>
