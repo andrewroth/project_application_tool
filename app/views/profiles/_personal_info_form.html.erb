@@ -38,7 +38,8 @@ What do you normally go by?<%= custom_element_item_footer("name", "header") %><B
 <%= render :partial => 'profiles/personal_info_address', :locals => { :label_prefix => 'Current ', :mid => 'local' } %>
 
 <%= custom_element_item("Current address valid until: ", :appln_person, :local_valid_until) do |m,c,classes|
-      date_select m, c, :start_year => Time.now.year, :end_year => 10.years.from_now.year, :class => classes, :include_blank => true
+      date_select m, c, :start_year => Time.now.year, :end_year => 10.years.from_now.year, :class => classes, :include_blank => true,
+        :order => [ :day, :month, :year ]
     end
 %>
 

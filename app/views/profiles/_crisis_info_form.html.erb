@@ -2,7 +2,8 @@
 <% @emerg = @appln_person.emerg if @appln_person %>
 
 <%= custom_element_item("Your Birthdate: ", :appln_person, :birth_date) do |m,c,classes|
-      date_select m, c, :start_year => 100.years.ago.year, :end_year => 10.years.ago.year, :class => classes, :include_blank => true
+      date_select m, c, :start_year => 100.years.ago.year, :end_year => 10.years.ago.year, :class => classes, :include_blank => true,
+        :order => [ :day, :month, :year ]
     end
 %>
 
@@ -107,7 +108,7 @@ update_province_select('<%= mid %>', 'emerg');
 
 <%= custom_element_item("Passport Expiry: ", :emerg, :passport_expiry) do |m,c,classes|
       date_select :emerg, :passport_expiry, { :end_year => 10.years.from_now.year,
-                     :include_blank => true, :class => classes }
+        :include_blank => true, :class => classes, :order => [ :day, :month, :year ] }
     end
  %>
 
