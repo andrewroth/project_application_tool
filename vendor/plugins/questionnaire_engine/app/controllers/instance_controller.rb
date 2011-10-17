@@ -13,7 +13,7 @@ class InstanceController < BaseViewController
     save_form
     bad_pages = []
     @questionnaire.pages.each do |page|
-      bad_pages << page.title unless page.validated?(questionnaire_instance)
+      bad_pages << page.title unless page.validated?(questionnaire_instance) || page.hidden?
     end
     bad_pages.each {|title| @current_page.errors.add_to_base(title) }
     
