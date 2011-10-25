@@ -6,7 +6,11 @@ module ApplicationHelper
   include Formatting
   
   def application_title
-    @eg.try(:pat_title) || Pat::CONFIG[:title] || "Project Application Tool"
+    if @eg.try(:pat_title).present?
+      @eg.try(:pat_title)
+    else
+      Pat::CONFIG[:title] || "Project Application Tool"
+    end
   end
 
   # TODO: I would really like to make this actually check for the file, rather than do this silly try to render thing
