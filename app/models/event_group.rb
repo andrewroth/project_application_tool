@@ -23,6 +23,37 @@ class EventGroup < Node
 
   attr :filter_hidden, true
 
+  def nested_children
+    children.collect(&:self_plus_nested_children).flatten
+  end
+
+  def self_plus_nested_children
+    [ self ] + nested_children
+  end
+
+  def self_plus_nested_form_ids
+    self_plus_nested_children.collect(&:form_ids).flatten
+  end
+
+  def all_appln_ids
+    Appln.find_all_by_form_id(self.self_plus_nested_form_ids, :select => "id").collect(&:id)
+  end
+  
+  def all_project_ids
+    self_plus_nested_children.collect(&:project_ids).flatten
+  end
+
+  #named_scope :all, lambda { { :conditions => { :a => b } } }
+
+=begin
+  def all_profiles(filter_type = [ "Acceptance", "Applying", "StaffProfile", "Withdrawn" ])
+    profiles_from_appln = Profile.find_all_by_appln_id(self.all_appln_ids, :conditions => [ "profiles.type IN (?)", filter_type ])
+    profiles_from_projects = Profile.find_all_by_project_id(self.self_plus_nested_children.collect(&:project_ids).flatten,
+                                                           :conditions => [ "profiles.type IN (?)", filter_type ])
+    return (profiles_from_appln + profiles_from_projects).uniq
+  end
+=end
+
   def application_form
     forms.find_by_hidden(false) || forms.all.detect{ |f| 
       # find first form that's not the processor form or a reference form

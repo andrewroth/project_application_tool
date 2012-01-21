@@ -4,13 +4,33 @@
 <BR />
 <P>
   <div id="select_event_Group">
-    <form>
-      <b>Select event group to view: </b>
-      <% event_group_current = params[:event_group_id] %>
-      <% event_group_current = event_group_current.to_i unless event_group_current.to_s.include?('all') %>
-      <%= select_tag 'event_group_id', options_for_select(@all_event_group_titles, event_group_current) %>
-      <%= observe_field 'event_group_id', :url => { }, :with => "window.location.href = '/tools/update_motivation_codes?event_group_id=' + value" %>
-    </form>
+    <% form_tag do %>
+      <b>Filters</b>
+      <div>
+        <%= label_tag 'event_group_id', 'Event Group' %>
+        <%= select_tag 'event_group_id', options_for_select(@all_event_group_titles, params[:event_group_id].to_i) %>
+      </div>
+      <div>
+        <b>By current code:</b><br/>
+        <%= check_box_tag 'include_with_codes', '1', params[:include_with_codes] == '1' %>
+        <%= label_tag 'include_with_codes', 'Include those <b>with</b> motivation codes currently' %>
+        <br/>
+        <%= check_box_tag 'include_without_codes', '1', params[:include_without_codes] == '1' %>
+        <%= label_tag 'include_without_codes', 'Include those <b>without</b> motivation codes currently' %>
+      </div>
+      <div>
+        <b>By profile:</b><br/>
+        <%= check_box_tag 'include_accepted', '1', params[:include_accepted] == '1' %>
+        <%= label_tag 'include_accepted', 'Include <b>Accepted</b> applicants' %>
+        <br/>
+        <%= check_box_tag 'include_withdrawn', '1', params[:include_withdrawn] == '1' %>
+        <%= label_tag 'include_withdrawn', 'Include <b>Withdrawn</b> applicants' %>
+        <br/>
+        <%= check_box_tag 'include_staff', '1', params[:include_staff] == '1' %>
+        <%= label_tag 'include_staff', 'Include <b>staff</b> applicants' %>
+      </div>
+      <%= submit_tag "Update" %>
+    <% end %>
   </div>
 </P>
 
@@ -22,6 +42,7 @@
   <thead>
     <tr>
         <%= th :name => 'name' %>
+        <%= th :name => 'type' %>
         <%= th :name => 'profile_id', :type => 'integer' %>
         <%= th :name => 'status' %>
         <%= th :name => 'project' %>
@@ -33,12 +54,11 @@
     </tr>
   </thead><tbody>
 
-    <% @accepted.each do |pe| %>
-        <% next if pe.project.nil? %>
-        <tr><div id="row_<%=pe.id%>">
-        <% v = pe.viewer %>
-        <%= render :partial => "update_motivation_code_for_acceptance", 
-            :locals => { :pe => pe, :v => v } %>
+    <% @profiles.each do |p| %>
+        <% next if p.project.nil? %>
+        <tr><div id="row_<%=p.id%>">
+        <% v = p.viewer %>
+        <%= render :partial => "update_motivation_code_for_profile", :locals => { :p => p, :v => v } %>
     </div></tr>
     <% end %>
   </tbody>

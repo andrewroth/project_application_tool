@@ -49,30 +49,40 @@ class ToolsController < ApplicationController
 
   def update_motivation_codes
     # all root nodes, for populating the switch eg dropdown
-    @all_nodes = EventGroup.find_all_by_parent_id(nil, :include => :projects)
+    @all_nodes = EventGroup.roots
     @all_event_group_titles = [ ]
     @all_event_group_titles << [ "all", "all" ]
-    @all_event_group_titles << [ "all without motivation codes", "all_no_codes" ]
     @all_event_group_titles += Node.roots_to_dropdown_list :roots => @all_nodes
 
-    # by default show only people without assigned motivation codes for any event group
-    params[:event_group_id] ||= 'all_no_codes'
+    # set some defaults
+    unless request.post?
+      params[:event_group_id] ||= @eg.id
+      params[:include_accepted] ||= '1'
+      params[:include_withdrawn] ||= '1'
+      params[:include_staff] ||= '1'
+      params[:include_with_codes] ||= '0'
+      params[:include_without_codes] ||= '1'
+    end
 
-    @accepted = Profile.find(:all, :include => :project)
-    if ['all','all_no_codes'].include?(params[:event_group_id])
-      if params[:event_group_id] == 'all_no_codes'
-        @accepted.reject! { |profile| profile.project.nil? || profile.project.event_group.nil? || 
-	                                  profile.motivation_code != '0' }
-      end
-      @eg_column = true
-    else
-      @accepted.reject! { |profile| profile.project.nil? || profile.project.event_group_id != params[:event_group_id].to_i } 
-      @eg_column = false
+    profile_types = []
+    profile_types << "Accepted" if params[:include_accepted] == '1'
+    profile_types << "Withdrawn" if params[:include_withdrawn] == '1'
+    profile_types << "StaffProfile" if params[:include_staff] == '1'
+
+    conditions_text = "(type IN (?))"
+    conditions_subs = [profile_types]
+
+    if params[:include_with_codes] == '1' && params[:without_codes] == '1'
+      # no extra conditions needed for both with and without codes
+    elsif params[:include_with_codes] == '1'
+      conditions_text << " AND (motivation_code IS NOT null AND motivation_code != '' AND motivation_code != '0')"
+    elsif params[:include_without_codes] == '1'
+      conditions_text << " AND (motivation_code IS null OR motivation_code = '' OR motivation_code = '0')"
     end
-    @accepted.reject! { |profile| profile.class == Withdrawn }
-    @accepted.sort! do |a,b|
-      a.motivation_code <=> b.motivation_code
-    end
+
+    @profiles = Profile.by_event_group(params[:event_group_id], conditions_text, conditions_subs).
+      find(:all, :order => 'motivation_code ASC', :include => [ :project, { :viewer => :persons }])
+    #@profiles = []
   end
   
   def accept_from_paper

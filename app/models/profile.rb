@@ -19,6 +19,22 @@ class Profile < ActiveRecord::Base
   # so include will work
   belongs_to :appln
 
+  named_scope :by_event_group, lambda { |*p|
+    if p.first.to_s == 'all'
+      all_appln_ids = EventGroup.roots.collect(&:all_appln_ids).flatten
+      all_project_ids = EventGroup.roots.collect(&:all_project_ids).flatten
+    else
+      eg = EventGroup.find p.first
+      all_appln_ids = eg.all_appln_ids
+      all_project_ids = eg.all_project_ids
+    end
+    conditions_text = "(appln_id IN (?) OR project_id IN (?))"
+    conditions_text += " AND #{p.second}" if p.second.present?
+    conditions_subs = [ all_appln_ids, all_project_ids ]
+    conditions_subs += p.third if p.third.present?
+    { :conditions => ([ conditions_text ] + conditions_subs) }
+  }
+
   def form_title() appln.form.questionnaire.title if appln && appln.form && appln.form.questionnaire end
 
   # params:

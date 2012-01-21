@@ -1,0 +1,24 @@
+<td><%= v ? v.name : 'nil_viewer' %></td>
+<td><%= p.class.name %></td>
+<td><%= p.id %></td>
+<td><%= p.status %></td>
+<td><%= p.project.title %></td>
+<% if @eg_column %>
+  <td><%= p.project.event_group ? p.project.event_group.to_s_with_eg_path : "Warning: no event_group for project id #{p.project.id} title #{p.project.title}" %></td>
+<% end %>
+<% eval "@profile_#{p.id} = p" %>
+<td><%= text_field "profile_#{p.id}", 'motivation_code' %></td>
+<td>
+    <div style="display:none" id="saving_<%=p.id%>">saving...</div>
+  <%= observe_field "profile_#{p.id}_motivation_code",
+         :url => {
+            :controller => :profiles,
+            :action => :update,
+            :id => p.id,
+         },
+        :loading => "$('saving_#{p.id}').show();",
+        :loaded => "$('saving_#{p.id}').hide();",
+    	:complete => visual_effect(:highlight, "row_#{p.id}"),
+        :with =>  "'profile[motivation_code]='+escape($('profile_#{p.id}_motivation_code').value)"
+   %>
+</td>
