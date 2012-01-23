@@ -217,5 +217,5 @@ class Profile < ActiveRecord::Base
     save!
   end
 
-  def event_group() project.try(:event_group) end
+  def event_group() project.try(:event_group) || self.try(:appln).try(:form).try(:event_group) end
 end

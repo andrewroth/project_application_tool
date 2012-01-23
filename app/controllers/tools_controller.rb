@@ -65,14 +65,14 @@ class ToolsController < ApplicationController
     end
 
     profile_types = []
-    profile_types << "Accepted" if params[:include_accepted] == '1'
+    profile_types << "Acceptance" if params[:include_accepted] == '1'
     profile_types << "Withdrawn" if params[:include_withdrawn] == '1'
     profile_types << "StaffProfile" if params[:include_staff] == '1'
 
     conditions_text = "(type IN (?))"
     conditions_subs = [profile_types]
 
-    if params[:include_with_codes] == '1' && params[:without_codes] == '1'
+    if params[:include_with_codes] == '1' && params[:include_without_codes] == '1'
       # no extra conditions needed for both with and without codes
     elsif params[:include_with_codes] == '1'
       conditions_text << " AND (motivation_code IS NOT null AND motivation_code != '' AND motivation_code != '0')"
@@ -82,6 +82,7 @@ class ToolsController < ApplicationController
 
     @profiles = Profile.by_event_group(params[:event_group_id], conditions_text, conditions_subs).
       find(:all, :order => 'motivation_code ASC', :include => [ :project, { :viewer => :persons }])
+    @eg_column = EventGroup.find(params[:event_group_id]).children.count > 0
     #@profiles = []
   end
   
