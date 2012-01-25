@@ -176,7 +176,7 @@ class ManageProjectsController < ApplicationController
       if @profile.nil?
         @profile = StaffProfile.create :viewer_id => params[:viewer_id], :project_id => params[:project_id]
       elsif @profile.class != StaffProfile
-        @profile.manual_update :type => StaffProfile, :user => @viewer
+        @profile.manual_update :type => StaffProfile, :viewer => @viewer
       end
 
       @success = @success && @profile
@@ -205,7 +205,7 @@ class ManageProjectsController < ApplicationController
         # if 'going' has been unchecked, the staff profile is set to withdrawn
         @profile ||= Withdrawn.find_by_viewer_id_and_project_id viewer.id, @project.id
 
-        @profile.manual_update :type => Withdrawn, :status => :staff_profile_dropped, :user => @viewer
+        @profile.manual_update :type => Withdrawn, :status => :staff_profile_dropped, :viewer => @viewer
       end
     end
   

@@ -33,7 +33,7 @@
            profile_field_id = "viewer_#{viewer.id}_profile_going"
          %>
         <div>
-            <%= check_box_tag profile_field_id, 1, has_staff_profile %> going
+            <%= check_box_tag profile_field_id, 1, has_staff_profile %> <%= label_tag profile_field_id, 'going' %>
             <%= observe_field profile_field_id,
                  :url => { :controller => :profiles, :action => :set_profile_going, 
                            :viewer_id => viewer.id, :project_id => @project.id },

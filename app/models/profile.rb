@@ -58,8 +58,13 @@ class Profile < ActiveRecord::Base
       profile = Profile.find self.id
     end
 
+    # take out any direct viewer or user refs since setting them can cause errors
+    # if the wrong one is passed in.  going by id is much safer
+    params[:viewer_id] = params.delete(:user).id if params[:user]
+    params[:viewer_id] = params.delete(:viewer).id if params[:viewer]
+    
+    # update!
     profile.update_attributes params
-    profile.save!
 
     # special case - update the appln's viewer_id if viewer_id changed
     if params[:viewer_id] && profile.appln && profile.appln.viewer_id != params[:viewer_id]
