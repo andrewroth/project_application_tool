@@ -95,7 +95,7 @@ table#application_status {
 }
 
 #header {
-	background-color: #94E2FF;
+	background-color: white;
 	border-bottom: 2px solid #253940;
 	padding: 5px;
 }
@@ -124,13 +124,13 @@ table#application_status {
 .menu li.menuactive {
 	padding-top: 2px;
 	border-top: none;
-	background-color: #94E2FF;
+	background-color: white;
 }
 
 .submenu li.submenuactive {
 	padding-bottom: 4px;
 	border-bottom: none;
-	background-color: #94E2FF;
+	background-color: white;
 }
 
 .submenu li a{
