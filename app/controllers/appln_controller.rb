@@ -46,7 +46,9 @@ class ApplnController < InstanceController
 #    @questionnaire = @appln.form.questionnaire
 #    @pages = @questionnaire.pages
     if @appln.nil?
-      throw "Couldn't find application id #{params[:appln_id]}"
+      flash[:notice] = "Couldn't find application (id given: #{params[:appln_id]}). Try opening the application from this page."
+      redirect_to :controller => :your_apps, :action => :list
+      return
     end
 
     @appln.form.questionnaire
