@@ -1,8 +1,11 @@
 <% form_for :appln_person, :url => { :action => 'update_campus_info', :viewer_id => @subject.id } do |p| %>
 
-<%= render :partial => 'campus_involvements/list' %>
-<P><BR />
-<%= submit_tag 'Save' %>
+<div class='center_column'>
+  <%- @visibility_override = true %>
+  <%= render :partial => 'campus_involvements/list' %>
+  <P><BR />
+  <%= submit_tag 'Save' %>
+</div>
 
 <% end %>
 

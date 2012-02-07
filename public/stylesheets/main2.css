@@ -686,3 +686,9 @@ img.new_window {
 #list_reports i {
   color: gray;
 }
+
+.center_column {
+  width: 800px;
+  text-align: left;
+  margin: 0 auto;
+}
