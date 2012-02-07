@@ -206,6 +206,7 @@ module Permissions
   end
 
   def has_profile_ownership
+    halt("error: no profile given for this action") and return false unless @profile
     @profile.viewer == @viewer || (@viewer && @viewer.is_eventgroup_coordinator?(@eg))
   end
 
