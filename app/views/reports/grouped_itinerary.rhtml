@@ -13,6 +13,11 @@ li {
   padding-left: 20px;
 }
 
+.header {
+  font-style: italic;
+  font-weight: bold;
+}
+
 </style>
 <%= render :partial => 'fix_include_profiles' %>
 <%  i = 0 
@@ -20,17 +25,13 @@ li {
 %>
 <% @travel_segments_hash.each_pair do |ts,p| %>
       
-  <i><strong>
-    <% if !@include_profiles %>
-      <%= ts.long_desc %>
-    <% else %>
-      <%= ts.short_desc %>
-      <% @highlight_ts_id = ts.id %>
-    <% end %>
-  </strong></i>
+  <div class='header'>
+    <%= ts.long_desc %>
+    <%- @highlight_ts_id = ts.id -%>
+  </div>
 
-    <%= render :partial => 'itinerary_profiles', :object => p %>
-<br />
+  <%= render :partial => 'itinerary_profiles', :object => p %>
+  <br />
 <% end -%>
 
 
