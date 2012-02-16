@@ -998,13 +998,14 @@ class ReportsController < ApplicationController
   end
   
   def travel_segment
-    @travel_segments_hash = {}
+    @travel_segments_hash = MyOrderedHash.new;
     @travel_segments.each do |ts|
       @travel_segments_hash[ts] = []
       ts.profiles.each do |p|
-        @travel_segments_hash[ts] << [ p.viewer.name, p.project, p ]
+        @travel_segments_hash[ts] << [ p.viewer.try(:name), p.project, p ]
       end
     end
+    @travel_segments_hash.keys.sort!{ |k,k2| k.departure_time <=> k2.departure_time }
     
     if @travel_segments.size == TravelSegment.find(:all).length 
       tag = "all Travel Segments" 

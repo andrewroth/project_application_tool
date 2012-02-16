@@ -20,12 +20,14 @@ li {
 %>
 <% @travel_segments_hash.each_pair do |ts,p| %>
       
+  <i><strong>
     <% if !@include_profiles %>
       <%= ts.long_desc %>
     <% else %>
       <%= ts.short_desc %>
       <% @highlight_ts_id = ts.id %>
     <% end %>
+  </strong></i>
 
     <%= render :partial => 'itinerary_profiles', :object => p %>
 <br />

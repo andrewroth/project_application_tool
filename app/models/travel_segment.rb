@@ -51,15 +51,14 @@ class TravelSegment < ActiveRecord::Base
   
   def short_desc
     "#{flight_no} #{format_datetime(departure_time, :ts)} " + 
-      "#{departure_city} to #{format_datetime(arrival_time, :ts)} #{arrival_city} " #+ 
-   #   ("(notes: #{notes})" if (notes && !notes.empty?)).to_s
-   # no notes per Russ's request
+      "#{departure_city} to #{format_datetime(arrival_time, :ts)} #{arrival_city} "
   end
   
   def long_desc
-    "#{flight_no} #{format_datetime(departure_time, :ts)} " + 
-      "#{departure_city} to #{format_datetime(arrival_time, :ts)} #{arrival_city} " + 
-      ("(notes: #{notes})" if (notes && !notes.empty?)).to_s
+    "#{departure_time.strftime('%b %d')} #{flight_no};" + ('&nbsp;'*5) +
+      "depart #{departure_city} #{departure_time.strftime('%H:%M')};" + ('&nbsp;'*5) +
+      "arrive #{arrival_city} #{arrival_time.strftime('%H:%M')}" + 
+      (";#{'&nbsp;'*5} (notes: #{notes})" if (notes && !notes.empty?)).to_s
   end
   
   def save_tag_objects_from_tags
