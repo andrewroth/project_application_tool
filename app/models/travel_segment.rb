@@ -55,12 +55,19 @@ class TravelSegment < ActiveRecord::Base
   end
   
   def long_desc
-    "#{departure_time.strftime('%b %d')} #{flight_no};" + ('&nbsp;'*5) +
-      "depart #{departure_city} #{departure_time.strftime('%H:%M')};" + ('&nbsp;'*5) +
+    "#{departure_time.strftime('%b %d')} #{flight_no}; " +
+      "depart #{departure_city} #{departure_time.strftime('%H:%M')}; " +
       "arrive #{arrival_city} #{arrival_time.strftime('%H:%M')}" + 
-      (";#{'&nbsp;'*5} (notes: #{notes})" if (notes && !notes.empty?)).to_s
+      ("; (notes: #{notes})" if (notes && !notes.empty?)).to_s
   end
-  
+
+  def long_desc_csv
+    "\"#{departure_time.strftime('%b %d')}\", \"#{flight_no}\"," +
+      "\"depart #{departure_city} #{departure_time.strftime('%H:%M')}\"," +
+      "\"arrive #{arrival_city} #{arrival_time.strftime('%H:%M')}\"" + 
+      (",\"(notes: #{notes})\"" if (notes && !notes.empty?)).to_s
+  end
+   
   def save_tag_objects_from_tags
     @tags ||= tags
     tags = @tags.split(',').collect{ |t| t.strip }
