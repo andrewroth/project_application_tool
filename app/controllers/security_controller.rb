@@ -95,8 +95,11 @@ class SecurityController < ApplicationController
   end
 
   def login
-    # set event group if possible so that custom css can be used
-    if session[:event_group_id]
+    if session[:user_id]
+      redirect_to :controller => :main
+      return
+    elsif session[:event_group_id] && !params[:ticket]
+      # set event group if possible so that custom css can be used
       @eg = EventGroup.find session[:event_group_id] if !EventGroup.find(:all).empty?
 
       if @eg && @eg.forward_to_cas
@@ -222,6 +225,7 @@ class SecurityController < ApplicationController
 
     clear_login_session_info
     clear_cas_session
+    session[:event_group_id] = nil
     @viewer = nil
 
     flash[:notice] = "You have been logged out."

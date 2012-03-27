@@ -4,7 +4,7 @@ class EventGroupsController < AjaxTreeController
   skip_before_filter :set_event_group, :except => [ :index, :update ]
   skip_before_filter :verify_event_group_chosen
   skip_before_filter :restrict_students
-  skip_before_filter :verify_user, :only => [ :scope_by_slug ]
+  skip_before_filter :verify_user, :only => [ :scope_by_slug, :custom_css ]
   
   prepend_before_filter :get_node
   before_filter :set_ministries_options, :only => [ :index, :create, :edit ]
@@ -60,7 +60,7 @@ class EventGroupsController < AjaxTreeController
     @eg = EventGroup.find_by_slug(params[:slug])
 
     if @eg
-      params[:id] = @eg.id
+      params[:id] = session[:event_group_id] = @eg.id
     else
       render :inline => "No event group with the key URL '#{params[:slug]}' found."
       return

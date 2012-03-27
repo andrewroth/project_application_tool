@@ -95,6 +95,7 @@ class ApplicationController < ActionController::Base
       redirect_to :controller => "security", :action => "login"
       return false
     end
+    return true
   end
   
   def set_user
