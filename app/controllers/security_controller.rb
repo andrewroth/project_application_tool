@@ -96,11 +96,13 @@ class SecurityController < ApplicationController
 
   def login
     # set event group if possible so that custom css can be used
-    @eg = EventGroup.find session[:event_group_id] if !EventGroup.find(:all).empty?
+    if session[:event_group_id]
+      @eg = EventGroup.find session[:event_group_id] if !EventGroup.find(:all).empty?
 
-    if @eg.forward_to_cas
-      redirect_to brand_link(CASClient::Frameworks::Rails::Filter.login_url(self))
-      return
+      if @eg && @eg.forward_to_cas
+        redirect_to brand_link(CASClient::Frameworks::Rails::Filter.login_url(self))
+        return
+      end
     end
 
     if is_demo_host
