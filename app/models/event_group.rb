@@ -3,6 +3,7 @@ class EventGroup < Node
 
   belongs_to :ministry
   belongs_to :location
+  belongs_to :key_logo, :class_name => "Attachment", :foreign_key => "key_logo_attachment_id"
 
   has_many :custom_reports
   has_many :projects
@@ -21,7 +22,15 @@ class EventGroup < Node
                  :storage => :file_system,
                  :path_prefix => 'public/event_groups'
 
+  belongs_to :key_logo, :class_name => "Attachment", :foreign_key => "key_logo_attachment_id"
+
   attr :filter_hidden, true
+
+  def key_logo_uploaded_data=(f)
+    return unless f.is_a?(Tempfile)
+    key_logo = Attachment.create(:uploaded_data => f)
+    self.key_logo_attachment_id = key_logo.id
+  end
 
   def nested_children
     children.collect(&:self_plus_nested_children).flatten
@@ -77,6 +86,12 @@ class EventGroup < Node
   def logo()
     if has_logo? then return public_filename end
     if parent then return parent.logo end
+    nil
+  end
+
+  def key_logo_url()
+    if key_logo then return key_logo.public_filename end
+    if parent then return parent.key_logo_url end
     nil
   end
 

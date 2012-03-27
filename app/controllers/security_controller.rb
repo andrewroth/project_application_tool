@@ -95,6 +95,14 @@ class SecurityController < ApplicationController
   end
 
   def login
+    # set event group if possible so that custom css can be used
+    @eg = EventGroup.find session[:event_group_id] if !EventGroup.find(:all).empty?
+
+    if @eg.forward_to_cas
+      redirect_to brand_link(CASClient::Frameworks::Rails::Filter.login_url(self))
+      return
+    end
+
     if is_demo_host
       student_str = "- To demo a student filling out an application, use the username 'student' and password 'student'"
       processor_str = "- To demo a processor deciding whether to accept or decline a student, use the username 'processor' and password 'processor'"
@@ -277,5 +285,18 @@ class SecurityController < ApplicationController
 
   def is_demo_host
     request.host['demo']
+  end
+
+  def brand_link(link)
+    if link.include? "?"
+      link << "&"
+    else
+      link << "?"
+    end
+    #link << "template=https://d15ip9v2bx8xzx.cloudfront.net/media/sso/p2c_style.css"
+    if @eg
+      link << "template=#{$server_url}/event_groups/#{@eg.id}/custom_css.css"
+    end
+    link.gsub("login?", "login.htm?")
   end
 end

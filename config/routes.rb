@@ -82,4 +82,6 @@ ActionController::Routing::Routes.draw do |map|
 
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id'
+
+  map.connect '/event_groups/:id/custom_css.css', :controller => "event_groups", :action => "custom_css"
 end

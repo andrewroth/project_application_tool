@@ -62,6 +62,14 @@
 
   <p><b>Upload a logo: </b><%= f.file_field :uploaded_data %></p>
 
+  <p><b>Upload a logo for the key login screen: </b><%= f.file_field :key_logo_uploaded_data %></p>
+
+<tr><td colspan='2'>
+  <p>
+  <b><%= f.check_box :forward_to_cas %> Forward striaght to CAS login</b> - don't show the PAT landing page but send directly to CAS login<br/>
+  </p>
+</td></tr>
+
 </td><td>
 
   <% if @event_group && @event_group.has_logo? -%>

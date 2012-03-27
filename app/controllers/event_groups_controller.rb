@@ -4,6 +4,7 @@ class EventGroupsController < AjaxTreeController
   skip_before_filter :set_event_group, :except => [ :index, :update ]
   skip_before_filter :verify_event_group_chosen
   skip_before_filter :restrict_students
+  skip_before_filter :verify_user, :only => [ :scope_by_slug ]
   
   prepend_before_filter :get_node
   before_filter :set_ministries_options, :only => [ :index, :create, :edit ]
@@ -13,6 +14,12 @@ class EventGroupsController < AjaxTreeController
   # bug with caching when you edit, it caches the edit screen
   # then scope doesn't work
   before_filter :clear_cache#, :only => [ :create, :update, :destroy ]
+
+  def custom_css
+    #headers["Content-Type"] = "text/css"
+    @eg = EventGroup.find params[:id]
+    render :file => 'event_groups/custom_css.erb', :content_type => 'text/css'
+  end
 
   def views() [ 'scope' ] end
 
@@ -50,13 +57,18 @@ class EventGroupsController < AjaxTreeController
   end
 
   def scope_by_slug
-    eg = EventGroup.find_by_slug(params[:slug])
-    if eg
-      params[:id] = eg.id
-      session[:start] = true
-      set_as_scope
+    @eg = EventGroup.find_by_slug(params[:slug])
+
+    if @eg
+      params[:id] = @eg.id
     else
       render :inline => "No event group with the key URL '#{params[:slug]}' found."
+      return
+    end
+
+    if verify_user
+      session[:start] = true
+      set_as_scope
     end
   end
 
@@ -124,5 +136,4 @@ class EventGroupsController < AjaxTreeController
         @viewer.is_eventgroup_coordinator?(EventGroup.find(params[:event_group][:parent_id]))
       end
     end
-
 end
