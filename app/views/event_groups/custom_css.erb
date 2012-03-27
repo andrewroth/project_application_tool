@@ -1,0 +1,297 @@
+/* setup & generic
+--------------------------------------------------*/
+body, p, table, ul, ol, form {margin:0; padding:0; border:0;}
+
+/* clearfix */
+.minorContent:after,
+.mainContent div.submit:after {content:""; display:block; clear:both; visibility:hidden; height:0; line-height:0;}
+
+
+
+/* structure
+--------------------------------------------------*/
+html {height:100%;} /* for browsers to show full backgrounds when content is small */
+
+body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5em; text-shadow:1px 1px 1px rgba(255,255,255,0.7); font-family:Helvetica, Arial, sans-serif;
+	background: #8a8a88 url(images/bg.gif) repeat center top; /* fallback color and image */
+	background-image: -moz-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-image: -webkit-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-image: -ms-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-image: radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-size: 2520px 2520px;
+	}
+
+.main {width:600px; margin:0 auto; position:relative; padding:4em 0;}
+
+.header {text-align:center; font-size:11pt; background-color:#ccc; padding:10px 12px; margin-bottom:1.5em; display:none;} /* header is slightly styled, but not showing because we don't use it yet. */
+
+
+
+/* menu & help
+--------------------------------------------------*/
+.menu {margin:0 24px 0.25em; font-size:13pt; font-weight:normal; overflow:hidden; height:24px;}
+.menu li {float:left; list-style:none; margin:0; padding:0; overflow:hidden;}
+.menu li.link1,
+.menu li.link2 {margin-right:12px;}
+.menu li a {color:#fff; padding:0 12px; text-decoration:none; text-shadow:1px 1px 1px rgba(0,0,0,0.4);}
+.menu li a:hover {text-shadow:1px 1px 1px rgba(0,0,0,0.6);}
+.menu li.selected a {color:#000;text-shadow:-1px -1px 1px rgba(0,0,0,0), 1px 1px 1px rgba(255,255,255,0.3);} /* strangely the fully transparent black has an effect on the color */
+.menu li.selected a:hover {text-shadow:1px 1px 1px rgba(255,255,255,0.5);}
+
+#ssoHelp {overflow:visible; position:absolute; right:25px; z-index:100;}
+#ssoHelp_link {color:#fff; display:inline;}
+#ssoHelp_popup-wrap {display:none; position:absolute; width:1px; height:1px; right:0; top:0; overflow:visible; z-index:100;} /* jQuery needs the box to be 1x1, so don't change to 0x0 as it once was */
+#ssoHelp_link-active {position:absolute; top:-9px; right:0; color:#fff; background-color:#436c2a; height:30px; padding-top:9px; border-radius:2px 2px 0 0; text-shadow:1px 1px 1px rgba(0,0,0,0.8);
+	box-shadow:0 1px 1px #666; /* solid color because an alpha color looks odd as it goes over other colors */
+	}
+#ssoHelp_link-active:hover {color:#fff; text-shadow:1px 1px 1px rgba(0,0,0,0.9);}
+#ssoHelp_popup {position:absolute; z-index:100; right:0; top:30px; width:320px;}
+.ssoHelp_content {border:4px solid #436c2a; border-radius:2px 0 2px 2px;
+	box-shadow:0 1px 1px #666;
+	background:#ddd; /* fallback color and image */
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eee), to(#ccc)); /* Safari 4+, Chrome 1-9 */
+	background-image: -webkit-linear-gradient(top, #eee, #ccc); /* Safari 5.1+, Mobile Safari, Chrome 10+ */
+	background-image:    -moz-linear-gradient(top, #eee, #ccc); /* Firefox 3.6+ */
+	background-image:     -ms-linear-gradient(top, #eee, #ccc); /* IE 10+ */
+	background-image:      -o-linear-gradient(top, #eee, #ccc); /* Opera 11.10+ */
+	}
+.ssoHelp_content-in {border:0; font-size:10pt;
+	box-shadow:inset 0 1px 1px #222; /* fallback box-shadow color */
+	box-shadow:inset 0 1px 1px rgba(0,0,0,0.9);
+	}
+.ssoHelp_content h2 {margin:0 18px 0.75em; padding:1em 0 0.5em; font-weight:normal; border-bottom:1px solid #cecece; font-size:12pt; color:#111;}
+.ssoHelp_content p {margin-left:18px; margin-right:18px; padding-bottom:1em;}
+.ssoHelp_content p.ssoHelp_exit {font-weight:bold;}
+.ssoHelp_content ol,
+.ssoHelp_content ul {padding:0 2em 1em 3em;}
+.ssoHelp_content li {overflow:visible; border-width:0; float:none; display:list-item;}
+.ssoHelp_content ul li {list-style-type:disc;}
+.ssoHelp_content ol li {list-style-type:decimal;}
+.ssoHelp_content .ssoHelp_footer {font-family:Georgia, "Times New Roman", serif; font-style:oblique; color:#666;}
+.menu li .ssoHelp_content a {padding:0; color:#487b00; text-shadow:1px 1px 1px rgba(255,255,255,0.4); font-family:Georgia, serif; font-style:oblique;}
+.menu li .ssoHelp_content a:hover {text-shadow:1px 1px 1px rgba(255,255,255,0.4); color:#487b00; text-decoration:underline;}
+
+
+
+/* content
+--------------------------------------------------*/
+.content {position:relative; overflow:hidden; clear:none; border:2px solid #fff; border-radius:8px;
+	box-shadow:0 4px 9px #222;
+	box-shadow:0 4px 9px rgba(0,0,0,0.2);
+	background: #ededed url(images/bg-content.gif) repeat-x left top; /* fallback color and image */
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fcfcfc), to(#ececec)); /* Safari 4+, Chrome 1-9 */
+	background-image: -webkit-linear-gradient(top, #fcfcfc, #ececec); /* Safari 5.1+, Mobile Safari, Chrome 10+ */
+	background-image:    -moz-linear-gradient(top, #fcfcfc, #ececec); /* Firefox 3.6+ */
+	background-image:     -ms-linear-gradient(top, #fcfcfc, #ececec); /* IE 10+ */
+	background-image:      -o-linear-gradient(top, #fcfcfc, #ececec); /* Opera 11.10+ */
+	border: 3px solid #FFFFFF;
+	border-radius: 8px 8px 8px 8px;
+	}
+.content-in {padding:1em 8px 1.75em; /*background:transparent url(images/bg-content-shine.png) no-repeat -260px top;*/}
+.content a {text-decoration:none; font-family:Georgia, serif; font-style:oblique; color:#487b00;}
+.content a:hover {text-decoration:underline;}
+.content_header {font-size:11pt; text-align:center; color:#333; clear:none; padding:0.25em 26px 0.75em; text-shadow:1px 1px 1px rgba(255,255,255,0.4); position:relative; z-index:1;}
+.content_body {position:relative; border-top:1px solid #ddd; z-index:0;}
+
+.mainContent {margin-right:230px; border-right:1px solid #ddd; min-height:180px; text-shadow:1px 1px 1px rgba(255,255,255,0.7); position:relative;
+	box-shadow:2px -1px 1px #e5e5e5;
+	box-shadow:2px -1px 1px rgba(0,0,0,0.02);
+	}
+.mainContent-in {padding:1.25em 9px 1em 0;}
+.mainContent ol {margin-bottom:4px; font-size:11px; padding-left:5em}
+.mainContent ol li {padding-left:1em; list-style-position:outside; list-style-type:lower-roman;}
+.mainContent label {font-size:11pt; line-height:1.8em; font-weight:normal; text-transform:capitalize; padding:0 4px;}
+.mainContent input {font-size:12pt; margin:0;}
+.mainContent .section {margin-bottom:1em; margin-top:30px;}
+.mainContent .section p {font-style:oblique; font-size:10pt; margin:0 0 0.75em; padding:0 16px 0.75em; text-align:center; color:#484848; border-bottom:1px dashed #d5d5d5;} /* .message is the assumed class for .section p */
+.mainContent .section p.note {background-color:#e5e5e5; text-align:left; font-style:normal; padding:6px 16px; border:0;}
+.mainContent .section ul {font-size:11px; margin:0.75em 0 0.75em 2em;}
+.mainContent .group {margin-bottom:1em; padding:0 12px;}
+.mainContent .group a {padding:0 4px; font-size:10.5pt; line-height:1.8em;}
+.mainContent .group input {padding:2px 1px;}
+.mainContent .group input.form_text,
+.mainContent .group textarea.form_textarea {border:0; padding:0.25em 4px; width:308px;
+	border-radius:4px 4px 4px 4px;
+	box-shadow:inset 0 1px 2px #666;
+	box-shadow:inset 0 1px 2px rgba(0,0,0,0.6);
+	}
+.mainContent .group textarea.form_textarea {height:100px; background-color:#f2f2f2; border-radius:4px 4px 4px 4px;}
+.mainContent .group .form_error span {background-color:#f99; border-bottom:2px solid #f00; padding:1px 4px;}
+.mainContent .submit {position:relative; height:40px; font-size:16px; padding:0 12px; margin-top:1.5em;}
+.mainContent .submit input {float:right; clear:none; cursor:pointer; font-size:11pt; color:#fff; margin:0 2em 0 0; border:2px solid #fff; padding:0 10px; font-weight:normal; text-transform:uppercase; line-height:1em; height:32px; border-radius:20px; background:#808080 url(images/button_signin-bg.png) repeat left top; font-family:Helvetica, Arial, sans-serif; text-shadow:-1px -1px 1px rgba(0,0,0,0.25), 1px 1px 1px rgba(255,255,255,0.25); position:relative; top:5px;
+	box-shadow:0 0 2px #999;
+	box-shadow:0 0 2px rgba(0,0,0,0.45);
+	}
+.page_SignUp_Name .mainContent .submit input {margin-right:0.5em;}
+.mainContent .submit input:hover,
+.mainContent .submit input:focus {color:#fff;
+	box-shadow:0 0 4px #777;
+	box-shadow:0 0 4px rgba(0,0,0,0.6);
+	}
+.mainContent .submit input.form_submit {height:40px; top:0; margin-right:0;}
+.mainContent .submit .form_submit-wrap {float:right; clear:none; border:2px solid #fff; height:36px; border-radius:20px; background:#808080 url(images/button_signin-bg.png) repeat left top; position:relative; overflow:visible; padding-left:0;
+	box-shadow:0 0 2px #999;
+	box-shadow:0 0 2px rgba(0,0,0,0.45);
+	}
+.mainContent .submit .form_submit-wrap:hover,
+.mainContent .submit .form_submit-wrap:focus {
+	box-shadow:0 0 4px #777;
+	box-shadow:0 0 4px rgba(0,0,0,0.6);
+	}
+.mainContent .submit .form_submit-wrap input,
+.mainContent .submit .form_submit-wrap input:hover {float:none; display:block; box-shadow:none; border:0; margin:0; background:none;}
+.mainContent .submit .form_submit-wrap input.form_submit {padding-right:72px; display:block; float:none; height:70px; position:relative; background:transparent url(images/button_signin-icon70px.png) no-repeat right top; top:-18px; right:-14px; margin-left:-14px;}
+.mainContent .submit .form_submit-wrap input.form_submit:hover {background-position:right -70px;}
+.mainContent .section.searchResults {background-color:#e5e5e5; border:1px solid; border-color:#555 #999 #ddd; padding:0 10px;}
+.mainContent .section.searchResults .group {margin-right:-16px;}
+.mainContent .section.searchResults select {border:1px solid #aaa; width:85%;}
+
+/* facebookLogin exists on signin and account details */
+.facebookLogin {text-align:center;}
+.facebookLogin label {padding:0; font-size:10pt; color:#484848;}
+/* fb_button styles come from facebook. I'm force-overriding them to not inherit gcx styles */
+.facebookLogin .fb_button,
+.facebookLogin .fb_button_rtl,
+.facebookLogin .fb_button_text {border-radius: 4px 4px 4px 4px; font-size:11px !important; line-height:14px !important; font-style:normal !important;}
+.facebookLogin .fb_button,
+.facebookLogin .fb_button_rtl {padding:0 !important; margin:0 !important; background-position: left -188px !important;}
+.facebookLogin .fb_button_text {margin-left:22px !important; margin-right:1px !important;}
+.facebookLogin .fb_button:hover,
+.facebookLogin .fb_button_rtl:hover {text-decoration:none !important;}
+
+.minorContent {position:absolute; top:0; right:0; width:224px;}
+.minorContent-in {padding-bottom:1em;}
+.minorContent .logo-wrap {width:175px; margin:20px auto 0;}
+.minorContent .logo {width:175px; margin-top:7px;}
+.minorContent .menu_minorContent {color:#333; text-align:center; text-shadow:1px 1px 1px rgba(255,255,255,0.95); line-height:1.5em; font-size:12pt; margin-top:5px; margin-bottom:20px;}
+.minorContent .menu_minorContent li {display:inline;}
+.minorContent .menu_minorContent li a {font-size:10.5pt; padding:0 0.35em; text-shadow:1px 1px 1px rgba(255,255,255,0.95);}
+
+/* languages
+--------------------------------------------------*/
+#languagesList {text-align:center; padding-top:1em; margin:1em 10px;}
+#languagesList li {display:inline; padding:2px 8px;}
+#languagesList li a {color:#666; white-space:nowrap;}
+#languagesList li a:hover {color:#000;}
+#languagesList li.selected a {color:#000; font-weight:normal; text-decoration:none;}
+
+
+
+/* errors
+--------------------------------------------------*/
+.mainContent .errors,
+.mainContent .group .form_error {text-align:center; font-weight:bold; background-color:#e5e5e5; color:#f40; font-family:Helvetica, Arial, sans-serif; font-style:normal; padding:6px 15px; line-height:1.5em; font-size:10pt; margin:0.5em 12px 1em; border:1px solid #ccc;
+	box-shadow:0 0 2px #ddd;
+	box-shadow:0 0 2px rgba(0,0,0,0.15);
+	}
+.mainContent .group .form_error {display:block; margin:0; padding:4px 4px 3px; border-top:0; text-align:left; line-height:1.4em;
+	box-shadow:0 1px 1px #ddd;
+	box-shadow:0 1px 1px rgba(0,0,0,0.15);
+	}
+.mainContent .group .form_error span {background:none; border:0; padding:0;}
+
+
+
+/* page specific overrides
+--------------------------------------------------*/
+body.page_login .mainContent {min-height:260px;}
+body.page_login .mainContent .submit {margin-bottom:2.5em;}
+body.page_login .facebookLogin {position:absolute; right:12px; top:63px;}
+
+body.page_SignUp_Email #ssoHelp_popup,
+body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
+body.page_SelfServe_AccountDetails .facebookLogin {margin:1.75em -12px; border-bottom:1px dashed #d5d5d5; padding:0 12px 1.75em;}
+
+
+
+/* RTL (IE hacks are added just below - not inline becuase it screws up the parser)
+--------------------------------------------------
+--------------------------------------------------*/
+body.rtl {direction:rtl; text-shadow:-1px 1px 1px rgba(255,255,255,0.7);}
+
+body.rtl .menu li {float:right;}
+body.rtl .menu li.link1,
+body.rtl .menu li.link2 {margin-left:12px; margin-right:0;}
+body.rtl .menu li a {text-shadow:-1px 1px 1px rgba(0,0,0,0.4);}
+body.rtl .menu li a:hover {text-shadow:-1px 1px 1px rgba(0,0,0,0.6);}
+body.rtl .menu li.selected a {text-shadow:1px -1px 1px rgba(0,0,0,0), -1px 1px 1px rgba(255,255,255,0.3);}
+body.rtl .menu li.selected a:hover {text-shadow:-1px 1px 1px rgba(255,255,255,0.5);}
+
+body.rtl #ssoHelp {right:auto; left:25px;}
+body.rtl #ssoHelp_link-active {text-shadow:-1px 1px 1px rgba(0,0,0,0.8); right:auto; left:0;}
+body.rtl #ssoHelp_link-active:hover {text-shadow:-1px 1px 1px rgba(0,0,0,0.9);}
+body.rtl #ssoHelp_popup-wrap {right:auto; left:0;}
+body.rtl #ssoHelp_popup {right:auto; left:0;}
+body.rtl .ssoHelp_content {border-radius:0 2px 2px 2px;}
+body.rtl .menu li .ssoHelp_content a {text-shadow:-1px 1px 1px rgba(255,255,255,0.4);}
+body.rtl .menu li .ssoHelp_content a:hover {text-shadow:-1px 1px 1px rgba(255,255,255,0.4);}
+
+body.rtl .content_header {text-shadow:-1px 1px 1px rgba(255,255,255,0.4);}
+
+body.rtl .mainContent {margin-right:0; margin-left:230px; text-shadow:-1px 1px 1px rgba(255,255,255,0.7); border-right:0; border-left:1px solid #ddd;
+	box-shadow:-2px -1px 1px #e5e5e5;
+	box-shadow:-2px -1px 1px rgba(0,0,0,0.02);
+	}
+body.rtl .mainContent-in {padding-right:0; padding-left:9px;}
+body.rtl .mainContent .group .form_error {text-align:right;}
+body.rtl .mainContent .submit input {float:left; margin-left:2em; margin-right:0; text-shadow:1px -1px 1px rgba(0,0,0,0.25), -1px 1px 1px rgba(255,255,255,0.25); background-position:right top;}
+body.rtl .mainContent .submit input.form_submit {margin-left:0;}
+body.rtl .mainContent .submit .form_submit-wrap {float:left;}
+body.rtl .mainContent .submit .form_submit-wrap input.form_submit {padding-right:14px; padding-left:72px; background-position:left -140px; right:auto; left:-14px; margin-left:0; margin-right:-14px;}
+
+body.rtl .mainContent .submit .form_submit-wrap input.form_submit:hover {background-position:left -210px;}
+
+body.rtl .facebookLogin {right:auto; left:12px;}
+
+body.rtl .minorContent {right:auto; left:0;}
+body.rtl .minorContent .logo {left:auto; right:54px;}
+body.rtl .minorContent .menu_minorContent,
+body.rtl .minorContent .menu_minorContent li a {text-shadow:1px 1px 1px rgba(255,255,255,0.95);}
+
+<%- if @eg.key_logo_url -%>
+
+.logo {
+  display: none;
+}
+
+.logo-wrap {
+  width: 175px;
+  height: 175px;
+  background-image: url("<%= "#{$server_url}#{@eg.key_logo_url}" %>);
+}
+
+<%- end -%>
+
+/* IE hacks
+   \9 = lte ie 9, * = lte ie 7, _ = 6 lte ie 6
+   these hacks don't work well with the key template parser so i need to update them
+--------------------------------------------------
+--------------------------------------------------*/
+
+/* ie 9 & below */
+.menu li a:hover,
+#ssoHelp_link:hover {color:#e9e9e9\9;}
+#ssoHelp_link-active:hover {color:#ccc\9;}
+
+.content {border:1px solid #c5c5c5\9; border-width:0 1px 1px\9;} /* creating a border shadow without the box-shadow property */
+.content-in {border:2px solid #fff\9;}
+.mainContent .group input.form_text,
+.mainContent .group textarea.form_textarea {border:1px solid #d5d5d5\9; width:306px\9;}
+.mainContent .group .form_error {padding-bottom:3px\9; padding-top:2px\9;}
+.mainContent .submit input:hover,
+.mainContent .submit input:focus {color:#eee\9;}
+.mainContent .submit .form_submit-wrap input.form_submit {right:-17px\9;}
+
+body.rtl .mainContent .submit .form_submit-wrap input.form_submit {left:-17px\9;}
+
+
+/* ie 8 & below (I don't know of a good hack yet) */
+
+/* ie 7 & below */
+.mainContent .submit input {*padding-left:0; *padding-right:0;}
+.mainContent .submit .form_submit-wrap input.form_submit {*padding-left:0; *padding-right:58px;}
+
+body.rtl .mainContent .submit .form_submit-wrap input.form_submit {*padding-right:0; *padding-left:58px;}
+
+
+/* ie 6 & below (not supported by GCX) */
