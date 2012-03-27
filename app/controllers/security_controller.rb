@@ -292,17 +292,4 @@ class SecurityController < ApplicationController
   def is_demo_host
     request.host['demo']
   end
-
-  def brand_link(link)
-    if link.include? "?"
-      link << "&"
-    else
-      link << "?"
-    end
-    #link << "template=https://d15ip9v2bx8xzx.cloudfront.net/media/sso/p2c_style.css"
-    if @eg
-      link << "template=#{$server_url}/event_groups/#{@eg.id}/custom_css.css"
-    end
-    link.gsub("login?", "login.htm?")
-  end
 end

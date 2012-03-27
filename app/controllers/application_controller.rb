@@ -196,4 +196,19 @@ class ApplicationController < ActionController::Base
       hash[key.to_sym] = Date.new(i1, i2, i3)
     end
   end
+
+  def brand_link(link)
+    if link.include? "?"
+      link << "&"
+    else
+      link << "?"
+    end
+    #link << "template=https://d15ip9v2bx8xzx.cloudfront.net/media/sso/p2c_style.css"
+    if @eg && @eg.key_logo_url
+      link << "template=#{$server_url}/event_groups/#{@eg.id}/custom_css.css?v=#{Digest::MD5.hexdigest(@eg.key_logo_url)}"
+    end
+    link.gsub("login?", "login.htm?")
+  end
+  helper_method :brand_link
+
 end
