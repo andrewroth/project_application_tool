@@ -13,7 +13,7 @@ class Applying < Profile
                                 app = p.appln
                                 app.submitted_at = Time.now
                                 app.save!
-                                unless app.reference_instances.empty? && p.project.event_group.automatic_acceptance
+                                unless app.reference_instances.empty? && p.event_group.automatic_acceptance
                                   SpApplicationMailer.deliver_submitted(app)
                                 end
                               }
@@ -24,7 +24,7 @@ class Applying < Profile
 				p.completed_at = Time.now
 				p.save!
 
-                                unless app.reference_instances.empty? && p.project.event_group.automatic_acceptance
+                                unless app.reference_instances.empty? && p.event_group.automatic_acceptance
                                   SpApplicationMailer.deliver_completed(app)
                                 end
                               }
