@@ -90,7 +90,7 @@ class EventGroup < Node
   end
 
   def key_logo_url()
-    if key_logo then return key_logo.public_filename end
+    if key_logo then return key_logo.public_filename(:cas_logo) end
     if parent then return parent.key_logo_url end
     nil
   end
