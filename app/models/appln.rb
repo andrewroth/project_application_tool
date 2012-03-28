@@ -124,7 +124,7 @@ class Appln < ActiveRecord::Base
   
   # mark the whole application as complete if it's all finished (including refs)
   def accept
-    if profile.automatic_acceptance && !profile.appln.form.questionnaire.references.present?
+    if profile.event_group.automatic_acceptance && !profile.appln.form.questionnaire.references.present?
       profile.manual_update :type => 'Acceptance', :appln_id => self.id, :project_id => self.profile.project.id,
         :support_claimed => 0, :support_coach_id => nil,
         :accepted_by_viewer_id => self.viewer.id, :as_intern => false,
