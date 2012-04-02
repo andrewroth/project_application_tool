@@ -516,6 +516,7 @@ input#submit {
 #scope_c .event_group_has_logo, #scope_c .event_group_top_level {
   float: left;
   width: 246px;
+  margin-bottom: 75px;
 }
 
 .event_group_logo {
