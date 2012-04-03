@@ -78,6 +78,7 @@ class YourAppsController < ApplicationController
       # might as well give them a profile right now, and set the viewer up properly too
       @profile = appln.profile
       @profile.viewer_id = @viewer.id
+      @profile.project = @eg.projects.first if @eg.projects.count == 1
       @profile.save!
 
       # and set the pref 1 if there's only one project
