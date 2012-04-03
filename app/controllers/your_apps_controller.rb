@@ -3,6 +3,8 @@ require_dependency 'permissions'
 class YourAppsController < ApplicationController
   include Permissions
 
+  cache_sweeper :profiles_sweeper
+
   before_filter :user_owns_profile_with_message, :only => [ :acceptance, :continue ]
   before_filter :set_title
 
