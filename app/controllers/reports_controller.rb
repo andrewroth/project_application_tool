@@ -411,9 +411,9 @@ class ReportsController < ApplicationController
     }
 
     accepted.each do |ac|
-      a = applns[ac.appln_id]
+      a = applns[ac.appln_id] || ac.appln
       next if a.nil?
-      v = viewers_cache[a.viewer_id]
+      v = viewers_cache[a.viewer_id] || ac.viewer
       @answers_cache = make_answers_cache [ a, a.processor_form ]
       yield ac, a, v, persons_cache[v.access.person_id]
     end
