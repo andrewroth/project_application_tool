@@ -107,7 +107,12 @@ ActiveRecord::Base.class_eval do
         found = false
         for db, tables in @@map_hash['databases']
           if tables.include?(self.name.underscore)
-            self.class_eval "establish_connection '#{db}'"
+            begin
+              self.class_eval "establish_connection '#{db}'"
+            rescue Exception => e
+              puts "[db_mappings] Couldn't find database #{db}"
+              raise e
+            end
             # Prepend database for joins
             unless table_name['.']
               db_name = ActiveRecord::Base.configurations[db]["database"]
