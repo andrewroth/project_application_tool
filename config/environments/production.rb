@@ -26,16 +26,8 @@ config.cache_store = :file_store, 'tmp/cache'
 # config.action_mailer.raise_delivery_errors = false
 
 # Mail settings
-if Common::STAGE == "prod" && Common::SERVER == "p2c"
-  ActionMailer::Base.delivery_method = :smtp
-  ActionMailer::Base.smtp_settings = {
-    :address => 'smtp.powertochange.local',
-    :domain => 'powertochange.local'
-  }
-else
-  ActionMailer::Base.smtp_settings = {
-    :address => 'localhost',
-    :port => 2525,
-    :domain => 'powertochange.local'
-  }
-end
+ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.smtp_settings = {
+  :address => 'smtp.powertochange.local',
+  :domain => 'powertochange.local'
+}
