@@ -1,12 +1,22 @@
 set :application, 'pat'
 set :keep_releases, '3'
-role :app, 'pat.powertochange.org'
-role :db, 'pat.powertochange.org'
 set :user, 'deploy'
-set :deploy_to, "/var/www/pat.powertochange.org"
-set :branch, "master"
 set :repository, "git://github.com/andrewroth/project_application_tool.git"
 set :scm, "git"
+
+task :production do
+  role :app, 'pat.powertochange.org'
+  role :db, 'pat.powertochange.org'
+  set :branch, 'master'
+  set :deploy_to, "/var/www/pat.powertochange.org"
+end
+
+task :dev do
+  role :app, 'elk.campusforchrist.org'
+  role :db, 'elk.campusforchrist.org'
+  set :branch, 'dev'
+  set :deploy_to, '/var/www/elk.campusforchrist.org'
+end
 
 desc "Add linked files after deploy and set permissions"
 task :after_update_code, :roles => :app do

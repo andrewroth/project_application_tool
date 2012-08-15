@@ -7,5 +7,8 @@ public/images/active_scaffold/
 public/javascripts/active_scaffold/
 public/javascripts/as_dd_reorder.js
 public/stylesheets/active_scaffold/
+public/attachments
+public/coverage
+public/event_groups
 tmp
 *.swp
