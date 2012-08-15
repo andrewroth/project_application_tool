@@ -1,0 +1,33 @@
+<% 
+@student = @profile.class == Acceptance
+
+if @student
+  @acceptance = @profile
+  @appln = @acceptance.appln
+end
+
+%>
+<div id="student_view">
+	<h2><%= @viewer.name %> <%= @profile.project.title %></h2>
+	
+	<% if @student %>
+	  <p style='font-style: italic;'>You have been accepted to <%= @acceptance.project.title %>
+	   <% if @acceptance.as_intern? %> as an intern<% end %></p>
+  <%- if @eg.show_mpdtool -%>
+    <p>You can use the <A HREF="https://mpdtool.powertochange.org">mpdtool</A> to walk you through the process of support raising (MPD stands for Ministry Partner Development).</p>
+  <%- end -%>
+	
+	<p><%= render :partial => "your_apps/always_edit_appln" %>
+	<p><%= render :partial => "your_apps/support_coach" %>
+	<% end %>
+	<hr/>
+	<p>Please ensure your costing information is accurate by clicking on the costing tab.</p>
+	<hr/>
+	<p>Please enter the following project code at the top of Record of Funds form you send to Power To Change headquarters: <!-- Cost Center--><%= if @profile.project.cost_center != nil then @profile.project.cost_center.to_s + " - " end %><!-- Motivation Code--><%= if @profile.motivation_code != nil then @profile.motivation_code end %>. Please send all donations to 20385 64th Avenue, Langley, BC V2Y 1N5</p>   
+	<hr>
+	<p><%= render :partial => "support_claimed" %>
+	<hr>
+	<p><%= render :partial => "support_received_overview" %></p>
+	<hr>
+	<p><%= render :partial => "print_travel" %></p>
+</div>

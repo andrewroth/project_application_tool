@@ -1,6 +1,7 @@
 <% if @profile && !@profile.new_record? %>
   <% content_for "submenu" do %>
-    <%= sub_menu_item 'misc', :profiles, :view, :id => @profile.id %>
+    <%= sub_menu_item 'dashboard', :url => profile_path(@profile.id) %>
+    <%= sub_menu_item 'old dashboard', :url => old_dashboard_profile_path(@profile.id) %>
     <%= sub_menu_item 'support received', :profiles, :support_received, :id => @profile.id %>
     <%= sub_menu_item 'costing', :profiles, :costing, :id => @profile.id %>
     <%= sub_menu_item 'paperwork', :profiles, :prep_items, :id => @profile.id %>

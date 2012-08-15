@@ -6,7 +6,7 @@ class ProfilesController < ApplicationController
 
   INFO_ACTIONS = [ :crisis_info, :update_crisis_info, :campus_info, :update_campus_info, :campus_info_new ]
 
-  skip_before_filter :restrict_students, :only => [ :index, :list, :view, :update, 
+  skip_before_filter :restrict_students, :only => [ :index, :list, :show, :old_dashboard, :view, :update, 
                                               :travel, :support_received, :costing, 
                                               :prep_items, :update_support, :use_past_appln ] + 
                                               INFO_ACTIONS
@@ -206,13 +206,27 @@ class ProfilesController < ApplicationController
     @donations = @profile.donations
   end
 
+  # support view for backwards compatibility
   def view
+    redirect_to :action => :show
+  end
+
+  def show
     flash[:error] = 'It is extremely important that you do not simply print off your 
 	  travel page from this website. Please click a link that says "printable itinerary pdf" 
 	  such as the one below or the one on the travel page and print your travel information 
 	  from Adobe Acrobat Reader. If you do not have Adobe Acrobat Reader it is available for free 
 	  <a href="http://www.adobe.com/products/acrobat/readstep2.html" target="_blank">here</a>.'
-    @submenu_title = "misc"
+    @submenu_title = "dashboard"
+  end
+
+  def old_dashboard
+    flash[:error] = 'It is extremely important that you do not simply print off your 
+	  travel page from this website. Please click a link that says "printable itinerary pdf" 
+	  such as the one below or the one on the travel page and print your travel information 
+	  from Adobe Acrobat Reader. If you do not have Adobe Acrobat Reader it is available for free 
+	  <a href="http://www.adobe.com/products/acrobat/readstep2.html" target="_blank">here</a>.'
+    @submenu_title = "old dashboard"
   end
 
   def update_support

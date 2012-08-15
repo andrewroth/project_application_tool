@@ -15,7 +15,17 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :reason_for_withdrawals
 
   map.resources :prep_items
+
   map.resources :profile_prep_items
+
+  map.resources :profiles, :member => { 
+    :old_dashboard => :get,
+    :view => :get, 
+    :support_received => :get, 
+    :costing => :get, 
+    :prep_items => :get, 
+    :travel => :get
+  }
 
   unless defined?(QUESTIONNAIRE_ACTIONS) == 'constant'
     QUESTIONNAIRE_ACTIONS = { :get_page => [ :get, :post ], :validate_page => :post, :withdraw => :post }
