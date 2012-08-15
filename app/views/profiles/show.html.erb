@@ -1,33 +1,24 @@
-<% 
-@student = @profile.class == Acceptance
-
-if @student
-  @acceptance = @profile
-  @appln = @acceptance.appln
-end
-
-%>
-<div id="student_view">
-	<h2><%= @viewer.name %> <%= @profile.project.title %></h2>
-	
-	<% if @student %>
-	  <p style='font-style: italic;'>You have been accepted to <%= @acceptance.project.title %>
-	   <% if @acceptance.as_intern? %> as an intern<% end %></p>
-  <%- if @eg.show_mpdtool -%>
-    <p>You can use the <A HREF="https://mpdtool.powertochange.org">mpdtool</A> to walk you through the process of support raising (MPD stands for Ministry Partner Development).</p>
-  <%- end -%>
-	
-	<p><%= render :partial => "your_apps/always_edit_appln" %>
-	<p><%= render :partial => "your_apps/support_coach" %>
-	<% end %>
-	<hr/>
-	<p>Please ensure your costing information is accurate by clicking on the costing tab.</p>
-	<hr/>
-	<p>Please enter the following project code at the top of Record of Funds form you send to Power To Change headquarters: <!-- Cost Center--><%= if @profile.project.cost_center != nil then @profile.project.cost_center.to_s + " - " end %><!-- Motivation Code--><%= if @profile.motivation_code != nil then @profile.motivation_code end %>. Please send all donations to 20385 64th Avenue, Langley, BC V2Y 1N5</p>   
-	<hr>
-	<p><%= render :partial => "support_claimed" %>
-	<hr>
-	<p><%= render :partial => "support_received_overview" %></p>
-	<hr>
-	<p><%= render :partial => "print_travel" %></p>
+<div id="header">
+  <p><a href="http://matthewjamestaylor.com/blog/perfect-multi-column-liquid-layouts" title="Perfect multi-column liquid layouts - iPhone compatible">&laquo; Back to the CSS article</a> by <a href="http://matthewjamestaylor.com">Matthew James Taylor</a></p>
+  <h1>The Perfect 3 Column Liquid Layout (Percentage widths)</h1>
+  <h2>No CSS hacks. SEO friendly. No Images. No JavaScript. Cross-browser &amp; iPhone compatible.</h2>
 </div>
+<div class="colmask threecol">
+  <div class="colmid">
+    <div class="colleft">
+      <div class="col1">
+        Column 1 Here
+      </div>
+      <div class="col2">
+        Column 2 Here
+      </div>
+      <div class="col3">
+        Column 3 Here
+      </div>
+    </div>
+  </div>
+</div>
+<div id="footer">
+  Footer Here
+</div>
+
