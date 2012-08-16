@@ -295,13 +295,14 @@ div#student_view, div#support_received, div#travel_itinerary, div#cost_items, di
 #footer {
 	margin: auto;
 	width: 350px;
-	margin-bottom: 40px;
-	margin-top: 40px;
+	margin-bottom: 4px;
+	margin-top: 4px;
 	clear: both;
 	position: relative;
 	top: 10px;
 	padding: 10px;
 	font-size: 10px;
+  border: 1px;
 }
 
 img {
@@ -700,10 +701,10 @@ img.new_window {
 #header {
   clear: both;
   float: left;
-  width: 100%;
+  width: 90%;
 }
 #header {
-  border-bottom: 1px solid #000;
+  border-bottom: 0px solid #000;
 }
 #header p,
 #header h1,
@@ -765,7 +766,7 @@ img.new_window {
   position: relative;  /* This fixes the IE7 overflow hidden bug */
   clear: both;
   float: left;
-  width: 100%;         /* width of whole page */
+  width: 90%;         /* width of whole page */
   overflow: hidden;    /* This chops off any overhanging divs */
 }
 /* common column settings */
@@ -786,29 +787,25 @@ img.new_window {
 
 /* 3 Column settings */
 
-.threecol {
-  background: #eee;    /* right column background colour  */
-}
-
 .threecol .colmid {
   right: 25%;          /* width of the right column       */
-  background: #fff;    /* center column background colour */
 }
 
 .threecol .colleft {
   right: 50%;          /* width of the middle column      */
-  background: #f4f4f4; /* left column background colour   */
 }
 
 .threecol .col1 {
   width: 46%;          /* width of center column content (column width minus padding on either side) */
   left: 102%;          /* 100% plus left padding of center column                                    */
+  border: 1px solid;
 }
 
 .threecol .col2 {
   width: 21%;          /* Width of left column content (column width minus padding on either side)   */
   left: 31%;           /* width of (right column) plus (center column left and right padding) plus 
                           (left column left padding) */
+  border: 1px solid;
 }
 
 .threecol .col3 {
@@ -816,18 +813,15 @@ img.new_window {
   left: 85%;           /* Please make note of the brackets here:
                           (100% - left column width) plus (center column left and right padding) 
                           plus (left column left and right padding) plus (right column left padding) */
+  border: 1px solid;
 }
 
 /* Footer styles */
 
-#footer {
+#acceptance_footer {
   clear: both;
   float: left;
-  width: 100%;
-  border-top: 1px solid #000;
-}
-
-#footer p {
-  padding: 10px;
-  margin: 0;
+  width: 86.5%;
+  border: 1px solid #000;
+  margin-left: 28px;
 }
