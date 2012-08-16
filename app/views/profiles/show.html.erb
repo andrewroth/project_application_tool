@@ -6,20 +6,42 @@
 
 <div class="container">
   <div class="span-24">
-      The header
+    Joe Student, you have been accepted to Paris Project.<br/>
+    Your support coach is Eric Staff.<br/>
+    Phone: (555) 444-3333<br/>
+    Email: Fank.staff@c4c.ca<br/>
+    <br/>
   </div>
 
-  <div class="span-4">
-      The first column
+  <div class="span-6">
+    <div class="acceptance_box">
+      <h3>Dates and To Do List</h3>
+      <div>Please do not check the box next to a form until you have sent it in.  When the office has received yoru form it will turn <span class="form_received">dark blue</span>.</div>
+      <div>March 20 mail to P2C Office</div>
+      <div>
+        <%= check_box_tag :item1 %>Test<br/>
+        <%= check_box_tag :item2 %>Test<br/>
+        <%= check_box_tag :item3 %>Test<br/>
+        <%= check_box_tag :item4 %>Test<br/>
+      </div>
+      <div>Print my travel itinerary</div>
+      <div><i>This link will turn blue when your itinerary is available.</i></div>
+    </div>
   </div>
-  <div class="span-16">
-      The center column
+  <div class="span-12">
+    <div class="acceptance_box">
+      <h3>Support Info</h3>
+    </div>
   </div>
-  <div class="span-4 last">
-      The last column
+  <div class="span-6 last">
+    <div class="acceptance_box">
+      <h3>Communication Summary</h3>
+    </div>
   </div>
 
-  <div class="span-24">
-      The footer
+  <div class="span-24 acceptance_resources">
+    <div class="acceptance_box">
+      <h3>Resources</h3>
+    </div>
   </div>
 </div>

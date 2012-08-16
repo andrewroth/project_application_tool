@@ -158,3 +158,22 @@ hr.space {background:#fff;color:#fff;visibility:hidden;}
 .clearfix:after, .container:after {content:"\0020";display:block;height:0;clear:both;visibility:hidden;overflow:hidden;}
 .clearfix, .container {display:block;}
 .clear {clear:both;}
+
+.acceptance_box {
+  border: 2px solid black;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  padding: 2px;
+}
+
+.acceptance_box div {
+  margin-bottom: 1em;
+}
+
+.form_received {
+  color: #0033CC;
+}
+
+.acceptance_resources {
+  margin-top: 10px;
+}
