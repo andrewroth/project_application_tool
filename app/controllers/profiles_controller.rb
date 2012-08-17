@@ -218,6 +218,14 @@ class ProfilesController < ApplicationController
 	  from Adobe Acrobat Reader. If you do not have Adobe Acrobat Reader it is available for free 
 	  <a href="http://www.adobe.com/products/acrobat/readstep2.html" target="_blank">here</a>.'
     @submenu_title = "dashboard"
+
+    @profile.all_prep_items.each do |prep_item|
+      @profile.profile_prep_items.find_or_create_by_prep_item_id(prep_item.id).save!
+    end
+    @profile_prep_items = @profile.all_profile_prep_items
+    @projects = @eg.projects
+    @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten.uniq
+    @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
   end
 
   def old_dashboard

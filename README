@@ -1,3 +1,3 @@
-Deploy to production: cap deploy target=prod
-Deploy to staging:    cap c4c2/staging deploy
-Deploy to dev:        cap c4c2/dev deploy
+Deploy to production: cap production deploy
+Deploy to dev:        cap staging deploy
+

@@ -288,7 +288,7 @@ render :partial => "viewer_specifics"
         @profiles = @profiles.find_all{ |p| people.include?(p.viewer.person) }
       end
 
-      # get prep_items from projects
+      # get prep_items from event group and projects
       @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten.uniq
       # ensure profile_prep_items is current
       @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }

@@ -19,6 +19,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :profile_prep_items
 
   map.resources :profiles, :member => { 
+    :prep_items => :get,
     :old_dashboard => :get,
     :view => :get, 
     :support_received => :get, 
