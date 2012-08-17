@@ -95,4 +95,6 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action/:id'
 
   map.connect '/event_groups/:id/custom_css.css', :controller => "event_groups", :action => "custom_css"
+
+  map.connect '/test_student', :controller => :main, :action => :test_student
 end

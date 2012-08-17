@@ -19,6 +19,13 @@ class MainController < ApplicationController
   CampusStats = Struct.new(:students_cnt, :student_profiles, :accepted_cnt, :applied_cnt, :students_no_profiles)
   StudentProfile = Struct.new(:student, :profile)
   
+  def test_student
+    @eg = EventGroup.find 58
+    session[:event_group_id] = @eg.id
+    session[:user_id] = 8213
+    redirect_to "/profiles/3947"
+  end
+
   def send_test_email
     TestMailer.deliver_test(params[:subject], params[:message], params[:to], params[:from])
     flash[:notice] = 'test email sent'
