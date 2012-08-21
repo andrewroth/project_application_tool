@@ -1,7 +1,7 @@
 <br/>
 
 <p>
-<% if params[:command] == 'optional' %>
+<% if params[:command] == 'checked_in' %>
   Click checkboxes to require a participant to complete the prep item
 <% else %>
   Click checkboxes to mark paperwork items as received.
@@ -26,7 +26,7 @@
       <% for prep_item in @prep_items %>
         <% profile_prep_item = profile.profile_prep_item prep_item %>
 
-        <% if params[:command] == 'optional' && prep_item.applies_to_profile(profile) || 
+        <% if params[:command] == 'checked_in' && prep_item.applies_to_profile(profile) || 
                 params[:command] == 'received' && prep_item.applies_to_profile_check_checked_in(profile) %>
 
           <% id = "prep_id_#{profile_prep_item.id}_profile_id_#{profile.id}_#{params[:command]}" -%>

@@ -19,8 +19,9 @@
       <div>Please do not check the box next to a form until you have sent it in.  When the office has received your form it will turn <span class="form_received">dark blue</span>.</div>
       <div>March 20 mail to P2C Office</div>
       <div>
-        <% @prep_items.each do |pi| %>
-          <%= check_box_tag :"#{pi.title}" %><%= pi.title %><br/>
+        <% @profile_prep_items.each do |ppi| %>
+          <% pi = ppi.prep_item %>
+          <%= check_box_tag :"#{pi.title}", "1", ppi.submitted %><%= pi.title %><br/>
         <% end %>
       </div>
       <div>Print my travel itinerary</div>

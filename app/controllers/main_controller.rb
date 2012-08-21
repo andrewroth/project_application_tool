@@ -273,7 +273,7 @@ render :partial => "viewer_specifics"
   end
   
   def find_prep_items
-    if %w(received optional).include?(params[:command]) && params[:project_id]
+    if %w(received checked_in).include?(params[:command]) && params[:project_id]
       # set @projects - if no project id is given, use all if using tools
       @projects = if params[:project_id].empty?
                     if params[:from_tools] then @eg.projects else nil end
@@ -301,9 +301,9 @@ render :partial => "viewer_specifics"
       @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
 
       # filter non-individual prep_items if optional command
-      if params[:command] == "optional" then @prep_items.delete_if { |pi| !pi.individual } end
+      if params[:command] == "checked_in" then @prep_items.delete_if { |pi| !pi.individual } end
     else
-      flash[:notice] = 'paperwork: invalid command or options: command should be either received or optional, and project_id should be given'
+      flash[:notice] = 'paperwork: invalid command or options: command should be either received or checked_in, and project_id should be given'
       redirect_to :back
     end
   end

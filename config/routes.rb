@@ -19,12 +19,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :profile_prep_items
 
   map.resources :profiles, :member => { 
-    :prep_items => :get,
+    :paperwork => :get,
     :old_dashboard => :get,
     :view => :get, 
     :support_received => :get, 
     :costing => :get, 
-    :prep_items => :get, 
     :travel => :get
   }
 

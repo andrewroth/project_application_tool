@@ -4,7 +4,7 @@
     <%= sub_menu_item 'old dashboard', :url => old_dashboard_profile_path(@profile.id) %>
     <%= sub_menu_item 'support received', :profiles, :support_received, :id => @profile.id %>
     <%= sub_menu_item 'costing', :profiles, :costing, :id => @profile.id %>
-    <%= sub_menu_item 'paperwork', profile_prep_items_path(@profile.id) %>
+    <%= sub_menu_item 'paperwork', :url => paperwork_profile_path(@profile.id) %>
     <%= sub_menu_item 'travel', :profiles, :travel, :id => @profile.id %>
   <% end %>
 <% else %>

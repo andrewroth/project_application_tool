@@ -8,7 +8,7 @@ class ProfilesController < ApplicationController
 
   skip_before_filter :restrict_students, :only => [ :index, :list, :show, :old_dashboard, :view, :update, 
                                               :travel, :support_received, :costing, 
-                                              :prep_items, :update_support, :use_past_appln ] + 
+                                              :paperwork, :update_support, :use_past_appln ] + 
                                               INFO_ACTIONS
                                               
   before_filter :set_title
@@ -104,7 +104,7 @@ class ProfilesController < ApplicationController
     @submenu_title = 'travel'
   end
   
-  def prep_items
+  def paperwork
     @submenu_title = 'paperwork'
   end
   
@@ -222,7 +222,7 @@ class ProfilesController < ApplicationController
     @profile.all_prep_items.each do |prep_item|
       @profile.profile_prep_items.find_or_create_by_prep_item_id(prep_item.id).save!
     end
-    @profile_prep_items = @profile.all_profile_prep_items
+    @profile_prep_items = @profile.all_profile_prep_items.sort!{ |ppi1, ppi2| ppi1.prep_item.title <=> ppi2.prep_item.title }
     @projects = @eg.projects
     @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten.uniq
     @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
