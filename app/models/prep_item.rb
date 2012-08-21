@@ -13,7 +13,7 @@ class PrepItem < ActiveRecord::Base
     if applies_to == :event_group then eg = event_group else eg = projects.first.event_group end
     pis = (eg.prep_items + eg.projects.collect {|p| p.prep_items}.flatten).uniq
     pis.delete_if { |pi| pi.title != self.title || pi.id = id}
-    errors.add_to_base "Cannont have two paperwork items with the same name within the same event group" if pis.size > 0
+    errors.add_to_base "Cannot have two paperwork items with the same name within the same event group" if pis.size > 0
   end
 
   def applies_to
@@ -24,13 +24,13 @@ class PrepItem < ActiveRecord::Base
     end
   end
   
-  def applies_to_profile_check_optional(profile)
+  def applies_to_profile_check_checked_in(profile)
     return false unless applies_to_profile(profile)
 
     # check individual flag for optional items only
     if individual
       ppi = profile.profile_prep_item self
-      return ppi && ppi.optional
+      return ppi && ppi.checked_in
     else
       return true
     end
@@ -42,7 +42,7 @@ class PrepItem < ActiveRecord::Base
     (applies_to == :event_group && profile.project.event_group == event_group) || 
       (applies_to == :projects && projects.include?(profile.project))
   end
-  
+
   def ensure_all_profile_prep_items_exist
     ensure_project_ids = if applies_to == :event_group then event_group.projects.collect(&:id) else self.project_ids end
     projects = Project.find ensure_project_ids, :include => [ :acceptances, :staff_profiles ] # eager loading :profile_prep_items on both acceptances and staff_profiles fails - AR bug?

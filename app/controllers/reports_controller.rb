@@ -1151,7 +1151,7 @@ class ReportsController < ApplicationController
       for prep_item in @prep_items
         profile_prep_item = profile.profile_prep_item prep_item
 
-        if prep_item.applies_to_profile_check_optional(profile) && profile_prep_item
+        if prep_item.applies_to_profile_check_cheked_in(profile) && profile_prep_item
 
           if csv_requested
             check_r = if profile_prep_item.received then "Y" else "n" end

@@ -4,4 +4,7 @@ class User < ActiveRecord::Base
   include Common::Core::Ca::User
   include Common::Pat::User
   include ViewerMethods
+
+  def prep_item_applies_to(prep_item)
+  end
 end
