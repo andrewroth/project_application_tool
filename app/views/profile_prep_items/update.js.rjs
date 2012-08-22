@@ -1,4 +1,6 @@
 if params[:from_tools]
+elsif params[:from_dashboard] == 'true'
+  page.visual_effect :highlight, "ppi_#{@profile_prep_item.id}_span"
 else
   unless @profile_prep_item.errors.empty?
     page.replace_html "edit_#{@profile_prep_item.id}", :partial => 'edit_form', :locals => {:profile_prep_item => @profile_prep_item}

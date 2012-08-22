@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="/stylesheets/blueprint/screen.css" type="text/css" media="screen, projection">
 <link rel="stylesheet" href="/stylesheets/blueprint/print.css" type="text/css" media="print">
+<%= javascript_include_tag "profiles" %>
 <!--[if lt IE 8]>
   <link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection">
 <![endif]-->
@@ -14,14 +15,18 @@
   </div>
 
   <div class="span-6">
-    <div class="acceptance_box">
+    <div id="paperwork" class="acceptance_box">
       <h3>Dates and To Do List</h3>
       <div>Please do not check the box next to a form until you have sent it in.  When the office has received your form it will turn <span class="form_received">dark blue</span>.</div>
       <div>March 20 mail to P2C Office</div>
       <div>
         <% @profile_prep_items.each do |ppi| %>
           <% pi = ppi.prep_item %>
-          <%= check_box_tag :"#{pi.title}", "1", ppi.submitted %><%= pi.title %><br/>
+          <%= check_box_tag :"#{pi.title}", "1", ppi.submitted, :id => "ppi_#{ppi.id}" %>
+          <script>Event.observe('ppi_<%= ppi.id %>', 'change', function() { send_prep_item_data(<%= ppi.id %>); })</script>
+          <% content_tag(:span, :id => "ppi_#{ppi.id}_span", :class => (ppi.received ? "form_received" : ""), :onClick => "$('ppi_#{ppi.id}').checked = !$('ppi_#{ppi.id}').checked; send_prep_item_data(#{ppi.id})") do %>
+            <%= pi.title %><br/>
+          <% end %>
         <% end %>
       </div>
       <div>Print my travel itinerary</div>
