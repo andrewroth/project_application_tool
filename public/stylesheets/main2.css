@@ -698,3 +698,23 @@ img.new_window {
 #paperwork span {
   cursor: pointer;
 }
+
+.support h3 {
+  float: left;
+}
+
+#progress_bar {
+  float: right;
+  position: relative;
+  top: 15px;
+  right: 4px;
+}
+
+#support_box {
+}
+
+.percentText {
+  position: relative;
+  left: 4px;
+  top: -2px;
+}

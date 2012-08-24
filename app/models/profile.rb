@@ -35,6 +35,10 @@ class Profile < ActiveRecord::Base
     { :conditions => ([ conditions_text ] + conditions_subs) }
   }
 
+  def support_claimed_percent
+    ((support_claimed.to_f / cached_costing_total.to_f) * 100).to_i
+  end
+
   def form_title() appln.form.questionnaire.title if appln && appln.form && appln.form.questionnaire end
 
   # params:

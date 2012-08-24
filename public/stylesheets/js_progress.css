@@ -1,0 +1,58 @@
+m* General Links */
+a:link { text-decoration : none; color : #3366cc; border: 0px;}
+a:active { text-decoration : underline; color : #3366cc; border: 0px;}
+a:visited { text-decoration : none; color : #3366cc; border: 0px;}
+a:hover { text-decoration : underline; color : #ff5a00; border: 0px;}
+img { padding: 0px; margin: 0px; border: none;}
+
+body {
+  margin : 0 auto;
+  width:100%;
+  font-family: 'Verdana';
+  color: #40454b;
+  font-size: 12px;
+  text-align:center;
+}
+
+.content {
+  margin:20px;
+  line-height:20px;
+}
+
+body h1 {
+  font-size:14px;
+  font-weight:bold;
+  color:#CC0000;
+  padding:5px;
+  border-bottom:solid;
+  border-bottom-width:1px;
+  border-bottom-color:#333333;
+}
+
+body h2 {
+  font-size:14px;
+  font-weight:bold;
+  color:#CC0000;
+  padding:5px;
+  border-bottom:solid;
+  border-bottom-width:1px;
+  border-bottom-color:#333333;
+}
+
+#demo {
+  margin : 0 auto;
+  width:100%;
+}
+
+#demo .extra {
+  padding-left:30px;
+}
+
+#demo .options {
+  padding-left:10px;
+}
+
+#demo .getOption {
+  padding-left:10px;
+  padding-right:20px;
+}
