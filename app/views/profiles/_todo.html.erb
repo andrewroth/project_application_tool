@@ -2,9 +2,9 @@
   <h3>Dates and To Do List</h3>
   <div>Please do not check the box next to a form until you have sent it in.  When the office has received your form it will turn <span class="form_received">dark blue</span>.</div>
   <div>
-    <% @profile_prep_items.group_by{ |ppi| ppi.prep_item.deadline }.each_pair do |deadline, ppis| %>
+    <% @profile_prep_items_by_deadline.keys.sort.each do |deadline| %>
       <p>Due <%= deadline.strftime("%B %d") %>:</p>
-      <% ppis.each do |ppi| %>
+      <% @profile_prep_items_by_deadline[deadline].sort{ |ppi1, ppi2| ppi1.prep_item.title <=> ppi2.prep_item.title }.each do |ppi| %>
         <% pi = ppi.prep_item %>
         <%= check_box_tag :"#{pi.title}", "1", ppi.submitted, :id => "ppi_#{ppi.id}" %>
         <script>Event.observe('ppi_<%= ppi.id %>', 'change', function() { send_prep_item_data(<%= ppi.id %>); })</script>

@@ -219,10 +219,7 @@ class ProfilesController < ApplicationController
     @profile.all_prep_items.each do |prep_item|
       @profile.profile_prep_items.find_or_create_by_prep_item_id(prep_item.id).save!
     end
-    @profile_prep_items = @profile.all_profile_prep_items.sort!{ |ppi1, ppi2| ppi1.prep_item.title <=> ppi2.prep_item.title }
-    @projects = @eg.projects
-    @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten.uniq
-    @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
+    @profile_prep_items_by_deadline = @profile.all_profile_prep_items.group_by{ |ppi| ppi.prep_item.deadline }
   end
 
   def old_dashboard

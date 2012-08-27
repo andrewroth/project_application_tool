@@ -198,8 +198,8 @@ class Profile < ActiveRecord::Base
     end
   end
   
-  def all_prep_items #return a list of all associated prep items
-    #PrepItem.find_by_project_id self.project.id
+  # all prep items that apply to this profile
+  def all_prep_items
     project.prep_items + project.event_group.prep_items
   end
   
