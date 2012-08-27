@@ -1,5 +1,6 @@
 class Profile < ActiveRecord::Base
   include Common::Pat::Profile
+  include ActionView::Helpers::NumberHelper
   belongs_to :viewer
   belongs_to :appln
   belongs_to :reuse_appln, :class_name => "Appln"
@@ -34,6 +35,18 @@ class Profile < ActiveRecord::Base
     conditions_subs += p.third if p.third.present?
     { :conditions => ([ conditions_text ] + conditions_subs) }
   }
+
+  def support_claimed_currency
+    if support_claimed.present?
+      number_to_currency(support_claimed, :unit => "", :delimiter => "")
+    else
+      "click to update"
+    end
+  end
+
+  def support_claimed_currency=(val)
+    self.support_claimed = val
+  end
 
   def support_claimed_percent
     ((support_claimed.to_f / cached_costing_total.to_f) * 100).to_i

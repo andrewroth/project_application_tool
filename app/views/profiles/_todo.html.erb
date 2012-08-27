@@ -1,14 +1,16 @@
 <div id="paperwork" class="acceptance_box todo">
   <h3>Dates and To Do List</h3>
   <div>Please do not check the box next to a form until you have sent it in.  When the office has received your form it will turn <span class="form_received">dark blue</span>.</div>
-  <div>March 20 mail to P2C Office</div>
   <div>
-    <% @profile_prep_items.each do |ppi| %>
-      <% pi = ppi.prep_item %>
-      <%= check_box_tag :"#{pi.title}", "1", ppi.submitted, :id => "ppi_#{ppi.id}" %>
-      <script>Event.observe('ppi_<%= ppi.id %>', 'change', function() { send_prep_item_data(<%= ppi.id %>); })</script>
-      <% content_tag(:span, :id => "ppi_#{ppi.id}_span", :class => (ppi.received ? "form_received" : ""), :onClick => "$('ppi_#{ppi.id}').checked = !$('ppi_#{ppi.id}').checked; send_prep_item_data(#{ppi.id})") do %>
-        <%= pi.title %><br/>
+    <% @profile_prep_items.group_by{ |ppi| ppi.prep_item.deadline }.each_pair do |deadline, ppis| %>
+      <p>Due <%= deadline.strftime("%B %d") %>:</p>
+      <% ppis.each do |ppi| %>
+        <% pi = ppi.prep_item %>
+        <%= check_box_tag :"#{pi.title}", "1", ppi.submitted, :id => "ppi_#{ppi.id}" %>
+        <script>Event.observe('ppi_<%= ppi.id %>', 'change', function() { send_prep_item_data(<%= ppi.id %>); })</script>
+        <% content_tag(:span, :id => "ppi_#{ppi.id}_span", :class => (ppi.received ? "form_received" : ""), :onClick => "$('ppi_#{ppi.id}').checked = !$('ppi_#{ppi.id}').checked; send_prep_item_data(#{ppi.id})") do %>
+          <%= pi.title %><br/>
+        <% end %>
       <% end %>
     <% end %>
   </div>

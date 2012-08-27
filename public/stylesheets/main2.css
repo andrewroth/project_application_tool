@@ -718,3 +718,7 @@ img.new_window {
   left: 4px;
   top: -2px;
 }
+
+div.acceptance_box.support form {
+  display: inline;
+}

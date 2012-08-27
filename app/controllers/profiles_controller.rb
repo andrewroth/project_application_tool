@@ -7,8 +7,8 @@ class ProfilesController < ApplicationController
   INFO_ACTIONS = [ :crisis_info, :update_crisis_info, :campus_info, :update_campus_info, :campus_info_new ]
 
   skip_before_filter :restrict_students, :only => [ :index, :list, :show, :old_dashboard, :view, :update, 
-                                              :travel, :support_received, :costing, 
-                                              :paperwork, :update_support, :use_past_appln ] + 
+                                              :travel, :support_received, :costing, :paperwork, :update_support, 
+                                              :use_past_appln, :set_profile_support_claimed_currency ] + 
                                               INFO_ACTIONS
                                               
   before_filter :set_title
@@ -19,6 +19,8 @@ class ProfilesController < ApplicationController
   before_filter :ensure_self_or_eventgroup_coordinator, :only => INFO_ACTIONS
   before_filter :ensure_profile_ownership_or_eventgroup_coordinator, :only => [ :view, :update ]
   before_filter :ensure_eventgroup_coordinator, :only => [ :new, :create ]
+
+  in_place_edit_for :profile, :support_claimed_currency
 
   def viewer_id_dropdown
     filter_s = params[:viewer]
@@ -212,11 +214,6 @@ class ProfilesController < ApplicationController
   end
 
   def show
-    flash[:error] = 'It is extremely important that you do not simply print off your 
-	  travel page from this website. Please click a link that says "printable itinerary pdf" 
-	  such as the one below or the one on the travel page and print your travel information 
-	  from Adobe Acrobat Reader. If you do not have Adobe Acrobat Reader it is available for free 
-	  <a href="http://www.adobe.com/products/acrobat/readstep2.html" target="_blank">here</a>.'
     @submenu_title = "dashboard"
 
     @profile.all_prep_items.each do |prep_item|
