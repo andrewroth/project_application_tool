@@ -5,7 +5,7 @@
     <%= sub_menu_item 'support received', :url => support_received_profile_path(@profile) %>
     <%= sub_menu_item 'costing', :url => costing_profile_path(@profile) %>
     <%= sub_menu_item 'paperwork', :url => paperwork_profile_path(@profile) %>
-    <%= sub_menu_item 'travel', :profiles, :travel, :id => @profile.id %>
+    <%= sub_menu_item 'travel', :url => travel_profile_path(@profile) %>
   <% end %>
 <% else %>
   <% content_for "submenu" do %>

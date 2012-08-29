@@ -8,8 +8,8 @@
   <div class="small">Please allow a minimum of 10 business days after your support has been sent in before you contact our office to inquire about missing support on the Project Application Tool. A high volume of email inquiries about missing donations slows down the donation process. If after 10 business days an expected donation from a supporter has not showed up. Don't hesitate to contact us.</div>
   <div><%= link_to "Details on support received", support_received_profile_path(@profile) %></div>
   <div>Total amount of support I know I have raised: <% if @profile.support_claimed.present? %>$<% end %><%= in_place_editor_field(:profile, :support_claimed_currency) %></div>
-  <div>Record of funds form Please complete this form on your computer for all the support you receive. Save it for your records and print a copy to send with your cheques.</div>
-  <div>Please enter the following project code at the top of Record of Funds form you send to Power To Change headquarters: 642060 - 0</div>
+  <div>Record of funds form <span class="small">Please complete this form on your computer for all the support you receive. Save it for your records and print a copy to send with your cheques.</span></div>
+  <div>Please enter the following project code at the top of Record of Funds form you send to Power To Change headquarters: <%= @profile.motivation_code %></div>
   <div>URL to send supporters</div>
   <div>Please send all donations to 20385 64th Avenue, Langley, BC V2Y 1N5</div>
 </div>

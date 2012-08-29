@@ -198,6 +198,8 @@ class Profile < ActiveRecord::Base
     end
   end
   
+  #### PREP ITEMS ####
+
   # all prep items that apply to this profile
   def all_prep_items
     project.prep_items + project.event_group.prep_items
@@ -219,6 +221,8 @@ class Profile < ActiveRecord::Base
     profile_prep_items.detect{ |ppi| ppi.prep_item_id == pi.id }
   end
 
+  #### PREP ITEMS ####
+  
   after_create do |profile|
     profile.update_costing_total_cache
   end

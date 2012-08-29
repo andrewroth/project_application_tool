@@ -10,10 +10,10 @@
 
 <div class="container">
   <div class="span-24">
-    Joe Student, you have been accepted to Paris Project.<br/>
-    Your support coach is Eric Staff.<br/>
-    Phone: (555) 444-3333<br/>
-    Email: Fank.staff@c4c.ca<br/>
+    <%= @profile.viewer.name %>, you have been accepted to <%= @profile.project.title %>.<br/>
+    Your support coach is <%= @profile.support_coach.name %>.<br/>
+    Phone: <%= @profile.support_coach.person.local_phone %><br/>
+    Email: <%= @profile.support_coach.email %><br/>
     <br/>
   </div>
 
