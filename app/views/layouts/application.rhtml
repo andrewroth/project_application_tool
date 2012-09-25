@@ -7,16 +7,6 @@
 
 <% end %>
 
-  <% 
-=begin
-  flash[:error] = %|
-  There will be a short, approximately 10-20 minutes, scheduled outage between 12pm-2pm PST
-  <BR />
-  -CIM team, Wed May 7
-  |
-=end
-  %>
-
 <html>
   <head>
     <title><%= application_title %></title>
@@ -31,6 +21,7 @@
     <% if RAILS_ENV == 'development' && @debug -%>
       <div>debug: <%= @debug -%></div>
     <% end -%>
+
     <!-- display style must be inline -->
     <div id="loading" style="display:none;">
       Loading <%=image_tag('spinner.gif')%><br />
@@ -38,16 +29,17 @@
     <div id="saving" style="display:none;">
       Saving <%=image_tag('spinner.gif')%><br />
     </div>
+
     <div id="header">
       <div id="user_info">
         <% if @viewer %> 
-          <p>user: <%= @viewer.name %> - <%= link_to "logout", :action => :logout, :controller => :security %>
+          <p>Hi <%= @viewer.name %> - <%= link_to "logout", :action => :logout, :controller => :security %>
           </p>
         <% end %>
       </div>
       <div id="event_group_info">
         <% if @eg %>
-          <p>group:
+          <p>
             <%= @eg.to_s_with_eg_path %> 
             <%= link_to 'change', scope_event_groups_url %>
           </p>
@@ -87,6 +79,23 @@
       </div>
     <% end %>
     
+    <% if @title %>
+      <h3><%=@title%></h3>
+    <% end %>
+		
+    <%= render_if_possible(controller.controller_name + "/menu") ||
+           (@submenu && render_if_possible(@submenu + "/menu"))
+    %>
+
+    <% submenu_items_html = yield :submenu %>
+    <% if submenu_items_html && !@eg.nil? %>
+      <div class="submenu">
+        <ul>
+          <%= submenu_items_html %>
+        </ul>
+      </div>
+    <% end %>
+
     <% flash.each do |key, msg| -%>
       <% full_msg = msg %>
       <%= content_tag :div, full_msg, :id => "flash_#{key}", :class => 'error flash' %>
@@ -106,8 +115,8 @@
          end
         %>
       <%= content_tag :div, full_msg, :id => "notification_#{n.id}", :class => 'error flash' %>
-    <% end -%>
-
+     <% end -%>
+     
      <% if @viewer && !@eg.nil? && !@viewer.is_student?(@eg) %>
       <div id="search" >
         <%= form_remote_tag :url => { :controller => 'main', :action => :find_people },	:before => "Element.show('loading');", :complete  => "Element.hide('loading');" %>
@@ -117,24 +126,8 @@
         </form>
       </div>
     <% end %>
-      
-    <% if @title %>
-      <h3><%=@title%></h3>
-    <% end %>
-		
-    <%= render_if_possible(controller.controller_name + "/menu") ||
-           (@submenu && render_if_possible(@submenu + "/menu"))
-    %>
 
-    <% submenu_items_html = yield :submenu %>
-    <% if submenu_items_html && !@eg.nil? %>
-      <div class="submenu">
-        <ul>
-          <%= submenu_items_html %>
-        </ul>
-      </div>
-    <% end %>
-    <div>
+     <div>
       <div id="content">
         <% if @form && params[:controller] != 'forms' %>
           <%= render_if_possible("qe_forms/form_#{@form}") || render_if_possible(:file => "layouts/form_#{@form}")%>
