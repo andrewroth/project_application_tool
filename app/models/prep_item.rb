@@ -5,70 +5,38 @@ class PrepItem < ActiveRecord::Base
   has_many :profile_prep_items, :include => :profile
   has_many :profiles, :through => :profile_prep_items
 
-  def self.find_prep_items
-    find(:all, :order => "title")
-  end
- 
-  def validate
-    if applies_to == :event_group then eg = event_group else eg = projects.first.event_group end
-    pis = (eg.prep_items + eg.projects.collect {|p| p.prep_items}.flatten).uniq
-    pis.delete_if { |pi| pi.title != self.title || pi.id = id}
-    errors.add_to_base "Cannot have two paperwork items with the same name within the same event group" if pis.size > 0
+  alias_method :original_projects, :projects
+  def projects
+    event_group.try(:projects) || self.original_projects
   end
 
-  def applies_to
-    if event_group_id
-      :event_group
-    else
-      :projects
-    end
-  end
-  
-  def applies_to_profile_check_checked_in(profile)
-    return false unless applies_to_profile(profile)
+  # Returns all profiles that this item might apply to.
+  # If this prep item is assigned to individual profiles, it still includes all profiles that may or may
+  # not have been assigned.
+  def all_profiles(project_filter = nil)
+    return @all_profiles if @all_profiles
 
-    # check individual flag for optional items only
-    if individual
-      ppi = profile.profile_prep_item self
-      return ppi && ppi.checked_in
+    @all_profiles = (projects.collect(&:acceptances) + projects.collect(&:staff_profiles)).flatten.uniq
+    @all_profiles.delete_if{ |p| p.project != project_filter } if project_filter
+    return @all_profiles
+  end
+
+  # Returns all profiles that this item does apply to.
+  # If this prep item is assigned to individual profiles, it only includes profiles that have been assigned.
+  def profiles(project_filter = nil)
+    if !self.individual
+      return all_profiles(project_filter)
     else
-      return true
+      return all_profiles(project_filter).find_all{ |p| profile_prep_items.find_by_prep_item_id(self.id).try(:checked_in) }
     end
   end
 
   def applies_to_profile(profile)
-    return false unless profile.class == Acceptance || profile.class == StaffProfile
-
-    (applies_to == :event_group && profile.project.event_group == event_group) || 
-      (applies_to == :projects && projects.include?(profile.project))
+    all_profiles.include?(profile)
   end
 
-  def ensure_all_profile_prep_items_exist
-    ensure_project_ids = if applies_to == :event_group then event_group.projects.collect(&:id) else self.project_ids end
-    projects = Project.find ensure_project_ids, :include => [ :acceptances, :staff_profiles ] # eager loading :profile_prep_items on both acceptances and staff_profiles fails - AR bug?
-    
-    valid_profile_ids_with_ppi = []
-    
-    for project in projects
-      for profile in project.acceptances + project.staff_profiles
-        #ppi = profile.profile_prep_items.find_or_create_by_prep_item_id self.id
-        ppi = profile.profile_prep_items.detect { |ppi| ppi.prep_item_id == self.id }
-        unless ppi
-          ppi = profile.profile_prep_items.create! :prep_item_id => self.id
-        end
-        valid_profile_ids_with_ppi << profile.id
-      end
-    end
-    
-    # get rid of profile_prep_items for any profile that's switched projects
-    if applies_to == :project
-      for ppi in self.profile_prep_items
-        unless ppi.profile && valid_profile_ids_with_ppi.include?(ppi.profile.id)
-          ppi.destroy
-        end
-      end
-    end
-    
-    return true
+  def applies_to_profile_check_checked_in(profile)
+    debugger if self.title == "Security Agreement"
+    profiles.include?(profile)
   end
 end

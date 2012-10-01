@@ -274,34 +274,17 @@ render :partial => "viewer_specifics"
   
   def find_prep_items
     if %w(received checked_in).include?(params[:command]) && params[:project_id]
-      # set @projects - if no project id is given, use all if using tools
-      @projects = if params[:project_id].empty?
-                    if params[:from_tools] then @eg.projects else nil end
-                  else @eg.projects.find_all_by_id params[:project_id].split(',') end
+      @project = Project.find(params[:project_id])
+      @prep_items = @eg.prep_items(:include => :profile_prep_items)
+      @prep_items += @project.prep_items(:include => :profile_prep_items)
+      @prep_items.uniq!
 
-      # ensure valid project
-      unless @projects && !@projects.empty?
-        flash[:notice] = 'paperwork: invalid project'
-        redirect_to :back
-        return
+      if params[:command] == 'received'
+        @profiles = @prep_items.collect{ |pi| pi.profiles(@project) }.flatten.uniq
+      elsif params[:command] == 'checked_in'
+        @prep_items.delete_if{ |pi| !pi.individual }
+        @profiles = @prep_items.find_all{ |pi| pi.individual }.collect{ |pi| pi.all_profiles(@project) }.flatten.uniq
       end
-        
-      # get profiles out of projects
-      @profiles = @projects.collect{ |p| p.acceptances + p.staff_profiles }.flatten
-        
-      # sort by name if they came from tools
-      if params[:from_tools] && params[:name] && !params[:name].empty?
-        people = Person.search_by_name params[:name]
-        @profiles = @profiles.find_all{ |p| people.include?(p.viewer.person) }
-      end
-
-      # get prep_items from event group and projects
-      @prep_items = @eg.prep_items + @projects.collect{ |p| p.prep_items }.flatten.uniq
-      # ensure profile_prep_items is current
-      @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
-
-      # filter non-individual prep_items if optional command
-      if params[:command] == "checked_in" then @prep_items.delete_if { |pi| !pi.individual } end
     else
       flash[:notice] = 'paperwork: invalid command or options: command should be either received or checked_in, and project_id should be given'
       redirect_to :back
