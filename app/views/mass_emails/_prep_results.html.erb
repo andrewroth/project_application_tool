@@ -1,9 +1,11 @@
 <table>
-<% for prep_item in @prep_items %>
-  <tr>
-    <%= check_box_tag "prep_item" + prep_item.id.to_s %>
-    <%= prep_item.title %>
-    <br />
-  </tr>
-<% end %>
+  <% for prep_item in @prep_items %>
+    <tr>
+      <td>
+        <%= check_box_tag "prep_item[#{prep_item.id}]" %>
+        <%= label_tag "prep_item[#{prep_item.id}]", prep_item.title %>
+        <br />
+      </tr>
+    </tr>
+  <% end %>
 </table>

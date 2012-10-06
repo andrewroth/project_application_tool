@@ -43,18 +43,9 @@ class MassEmailsController < ApplicationController
     end
     
     if params[:prep_item_unreceived]
-    if params[:project_id]!= 'any' then @prep_items = Project.find(params[:project_id]).prep_items + @eg.prep_items else @prep_items = @eg.prep_items end
-      prep_ids = @prep_items.collect { |p| p.id }
-      for i in 0 .. @prep_items.size - 1
-        if params[("prep_item"+ prep_ids.at(i).to_s).to_sym]
-          profile_prep_items = PrepItem.find(prep_ids.at(i)).profile_prep_items
-          if params[:project_id]!= 'any' then profile_prep_items.delete_if { |ppi| ppi.profile.project_id != params[:project_id].to_i } end
-          for profile_prep_item in profile_prep_items
-            if profile_prep_item.received == false 
-              if !profile_prep_item.prep_item.individual || profile_prep_item.optional then profiles += [profile_prep_item.profile] end
-            end
-          end
-        end
+      find_prep_items
+      @prep_items.each do |pi|
+        # TODO
       end
     end
     
@@ -65,18 +56,15 @@ class MassEmailsController < ApplicationController
   end
   
   def find_prep_items
-    if params[:proj_id] != ''
-      if params[:proj_id]!= 'any'
-        @prep_items = (Project.find(params[:proj_id]).prep_items + @eg.prep_items)
-      else
-        @prep_items = @eg.prep_items
-      end
+    if params[:proj_id].present?
+      @project = Project.find(params[:proj_id])
+      @prep_items = @eg.prep_items(:include => :profile_prep_items)
+      @prep_items += @project.prep_items(:include => :profile_prep_items)
     else
-    @prep_items = []
+      @prep_items = []
     end
-    @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
   end
-  
+
   protected
 
   def set_allowed_projects

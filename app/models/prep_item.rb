@@ -13,30 +13,29 @@ class PrepItem < ActiveRecord::Base
   # Returns all profiles that this item might apply to.
   # If this prep item is assigned to individual profiles, it still includes all profiles that may or may
   # not have been assigned.
-  def all_profiles(project_filter = nil)
-    return @all_profiles if @all_profiles
+  def potential_profiles(project_filter = nil)
+    return @potential_profiles if @all_profiles
 
-    @all_profiles = (projects.collect(&:acceptances) + projects.collect(&:staff_profiles)).flatten.uniq
-    @all_profiles.delete_if{ |p| p.project != project_filter } if project_filter
-    return @all_profiles
+    @potential_profiles = (projects.collect(&:acceptances) + projects.collect(&:staff_profiles)).flatten.uniq
+    @potential_profiles.delete_if{ |p| p.project != project_filter } if project_filter
+    return @potential_profiles
   end
 
   # Returns all profiles that this item does apply to.
   # If this prep item is assigned to individual profiles, it only includes profiles that have been assigned.
   def profiles(project_filter = nil)
     if !self.individual
-      return all_profiles(project_filter)
+      return potential_profiles(project_filter)
     else
-      return all_profiles(project_filter).find_all{ |p| profile_prep_items.find_by_prep_item_id(self.id).try(:checked_in) }
+      return potential_profiles(project_filter).find_all{ |p| profile_prep_items.find_by_prep_item_id(self.id).try(:checked_in) }
     end
   end
 
-  def applies_to_profile(profile)
-    all_profiles.include?(profile)
+  def can_be_assigned(profile)
+    potential_profiles.include?(profile)
   end
 
-  def applies_to_profile_check_checked_in(profile)
-    debugger if self.title == "Security Agreement"
+  def is_assigned(profile)
     profiles.include?(profile)
   end
 end

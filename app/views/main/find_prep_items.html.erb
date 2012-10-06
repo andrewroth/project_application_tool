@@ -26,8 +26,8 @@
       <% for prep_item in @prep_items %>
         <% profile_prep_item = profile.profile_prep_item prep_item %>
 
-        <% if params[:command] == 'checked_in' && prep_item.applies_to_profile(profile) || 
-                params[:command] == 'received' && prep_item.applies_to_profile_check_checked_in(profile) %>
+        <% if params[:command] == 'checked_in' && prep_item.can_be_assigned(profile) || 
+                params[:command] == 'received' && prep_item.is_assigned(profile) %>
 
           <% id = "prep_id_#{profile_prep_item.id}_profile_id_#{profile.id}_#{params[:command]}" -%>
           <td mochi:format='input'><%= check_box_tag id, profile_prep_item.send(params[:command]), profile_prep_item.send(params[:command]), :id => id, :onClick => 

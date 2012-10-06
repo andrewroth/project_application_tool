@@ -273,20 +273,32 @@ render :partial => "viewer_specifics"
   end
   
   def find_prep_items
-    if %w(received checked_in).include?(params[:command]) && params[:project_id]
-      @project = Project.find(params[:project_id])
+    if %w(received checked_in).include?(params[:command])
+      # get all prep items that apply
       @prep_items = @eg.prep_items(:include => :profile_prep_items)
-      @prep_items += @project.prep_items(:include => :profile_prep_items)
+      if params[:project_id].present?
+        @project = Project.find(params[:project_id])
+        @prep_items += @project.prep_items(:include => :profile_prep_items)
+      else
+        @prep_items = @eg.projects.collect(&:prep_items).flatten
+      end
       @prep_items.uniq!
 
+      # get all profiles that apply
       if params[:command] == 'received'
         @profiles = @prep_items.collect{ |pi| pi.profiles(@project) }.flatten.uniq
       elsif params[:command] == 'checked_in'
         @prep_items.delete_if{ |pi| !pi.individual }
-        @profiles = @prep_items.find_all{ |pi| pi.individual }.collect{ |pi| pi.all_profiles(@project) }.flatten.uniq
+        @profiles = @prep_items.find_all{ |pi| pi.individual }.collect{ |pi| pi.potential_profiles(@project) }.flatten.uniq
+      end
+
+      # sort by name if they came from tools
+      if params[:from_tools] && params[:name] && !params[:name].empty?
+        people = Person.search_by_name params[:name]
+        @profiles = @profiles.find_all{ |p| people.include?(p.viewer.try(:person)) }
       end
     else
-      flash[:notice] = 'paperwork: invalid command or options: command should be either received or checked_in, and project_id should be given'
+      flash[:notice] = 'paperwork: invalid command or options: command should be either received or checked_in'
       redirect_to :back
     end
   end
