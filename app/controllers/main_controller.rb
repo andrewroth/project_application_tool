@@ -292,7 +292,8 @@ render :partial => "viewer_specifics"
         @profiles = @prep_items.find_all{ |pi| pi.individual }.collect{ |pi| pi.potential_profiles(@project) }.flatten.uniq
       end
 
-      # sort by name if they came from tools
+
+      # filter by name if they came from tools
       if params[:from_tools] && params[:name] && !params[:name].empty?
         people = Person.search_by_name params[:name]
         @profiles = @profiles.find_all{ |p| people.include?(p.viewer.try(:person)) }
@@ -301,6 +302,19 @@ render :partial => "viewer_specifics"
       flash[:notice] = 'paperwork: invalid command or options: command should be either received or checked_in'
       redirect_to :back
     end
+  end
+
+  def received_prep_items
+    @prep_items = @eg.prep_items
+    if params[:project_id]
+      @project = Project.find(params[:project_id])
+      @prep_items += @project.prep_items
+    else
+      @prep_items += @eg.projects.collect(&:prep_items).flatten
+    end
+    @prep_items.uniq!
+    @prep_item_applicable_profiles = Hash[@prep_items.collect{ |prep_item| [ prep_item, prep_item.applicable_profiles(@project) ] }]
+    @profiles = Profile.find(@prep_item_applicable_profiles.values.flatten.collect(&:id), :include => :received_prep_items)
   end
 
   protected

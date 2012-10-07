@@ -14,6 +14,16 @@
     <%= render :partial => "externs/sortable_tables" %>
     <%= javascript_include_tag "prototype", "effects" %>
     <%= render :partial => "externs/load_extern" %>
+    <script>
+      // Here we define Ext for the first time
+      Ext = {
+        buildSettings: {
+          "scopeResetCSS": true  // Thanks, but I'll do my own scoping please
+        }
+      };
+    </script>
+    <script type="text/javascript" src="/extjs/ext-debug.js"></script>
+    <link rel="stylesheet" type="text/css" href="/extjs/resources/css/ext-all-scoped.css">
   </head>
   <body>
     <%= connexion_bar if @viewer && session[:login_source] == 'gcx' %>
