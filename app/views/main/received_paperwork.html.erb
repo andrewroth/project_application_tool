@@ -1,3 +1,8 @@
+<%= stylesheet_link_tag "/extjs/src/ux/css/LiveSearchGridPanel.css" %>
+<%= javascript_include_tag "/main/received_paperwork/LiveSearchGridPanel.js" %>
+<%= javascript_include_tag "/main/received_paperwork/live-search-grid.js" %>
+<div id="grid-example"></div>
+
 <p>Click checkboxes to mark paperwork items as received.</p>
 <br/>
 
@@ -43,6 +48,7 @@
 <br />
 
 <%= initialize_sortable_tables %>
+
 <% if params[:from_tools]=="true" %>
   <a href="/tools/index">Back</a>
 <% else %>
