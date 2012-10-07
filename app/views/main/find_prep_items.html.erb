@@ -24,9 +24,9 @@
       <td><% if profile.class == StaffProfile %>(staff) <% end %><%= profile.viewer.try(:name) %></td>
       <td><%= profile.project.name %></td>
       <% for prep_item in @prep_items %>
-        <% profile_prep_item = profile.profile_prep_item prep_item %>
+        <% profile_prep_item = profile.profile_prep_items.  %>
 
-        <% if params[:command] == 'checked_in' && prep_item.can_be_assigned(profile) || 
+        <% if true || params[:command] == 'checked_in' && prep_item.can_be_assigned(profile) || 
                 params[:command] == 'received' && prep_item.is_assigned(profile) %>
 
           <% id = "prep_id_#{profile_prep_item.id}_profile_id_#{profile.id}_#{params[:command]}" -%>

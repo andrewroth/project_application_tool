@@ -14,16 +14,17 @@ class PrepItem < ActiveRecord::Base
   # If this prep item is assigned to individual profiles, it still includes all profiles that may or may
   # not have been assigned.
   def potential_profiles(project_filter = nil)
-    return @potential_profiles if @all_profiles
+    @potential_profiles ||= {}
+    return @potential_profiles[project_filter] if @potential_profiles[project_filter]
 
-    @potential_profiles = (projects.collect(&:acceptances) + projects.collect(&:staff_profiles)).flatten.uniq
-    @potential_profiles.delete_if{ |p| p.project != project_filter } if project_filter
-    return @potential_profiles
+    @potential_profiles[project_filter] = (projects.collect(&:acceptances) + projects.collect(&:staff_profiles)).flatten.uniq
+    @potential_profiles[project_filter].delete_if{ |p| p.project != project_filter } if project_filter
+    return @potential_profiles[project_filter]
   end
 
   # Returns all profiles that this item does apply to.
   # If this prep item is assigned to individual profiles, it only includes profiles that have been assigned.
-  def profiles(project_filter = nil)
+  def applicable_profiles(project_filter = nil)
     if !self.individual
       return potential_profiles(project_filter)
     else
@@ -36,6 +37,6 @@ class PrepItem < ActiveRecord::Base
   end
 
   def is_assigned(profile)
-    profiles.include?(profile)
+    applicable_profiles.include?(profile)
   end
 end

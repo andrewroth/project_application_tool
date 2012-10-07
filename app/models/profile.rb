@@ -10,6 +10,8 @@ class Profile < ActiveRecord::Base
   has_many :travel_segments, :through => :profile_travel_segments, :order => "position ASC"
   has_many :optin_cost_items;
   has_many :profile_prep_items
+  has_many :checkedin_prep_items, :class_name => "PrepItem", :source => :prep_item, :through => :profile_prep_items, :conditions => { "profile_prep_items.checked_in" => true }
+  has_many :received_prep_items, :class_name => "PrepItem", :source => :prep_item, :through => :profile_prep_items, :conditions => { "profile_prep_items.received" => true }
   has_many :profile_notes
   
   #has_many :profile_manual_donations
@@ -197,31 +199,6 @@ class Profile < ActiveRecord::Base
       return cis
     end
   end
-  
-  #### PREP ITEMS ####
-
-  # all prep items that apply to this profile
-  def all_prep_items
-    project.prep_items + project.event_group.prep_items
-  end
-  
-  def all_profile_prep_items
-    ppis = self.profile_prep_items(:include => :prep_item)
-    for ppi in ppis
-      if ppi.prep_item.nil?
-        ppi.destroy
-        reload_ppis = true
-      end
-    end
-    ppis = self.profile_prep_items(:include => :prep_item) if reload_ppis
-    ppis
-  end
-
-  def profile_prep_item(pi)
-    profile_prep_items.detect{ |ppi| ppi.prep_item_id == pi.id }
-  end
-
-  #### PREP ITEMS ####
   
   after_create do |profile|
     profile.update_costing_total_cache

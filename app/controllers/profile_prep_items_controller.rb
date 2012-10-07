@@ -1,6 +1,6 @@
 class ProfilePrepItemsController < ApplicationController
   skip_before_filter :restrict_students
-  before_filter :get_profile, :except => :update
+  before_filter :get_profile, :except => [ :update, :set_received, :set_checked_in ]
   
   # GET /profile_prep_items
   # GET /profile_prep_items.xml
@@ -43,6 +43,22 @@ class ProfilePrepItemsController < ApplicationController
         format.html { render :action => "index" }
         format.xml  { render :xml => @profile_prep_item.errors, :status => :unprocessable_entity }
       end
+    end
+  end
+
+  def set_received
+    @profile_prep_item = ProfilePrepItem.find_or_create_by_profile_id_and_prep_item_id(params[:profile_id], params[:prep_item_id])
+    @profile_prep_item.update_attribute(:received, params[:received] == "true")
+    respond_to do |format|
+      format.js { render :inline => '' }
+    end
+  end
+
+  def set_checkedin
+    @profile_prep_item = ProfilePrepItem.find_or_create_by_profile_id_and_prep_item_id(params[:profile_id], params[:prep_item_id])
+    @profile_prep_item.update_attribute(:checked_in, params[:checked_in] == "true")
+    respond_to do |format|
+      format.js { render :inline => '' }
     end
   end
 

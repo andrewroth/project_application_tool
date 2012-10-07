@@ -41,8 +41,8 @@ end
   %>
 
     <p>
-      <%= link_to 'File paperwork', :action => 'find_prep_items', :project_id => your_project.id, :command => 'received' %>
-      <%= link_to 'Assign optional paperwork items', :action => 'find_prep_items', :project_id => your_project.id, :command => 'checked_in' %>
+      <%= link_to 'File paperwork', :action => 'received_paperwork', :project_id => your_project.id %>
+      <%= link_to 'Assign tasks', :action => 'assign_individual_tasks', :project_id => your_project.id %>
     </p>
 
     <p>Accepted pile:

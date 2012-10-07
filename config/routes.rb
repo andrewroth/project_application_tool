@@ -16,7 +16,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :prep_items
 
-  map.resources :profile_prep_items
+  map.resources :profile_prep_items, :collection => {
+    :set_received => :put,
+    :set_checked_in => :put
+  }
 
   map.resources :profiles, :member => { 
     :paperwork => :get,
