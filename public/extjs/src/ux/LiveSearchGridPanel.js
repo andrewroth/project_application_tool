@@ -55,6 +55,12 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
      */
     matchCls: 'x-livesearch-match',
     
+    /**
+     * @cfg {String} canSearchRegularExpresion
+     * True if the "Regular dxpression" checkbox is visible.
+     */
+    canSearchRegularExpression: true,
+ 
     defaultStatusText: 'Nothing Found',
     
     // Component initialization override: adds the top and bottom toolbars and setup headers renderer.
@@ -74,13 +80,13 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
                  }
             }, {
                 xtype: 'button',
-                text: '<',
+                text: '&lt;',
                 tooltip: 'Find Previous Row',
                 handler: me.onPreviousClick,
                 scope: me
             },{
                 xtype: 'button',
-                text: '>',
+                text: '&gt;',
                 tooltip: 'Find Next Row',
                 handler: me.onNextClick,
                 scope: me
@@ -90,13 +96,18 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
                 margin: '0 0 0 4px',
                 handler: me.regExpToggle,
                 scope: me                
-            }, 'Regular expression', {
-                xtype: 'checkbox',
-                hideLabel: true,
-                margin: '0 0 0 4px',
-                handler: me.caseSensitiveToggle,
-                scope: me
-            }, 'Case sensitive'];
+            }];
+        if (me.canSearchRegularExpression) {
+          me.tbar.push('Regular expression')
+          me.tbar.push({
+              xtype: 'checkbox',
+              hideLabel: true,
+              margin: '0 0 0 4px',
+              handler: me.caseSensitiveToggle,
+              scope: me
+          });
+        }
+        me.tbar.push('Case sensitive');
 
         me.bbar = Ext.create('Ext.ux.StatusBar', {
             defaultText: me.defaultStatusText,
@@ -154,20 +165,8 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
                 return null;
             }
         }
-        
-        var length = value.length,
-            resultArray = [me.tagsProtect + '*'],
-            i = 0,
-            c;
-            
-        for(; i < length; i++) {
-            c = value.charAt(i);
-            resultArray.push(c);
-            if (c !== '\\') {
-                resultArray.push(me.tagsProtect + '*');
-            } 
-        }
-        return resultArray.join('');
+
+        return value;
     },
     
     /**
