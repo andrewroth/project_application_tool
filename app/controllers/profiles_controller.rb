@@ -95,7 +95,37 @@ class ProfilesController < ApplicationController
   end
 
   def index
-    redirect_to :action => :list
+    profiles = @viewer.profiles.find :all, :include => [ { :appln => { :form => :questionnaire } }, :project ],
+       :select => "#{Profile.table_name}.id, #{Form.table_name}.event_group_id," +
+                  "#{Profile.table_name}.status, #{Profile.table_name}.type," +
+                  "#{Questionnaire.table_name}.title, #{Project.table_name}.title",
+       :conditions => [ "#{Form.table_name}.event_group_id = ?", @eg.id ]
+
+    @started = find_profiles profiles, :class => Applying, :status => :started
+    @unsubmitted = find_profiles profiles, :class => Applying, :status => :unsubmitted
+    @submitted = find_profiles profiles, :class => Applying, :status => :submitted
+    @completed = find_profiles profiles, :class => Applying, :status => :completed
+    @withdrawn = find_profiles profiles, :class => Withdrawn
+    @acceptances = find_profiles profiles, :class => Acceptance
+
+    if @eg.allows_multiple_applications_with_same_form
+      @already_have_forms = profiles.collect{ |p| p.appln.form if p.appln.form }.compact
+      @not_started = @eg.forms.find_all_by_hidden(false)
+    else
+      # get all possible forms
+      all_form_ids = @eg.forms.find_all_by_hidden(false).collect &:id
+
+      # now figure out which haven't been started (easy)
+      not_started_ids = all_form_ids - profiles.collect{ |p| p.appln.form.id if p.appln.form }.compact
+
+      @not_started = Form.find(not_started_ids)
+    end
+
+    # special case when there's one acceptance -- forward to the your apps acceptance page
+    if @started.empty? && @unsubmitted.empty? && @submitted.empty? &&
+      @completed.empty? && @withdrawn.empty? && @acceptances.length == 1
+      redirect_to({ :controller => 'profiles', :action => 'show', :id => @acceptances.first.id })
+    end
   end
   
   def costing
@@ -154,14 +184,6 @@ class ProfilesController < ApplicationController
     else
       render :inline => (success ? 'success' : 'error')
     end
-  end
-  
-  def list
-    @profiles = Profile.find_all_by_viewer_id(@viewer.id, :include => :project).reject{ |profile|
-        profile.project.nil? || profile.project.event_group_id != @eg.id
-    }
-
-    @submenu_title = 'Your Profiles'
   end
   
   def campus_info
@@ -274,4 +296,19 @@ class ProfilesController < ApplicationController
         render :inline => "no permission"
       end
     end
+
+    def find_profiles(profiles, o)
+      o[:status] = o[:status].to_s if o[:status]
+
+      profiles.find_all{ |p|
+        if o[:class] != p.class
+          false
+        elsif o[:status]
+          p.status == o[:status]
+        else
+          true
+        end
+      }
+    end
+
 end
