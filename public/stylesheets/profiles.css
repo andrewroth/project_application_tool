@@ -1,0 +1,502 @@
+/* CSS Document */
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* --------------------Native Elements------------------------- */
+
+html, body{
+  margin:0px;
+  padding:0px;
+  font-family:Arial, Helvetica, sans-serif;
+  color:#484848;
+  background-image:url(/images/transparentBG.png);
+  line-height:1.3;
+}
+
+a{
+  color:#3366cc;
+  text-decoration:none;
+}
+
+a:hover{
+  color:#164f88;
+  text-decoration:none;
+}
+
+
+
+/* --------------------Header------------------------- */
+
+#header{
+  margin-top:10px;
+  width:1024px;
+  height:45px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/* ------------Left Top Header Content--------------- */
+
+#logoBrander{
+  width:170px;
+  height:40px;
+  display:block;
+  float:left;
+  border-right: solid thin black;
+}
+
+img#logoBrand{
+  width:160px;
+  height:40px;
+}
+
+#projectTitle{
+  margin: 0px 10px;
+  font-size:2em;
+  display:block;
+  float:left;
+  color:black;
+}
+
+/* ------------Rigth Top Header Content--------------- */
+
+#userInfoBox{
+  margin-right:10px;
+}
+
+#userInfo{
+  margin: 0px;
+  padding: 0px 7px;
+  font-size:.75em;
+  float:right;
+}
+
+#userInfo p{
+  margin: 0px;
+  padding: 0px;
+}
+
+#eventGroupDropDown{
+  margin-top:5px;
+  float:right;
+  clear:right;
+}
+
+/* --------------------Main Student Nav------------------------- */
+
+#studentNavBG{
+  position:absolute;
+  width:100%;
+  height:30px;
+  background-color:#367aca;
+  text-align:center;
+  box-shadow: 0px 0px 10px #888888;
+}
+
+#studentNavWrapper{
+  width:420px;
+  height:30px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+#studentNavMenu ul{
+/* Clear floats */
+  float:left;
+  width:100%;
+}
+
+#studentNavMenu li{
+  margin: 0px;
+  float:left;
+  display:inline-block;
+  list-style:none;
+    transition: background .25s ease-in-out;
+    -moz-transition: background .25s ease-in-out;
+    -webkit-transition: background .25s ease-in-out;
+}
+
+#studentNavMenu li:hover{
+  display:inline-block;
+  color:#367aca;
+  background:white;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+#studentNavMenu a{
+  display:block;
+  color:#fff;
+  padding:7px 15px;
+  text-decoration:none;
+  font-size:.9em;
+  font-weight:bold;
+    transition: color .25s ease-in-out;
+    -moz-transition: color .25s ease-in-out;
+    -webkit-transition: color .25s ease-in-out;
+}
+
+#studentNavMenu a:hover{
+  color:#367aca;
+}
+/* --------------------Content------------------------- */
+
+#contentWrapper{
+  width:1024px;
+  margin:50px auto ;
+  clear:both;
+  margin-top: 0px;
+  position: relative;
+  top: -30px;
+}
+
+/* ------------All Boxes--------------- */
+
+h3.boxTitle{
+  padding: 0px;
+  margin:0px;
+  display:block;
+  width:100%;
+  background:#f5f5f5;
+  text-align:center;
+  font-size:16px;
+  font-weight:bold;
+  border-bottom: solid thin #d6e4f4;
+}
+
+.smallDescriptionText{
+  text-align:center;
+  font-size:10px;
+}
+
+.boxContent{
+  overflow:auto;
+  padding:10px;
+  background:white; 
+  /* Fallback for web browsers that doesn't support RGBa */
+
+background: rgb(255, 255, 255);
+
+/* RGBa with 0.6 opacity */
+
+background: rgba(255, 255, 255, 0.5);
+}
+
+#toDoBox, #supportBox, #forumBox{
+  margin:0px 0px 20px 0px;
+  
+}
+/* ------------Column Structure--------------- */
+#leftColumn{
+  width:25%;
+  float:left;
+}
+
+#centerColumn{
+  width:50%;
+  float:left;
+}
+
+#rightColumn{
+  width:25%;
+  float:left;
+}
+
+/* ------------New PAT--------------- */
+
+#newPATBox{
+  width:95%;
+  height:100px;
+  border: solid thin #d6e4f4;
+  margin-left:auto;
+  margin-right:auto;
+  overflow:auto;
+}
+
+#newPATBox p{
+  font-size:12px;
+  line-height:1.3;
+}
+
+/* ------------To Do--------------- */
+
+#toDoBox{
+  width:95%;
+  height:400px; /*or 460px*/  
+  border: solid thin #d6e4f4;
+  font-size:.8em;
+  float:left;
+  overflow:auto;
+}
+
+#toDoBox ul{
+  margin:5px;
+  padding:5px;
+}
+#toDoBox li{
+  padding:5px;
+}
+
+.toDoItemTitle{
+  margin-left:-10px;
+  font-weight:bold;
+}
+
+.toDoPriority1{
+  color:#143e77;  
+}
+
+.toDoPriority2{
+  color:#418cf3;  
+}
+
+.toDoPriority3{
+  color:#77b0ff;  
+}
+
+#completedItems{
+  margin-bottom:10px;
+  text-align:center;
+}
+
+/* ------------Support--------------- */
+
+#supportBox{
+  width:95%;
+  height:70%;
+  margin-left:auto;
+  margin-right:auto;
+  border: solid thin #d6e4f4;
+  line-height:1.2;
+}
+
+#youveRaisedTitle{
+  margin-top:10px;
+}
+
+#supportBox h4{
+  padding-left:10px;
+  font-size:14px;
+  font-weight:bold; 
+}
+
+#supportBoxLeftColumn{
+  width:50%;
+  float:left;
+  margin-top:10px;
+}
+
+#supportBoxRightColumn{
+  width:50%;
+  float:left;
+  margin-top:10px;
+}
+
+.supportTitles{
+  display:block;
+  border-bottom: solid thin #87afdf;
+}
+
+#supportBox p{
+  font-size:14px;
+  padding:10px; 
+}
+
+#supportBox b{
+  font-weight:bold;
+}
+
+#chartNumbers{
+  margin-bottom:15px;
+  width:100%;
+  font-size:12px;
+}
+
+#chartNumbers td{
+  width:33%;
+}
+
+/* ------------Chart Test--------------- */
+
+#chartContainer{
+  margin-top:10px;
+  height:45px;
+  width:100%;
+}
+#chart{
+  width:100%;
+}
+#chart dt{
+  width:100%;
+  float:left;
+  margin:0 20px 5px 0;
+  padding:2px 0;
+  display:inline;
+  font-weight:bold;
+  text-align:right;
+}
+#chart dd{
+  width:100%;
+  border-right:1px solid #ddd;
+  float:left;
+  margin-bottom:5px;
+  display:inline;
+}
+#chart dd span{
+  color:#fff;
+  background:#09f;
+  text-align:center;
+  padding:10px 0;
+  display:block;
+
+  text-shadow:1px 1px 1px rgba(0,0,0,0.2);
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border-radius:2px;
+  background:-webkit-gradient(linear, left top, →
+  left bottom, from(#09f), to(#077fd0));
+  -webkit-box-reflect:below 0 →
+  -webkit-gradient(linear, left top, →
+  left bottom, from(rgba(0,0,0,0)), to(rgba(0,0,0,0.25)));
+}
+#data-one{
+  width:75%;
+}
+#data-two{
+  width:59%;
+}
+#data-three{
+  width:26%;
+}
+#data-one{
+  -webkit-animation-name:bar-one; /* Give the bar an animation with a
+    unique name */
+}
+#data-two{
+  -webkit-animation-name:bar-two; /* Give the bar an animation with a
+    unique name */
+}
+#data-three{
+  -webkit-animation-name:bar-three; /* Give the bar an animation with a
+    unique name */
+}
+#data-one,#data-two,#data-three{ /* Define animation styles for all three
+    bars at once */
+  -webkit-animation-duration:0.5s; /* Animation duration in seconds */
+  -webkit-animation-iteration-count:1; /* Amount of times to loop */
+  -webkit-animation-timing-function:ease-out; /* Ease in, out etc. */
+}
+@-webkit-keyframes bar-one{
+  0%{ /* Define bar-one styles at 0% (0 seconds) */
+    width:0%;
+  }
+  100%{ /* Define bar-one styles at 100% (0.5 seconds) */
+    width:75%;
+  }
+}
+
+
+/* ------------Forum--------------- */
+
+#forumBox{
+  width:95%;
+  height:70%; 
+  float:right;  
+  border: solid thin #d6e4f4;
+  font-size:12px;
+  line-height:1.2;
+}
+
+.forumQuestion{
+  font-size:14px;
+  padding:5px 0;
+}
+
+.forumAnswer{
+  padding: 0px 10px;
+}
+
+/* ------------Travel--------------- */
+
+#travelBox{
+  width:95%;
+  height:70%; 
+  border: solid thin #d6e4f4;
+  float:left;
+  clear:left;
+  text-align:center;
+  font-size:12px;
+}
+
+#travelBox ul{
+  margin-bottom:10px; 
+}
+
+/* ------------Resources--------------- */
+
+#resourcesBox{
+  width:95%;
+  height:70%; 
+  border: solid thin #d6e4f4;
+  float:right;
+  position:relative;
+  text-align:center;
+  font-size:12px;
+}
+
+#resourcesBox h4{
+  font-weight:bold;
+  padding:5px ;
+}
+
+#content {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}

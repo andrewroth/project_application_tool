@@ -1,8 +1,9 @@
-body {
+body, body.x-body {
   font-family: Arial;
   font-size: 12px;
-  margin: 0px;
+  margin: 0px ;
   min-width: 750px;
+  color: inherit;
 }
 
 .hidden {
@@ -95,7 +96,6 @@ table#application_status {
 }
 
 #header {
-  background-color: white;
   padding: 5px;
 }
 

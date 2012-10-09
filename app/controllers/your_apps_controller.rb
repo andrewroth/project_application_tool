@@ -115,6 +115,6 @@ class YourAppsController < ApplicationController
   protected
   
     def set_title
-      @page_title = "Applications"
+      @page_title = "Application"
     end
 end

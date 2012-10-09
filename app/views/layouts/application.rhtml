@@ -67,6 +67,7 @@
       <div class="menu">
         <ul>
           <%= new_item "Application", "your_apps", :list %>
+          <%= new_item "Dashboard", "profiles", "" %>
           <% if @show_your_project %>
             <%= new_item "Your Projects", "main", :your_projects %>
           <% end %>
@@ -83,7 +84,6 @@
             <%= new_item "Manage Projects", "manage_projects", :list %>
             <%= new_item "Reports", "reports", :index %> 
           <% end %>
-          <%= new_item "Dashboard", "profiles", :index %>
         </ul>
         <br clear="left">
       </div>
