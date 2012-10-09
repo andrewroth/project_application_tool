@@ -4,6 +4,7 @@ class PrepItem < ActiveRecord::Base
   has_and_belongs_to_many :projects
   has_many :profile_prep_items, :include => :profile
   has_many :profiles, :through => :profile_prep_items
+  after_save :clear_unapplicable_profile_prep_items
 
   alias_method :original_projects, :projects
   def projects
@@ -38,5 +39,9 @@ class PrepItem < ActiveRecord::Base
 
   def is_assigned(profile)
     applicable_profiles.include?(profile)
+  end
+
+  def clear_unapplicable_profile_prep_items
+    profile_prep_items.find_all{ |profile_prep_item| !can_be_assigned(profile_prep_items.profile) }.collect(&:destroy)
   end
 end

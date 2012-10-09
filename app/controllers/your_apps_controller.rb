@@ -62,7 +62,7 @@ class YourAppsController < ApplicationController
     # special case when there's one acceptance -- forward to the your apps acceptance page
     if @started.empty? && @unsubmitted.empty? && @submitted.empty? && 
       @completed.empty? && @withdrawn.empty? && @acceptances.length == 1
-      redirect_to profile_url(@acceptances.first)
+      redirect_to({ :controller => 'appln', :action => 'view_always_editable', :profile_id => @acceptances.first.id })
     end
   end
   
@@ -115,6 +115,6 @@ class YourAppsController < ApplicationController
   protected
   
     def set_title
-      @page_title = "Your Apps"
+      @page_title = "Applications"
     end
 end

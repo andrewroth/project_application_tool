@@ -91,8 +91,8 @@ Ext.onReady(function() {
             }
         ],*/
         columns: columns,
-        height: 350,
-        width: gridWidth,
+        height: 600,
+        width: "100%",
         title: 'Live Search Grid',
         selMode: {
           selType: 'cellmodel'

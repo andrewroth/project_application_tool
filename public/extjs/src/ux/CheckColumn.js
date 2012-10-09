@@ -79,7 +79,7 @@ Ext.define('Ext.ux.CheckColumn', {
             // Allow apps to hook beforecheckchange
             if (me.fireEvent('beforecheckchange', me, recordIndex, checked) !== false) {
                 record.set(dataIndex, checked);
-                me.fireEvent('checkchange', me, recordIndex, checked);
+                me.fireEvent('checkchange', me, recordIndex, record, checked);
 
                 // Mousedown on the now nonexistent cell causes the view to blur, so stop it continuing.
                 if (mousedown) {

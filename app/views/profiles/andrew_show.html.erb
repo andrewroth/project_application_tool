@@ -1,0 +1,37 @@
+<script>var progress = <%= @profile.support_claimed_percent %>;</script>
+<link rel="stylesheet" href="/stylesheets/blueprint/screen.css" type="text/css" media="screen, projection">
+<link rel="stylesheet" href="/stylesheets/blueprint/print.css" type="text/css" media="print">
+<%= javascript_include_tag "jsProgressBarHandler" %>
+<%= javascript_include_tag "profiles" %>
+
+<!--[if lt IE 8]>
+  <link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection">
+<![endif]-->
+
+<div class="container">
+  <div class="span-24">
+    <%= @profile.viewer.name %>, you have been accepted to <%= @profile.project.title %>.<br/>
+    Your support coach is <%= @profile.support_coach.name %>.<br/>
+    Phone: <%= @profile.support_coach.person.local_phone %><br/>
+    Email: <%= @profile.support_coach.email %><br/>
+    <br/>
+  </div>
+
+  <div class="span-6">
+    <%= render :partial => "todo" %>
+  </div>
+  <div class="span-12">
+    <%= render :partial => "support" %>
+  </div>
+  <div class="span-6 last">
+    <div class="acceptance_box">
+      <h3>Communication Summary</h3>
+    </div>
+  </div>
+
+  <div class="span-24 acceptance_resources">
+    <div class="acceptance_box">
+      <h3>Resources</h3>
+    </div>
+  </div>
+</div>

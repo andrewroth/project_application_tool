@@ -38,6 +38,11 @@ class Profile < ActiveRecord::Base
     { :conditions => ([ conditions_text ] + conditions_subs) }
   }
 
+  def all_prep_items
+    prep_items = event_group.prep_items + project.event_group.prep_items
+    prep_items.find_all{ |prep_item| prep_item.is_assigned(self) }
+  end
+
   def support_claimed_currency
     if support_claimed.present?
       number_to_currency(support_claimed, :unit => "", :delimiter => "")

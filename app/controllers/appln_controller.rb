@@ -15,6 +15,7 @@ class ApplnController < InstanceController
   skip_before_filter :get_profile_and_appln, :only => [ :delete_reference, :resend_reference_email ]
   
   before_filter :ensure_appln_ownership_or_processor
+  before_filter :set_page_title
   
   def view_always_editable
     @pass_params ||= {}
@@ -147,5 +148,9 @@ class ApplnController < InstanceController
 
   def redirect_to_default_view
     redirect_to :controller => :appln, :profile_id => @profile.id
+  end
+
+  def set_page_title
+    @page_title = "Application"
   end
 end

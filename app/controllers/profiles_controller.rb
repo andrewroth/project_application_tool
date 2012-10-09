@@ -213,13 +213,17 @@ class ProfilesController < ApplicationController
     redirect_to :action => :show
   end
 
+  def andrew_show
+    show
+  end
+
   def show
     @submenu_title = "dashboard"
 
     @profile.all_prep_items.each do |prep_item|
       @profile.profile_prep_items.find_or_create_by_prep_item_id(prep_item.id).save!
     end
-    @profile_prep_items_by_deadline = @profile.all_profile_prep_items.group_by{ |ppi| ppi.prep_item.deadline }
+    @profile_prep_items_by_deadline = @profile.profile_prep_items.group_by{ |ppi| ppi.prep_item.deadline }
   end
 
   def old_dashboard
@@ -254,7 +258,7 @@ class ProfilesController < ApplicationController
   end
 
   protected
-    def set_title() @page_title = "Profiles" end
+    def set_title() @page_title = "Dashboard" end
     def get_profile() @profile = Profile.find params[:id] if params[:id] end
 
     def set_subject

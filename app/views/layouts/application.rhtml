@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<% if RAILS_ENV == "development" %>
+<% if RAILS_ENV != "development" && request.url !=~ /pat.powertochange.com/ %>
   <% flash[:error] ||= "You are on our development site -- you should NOT be filling in your app or reference here.  Remove the 'dev.' from your url, and email #{$tech_email_only} with how you got here"
   %>
 
@@ -66,7 +66,7 @@
     <% if @viewer %>
       <div class="menu">
         <ul>
-          <%= new_item "Your Apps", "your_apps", :list %>
+          <%= new_item "Application", "your_apps", :list %>
           <% if @show_your_project %>
             <%= new_item "Your Projects", "main", :your_projects %>
           <% end %>
@@ -83,7 +83,7 @@
             <%= new_item "Manage Projects", "manage_projects", :list %>
             <%= new_item "Reports", "reports", :index %> 
           <% end %>
-          <%= new_item "Profiles", "profiles", :index%>
+          <%= new_item "Dashboard", "profiles", :index %>
         </ul>
         <br clear="left">
       </div>
