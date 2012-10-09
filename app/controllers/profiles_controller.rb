@@ -137,7 +137,7 @@ class ProfilesController < ApplicationController
   end
   
   def paperwork
-    @submenu_title = 'paperwork'
+    @submenu_title = 'todos'
   end
   
   def set_profile_going

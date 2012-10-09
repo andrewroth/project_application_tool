@@ -12,6 +12,7 @@
     <title><%= application_title %></title>
     <%= stylesheet_link_tag 'main2', 'connexion_default' %>
     <%= render :partial => "externs/sortable_tables" %>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
     <%= javascript_include_tag "prototype", "effects" %>
     <%= render :partial => "externs/load_extern" %>
     <script>
@@ -26,6 +27,8 @@
     <link rel="stylesheet" type="text/css" href="/extjs/resources/css/ext-all-scoped.css">
   </head>
   <body>
+    <div id="connexion_bar_revealer" onclick="jQuery('div.yui-skin-cnxbar').show(); jQuery('connexion_bar_revealer').hide()"></div>
+
     <%= connexion_bar if @viewer && session[:login_source] == 'gcx' %>
 
     <% if RAILS_ENV == 'development' && @debug -%>

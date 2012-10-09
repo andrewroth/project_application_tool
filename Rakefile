@@ -3,6 +3,11 @@
 
 require(File.join(File.dirname(__FILE__), 'config', 'boot'))
 
+module Rake
+  module DSL
+  end
+end
+
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'

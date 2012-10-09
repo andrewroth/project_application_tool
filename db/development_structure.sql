@@ -25,7 +25,7 @@ CREATE TABLE `applns` (
   KEY `applns_preference1_id_index` (`preference1_id`),
   KEY `applns_preference2_id_index` (`preference2_id`),
   KEY `applns_as_intern_index` (`as_intern`)
-) ENGINE=InnoDB AUTO_INCREMENT=5953 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5954 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `attachments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -47,7 +47,7 @@ CREATE TABLE `attributes_updated_ats` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21234 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21244 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `cost_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -64,7 +64,7 @@ CREATE TABLE `cost_items` (
   KEY `cost_items_type_index` (`type`),
   KEY `cost_items_year_index` (`year`),
   KEY `index_cost_items_on_event_group_id` (`event_group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=972 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=973 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `countries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -353,6 +353,15 @@ CREATE TABLE `preferences` (
   KEY `preferences_viewer_id_index` (`viewer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `prep_item_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `event_group_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `prep_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
@@ -363,6 +372,7 @@ CREATE TABLE `prep_items` (
   `updated_at` datetime DEFAULT NULL,
   `individual` tinyint(1) DEFAULT '0',
   `deadline_optional` tinyint(1) DEFAULT '0',
+  `prep_item_category_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=216 DEFAULT CHARSET=latin1;
 
@@ -476,7 +486,7 @@ CREATE TABLE `profiles` (
   KEY `profiles_locked_by_index` (`locked_by`),
   KEY `profiles_withdrawn_by_index` (`withdrawn_by`),
   KEY `profiles_reason_id_index` (`reason_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6977 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6978 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `project_administrators` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -649,7 +659,7 @@ CREATE TABLE `sessions` (
   PRIMARY KEY (`id`),
   KEY `index_sessions_on_session_id` (`session_id`),
   KEY `index_sessions_on_updated_at` (`updated_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=979980 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=979994 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `support_coaches` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -925,6 +935,8 @@ INSERT INTO schema_migrations (version) VALUES ('20120322192523');
 INSERT INTO schema_migrations (version) VALUES ('20120327165547');
 
 INSERT INTO schema_migrations (version) VALUES ('20120821201902');
+
+INSERT INTO schema_migrations (version) VALUES ('20121009085913');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

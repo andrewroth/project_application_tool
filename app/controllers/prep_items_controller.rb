@@ -79,7 +79,7 @@ class PrepItemsController < ApplicationController
   
   protected
   
-  def set_menu_titles() @page_title = 'Manage Projects'; @submenu_title = 'paperwork' end
+  def set_menu_titles() @page_title = 'Manage Projects'; @submenu_title = 'todos' end
   
   def check_prep_item_event_group_all
     if params[:prep_item][:project_ids].to_a.empty? || params[(@prep_item.id.to_s + "_event_group_prep_item").to_sym]

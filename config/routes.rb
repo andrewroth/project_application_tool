@@ -10,11 +10,14 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :assignments
 
   map.resources :notification_acknowledgments
+
   map.resources :notifications
 
   map.resources :reason_for_withdrawals
 
   map.resources :prep_items
+
+  map.resources :prep_items_categories
 
   map.resources :profile_prep_items, :collection => {
     :set_received => :put,
