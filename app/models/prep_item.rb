@@ -4,6 +4,7 @@ class PrepItem < ActiveRecord::Base
   has_and_belongs_to_many :projects
   has_many :profile_prep_items, :include => :profile
   has_many :profiles, :through => :profile_prep_items
+  belongs_to :prep_item_category
   after_save :clear_unapplicable_profile_prep_items
 
   alias_method :original_projects, :projects

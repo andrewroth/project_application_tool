@@ -31,7 +31,8 @@ module ApplicationHelper
 
   def new_item(title, controller, action = '')
     item_html = "<li "
-    if (title == @page_title)
+    title =~ /<img .*>(.*)/
+    if (title == @page_title || $1 == @page_title)
       item_html += " class=\"menuactive\""
     else
       item_html += " class=\"menuinactive\""

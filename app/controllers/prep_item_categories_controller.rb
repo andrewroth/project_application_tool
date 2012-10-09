@@ -1,10 +1,5 @@
 class PrepItemCategoriesController < ApplicationController
   def index
-    if request.post?
-      # WHY IS A POST COMING HERE?  STUPID RAILS
-      create
-      return
-    end
     @prep_item_categories = PrepItemCategory.all
 
     respond_to do |format|
@@ -30,7 +25,7 @@ class PrepItemCategoriesController < ApplicationController
     @prep_item_category = PrepItemCategory.find(params[:id])
 
     respond_to do |format|
-      if @prep_item_category.update_attributes(params[:prep_item_category])
+      if @prep_item_category.update_attributes(:title => params[:title], :event_group_id => @eg.id)
         format.json { render :json => { :success => true, :prep_item_categories => [@prep_item_category] } }
       end
     end

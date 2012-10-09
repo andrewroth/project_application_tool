@@ -1,23 +1,15 @@
 Ext.require(['Ext.data.*', 'Ext.grid.*']);
 
-Ext.define('Person', {
+Ext.define('PrepItemCategory', {
     extend: 'Ext.data.Model',
     fields: [{
         name: 'id',
         type: 'int',
         useNull: true
-    }, 'email', 'first', 'last'],
+    }, 'title'],
     validations: [{
         type: 'length',
-        field: 'email',
-        min: 1
-    }, {
-        type: 'length',
-        field: 'first',
-        min: 1
-    }, {
-        type: 'length',
-        field: 'last',
+        field: 'title',
         min: 1
     }]
 });
@@ -27,7 +19,7 @@ Ext.onReady(function(){
     var store = Ext.create('Ext.data.Store', {
         autoLoad: true,
         autoSync: true,
-        model: 'Person',
+        model: 'PrepItemCategory',
         proxy: {
             type: 'rest',
             url: '/prep_item_categories',
@@ -44,14 +36,13 @@ Ext.onReady(function(){
     var rowEditing = Ext.create('Ext.grid.plugin.RowEditing');
     
     var grid = Ext.create('Ext.grid.Panel', {
-        renderTo: document.body,
+        renderTo: "todoUi",
         plugins: [rowEditing],
         width: 400,
-        height: 300,
+        height: 400,
         frame: true,
-        title: 'Users',
+        title: 'Categories',
         store: store,
-        iconCls: 'icon-user',
         columns: [{
             text: 'ID',
             width: 40,
@@ -64,26 +55,10 @@ Ext.onReady(function(){
                 return v;
             }
         }, {
-            text: 'Email',
+            text: 'Title',
             flex: 1,
             sortable: true,
-            dataIndex: 'email',
-            field: {
-                xtype: 'textfield'
-            }
-        }, {
-            header: 'First',
-            width: 80,
-            sortable: true,
-            dataIndex: 'first',
-            field: {
-                xtype: 'textfield'
-            }
-        }, {
-            text: 'Last',
-            width: 80,
-            sortable: true,
-            dataIndex: 'last',
+            dataIndex: 'title',
             field: {
                 xtype: 'textfield'
             }
@@ -92,16 +67,14 @@ Ext.onReady(function(){
             xtype: 'toolbar',
             items: [{
                 text: 'Add',
-                iconCls: 'icon-add',
-                handler: function(){
+                handler: function() {
                     // empty record
-                    store.insert(0, new Person());
+                    store.insert(0, new PrepItemCategory());
                     rowEditing.startEdit(0, 0);
                 }
             }, '-', {
                 text: 'Delete',
-                iconCls: 'icon-delete',
-                handler: function(){
+                handler: function() {
                     var selection = grid.getView().getSelectionModel().getSelection()[0];
                     if (selection) {
                         store.remove(selection);

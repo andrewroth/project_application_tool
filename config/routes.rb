@@ -17,7 +17,9 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :prep_items
 
-  map.resources :prep_items_categories
+  map.resources :prep_item_categories, :member => {
+    :prep_item_categories => :post,
+  }
 
   map.resources :profile_prep_items, :collection => {
     :set_received => :put,
@@ -30,7 +32,12 @@ ActionController::Routing::Routes.draw do |map|
     :view => :get, 
     :support_received => :get, 
     :costing => :get, 
-    :travel => :get
+    :travel => :get,
+  }, :collection => {
+    :campus_info => :get,
+    :update_campus_info => :post,
+    :crisis_info => :get,
+    :update_crisis_info => :post
   }
 
   unless defined?(QUESTIONNAIRE_ACTIONS) == 'constant'

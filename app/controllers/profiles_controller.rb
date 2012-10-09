@@ -95,6 +95,7 @@ class ProfilesController < ApplicationController
   end
 
   def index
+    @page_title = "Dashboard"
     profiles = @viewer.profiles.find :all, :include => [ { :appln => { :form => :questionnaire } }, :project ],
        :select => "#{Profile.table_name}.id, #{Form.table_name}.event_group_id," +
                   "#{Profile.table_name}.status, #{Profile.table_name}.type," +
@@ -187,6 +188,7 @@ class ProfilesController < ApplicationController
   end
   
   def campus_info
+    @page_title = "Profile"
     @appln_person = @viewer.person
     @submenu_title = 'Campus Info'
   end
@@ -201,6 +203,7 @@ class ProfilesController < ApplicationController
   end
 
   def crisis_info
+    @page_title = "Profile"
     @submenu_title = 'Personal Info and Crisis Info'
     @person = @appln_person = @subject.person
     @emerg = @person.get_emerg
@@ -240,7 +243,7 @@ class ProfilesController < ApplicationController
   end
 
   def show
-    @submenu_title = "dashboard"
+    @page_title = "Dashboard"
 
     @profile.all_prep_items.each do |prep_item|
       @profile.profile_prep_items.find_or_create_by_prep_item_id(prep_item.id).save!
