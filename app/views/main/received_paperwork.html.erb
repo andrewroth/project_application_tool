@@ -26,8 +26,9 @@
 <% @profiles = @profiles.find_all{ |profile| profile.id == 6074 } %>
 
 <script>
-  checkHandler = function(menuCheckItem, recordIndex, checked) {
-    console.log('in checkHandler ' + menuCheckItem.dataIndex + ' ' + recordIndex + ' ' + checked);
+  checkHandler = function(menuCheckItem, recordIndex, record, checked) {
+    //record.commit();
+    console.log('in checkHandler profile_id ' + record.data.profile_id + ' prep_item_id ' + menuCheckItem.dataIndex + ' checked ' + checked);
   };
 
   var gridWidth = "100%";
@@ -35,20 +36,21 @@
     { text: "Name", width: 200, sortable: true, dataIndex: "name" },
     { text: "Project", width: 180, sortable: true, dataIndex: "project" },
     <%- @prep_items.each do |prep_item| -%>
-    { text: "<%= prep_item.title %>", flex: 1, dataIndex: "prep_item_<%= prep_item.id %>", xtype: 'checkcolumn', listeners: { checkchange: checkHandler } },
+    { text: "<%= prep_item.title %>", flex: 1, dataIndex: "<%= prep_item.id %>", xtype: 'checkcolumn', listeners: { checkchange: checkHandler } },
     <%- end -%>
   ]
 
   var fields = [
     {name: 'name'},
     {name: 'project'},
+    {name: 'profile_id'},
     <%- @prep_items.each do |prep_item| -%>
-    { name: "prep_item_<%= prep_item.id %>", type: 'auto' },
+    { name: "<%= prep_item.id %>", type: 'auto' },
     <%- end -%>
   ];
 
   var profileData = <%= @profiles.collect{ |profile| 
-    [ "#{profile.class == StaffProfile ? "(staff) " : ""}#{profile.viewer.try(:name)}", profile.project.try(:name) ] + 
+    [ "#{profile.class == StaffProfile ? "(staff) " : ""}#{profile.viewer.try(:name)}", profile.project.try(:name), profile.id ] + 
       @prep_items.collect{ |prep_item| @prep_item_applicable_profiles[prep_item].include?(profile) ? profile.received_prep_items.include?(prep_item) : nil }
   }.to_json %>;
 
