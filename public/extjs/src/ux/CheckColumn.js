@@ -69,6 +69,9 @@ Ext.define('Ext.ux.CheckColumn', {
             key = type === 'keydown' && e.getKey(),
             mousedown = type == 'mousedown';
 
+        /* don't let cells with no data be checked */
+        if (record.get(me.dataIndex) == null) { return; }
+
         if (mousedown || (key == e.ENTER || key == e.SPACE)) {
             var dataIndex = me.dataIndex,
                 checked = !record.get(dataIndex);
@@ -109,8 +112,10 @@ Ext.define('Ext.ux.CheckColumn', {
         var cssPrefix = Ext.baseCSSPrefix,
             cls = [cssPrefix + 'grid-checkheader'];
 
-        if (value) {
+        if (value == true) {
             cls.push(cssPrefix + 'grid-checkheader-checked');
+        } else if (value == false) {
+            cls.push(cssPrefix + 'grid-checkheader-unchecked');
         }
         return '<div class="' + cls.join(' ') + '">&#160;</div>';
     }

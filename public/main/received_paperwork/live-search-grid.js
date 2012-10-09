@@ -5,7 +5,8 @@ Ext.require([
     'Ext.data.*',
     'Ext.util.*',
     'Ext.tip.QuickTipManager',
-    'Ext.ux.LiveSearchGridPanel'
+    'Ext.ux.CheckColumn',
+    'Ext.ux.LiveSearchGridPanel',
 ]);
 
 Ext.onReady(function() {    
@@ -40,14 +41,10 @@ Ext.onReady(function() {
     
     // create the data store
     var store = Ext.create('Ext.data.ArrayStore', {
-        fields: fields /*[
-           {name: 'project'},
-           {name: 'price',      type: 'float'},
-           {name: 'change',     type: 'float'},
-           {name: 'pctChange',  type: 'float'},
-           {name: 'lastChange', type: 'date', dateFormat: 'n/j h:ia'}
-        ]*/,
-        data: profileData
+        fields: fields,
+        data: profileData,
+        sortOnLoad: true,
+        sorters: { property: 'name', direction: 'DESC' },
     });
     
     console.log(columns);
@@ -97,6 +94,9 @@ Ext.onReady(function() {
         height: 350,
         width: gridWidth,
         title: 'Live Search Grid',
+        selMode: {
+          selType: 'cellmodel'
+        },
         renderTo: 'grid-example',
         viewConfig: {
             stripeRows: true
