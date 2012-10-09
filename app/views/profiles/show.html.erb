@@ -70,8 +70,7 @@
           <li><a href="#">Packing List</a></li>
           <li><a href="#" style="color:grey;">Itinerary</a></li>
         </ul>
-        <p class="smallDescriptionText">Itinerary will become blue when available. You will 
-        not receive itinerary info before March 14</p>
+        <p class="smallDescriptionText">Itinerary will become blue when available. You will not receive itinerary info before March 14</p>
       </div>
     </div>
   </div>
@@ -79,21 +78,27 @@
     <div id="supportBox">
       <h3 class="boxTitle"><img src="/images/boxTitle/supportIcon.png" class="boxTitleIcon"> Support</h3>
       <div class="boxContent">
-        <h2>You need to raise $5,000 by June 1, 2012</h2>
-        <p>Your support coach <b>Eric Staff</b> is here to help you do that. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis.</p>
-        <p><b>Eric Staff</b> • <b>cell</b>: 555.444.2342 • <b>eric.staff@p2c.ca</b> </p>
-        <h3 id="youveRaisedTitle">You've raised <span style="color:green;">$2,725.</span> <span style="color:grey;">We've received $2,500.</span></h3>
+        <h2>You need to raise <%= format_currency(@profile.cached_costing_total) %> by June 1, 2012</h2>
+        <p>Your support coach <b><%= @profile.support_coach.name %></b> is here to help you do that. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis.</p>
+        <p><b><%= @profile.support_coach.name %></b> •
+        <% if cell = @profile.support_coach.person.cell_phone %>
+        <b>cell</b>: <%= cell %>
+        <% elsif local_phone = @profile.support_coach.person.local_phone %>
+        <b>phone</b>: <%= local_phone %>
+        <% end %> •
+        <b><%= @profile.support_coach.email %></b> </p>
+        <h3 id="youveRaisedTitle">You've raised $<span style="color:green;"><%= in_place_editor_field(:profile, :support_claimed_currency) %></span> <span style="color:grey;">We've received $2,500.</span></h3>
         <div id="chartContainer">
           <dl id="chart">
-            <dd><span id="data-one">75%</span></dd>
+            <dd><span id="data-one" style="width: <%= @profile.support_claimed_percent %>%"><%= @profile.support_claimed_percent %>%</span></dd>
           </dl>
         </div>
         <div id="chartNumbers">
           <table id="chartNumbers">
             <tbody><tr>
                 <td style="text-align:left;">$0</td>
-                <td style="text-align:center;">$2,500</td>
-                <td style="text-align:right;">$5,000</td>
+                <td style="text-align:center;"><%= format_currency(@profile.cached_costing_total / 2) %></td>
+                <td style="text-align:right;"><%= format_currency(@profile.cached_costing_total) %></td>
               </tr>
           </tbody></table>
         </div>
@@ -102,7 +107,7 @@
         <h3 class="supportTitles">How to Receive Donations</h3>
         <div id="supportBoxLeftColumn">
           <h4>Online</h4>
-          <p>Send this info &amp; donate url to supporters: <a href="#">http://p2curl.ca</a></p>
+          <p>Send this info &amp; donate url to supporters: <a href="#"><%= link_to_function "Click to copy", "prompt('Send this url', 'https://powertochange.com/organization/staff/andrew-roth/')" %></a></p>
         </div>
         <div id="supportBoxRightColumn">
           <h4>Snail Mail</h4>
