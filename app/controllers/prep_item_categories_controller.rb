@@ -1,5 +1,10 @@
 class PrepItemCategoriesController < ApplicationController
   def index
+    if request.post?
+      # WHY IS A POST COMING HERE?  STUPID RAILS
+      create
+      return
+    end
     @prep_item_categories = PrepItemCategory.all
 
     respond_to do |format|
@@ -12,7 +17,7 @@ class PrepItemCategoriesController < ApplicationController
   end
 
   def create
-    @prep_item_category = PrepItemCategory.new(params[:prep_item_category])
+    @prep_item_category = PrepItemCategory.new(:title => params[:title], :event_group_id => @eg.id)
 
     respond_to do |format|
       if @prep_item_category.save
