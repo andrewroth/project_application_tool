@@ -12,6 +12,24 @@ class PrepItem < ActiveRecord::Base
     event_group.try(:projects) || self.original_projects
   end
 
+  def projects_csv
+    projects.collect(&:title).join(", ")
+  end
+
+  def projects_csv=(val)
+    project_titles = val.split(',')
+    project_ids = []
+    self.projects = []
+    project_titles.each do |title|
+      project = self.event_group.projects.find_or_create_by_title(title)
+      self.projects << project
+    end
+  end
+
+  def as_json(params)
+    super(params.merge(:methods => [ :projects_csv ]))
+  end
+
   # Returns all profiles that this item might apply to.
   # If this prep item is assigned to individual profiles, it still includes all profiles that may or may
   # not have been assigned.

@@ -12,6 +12,14 @@ class PrepItemsController < ApplicationController
     @prep_items = (@eg.prep_items + @eg.projects.collect {|p| p.prep_items}.flatten).uniq
     @prep_item = PrepItem.new
     @checkbox_projects = @eg.projects.find_all_by_hidden(false)
+
+    respond_to do |format|
+      format.json { render :json => {
+        :success => true,
+        :message => "Loaded data",
+        :data => @prep_items
+      } }
+    end
   end
 
   # POST /prep_items
