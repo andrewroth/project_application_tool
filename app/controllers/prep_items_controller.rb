@@ -23,7 +23,6 @@ class PrepItemsController < ApplicationController
   def create
     extract_params_from_extjs if request.xhr?
     @prep_item = PrepItem.new(params[:prep_item])
-    debugger
     @prep_item.project_ids = params[:prep_item][:project_ids]
     
     respond_to do |format|
