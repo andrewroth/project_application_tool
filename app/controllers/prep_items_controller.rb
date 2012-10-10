@@ -79,6 +79,7 @@ class PrepItemsController < ApplicationController
       :deadline => params[:deadline],
       :deadline_optional => params[:deadline_optional],
       :individual => params[:individual],
+      :paperwork => params[:paperwork],
       :title => params[:title],
       :description => params[:description],
       :project_ids => params[:project_ids],

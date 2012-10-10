@@ -11,8 +11,9 @@
     <%= stylesheet_link_tag 'main2', 'connexion_default' %>
     <%= render :partial => "externs/sortable_tables" %>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
-    <%= javascript_include_tag "prototype", "effects" %>
+    <%= javascript_include_tag "application", "prototype", "effects" %>
     <%= render :partial => "externs/load_extern" %>
+    <!-- start extjs -->
     <script>
       // Here we define Ext for the first time
       Ext = {
@@ -29,6 +30,7 @@
     <script type="text/javascript" src="/extjs/src/ux/CheckColumn.js"></script>
     <% end %>
     <link rel="stylesheet" type="text/css" href="/extjs/resources/css/ext-all-scoped.css">
+    <!-- end exjtjs -->
   </head>
   <body>
     <div id="connexion_bar_revealer" onclick="jQuery('div.yui-skin-cnxbar').show(); jQuery('connexion_bar_revealer').hide()"></div>
@@ -70,50 +72,64 @@
       <% end -%>
     </div>
     
-    <% if @viewer %>
-      <div class="menu">
-        <ul>
-          <%= new_item %|<img src="/images/nav/appIcon.png" class="navMenuIcons">Application|, "your_apps", :view %>
-          <%= new_item %|<img src="/images/nav/dashIcon.png" class="navMenuIcons" width="14" height="14" style="margin-right: 3px">Dashboard|, "profiles", "" %>
-          <%= new_item %|<img src="/images/nav/profileIcon.png" class="navMenuIcons" height="14" style="margin-right: 3px">Profile|, "profiles/crisis_info", "" %>
-          <% if @show_your_project %>
-            <%= new_item "Your Projects", "main", :your_projects %>
-          <% end %>
-          <% unless @viewer.is_student?(@eg) %>    
-            <%= new_item "App Processing", "main", :your_applications %>
-            <% if @eg && @eg.has_your_campuses %>
-              <%= new_item "Your Campuses", "main", :your_campuses %>
-	          <% end %>
-            <% if @viewer.is_eventgroup_coordinator?(@eg) %>
-              <%= new_item "Tools", "tools", :index %>
-              <%= new_item "Manage Forms", "forms" %>
-              <%= new_item "Manage Groups", "event_groups" %>
+    <div id="menu_wrapper">
+      <% if @viewer %>
+        <div id="menu" class="menu">
+          <ul>
+            <%= new_item %|<img src="/images/nav/appIcon.png" class="navMenuIcons">Application|, "your_apps", :view %>
+            <%= new_item %|<img src="/images/nav/dashIcon.png" class="navMenuIcons">Dashboard|, "profiles", "" %>
+            <%= new_item %|<img src="/images/nav/profileIcon.png" class="navMenuIcons">Profile|, "profiles/crisis_info", "" %>
+            <% if @show_your_project %>
+              <%= new_item "Your Projects", "main", :your_projects %>
             <% end %>
-            <%= new_item "Manage Projects", "manage_projects", :list %>
-            <%= new_item "Reports", "reports", :index %> 
-          <% end %>
-        </ul>
-        <br clear="left">
+            <% unless @viewer.is_student?(@eg) %>    
+              <%= new_item "App Processing", "main", :your_applications %>
+              <% if @eg && @eg.has_your_campuses %>
+                <%= new_item "Your Campuses", "main", :your_campuses %>
+              <% end %>
+              <% if @viewer.is_eventgroup_coordinator?(@eg) %>
+                <%= new_item "Tools", "tools", :index %>
+                <%= new_item "Manage Forms", "forms" %>
+                <%= new_item "Manage Groups", "event_groups" %>
+              <% end %>
+              <%= new_item "Manage Projects", "manage_projects", :list %>
+              <%= new_item "Reports", "reports", :index %> 
+            <% end %>
+            <% if @viewer && !@eg.nil? && !@viewer.is_student?(@eg) %>
+              <li id="menu_search"><%= link_to_function(%|<img src="/images/nav/icon_magnify_glass.png" class="navMenuIcons">|, "toggleSearch()") %></li>
+            <% end %>
+          </ul>
+          <br clear="left">
+        </div>
+      <% end %>
+      
+      <div id="submenu_wrapper">
+        <%= 
+          if render_if_possible(controller.controller_name + "/menu").present? || @submenu && render_if_possible(@submenu + "/menu").present?
+           @submenu_active = true 
+          end 
+        %>
+
+        <% submenu_items_html = yield :submenu %>
+        <% if submenu_items_html && !@eg.nil? %>
+          <% @submenu_active = true %>
+          <div class="submenu">
+            <ul>
+              <%= submenu_items_html %>
+            </ul>
+          </div>
+        <% end %>
       </div>
-    <% end %>
-    
+
+      <% if @submenu_active %>
+      <div id="submenu_spacer">&nbsp;</div>
+      <% end %>
+    </div>
+
     <% if @title %>
       <h3><%=@title%></h3>
     <% end %>
 		
-    <%= render_if_possible(controller.controller_name + "/menu") ||
-           (@submenu && render_if_possible(@submenu + "/menu"))
-    %>
-
-    <% submenu_items_html = yield :submenu %>
-    <% if submenu_items_html && !@eg.nil? %>
-      <div class="submenu">
-        <ul>
-          <%= submenu_items_html %>
-        </ul>
-      </div>
-    <% end %>
-
     <% flash.each do |key, msg| -%>
       <% full_msg = msg %>
       <%= content_tag :div, full_msg, :id => "flash_#{key}", :class => 'error flash' %>
@@ -136,7 +152,7 @@
      <% end -%>
      
      <% if @viewer && !@eg.nil? && !@viewer.is_student?(@eg) %>
-      <div id="search" >
+      <div id="search" style="display:none">
         <%= form_remote_tag :url => { :controller => 'main', :action => :find_people },	:before => "Element.show('loading');", :complete  => "Element.hide('loading');" %>
           <label for="viewer_name">Search People:</label>
           <%= text_field 'viewer', 'name', :size => 20, :value => '' %>

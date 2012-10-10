@@ -78,8 +78,7 @@ table#application_status {
   padding: 5px; }
 
 #content {
-  margin: 5px;
-  margin-top: 30px; }
+  margin: 5px; }
 
 #header h1, #branding_logo_title {
   font-size: 18px;
@@ -181,13 +180,13 @@ div#student_view, div#support_received, div#travel_itinerary, div#cost_items, di
   position: relative;
   top: 3px; }
 
+#menu_search {
+  z-index: 20; }
+
 #search {
-  margin: 0px 10px;
-  float: right;
-  padding: 5px;
-  position: relative;
-  bottom: 13px;
-  top: 8px; }
+  z-index: 10;
+  position: absolute;
+  box-shadow: 0px 0px 10px #888; }
 
 .flash, .centerblock {
   width: 600px;
@@ -633,3 +632,20 @@ div.yui-skin-cnxbar {
 
 #connexion_bar_revealer:active {
   box-shadow: 0 0 2px #0C1C3E; }
+
+.navMenuIcons {
+  margin-right: 3px;
+  width: 14px;
+  height: 14px; }
+
+#menu_wrapper {
+  position: relative; }
+  #menu_wrapper #menu {
+    position: relative;
+    z-index: 100; }
+  #menu_wrapper #submenu_wrapper {
+    position: absolute;
+    z-index: 50;
+    width: 100%; }
+  #menu_wrapper #submenu_spacer {
+    height: 30px; }

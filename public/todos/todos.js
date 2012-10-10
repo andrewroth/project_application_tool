@@ -38,7 +38,10 @@ Ext.define('PrepItem', {
       }, {
         name: 'individual',
         type: 'boolean'
-      }, 'title', 'description', 'applies_to', 'projects_csv', 'category', 'prep_item_category_id', 'project_ids'
+      }, {
+        name: 'paperwork',
+        type: 'boolean'
+      }, 'title', 'description', 'prep_item_category_id', 'project_ids'
     ], validations: [{
       type: 'length',
       field: 'title',
@@ -211,24 +214,6 @@ Ext.onReady(function() {
               allowBlank: false
             }
         }, {
-            text: 'Deadline',
-            width: 80,
-            sortable: true,
-            dataIndex: 'deadline',
-            renderer: formatDate,
-            field: {
-              xtype: 'datefield',
-              format: 'm/d/y'
-            }
-        }, {
-            text: 'Optional',
-            width: 58,
-            sortable: true,
-            dataIndex: 'deadline_optional',
-            field: {
-              xtype: 'checkbox'
-            },
-        }, {
             text: 'Projects',
             flex: 1,
             sortable: true,
@@ -253,10 +238,36 @@ Ext.onReady(function() {
               return project_names.join(', ');
             }
         }, {
+            text: 'Deadline',
+            width: 80,
+            sortable: true,
+            dataIndex: 'deadline',
+            renderer: formatDate,
+            field: {
+              xtype: 'datefield',
+              format: 'm/d/y'
+            }
+        }/*, {
+            text: 'Optional',
+            width: 60,
+            sortable: true,
+            dataIndex: 'deadline_optional',
+            field: {
+              xtype: 'checkbox'
+            },
+        }*/, {
             text: 'Individual',
             width: 60,
             sortable: true,
             dataIndex: 'individual',
+            field: {
+              xtype: 'checkbox'
+            }
+        }, {
+            text: 'Paperwork',
+            width: 60,
+            sortable: true,
+            dataIndex: 'paperwork',
             field: {
               xtype: 'checkbox'
             }
