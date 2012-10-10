@@ -3,6 +3,7 @@ set :keep_releases, '3'
 set :user, 'deploy'
 set :repository, "git://github.com/andrewroth/project_application_tool.git"
 set :scm, "git"
+set :deploy_via, :remote_cache
 
 task :production do
   role :app, 'pat.powertochange.org'

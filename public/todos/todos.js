@@ -11,10 +11,6 @@ Ext.define('PrepItemCategory', {
         type: 'length',
         field: 'title',
         min: 1
-    },{
-        type: 'length',
-        field: 'description',
-        min: 1
     }]
 });
 
@@ -33,20 +29,25 @@ Ext.define('PrepItem', {
         name: 'id',
         type: 'int',
         useNull: true
-      },
-      {
+      }, {
         name: 'deadline',
         type: 'date',
-      },
-      {
+      }, {
         name: 'deadline_optional',
         type: 'boolean',
-      },
-      {
+      }, {
         name: 'individual',
         type: 'boolean'
       }, 'title', 'description', 'applies_to', 'projects_csv', 'category', 'prep_item_category_id', 'project_ids'
-    ],
+    ], validations: [{
+      type: 'length',
+      field: 'title',
+      min: 1
+    }, {
+      type: 'length',
+      field: 'description',
+      min: 1
+    }]
 });
 
 Ext.onReady(function() {
@@ -120,7 +121,8 @@ Ext.onReady(function() {
             sortable: true,
             dataIndex: 'title',
             field: {
-                xtype: 'textfield'
+                xtype: 'textfield',
+                allowBlank: false
             }
         }],
         dockedItems: [{
@@ -130,7 +132,7 @@ Ext.onReady(function() {
                 handler: function() {
                     // empty record
                     categoriesStore.insert(0, new PrepItemCategory());
-                    rowEditing.startEdit(0, 0);
+                    categoriesRowEditing.startEdit(0, 0);
                 }
             }, '-', {
                 text: 'Delete',
@@ -196,7 +198,8 @@ Ext.onReady(function() {
             sortable: true,
             dataIndex: 'title',
             field: {
-                xtype: 'textfield'
+              xtype: 'textfield',
+              allowBlank: false
             }
         }, {
             text: 'Description',
@@ -204,7 +207,8 @@ Ext.onReady(function() {
             sortable: true,
             dataIndex: 'description',
             field: {
-              xtype: 'textfield'
+              xtype: 'textfield',
+              allowBlank: false
             }
         }, {
             text: 'Deadline',
@@ -244,8 +248,6 @@ Ext.onReady(function() {
                 record = projectsStore.findRecord("id", ids[i]);
                 if (record != null) {
                   project_names.push(record.get('title'));
-                } else {
-                  project_names.push(value);
                 }
               }
               return project_names.join(', ');
