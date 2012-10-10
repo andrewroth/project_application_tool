@@ -23,7 +23,13 @@
         }
       };
     </script>
+    <% if Rails.env.development? %>
     <script type="text/javascript" src="/extjs/ext-debug.js"></script>
+    <% else %>
+    <script type="text/javascript" src="/extjs/ext-all.js"></script>
+    <!-- I've manully modified ux/CheckColumn.js -->
+    <script type="text/javascript" src="/extjs/src/ux/CheckColumn.js"></script>
+    <% end %>
     <link rel="stylesheet" type="text/css" href="/extjs/resources/css/ext-all-scoped.css">
   </head>
   <body>
