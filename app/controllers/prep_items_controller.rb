@@ -23,6 +23,8 @@ class PrepItemsController < ApplicationController
   def create
     extract_params_from_extjs if request.xhr?
     @prep_item = PrepItem.new(params[:prep_item])
+    debugger
+    @prep_item.project_ids = params[:prep_item][:project_ids]
     
     respond_to do |format|
       if @prep_item.save
@@ -38,6 +40,7 @@ class PrepItemsController < ApplicationController
   def update
     extract_params_from_extjs if request.xhr?
     @prep_item = PrepItem.find(params[:id])
+    @prep_item.project_ids = params[:prep_item][:project_ids]
     
     respond_to do |format|
       if @prep_item.update_attributes(params[:prep_item])
@@ -79,7 +82,7 @@ class PrepItemsController < ApplicationController
       :individual => params[:individual],
       :title => params[:title],
       :description => params[:description],
-      :project_ids => params[:projects_ids],
+      :project_ids => params[:project_ids],
       :prep_item_category_id => params[:prep_item_category_id]
     }
   end
