@@ -27,7 +27,7 @@ class PrepItem < ActiveRecord::Base
   end
 
   def as_json(params)
-    super(params.merge(:methods => [ :projects_csv ]))
+    super(params.merge(:methods => [ :projects_csv, :category, :project_ids ]))
   end
 
   # Returns all profiles that this item might apply to.
@@ -61,6 +61,6 @@ class PrepItem < ActiveRecord::Base
   end
 
   def clear_unapplicable_profile_prep_items
-    profile_prep_items.find_all{ |profile_prep_item| !can_be_assigned(profile_prep_items.profile) }.collect(&:destroy)
+    profile_prep_items.find_all{ |profile_prep_item| !can_be_assigned(profile_prep_item.profile) }.collect(&:destroy)
   end
 end

@@ -1,3 +1,10 @@
 <%= javascript_include_tag "/todos/todos.js" %>
 
-<div id="todoUi"></div>
+<script>
+  var projectsData = <%= @eg.projects.collect{ |project| [ project.id, project.title ] }.to_json %>;
+</script>
+
+<br/>
+<center>
+  <div id="todoUi"></div>
+</center>
