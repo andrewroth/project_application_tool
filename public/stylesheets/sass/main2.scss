@@ -97,6 +97,7 @@ table#application_status {
 
 #header {
   padding: 5px;
+  height: 40px;
 }
 
 #content {
@@ -691,7 +692,6 @@ div.acceptance_box.support form {
 
 .menu {
   width: 100%;
-  height: 30px;
   background-color: #367aca;
   text-align: center;
   box-shadow: 0px 0px 10px #888888;
@@ -699,13 +699,14 @@ div.acceptance_box.support form {
 }
 
 .menu ul, .submenu ul {
-  padding-top: 8px;
+  padding-top: 7px;
+  padding-bottom: 7px;
 }
 
 .menu li a {
   text-decoration: none;
   color: white;
-  padding: 8px 10px 6px 10px;
+  padding: 7px 10px 6px 10px;
 }
 
 .menu li a:hover {
@@ -779,9 +780,8 @@ div.yui-skin-cnxbar {
   box-shadow:0 0 2px #0C1C3E;
 }
 
-.navMenuIcons {
+.navMenuIcons, .boxTitleIcon {
   margin-right: 3px;
-  width: 14px;
   height: 14px;
 }
 

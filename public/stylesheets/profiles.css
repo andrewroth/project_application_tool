@@ -192,10 +192,9 @@ img#logoBrand{
 /* --------------------Content------------------------- */
 
 #contentWrapper{
-  width:1024px;
-  margin:50px auto ;
+  width: 1024px;
+  margin: 22px auto 0px auto;
   clear:both;
-  margin-top: 0px;
 }
 
 /* ------------All Boxes--------------- */
@@ -230,10 +229,10 @@ background: rgb(255, 255, 255);
 background: rgba(255, 255, 255, 0.5);
 }
 
-#toDoBox, #supportBox, #forumBox{
-  margin:0px 0px 20px 0px;
-  
+#toDoBox, #supportBox, #forumBox {
+  margin: 0px 0px 20px 0px;
 }
+
 /* ------------Column Structure--------------- */
 #leftColumn{
   width:25%;
@@ -272,24 +271,24 @@ background: rgba(255, 255, 255, 0.5);
 
 /* ------------To Do--------------- */
 
-#toDoBox{
-  width:95%;
-  height:400px; /*or 460px*/  
+#toDoBox {
+  width: 95%;
+  height: 400px; /*or 460px*/  
   border: solid thin #d6e4f4;
-  font-size:.8em;
-  float:left;
-  overflow:auto;
+  font-size: 1em;
+  float: left;
+  overflow: auto;
 }
 
-#toDoBox ul{
+#toDoBox ul {
   margin:5px;
   padding:5px;
 }
-#toDoBox li{
+#toDoBox li {
   padding:5px;
 }
 
-.toDoItemTitle{
+.toDoItemTitle {
   margin-left:-10px;
   font-weight:bold;
 }
@@ -366,6 +365,10 @@ background: rgba(255, 255, 255, 0.5);
 
 #chartNumbers td{
   width:33%;
+}
+
+#supportBox form {
+  display: inline;
 }
 
 /* ------------Chart Test--------------- */

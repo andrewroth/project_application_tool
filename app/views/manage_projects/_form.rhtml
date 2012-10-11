@@ -13,6 +13,12 @@
 <p><label for="project_end">End</label><br/>
 <%= date_select 'project', 'end'  %></p>
 
+<p><label for="support_deadline">Support Deadline</label><br/>
+<%= date_select 'project', 'support_deadline', :include_blank => true %></p>
+
+<p><label for="itinerary_available">Itinerary Available</label><br/>
+<%= date_select 'project', 'itinerary_available', :include_blank => true %></p>
+
 <p><label for="cost_center">Cost Center</label><br/>
 <%= text_field 'project', 'cost_center'  %></p>
 

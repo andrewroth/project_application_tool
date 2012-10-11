@@ -64,7 +64,7 @@ CREATE TABLE `cost_items` (
   KEY `cost_items_type_index` (`type`),
   KEY `cost_items_year_index` (`year`),
   KEY `index_cost_items_on_event_group_id` (`event_group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=892 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=889 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `countries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -360,7 +360,7 @@ CREATE TABLE `prep_item_categories` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `prep_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -375,7 +375,7 @@ CREATE TABLE `prep_items` (
   `prep_item_category_id` int(11) DEFAULT NULL,
   `paperwork` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=210 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `prep_items_projects` (
   `prep_item_id` int(11) NOT NULL,
@@ -434,7 +434,7 @@ CREATE TABLE `profile_prep_items` (
   `updated_at` datetime DEFAULT NULL,
   `checked_in` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9854 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9835 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `profile_travel_segments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -544,6 +544,8 @@ CREATE TABLE `projects` (
   `hidden` tinyint(1) DEFAULT '0',
   `hide_from_profile` tinyint(1) DEFAULT '0',
   `pulse_name` varchar(255) DEFAULT NULL,
+  `itinerary_available` date DEFAULT NULL,
+  `support_deadline` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_projects_on_event_group_id` (`event_group_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=316 DEFAULT CHARSET=latin1;
@@ -660,7 +662,7 @@ CREATE TABLE `sessions` (
   PRIMARY KEY (`id`),
   KEY `index_sessions_on_session_id` (`session_id`),
   KEY `index_sessions_on_updated_at` (`updated_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=790236 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=790238 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `support_coaches` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -940,6 +942,12 @@ INSERT INTO schema_migrations (version) VALUES ('20120821201902');
 INSERT INTO schema_migrations (version) VALUES ('20121009085913');
 
 INSERT INTO schema_migrations (version) VALUES ('20121009131315');
+
+INSERT INTO schema_migrations (version) VALUES ('20121011162936');
+
+INSERT INTO schema_migrations (version) VALUES ('20121011170312');
+
+INSERT INTO schema_migrations (version) VALUES ('20121011170436');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

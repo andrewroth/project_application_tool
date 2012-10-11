@@ -1,3 +1,5 @@
+<% content_for(:subtitle) do %><%= @profile.project.title %><% end -%>
+
 <link rel="stylesheet" href="/stylesheets/profiles.css" type="text/css">
 <script>var progress = <%= @profile.support_claimed_percent %>;</script>
 <%= javascript_include_tag "jsProgressBarHandler" %>
@@ -66,11 +68,13 @@
       <h3 class="boxTitle"><img src="/images/boxTitle/travelIcon.png" class="boxTitleIcon"> Travel Information</h3>
       <div class="boxContent">
         <ul id="travelList">
-          <li><a href="#">Project Schedule</a></li>
-          <li><a href="#">Packing List</a></li>
-          <li><a href="#" style="color:grey;">Itinerary</a></li>
+          <li><span style="color:grey;">Itinerary</a></li>
         </ul>
-        <p class="smallDescriptionText">Itinerary will become blue when available. You will not receive itinerary info before March 14</p>
+        <p class="smallDescriptionText">Itinerary will become blue when available.
+          <% if @profile.project.itinerary_available %>
+            You will not receive itinerary info before <%= @profile.project.itinerary_available %>
+          <% end %>
+        </p>
       </div>
     </div>
   </div>
@@ -78,8 +82,8 @@
     <div id="supportBox">
       <h3 class="boxTitle"><img src="/images/boxTitle/supportIcon.png" class="boxTitleIcon"> Support</h3>
       <div class="boxContent">
-        <h2>You need to raise <%= format_currency(@profile.cached_costing_total) %> by June 1, 2012</h2>
-        <p>Your support coach <b><%= @profile.support_coach.name %></b> is here to help you do that. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis.</p>
+        <h2>You need to raise <%= format_currency(@profile.cached_costing_total) %><% if @profile.project.support_deadline %>by <%= @profile.project.support_deadline %><% end %></h2>
+        <p>Your support coach <b><%= @profile.support_coach.name %></b> is here to help you do that.</p>
         <p><b><%= @profile.support_coach.name %></b> •
         <% if cell = @profile.support_coach.person.cell_phone %>
         <b>cell</b>: <%= cell %>
@@ -90,7 +94,7 @@
         <h3 id="youveRaisedTitle">You've raised $<span style="color:green;"><%= in_place_editor_field(:profile, :support_claimed_currency) %></span> <span style="color:grey;">We've received $2,500.</span></h3>
         <div id="chartContainer">
           <dl id="chart">
-            <dd><span id="data-one" style="width: <%= @profile.support_claimed_percent %>%"><%= @profile.support_claimed_percent %>%</span></dd>
+            <dd><span id="data-one" style="width: <%= [@profile.support_claimed_percent, 100].min %>%"><%= @profile.support_claimed_percent %>%</span></dd>
           </dl>
         </div>
         <div id="chartNumbers">
@@ -127,17 +131,20 @@
   </div>
   <div id="rightColumn">
     <div id="forumBox">
-      <h3 class="boxTitle"><img src="/images/boxTitle/forumIcon.png" class="boxTitleIcon"> Forum</h3>
+      <h3 class="boxTitle">&nbsp;<!--<img src="/images/boxTitle/forumIcon.png" class="boxTitleIcon">Forum--></h3>
       <div class="boxContent">
+        <!--
         <h4 class="forumQuestion">Forum content?</h4>
         <p class="forumAnswer"> Nam pulvinar, odio sed rhoncus suscipit, sem diam ultrices mauris, eu consequat purus metus eu velit. Proin metus odio, aliquam eget molestie nec, gravida ut sapien. Phasellus quis est sed turpis sollicitudin venenatis sed eu odio. Praesent eget neque eu eros interdum malesuada non vel leo.</p>
         <h4 class="forumQuestion">Sed fringilla porta ligula egestas tincidunt?</h4>
         <p class="forumAnswer">Nullam risus magna, ornare vitae varius eget, scelerisque a libero. Morbi eu porttitor ipsum. Nullam lorem nisi, posuere quis volutpat eget, luctus nec massa. Pellentesque aliquam lacinia tellus.</p>
+        -->
       </div>
     </div>
     <div id="resourcesBox">
-      <h3 class="boxTitle"><img src="/images/boxTitle/resourcesIcon.png" class="boxTitleIcon"> Resources</h3>
+      <h3 class="boxTitle">&nbsp;<!--<img src="/images/boxTitle/resourcesIcon.png" class="boxTitleIcon"> Resources--></h3>
       <div class="boxContent">
+        <!--
         <ul id="resourcesList">
           <li><h4>Links</h4></li>
           <li><a href="#">Project Schedule</a></li>
@@ -147,6 +154,7 @@
           <li><a href="#">Packing List</a> <a href="#"><img src="/images/searchIcon.png"></a> <a href="#"><img src="/images/downArrow.png"></a> </li>
           <li><a href="#">Itinerary</a> <a href="#"><img src="/images/searchIcon.png"></a> <a href="#"><img src="/images/downArrow.png"></a> </li>
         </ul>
+        -->
       </div>
     </div>
   </div>

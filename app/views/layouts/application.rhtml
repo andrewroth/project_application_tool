@@ -33,9 +33,10 @@
     <!-- end exjtjs -->
   </head>
   <body>
-    <div id="connexion_bar_revealer" onclick="jQuery('div.yui-skin-cnxbar').show(); jQuery('connexion_bar_revealer').hide()"></div>
-
-    <%= connexion_bar if @viewer && session[:login_source] == 'gcx' %>
+    <% if @viewer && session[:login_source] == 'gcx' %>
+      <div id="connexion_bar_revealer" onclick="jQuery('div.yui-skin-cnxbar').show(); jQuery('connexion_bar_revealer').hide()"></div>
+      <%= connexion_bar %>
+    <% end %>
 
     <% if RAILS_ENV == 'development' && @debug -%>
       <div>debug: <%= @debug -%></div>
@@ -66,7 +67,12 @@
       </div>
       <% if session[:logo_url] -%>
           <%= image_tag session[:logo_url], :class => 'branding_logo' %>
-          <span id='branding_logo_title'><%= application_title %></span>
+          <span id='branding_logo_title'>
+            <%= application_title %>
+            <% if subtitle = yield(:subtitle) %>
+              <span class='subtitle'><%= subtitle %></span>
+            <% end %>
+          </span>
       <% else %> 
         <h1><%= application_title %></h1>
       <% end -%>
@@ -99,7 +105,6 @@
               <li id="menu_search"><%= link_to_function(%|<img src="/images/nav/icon_magnify_glass.png" class="navMenuIcons">|, "toggleSearch()") %></li>
             <% end %>
           </ul>
-          <br clear="left">
         </div>
       <% end %>
       
