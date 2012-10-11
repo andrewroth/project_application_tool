@@ -177,7 +177,6 @@ Ext.onReady(function() {
             editor: {
                   xtype: 'combobox',
                   store: categoriesStore,
-                  queryMode: 'local',
                   displayField: 'title',
                   valueField: 'id',
                   editable: false,
