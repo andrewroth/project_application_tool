@@ -1,78 +1,84 @@
 <link rel="stylesheet" href="/stylesheets/profiles.css" type="text/css">
 <style>
-  #centerColumn { width: 100%; }
+  .boxWrapper { width: 100%; margin-top: 20px; }
 </style>
 
 <div id="contentWrapper">
-  <div id="centerColumn">
-    <div id="toDoBox">
-      <h3 class="boxTitle"><img src="/images/boxTitle/toDoIcon.png" class="boxTitleIcon">Applications</h3>
-      <div class="boxContent">
+  <div id="" class="boxWrapper">
+    <h3 class="boxTitle"><img src="/images/boxTitle/toDoIcon.png" class="boxTitleIcon">Applications</h3>
+    <div class="boxContent">
 
-        <% if @acceptances.length > 0 %>
-          <p>Your application has been accepted to the projects listed below!  Click on the link to go to an acceptance page.
-          <ul>
-            <% for acceptance in @acceptances %>
-              <li><%= link_to acceptance.project.title, :action => "acceptance", :profile_id => acceptance.id %> (accepted)</li>
-            <% end %>
-          </ul>
-          </p>
-        <% end %>
+      <% if @acceptances.length > 0 %>
+        <p>Your application has been accepted to the projects listed below!  Click on the link to go to an acceptance page.
+        <ul>
+          <% for acceptance in @acceptances %>
+            <li><%= link_to acceptance.project.title, :action => "acceptance", :profile_id => acceptance.id %> (accepted)</li>
+          <% end %>
+        </ul>
+        </p>
+      <% end %>
 
-        <% if @started.length > 0 %>
-          <p>You can continue the following applications:
-          <ul>
-            <% for profile in @started %>
-              <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (started)</li>
-            <% end %>
-          </ul>
-          </p>
-        <% end %>
+      <% if @started.length > 0 %>
+        <p>You can continue the following applications:
+        <ul>
+          <% for profile in @started %>
+            <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (started)</li>
+          <% end %>
+        </ul>
+        </p>
+      <% end %>
 
-        <% if @not_started.length > 0 %>
-          <p>You can start the following applications: 
-          <ul>
-            <% for form in @not_started %>
-              <li><%= link_to form.title, :action => "start", :form_id => form.id %></li>
-            <% end %>
-          </ul>
-          </p>
-        <% end %>
+      <% if @not_started.length > 0 %>
+        <p>You can start the following applications: 
+        <ul>
+          <% for form in @not_started %>
+            <li><%= link_to form.title, :action => "start", :form_id => form.id %></li>
+          <% end %>
+        </ul>
+        </p>
+      <% end %>
 
-        <% if @submitted.length > 0 || @completed.length > 0 %>
-          <p>You have submitted the following applications: 
-          <ul>
-            <% for profile in @submitted %>
-              <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (submitted)</li>
-            <% end %>
-            <% for profile in @completed %>
-              <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (completed)</li>
-            <% end %>
-          </ul>
-          </p>
-        <% end %>
+      <% if @submitted.length > 0 || @completed.length > 0 %>
+        <p>You have submitted the following applications: <br/>
+        <br/>
+        <ul>
+          <% for profile in @submitted %>
+            <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (submitted)</li>
+          <% end %>
+          <% for profile in @completed %>
+            <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (completed)</li>
+          <% end %>
+        </ul>
+        </p>
+      <% end %>
 
-        <% if @unsubmitted.length > 0 %>
-          <p>You have submitted the following applications, but their status is now unsubmitted: 
-          <ul>
-            <% for profile in @unsubmitted %>
-              <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (unsubmitted)</li>
-            <% end %>
-          </ul>
-          </p>
-        <% end %>
+      <% if @unsubmitted.length > 0 %>
+        <p>You have submitted the following applications, but their status is now unsubmitted: 
+        <ul>
+          <% for profile in @unsubmitted %>
+            <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (unsubmitted)</li>
+          <% end %>
+        </ul>
+        </p>
+      <% end %>
 
-        <% if @withdrawn.length > 0 %>
-          <p>Your application has been withdrawn: 
-          <ul>
-            <% for appln in @withdrawn %>
-              <li><%= appln.form_title %> (<%= appln.status.humanize %>)</li>
-            <% end %>
-          </ul>
-          </p>
-        <% end %>
+      <% if @withdrawn.length > 0 %>
+        <p>Your application has been withdrawn: 
+        <ul>
+          <% for appln in @withdrawn %>
+            <li><%= appln.form_title %> (<%= appln.status.humanize %>)</li>
+          <% end %>
+        </ul>
+        </p>
+      <% end %>
 
-      </div>
+    </div>
+  </div>
+
+  <div id="" class="boxWrapper">
+    <h3 class="boxTitle"><img src="/images/boxTitle/helpIcon.png" class="boxTitleIcon">How to Use the New PAT</h3>
+    <div class="boxContent">
+      Help
     </div>
   </div>
 </div>
