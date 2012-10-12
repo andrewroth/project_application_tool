@@ -277,6 +277,15 @@ render :partial => "viewer_specifics"
     @prep_item_applicable_profiles = Hash[@prep_items.collect{ |prep_item| [ prep_item, prep_item.applicable_profiles(@project) ] }]
     @prep_items.delete_if{ |prep_item| @prep_item_applicable_profiles[prep_item].empty? }
     @profiles = Profile.find(@prep_item_applicable_profiles.values.flatten.collect(&:id), :include => :received_prep_items)
+
+    if params[:from_tools]
+      # filter by name if they came from tools
+      if params[:name].present?
+        people = Person.search_by_name params[:name]
+        @profiles = @profiles.find_all{ |p| people.include?(p.viewer.try(:person)) }
+      end
+      render :template => "main/received_paperwork_native"
+    end
   end
 
   def assign_individual_tasks

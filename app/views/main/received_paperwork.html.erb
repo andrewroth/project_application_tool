@@ -1,5 +1,3 @@
-<%= stylesheet_link_tag "/extjs/src/ux/css/LiveSearchGridPanel.css" %>
-
 <style>
   .x-reset .x-column-header-inner .x-column-header-text {
     white-space: normal; !important;
@@ -59,9 +57,10 @@
       @prep_items.collect{ |prep_item| @prep_item_applicable_profiles[prep_item].include?(profile) ? profile.received_prep_items.include?(prep_item) : nil }
   }.to_json %>;
 
-  console.log(columns);
-  jQuery.getScript("/main/received_paperwork/live-search-grid.js");
 </script>
+
+<%= stylesheet_link_tag "/extjs/src/ux/css/LiveSearchGridPanel.css" %>
+<%= javascript_include_tag "/main/received_paperwork/live-search-grid.js" %>
 
 <br/>
 <br/>
