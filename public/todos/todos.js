@@ -204,7 +204,7 @@ Ext.onReady(function() {
               allowBlank: false
             }
         }, {
-            text: 'Description',
+            text: 'Tooltip',
             flex: 1,
             sortable: true,
             dataIndex: 'description',

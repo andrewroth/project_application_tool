@@ -12,6 +12,9 @@ function set_complete_prep_item(value, prep_item_id, profile_id) {
     method: 'put', parameters: { prep_item_id: prep_item_id, profile_id: profile_id, completed: value },
     onSuccess: function(transport, json) {
       $("loading").hide();
+    },
+    onComplete: function() {
+      after_ajax();
     }
   });
 }

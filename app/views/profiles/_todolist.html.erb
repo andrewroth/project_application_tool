@@ -5,11 +5,12 @@
         <% prep_items.sort.each do |prep_item| %>
           <% ppi = @profile.profile_prep_items.find_by_prep_item_id(prep_item.id) %>
           <% next if ppi.try(:completed_at) %>
-          <li class="toDoPriority1">
+          <li class="toDoPriority<%= prep_item.priority %>">
             <%= check_box_tag :"#{prep_item.title}", "1", false, :id => "pi_#{prep_item.id}" %>
             <% content_tag(:span, :id => "pi_#{prep_item.id}_span", :onClick => "$('pi_#{prep_item.id}').checked = !$('pi_#{prep_item.id}').checked; complete_prep_item(#{prep_item.id}, #{@profile.id})", :class => "button") do %>
               <%= [ category.try(:title), deadline, prep_item.title ].compact.join(" - ") %>
             <% end %>
+            <%= tooltip(prep_item.id, prep_item.description) %>
             <script>Event.observe('pi_<%= prep_item.id %>', 'change', function() { complete_prep_item(<%= prep_item.id %>, <%= @profile.id %>); })</script>
           </li>
         <% end %>
@@ -28,6 +29,7 @@
       <% content_tag(:span, :id => "pi_#{prep_item.id}_span", :onClick => ("$('ppi_#{ppi.id}').checked = !$('ppi_#{ppi.id}').checked; uncomplete_prep_item(#{prep_item.id}, #{@profile.id})" unless ppi.received_at), 
                      :class => "#{'button' unless ppi.received_at} #{'toDoReceived' if ppi.received_at}") do %>
         <%= prep_item.title %>
+        <%= tooltip(prep_item.id, prep_item.description) %>
       <% end %>
       <% unless ppi.received_at %>
         <script>Event.observe('ppi_<%= ppi.id %>', 'change', function() { uncomplete_prep_item(<%= prep_item.id %>, <%= @profile.id %>); })</script>
