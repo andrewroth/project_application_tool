@@ -290,13 +290,14 @@ render :partial => "viewer_specifics"
   protected
   
   def load_prep_items_and_project
-    @prep_items = @eg.prep_items
-    if params[:project_id]
+    @prep_items = @eg.prep_items.find_all_by_paperwork(true)
+    if params[:project_id].present?
       @project = Project.find(params[:project_id])
       @prep_items += @project.prep_items
     else
-      @prep_items += @eg.projects.collect(&:prep_items).flatten.uniq
+      @prep_items += @eg.prep_items
     end
+    @prep_items.uniq!
   end
 
   def get_students_profiles_from_sorted_profiles(profiles, viewers)

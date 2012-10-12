@@ -10,58 +10,7 @@
     <div id="toDoBox">
       <h3 class="boxTitle"><img src="/images/boxTitle/toDoIcon.png" class="boxTitleIcon"> To Do</h3>
       <div class="boxContent">
-        <p class="smallDescriptionText">Do not check items until they are completed. Hover over the "?" for more information.</p>
-        <form action="">
-          <ul id="toDoList">
-            <li class="toDoPriority1">
-            <input type="checkbox" name="toDo" value="readAcceptancePackage">
-            Read Acceptance Package</li>
-            <li class="toDoPriority1">
-            <input type="checkbox" name="toDo" value="checkPassportDate">
-            Check passport expiry date (Must not expire before 3/24/13)</li>
-            <li>
-            <input type="checkbox" name="toDo" value="photocopyPassport">
-            Photocopy passport</li>
-            <li class="toDoItemTitle">
-            <h4>Support Raising - June 1</h4>
-            </li>
-            <li class="toDoPriority2">
-            <input type="checkbox" name="toDo" value="">
-            Write 1st draft of support letter</li>
-            <li class="toDoPriority2">
-            <input type="checkbox" name="toDo" value="">
-            Finish support letter</li>
-            <li class="toDoItemTitle">
-            <h4>Testimony - March 12</h4>
-            </li>
-            <li class="toDoPriority3">
-            <input type="checkbox" name="toDo" value="">
-            Write 1st draft of testimony letter</li>
-            <li class="toDoPriority3">
-            <input type="checkbox" name="toDo" value="">
-            Finish support letter</li>
-            <li class="toDoItemTitle">
-            <h4>More Items - August 4</h4>
-            </li>
-            <li class="toDoPriority3">
-            <input type="checkbox" name="toDo" value="">
-            Write 1st draft of testimony letter</li>
-            <li class="toDoPriority3">
-            <input type="checkbox" name="toDo" value="">
-            Finish support letter</li>
-          </ul>
-        </form>
-        <hr id="toDoCompletedDivider">
-        <p id="completedItems">Completed Items</p>
-        <p class="smallDescriptionText"> Items received by our office will turn grey. </p>
-        <ul>
-          <li class="toDoCompleted">
-          <input type="checkbox" name="toDo" value="" checked="checked">
-          PAT Application</li>
-          <li class="toDoReceived">
-          <input type="checkbox" name="toDo" value="" checked="checked">
-          Read Statement of Faith</li>
-        </ul>
+        <%= render :partial => "profiles/todolist" %>
       </div>
     </div>
     <div id="travelBox">

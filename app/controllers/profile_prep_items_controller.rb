@@ -1,16 +1,7 @@
 class ProfilePrepItemsController < ApplicationController
   skip_before_filter :restrict_students
-  before_filter :get_profile, :except => [ :update, :set_received, :set_checked_in ]
+  before_filter :get_profile, :except => [ :update, :set_received, :set_checked_in, :set_completed ]
   
-  # GET /profile_prep_items
-  # GET /profile_prep_items.xml
-  def index
-    for prep_item in @profile.all_prep_items
-      @profile.profile_prep_items.find_or_create_by_prep_item_id(prep_item.id).save!
-    end
-    @profile_prep_items = @profile.all_profile_prep_items
-  end
-
   # POST /profile_prep_items
   # POST /profile_prep_items.xml
   def create
@@ -48,7 +39,7 @@ class ProfilePrepItemsController < ApplicationController
 
   def set_received
     @profile_prep_item = ProfilePrepItem.find_or_create_by_profile_id_and_prep_item_id(params[:profile_id], params[:prep_item_id])
-    @profile_prep_item.update_attribute(:received, params[:received] == "true")
+    @profile_prep_item.update_attribute(:received_at, params[:received] == "true" ? DateTime.now : nil)
     respond_to do |format|
       format.js { render :inline => '' }
     end
@@ -61,6 +52,17 @@ class ProfilePrepItemsController < ApplicationController
       format.js { render :inline => '' }
     end
   end
+
+  def set_completed
+    @profile_prep_item = ProfilePrepItem.find_or_create_by_profile_id_and_prep_item_id(params[:profile_id], params[:prep_item_id])
+    @profile_prep_item.update_attribute(:completed_at, params[:completed] == "true" ? DateTime.now : nil)
+    @profile = @profile_prep_item.profile
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
 
   # DELETE /profile_prep_items/1
   # DELETE /profile_prep_items/1.xml

@@ -284,6 +284,12 @@ img.branding_logo {
   top: 5px;
 }
 
+.subtitle {
+  padding-left: 8px;
+  border-left: 1px solid gray;
+  margin-left: 5px;
+}
+
 /* QUESTIONNAIRE ENGINE, STUDENT VIEW */
 
 #section_list {
@@ -332,7 +338,7 @@ img.branding_logo {
 }
 
 #section_list .completed_menuinactive {
-  background-color: #6FAABF;
+  background-color: #73f781;
   border: 1px solid #253940;
   border-right-width: 2px;
 }
@@ -345,7 +351,7 @@ img.branding_logo {
 }
 
 #section_list .incomplete_menuinactive {
-  background-color: #6FAABF;
+  background-color: #fe666b;
   border: 1px solid #253940;
   font-weight: bold;
   border-right-width: 2px;
@@ -395,7 +401,8 @@ td.app, #controls {
 }
 
 .required, .reqactive, .reqfilled {
-  background-color: #FFFF99;
+  background-color: #ffffff;
+  font-weight: bold;
   border: 1px solid #253940;
 }
 

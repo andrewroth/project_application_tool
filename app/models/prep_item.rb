@@ -7,9 +7,19 @@ class PrepItem < ActiveRecord::Base
   belongs_to :prep_item_category
   after_save :clear_unapplicable_profile_prep_items
 
-  alias_method :original_projects, :projects
-  def projects
-    event_group.try(:projects) || self.original_projects
+  def priority
+    return 3 unless deadline.to_time
+    if deadline.to_time > 2.month.from_now
+      return 3
+    elsif deadline.to_time > 1.months.from_now
+      return 2
+    else
+      return 1
+    end
+  end
+
+  def <=>(other)
+    self.title <=> other.title
   end
 
   def projects_csv

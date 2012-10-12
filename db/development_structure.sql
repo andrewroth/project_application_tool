@@ -360,7 +360,7 @@ CREATE TABLE `prep_item_categories` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `prep_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -375,7 +375,7 @@ CREATE TABLE `prep_items` (
   `prep_item_category_id` int(11) DEFAULT NULL,
   `paperwork` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=210 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=220 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `prep_items_projects` (
   `prep_item_id` int(11) NOT NULL,
@@ -427,14 +427,14 @@ CREATE TABLE `profile_prep_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `profile_id` int(11) DEFAULT NULL,
   `prep_item_id` int(11) DEFAULT NULL,
-  `submitted` tinyint(1) DEFAULT '0',
-  `received` tinyint(1) DEFAULT '0',
   `notes` text,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `checked_in` tinyint(1) DEFAULT '0',
+  `received_at` datetime DEFAULT NULL,
+  `completed_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9835 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10951 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `profile_travel_segments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -948,6 +948,14 @@ INSERT INTO schema_migrations (version) VALUES ('20121011162936');
 INSERT INTO schema_migrations (version) VALUES ('20121011170312');
 
 INSERT INTO schema_migrations (version) VALUES ('20121011170436');
+
+INSERT INTO schema_migrations (version) VALUES ('20121012033830');
+
+INSERT INTO schema_migrations (version) VALUES ('20121012034309');
+
+INSERT INTO schema_migrations (version) VALUES ('20121012034801');
+
+INSERT INTO schema_migrations (version) VALUES ('20121012050528');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

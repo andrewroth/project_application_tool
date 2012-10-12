@@ -11,7 +11,7 @@ class Profile < ActiveRecord::Base
   has_many :optin_cost_items;
   has_many :profile_prep_items
   has_many :checkedin_prep_items, :class_name => "PrepItem", :source => :prep_item, :through => :profile_prep_items, :conditions => { "profile_prep_items.checked_in" => true }
-  has_many :received_prep_items, :class_name => "PrepItem", :source => :prep_item, :through => :profile_prep_items, :conditions => { "profile_prep_items.received" => true }
+  has_many :received_prep_items, :class_name => "PrepItem", :source => :prep_item, :through => :profile_prep_items, :conditions => "profile_prep_items.received_at is not null"
   has_many :profile_notes
   
   #has_many :profile_manual_donations
@@ -39,8 +39,9 @@ class Profile < ActiveRecord::Base
   }
 
   def all_prep_items
-    prep_items = event_group.prep_items + project.event_group.prep_items
-    prep_items.find_all{ |prep_item| prep_item.is_assigned(self) }
+    prep_items = project.prep_items.find_all_by_individual(false) + self.checkedin_prep_items
+    prep_items.uniq!
+    prep_items.find_all{ |prep_item| prep_item.can_be_assigned(self) }
   end
 
   def support_claimed_currency

@@ -244,11 +244,6 @@ class ProfilesController < ApplicationController
 
   def show
     @page_title = "Dashboard"
-
-    @profile.all_prep_items.each do |prep_item|
-      @profile.profile_prep_items.find_or_create_by_prep_item_id(prep_item.id).save!
-    end
-    @profile_prep_items_by_deadline = @profile.profile_prep_items.group_by{ |ppi| ppi.prep_item.deadline }
   end
 
   def old_dashboard

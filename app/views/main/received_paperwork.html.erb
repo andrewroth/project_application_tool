@@ -1,3 +1,5 @@
+<%= stylesheet_link_tag "/extjs/src/ux/css/LiveSearchGridPanel.css" %>
+
 <style>
   .x-reset .x-column-header-inner .x-column-header-text {
     white-space: normal; !important;
@@ -28,7 +30,7 @@
     Ext.Ajax.request({
       method: 'PUT',
       url: '/profile_prep_items/set_received',
-      params: { profile_id: record.data.profile_id, prep_item_id: menuCheckItem.dataIndex, checked_in: checked },
+      params: { profile_id: record.data.profile_id, prep_item_id: menuCheckItem.dataIndex, received: checked },
       success: function( result, request ){
         record.commit();
       }
@@ -57,10 +59,9 @@
       @prep_items.collect{ |prep_item| @prep_item_applicable_profiles[prep_item].include?(profile) ? profile.received_prep_items.include?(prep_item) : nil }
   }.to_json %>;
 
+  console.log(columns);
+  jQuery.getScript("/main/received_paperwork/live-search-grid.js");
 </script>
-
-<%= stylesheet_link_tag "/extjs/src/ux/css/LiveSearchGridPanel.css" %>
-<%= javascript_include_tag "/main/received_paperwork/live-search-grid.js" %>
 
 <br/>
 <br/>

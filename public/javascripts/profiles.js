@@ -1,8 +1,15 @@
-function send_prep_item_data(id) {
-  value = $("ppi_" + id).checked ? '1' : '0';
+function complete_prep_item(prep_item_id, profile_id) {
+  set_complete_prep_item(true, prep_item_id, profile_id);
+}
+
+function uncomplete_prep_item(prep_item_id, profile_id) {
+  set_complete_prep_item(false, prep_item_id, profile_id);
+}
+
+function set_complete_prep_item(value, prep_item_id, profile_id) {
   $("loading").show();
-  new Ajax.Request('/profile_prep_items/' + id, { 
-    method: 'put', parameters: { 'profile_prep_item[submitted]': value, from_dashboard: true },
+  new Ajax.Request('/profile_prep_items/set_completed', { 
+    method: 'put', parameters: { prep_item_id: prep_item_id, profile_id: profile_id, completed: value },
     onSuccess: function(transport, json) {
       $("loading").hide();
     }

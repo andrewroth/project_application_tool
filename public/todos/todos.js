@@ -255,7 +255,7 @@ Ext.onReady(function() {
               xtype: 'checkbox'
             },
         }*/, {
-            text: 'Individual',
+            text: 'Optional',
             width: 60,
             sortable: true,
             dataIndex: 'individual',

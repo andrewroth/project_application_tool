@@ -1,3 +1,6 @@
+console.log('here2');
+console.log('columns: ' + columns);
+
 Ext.Loader.setConfig({enabled: true});
 
 Ext.require([
@@ -47,8 +50,6 @@ Ext.onReady(function() {
         sorters: { property: 'name', direction: 'DESC' },
     });
     
-    console.log(columns);
-
     // create the Grid, see Ext.
     Ext.create('Ext.ux.LiveSearchGridPanel', {
         store: store,
@@ -93,7 +94,7 @@ Ext.onReady(function() {
         columns: columns,
         height: 600,
         width: "100%",
-        title: 'Live Search Grid',
+        title: 'Mark Paperwork Items Received',
         selMode: {
           selType: 'cellmodel'
         },

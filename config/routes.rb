@@ -23,7 +23,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :profile_prep_items, :collection => {
     :set_received => :put,
-    :set_checked_in => :put
+    :set_checked_in => :put,
+    :set_completed => :put
   }
 
   map.resources :profiles, :member => { 

@@ -1,4 +1,4 @@
-<p>Click checkboxes to mark paperwork items as received.</p>
+<p>Click checkboxes to mark optional todos as being required for someone.</p>
 <br/>
 
 <%= sortable_table %>
@@ -20,8 +20,8 @@
         <% if @prep_item_potential_profiles[prep_item].include?(profile) %>
           <td mochi:format='input'>
             <%- id = "prep_item_#{prep_item.id}_profile_id_#{profile.id}" -%>
-            <%- received = profile.received_prep_items.include?(prep_item) -%>
-            <%= check_box_tag id, "true", received, :id => id, :onClick =>
+            <%- checkedin = profile.checkedin_prep_items.include?(prep_item) -%>
+            <%= check_box_tag id, "true", checkedin, :id => id, :onClick =>
                 remote_function(:url => {:controller => 'profile_prep_items', :action => 'set_checked_in', :_method => "PUT", :format => 'js'},
                   :loading => "$('loading').show();",
                   :complete => "$('loading').hide();",
