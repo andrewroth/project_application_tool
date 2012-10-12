@@ -1,6 +1,6 @@
 class AddItineraryAvailableToProjects < ActiveRecord::Migration
   def self.up
-    #add_column :projects, :itinerary_available, :date
+    add_column :projects, :itinerary_available, :date
   end
 
   def self.down
