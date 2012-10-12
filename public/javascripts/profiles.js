@@ -1,3 +1,7 @@
+Ext.require([
+  'Ext.window.MessageBox',
+]);
+
 function complete_prep_item(prep_item_id, profile_id) {
   set_complete_prep_item(true, prep_item_id, profile_id);
 }
