@@ -8,7 +8,7 @@ class ProfilesController < ApplicationController
 
   skip_before_filter :restrict_students, :only => [ :index, :list, :show, :old_dashboard, :view, :update, 
                                               :travel, :support_received, :costing, :paperwork, :update_support, 
-                                              :use_past_appln, :set_profile_support_claimed_currency ] + 
+                                              :use_past_appln, :set_profile_support_claimed_currency, :start, :continue ] + 
                                               INFO_ACTIONS
                                               
   before_filter :set_title
