@@ -6,7 +6,6 @@ function toggleSearch() {
 }
 
 function after_ajax() {
-  console.log('after_ajax');
   jQuery("[data-tip_html_selector]").each(function(i, el) {
     var tip = Ext.create('Ext.tip.ToolTip', {
       target: el.id,
