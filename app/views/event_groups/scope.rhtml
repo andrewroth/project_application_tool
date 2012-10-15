@@ -33,6 +33,8 @@ function update_links() {
   <% end %>
   </p>
 
-<%= check_box_tag 'remember', 'true', false, :onClick => "update_links();" %>Remember my choice for next time.</p>
+<%= check_box_tag 'remember', 'true', true, :onClick => "update_links();" %>Remember my choice for next time.</p>
+
+<script>jQuery(function() { update_links(); });</script>
 
 <%= if @columns then "</div>" end %>
