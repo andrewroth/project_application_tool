@@ -35,6 +35,8 @@ ActionController::Routing::Routes.draw do |map|
     :costing => :get, 
     :travel => :get,
   }, :collection => {
+    :start => :get,
+    :continue => :get,
     :campus_info => :get,
     :update_campus_info => :post,
     :crisis_info => :get,

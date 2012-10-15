@@ -129,6 +129,46 @@ class ProfilesController < ApplicationController
     end
   end
   
+  # TODO move to new action
+  def continue
+    redirect_to :controller => :appln, :profile_id => @profile.id
+  end
+
+  # TODO move to new action
+  def start
+    # make sure the form is in this event group
+    form = @eg.forms.find params[:form_id]
+
+    # look for ane already
+    appln = @viewer.applns.find_by_form_id(form.id)
+    if appln && !@eg.allows_multiple_applications_with_same_form
+      @profile = appln.profile
+    else
+      appln = Appln.create :form_id => form.id,
+            :viewer_id => @viewer.id,
+            :status => "started"
+
+      # might as well give them a profile right now, and set the viewer up properly too
+      @profile = appln.profile
+      @profile.viewer_id = @viewer.id
+      @profile.project = @eg.projects.first if @eg.projects.count == 1
+      @profile.save!
+
+      # and set the pref 1 if there's only one project
+      if @eg.projects.size == 1
+        pid = @eg.projects.first.id
+        appln.preference1_id = pid
+        appln.preference2_id = pid
+        appln.save!
+
+        @profile.project_id = pid
+        @profile.save!
+      end
+    end
+
+    redirect_to :controller => :appln, :profile_id => @profile.id
+  end
+ 
   def costing
     @submenu_title = 'costing'
   end
