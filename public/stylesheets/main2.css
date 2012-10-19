@@ -657,3 +657,6 @@ div.yui-skin-cnxbar {
     width: 100%; }
   #menu_wrapper #submenu_spacer {
     height: 30px; }
+
+.x-window-body {
+  background: #fff !important; }
