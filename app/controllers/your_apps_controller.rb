@@ -26,6 +26,7 @@ class YourAppsController < ApplicationController
         redirect_to :controller => :profiles, :action => :start, :form_id => @eg.forms.find_all_by_hidden(false).first
       else
         # multiple forms, they need to choose
+        flash[:notice] = "There are multiple application forms - please choose one"
         redirect_to :controller => :profiles, :action => :index
       end
     else
