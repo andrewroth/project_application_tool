@@ -1,5 +1,7 @@
 set :application, 'pat'
 set :keep_releases, '3'
+after "deploy:update", "deploy:cleanup" 
+
 set :user, 'deploy'
 set :repository, "git://github.com/andrewroth/project_application_tool.git"
 set :scm, "git"
