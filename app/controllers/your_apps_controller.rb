@@ -24,6 +24,9 @@ class YourAppsController < ApplicationController
     elsif profiles.empty?
       if @eg.forms.find_all_by_hidden(false).count == 1
         redirect_to :controller => :profiles, :action => :start, :form_id => @eg.forms.find_all_by_hidden(false).first
+      elsif @eg.forms.find_all_by_hidden(false).empty?
+        # the profiles index page will show an appropriate message about no forms available yet
+        redirect_to :controller => :profiles, :action => :index
       else
         # multiple forms, they need to choose
         flash[:notice] = "There are multiple application forms - please choose one"

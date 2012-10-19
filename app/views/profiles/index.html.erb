@@ -9,6 +9,10 @@
     <h3 class="boxTitle"><img src="/images/boxTitle/toDoIcon.png" class="boxTitleIcon">Applications</h3>
     <div class="boxContent">
 
+      <% if @eg.forms.find_all_by_hidden(false).count == 0 %>
+        <p>Sorry, there are no application forms available yet.</p>
+      <% end %>
+
       <% if @acceptances.length > 0 %>
         <p>Your application has been accepted to the projects listed below!  Click on the link to go to an acceptance page.
         <ul>
