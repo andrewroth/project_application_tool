@@ -31,7 +31,17 @@ class CustomElement < Element
         sa = 'person_country_id'
       end
 
-      if (section.name == 'appln_person' && (
+      if section.name == 'emerg' && (section.attribute == 'health_coverage_state' || section.attribute == 'health_number')
+        if @emerg.health_coverage_country == "CAN" && [nil, ''].include?(@emerg.send(section.attribute))
+          page.errors.add_to_base("Attribute '#{section.attribute.humanize}' is required")
+          page.add_invalid_element("#{section.name}_#{section.attribute}")
+        end
+      elsif section.name == 'emerg' && (section.attribute == 'medical_plan_number' || section.attribute == 'medical_plan_carrier')
+        if @emerg.health_coverage_country == "USA" && [nil, ''].include?(@emerg.send(section.attribute))
+          page.errors.add_to_base("Attribute '#{section.attribute.humanize}' is required")
+          page.add_invalid_element("#{section.name}_#{section.attribute}")
+        end
+      elsif (section.name == 'appln_person' && (
             [nil, ''].include?(@person.send(sa)) ||
             sa_assoc && @person.send(sa_assoc).nil?)) ||
          (section.name == 'emerg' && [nil, ''].include?(@emerg.send(section.attribute)))
