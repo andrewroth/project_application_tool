@@ -57,6 +57,20 @@
     end
 %>
 
+<script>
+  function set_country_specifics_visibility() {
+    jQuery('.country_specific').hide();
+    jQuery('.'+jQuery('#emerg_health_coverage_country').val()+'_only').show();
+  }
+
+  jQuery("#emerg_health_coverage_country").change(function() {
+    set_country_specifics_visibility();
+  });
+
+  jQuery(function() { set_country_specifics_visibility(); });
+</script>
+
+<div class='country_specific CAN_only' style='display:none'>
 <%= custom_element_item("#{label_prefix} province (Canada only): ", :emerg, :"#{mid}_state") do |m,c,classes|
       id = "#{m}_#{c}"
       r = ""
@@ -74,8 +88,11 @@ update_province_select('<%= mid %>', 'emerg');
 </script>
 
 <%= custom_element_text_field('Provincial/State insurance number (Canada only): ', :emerg, :health_number) %>
-<%= custom_element_text_field('Extended medical plan number (US only): ', :emerg, :medical_plan_number) %>
-<%= custom_element_text_field('Extended medical plan carrier (US only): ', :emerg, :medical_plan_carrier) %>
+</div>
+<div class='country_specific USA_only' style='display:none'>
+<%= custom_element_text_field('Medical plan number (US only): ', :emerg, :medical_plan_number) %>
+<%= custom_element_text_field('Medical plan carrier (US only): ', :emerg, :medical_plan_carrier) %>
+</div>
 <%= custom_element_text_field("Doctor's name: ", :emerg, :doctor_name) %>
 <%= custom_element_text_field("Doctor's phone (include area code): ", :emerg, :doctor_phone) %>
 <%= custom_element_text_field("Dentist's name: ", :emerg, :dentist_name) %>
