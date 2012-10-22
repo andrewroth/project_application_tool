@@ -188,8 +188,7 @@ div#student_view, div#support_received, div#travel_itinerary, div#cost_items, di
   z-index: 10;
   position: absolute;
   box-shadow: 0px 0px 10px #888;
-  background-color: white;
-  top: 83px; }
+  background-color: white; }
 
 .flash, .centerblock {
   width: 600px;
