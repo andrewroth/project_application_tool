@@ -35,7 +35,7 @@ class ApplnController < InstanceController
   def withdraw
     @appln.profile.withdraw! :status => 'self_withdrawn', :viewer => @viewer
     flash[:notice] = 'Your application has been withdrawn.  If you change your mind, please email the appropriate address below.'
-    redirect_to :controller => :your_apps, :action => :list
+    redirect_to :controller => :profiles, :action => :index
   end
   
   # VARIOUS HELPERS TO FOLLOW
@@ -48,7 +48,7 @@ class ApplnController < InstanceController
 #    @pages = @questionnaire.pages
     if @appln.nil?
       flash[:notice] = "Couldn't find application (id given: #{params[:appln_id]}). Try opening the application from this page."
-      redirect_to :controller => :your_apps, :action => :list
+      redirect_to :controller => :profiles, :action => :index
       return
     end
 

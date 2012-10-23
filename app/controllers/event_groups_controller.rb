@@ -88,7 +88,7 @@ class EventGroupsController < AjaxTreeController
 
     @eg = EventGroup.find(params[:id])
     if session[:start] && (form = @eg.forms.find_by_hidden(false))
-      redirect_to :controller => :your_apps, :action => :start, :form_id => form.id
+      redirect_to :controller => :profiles, :action => :start, :form_id => form.id
     else
       redirect_to :controller => :main
     end
