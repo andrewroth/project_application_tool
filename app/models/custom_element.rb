@@ -31,12 +31,12 @@ class CustomElement < Element
         sa = 'person_country_id'
       end
 
-      if section.name == 'emerg' && (section.attribute == 'health_coverage_state' || section.attribute == 'health_number')
+      if section.name == 'emerg' && %w(health_coverage_state health_number health_province_id).include?(section.attribute)
         if @emerg.health_coverage_country == "CAN" && [nil, ''].include?(@emerg.send(section.attribute))
           page.errors.add_to_base("Attribute '#{section.attribute.humanize}' is required")
           page.add_invalid_element("#{section.name}_#{section.attribute}")
         end
-      elsif section.name == 'emerg' && (section.attribute == 'medical_plan_number' || section.attribute == 'medical_plan_carrier')
+      elsif section.name == 'emerg' && %w(medical_plan_number medical_plan_carrier).include?(section.attribute)
         if @emerg.health_coverage_country == "USA" && [nil, ''].include?(@emerg.send(section.attribute))
           page.errors.add_to_base("Attribute '#{section.attribute.humanize}' is required")
           page.add_invalid_element("#{section.name}_#{section.attribute}")
