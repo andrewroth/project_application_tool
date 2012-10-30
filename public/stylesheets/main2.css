@@ -185,10 +185,11 @@ div#student_view, div#support_received, div#travel_itinerary, div#cost_items, di
   z-index: 20; }
 
 #search {
-  z-index: 10;
+  z-index: 1000;
   position: absolute;
   box-shadow: 0px 0px 10px #888;
-  background-color: white; }
+  background-color: white;
+  width: 275px; }
 
 .flash, .centerblock {
   width: 600px;

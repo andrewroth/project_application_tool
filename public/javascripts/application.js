@@ -1,6 +1,10 @@
 function toggleSearch() {
+  jQuery("#search").toggle();
+  positionSearch();
+}
+
+function positionSearch() {
   jQuery("#search").
-    toggle().
     css("left", jQuery("#menu_search").offset().left - jQuery("#search").width() + jQuery("#menu_search").width()).
     css("top", jQuery("#menu_search").offset().top + jQuery("#menu_search").height() + 8).
       find("input[type=text]").focus();
@@ -24,3 +28,7 @@ jQuery(function() {
 jQuery(document).ajaxSuccess(function() {
   after_ajax();
 });
+
+jQuery(window).resize(function() {
+  positionSearch();
+})
