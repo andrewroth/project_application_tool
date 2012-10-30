@@ -67,7 +67,11 @@
     set_country_specifics_visibility();
   });
 
+<% if custom_element_edit_mode || custom_element_create_mode %>
+  jQuery(function() { jQuery('.country_specific').show(); })
+<% else %>
   jQuery(function() { set_country_specifics_visibility(); });
+<% end %>
 </script>
 
 <div class='country_specific CAN_only' style='display:none'>
@@ -83,9 +87,11 @@
     end
 %>
 
+<% unless custom_element_edit_mode || custom_element_edit_mode %>
 <script>
 update_province_select('<%= mid %>', 'emerg');
 </script>
+<% end %>
 
 <%= custom_element_text_field('Provincial/State insurance number (Canada only): ', :emerg, :health_number) %>
 </div>
