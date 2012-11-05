@@ -57,6 +57,7 @@ class Profile < ActiveRecord::Base
   end
 
   def support_claimed_percent
+    return 0 if cached_costing_total.to_f == 0
     ((support_claimed.to_f / cached_costing_total.to_f) * 100).to_i
   end
 
