@@ -718,7 +718,8 @@ class ReportsController < ApplicationController
   def funding_details
     # find profile 
     profiles = Profile.find_all_by_project_id_and_viewer_id @projects.collect { |p| p.id }, @report_viewer.id
-    profile = profiles[0] # uh take the first one if there are multiple projects requested
+    # take the one that has the most support if there are multiple
+    profile = profiles.detect{ |profile| profile.donations.present? }
     
     if profile.nil?
       flash[:notice] = "Couldn\'t find a profile for #{@report_viewer.name}."
