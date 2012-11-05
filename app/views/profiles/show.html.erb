@@ -32,14 +32,16 @@
       <h3 class="boxTitle"><img src="/images/boxTitle/supportIcon.png" class="boxTitleIcon"> Support</h3>
       <div class="boxContent">
         <h2>You need to raise <%= format_currency(@profile.cached_costing_total) %><% if @profile.project.support_deadline %>by <%= @profile.project.support_deadline %><% end %></h2>
-        <p>Your support coach <b><%= @profile.support_coach.name %></b> is here to help you do that.</p>
-        <p><b><%= @profile.support_coach.name %></b> •
-        <% if cell = @profile.support_coach.person.cell_phone %>
-        <b>cell</b>: <%= cell %>
-        <% elsif local_phone = @profile.support_coach.person.local_phone %>
-        <b>phone</b>: <%= local_phone %>
-        <% end %> •
-        <b><%= @profile.support_coach.email %></b> </p>
+        <% if @profile.support_coach %>
+          <p>Your support coach <b><%= @profile.support_coach.name %></b> is here to help you do that.</p>
+          <p><b><%= @profile.support_coach.name %></b> •
+          <% if cell = @profile.support_coach.person.cell_phone %>
+          <b>cell</b>: <%= cell %>
+          <% elsif local_phone = @profile.support_coach.person.local_phone %>
+          <b>phone</b>: <%= local_phone %>
+          <% end %> •
+          <b><%= @profile.support_coach.email %></b> </p>
+        <% end %>
         <h3 id="youveRaisedTitle">You've raised $<span style="color:green;"><%= in_place_editor_field(:profile, :support_claimed_currency) %></span> <span style="color:grey;">We've received $2,500.</span></h3>
         <div id="chartContainer">
           <dl id="chart">
