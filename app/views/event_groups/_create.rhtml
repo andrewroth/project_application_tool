@@ -2,7 +2,7 @@
 
 <%= error_messages_for :event_group %>
 
-<% form_for(:event_group, :url => event_groups_path) do |f| %>
+<% form_for(:event_group, :url => event_groups_path, :html => { :class => "new_event_group" }) do |f| %>
 
   <%= render :partial  => 'form', :locals => { :f => f } %>
 

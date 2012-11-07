@@ -15,6 +15,9 @@ class EventGroupsController < AjaxTreeController
   # then scope doesn't work
   before_filter :clear_cache#, :only => [ :create, :update, :destroy ]
 
+  def nodes
+  end
+
   def custom_css
     #headers["Content-Type"] = "text/css"
     @eg = EventGroup.find params[:id]
@@ -98,7 +101,31 @@ class EventGroupsController < AjaxTreeController
   # GET /event_groups.xml
   def index
     @nodes = [] if read_fragment({:action => 'index'})
-    super
+
+    respond_to do |format|
+      format.js { render :inline => %|[{"text":"app","id":"src\/app","cls":"folder"},
+        {"text":"ComponentManager.js","id":"src\/ComponentManager.js","leaf":true,"cls":"file"},
+        {"text":"core","id":"src\/core","cls":"folder"},
+        {"text":"XTemplateParser.js","id":"src\/XTemplateParser.js","leaf":true,"cls":"file"},
+        {"text":"chart","id":"src\/chart","cls":"folder"},
+        {"text":"diag","id":"src\/diag","cls":"folder"},
+        {"text":"tab","id":"src\/tab","cls":"folder"},
+        {"text":"FocusManager.js","id":"src\/FocusManager.js","leaf":true,"cls":"file"},
+        {"text":"form","id":"src\/form","cls":"folder"},
+        {"text":"Ajax.js","id":"src\/Ajax.js","leaf":true,"cls":"file"},
+        {"text":"LoadMask.js","id":"src\/LoadMask.js","leaf":true,"cls":"file"},
+        {"text":"ModelManager.js","id":"src\/ModelManager.js","leaf":true,"cls":"file"},
+        {"text":"dom","id":"src\/dom","cls":"folder"},
+        {"text":"layout","id":"src\/layout","cls":"folder"},
+        {"text":"resizer","id":"src\/resizer","cls":"folder"},
+        {"text":"Action.js","id":"src\/Action.js","leaf":true,"cls":"file"},
+        {"text":"window","id":"src\/window","cls":"folder"},
+        {"text":"PluginManager.js","id":"src\/PluginManager.js","leaf":true,"cls":"file"},{"text":"selection","id":"src\/selection","cls":"folder"},{"text":"ShadowPool.js","id":"src\/ShadowPool.js","leaf":true,"cls":"file"},{"text":"draw","id":"src\/draw","cls":"folder"},{"text":"picker","id":"src\/picker","cls":"folder"},{"text":"Shadow.js","id":"src\/Shadow.js","leaf":true,"cls":"file"},{"text":"slider","id":"src\/slider","cls":"folder"},{"text":"menu","id":"src\/menu","cls":"folder"},{"text":"Component.js","id":"src\/Component.js","leaf":true,"cls":"file"},{"text":"Template.js","id":"src\/Template.js","leaf":true,"cls":"file"},{"text":"Editor.js","id":"src\/Editor.js","leaf":true,"cls":"file"},{"text":"fx","id":"src\/fx","cls":"folder"},{"text":"tree","id":"src\/tree","cls":"folder"},{"text":"ElementLoader.js","id":"src\/ElementLoader.js","leaf":true,"cls":"file"},{"text":"AbstractPlugin.js","id":"src\/AbstractPlugin.js","leaf":true,"cls":"file"},{"text":"data","id":"src\/data","cls":"folder"},{"text":"ZIndexManager.js","id":"src\/ZIndexManager.js","leaf":true,"cls":"file"},{"text":"XTemplate.js","id":"src\/XTemplate.js","leaf":true,"cls":"file"},{"text":"Img.js","id":"src\/Img.js","leaf":true,"cls":"file"},{"text":"view","id":"src\/view","cls":"folder"},{"text":"ComponentLoader.js","id":"src\/ComponentLoader.js","leaf":true,"cls":"file"},{"text":"grid","id":"src\/grid","cls":"folder"},{"text":"util","id":"src\/util","cls":"folder"},{"text":"AbstractManager.js","id":"src\/AbstractManager.js","leaf":true,"cls":"file"},{"text":"tip","id":"src\/tip","cls":"folder"},{"text":"container","id":"src\/container","cls":"folder"},{"text":"ProgressBar.js","id":"src\/ProgressBar.js","leaf":true,"cls":"file"},{"text":"tail.js","id":"src\/tail.js","leaf":true,"cls":"file"},{"text":"toolbar","id":"src\/toolbar","cls":"folder"},{"text":"XTemplateCompiler.js","id":"src\/XTemplateCompiler.js","leaf":true,"cls":"file"},{"text":"ComponentQuery.js","id":"src\/ComponentQuery.js","leaf":true,"cls":"file"},{"text":"dd","id":"src\/dd","cls":"folder"},{"text":"button","id":"src\/button","cls":"folder"},{"text":"panel","id":"src\/panel","cls":"folder"},{"text":"state","id":"src\/state","cls":"folder"},{"text":"flash","id":"src\/flash","cls":"folder"},{"text":"Layer.js","id":"src\/Layer.js","leaf":true,"cls":"file"},{"text":"AbstractComponent.js","id":"src\/AbstractComponent.js","leaf":true,"cls":"file"},{"text":"direct","id":"src\/direct","cls":"folder"}]
+        | }
+      format.html {
+        super
+      }
+    end
   end
 
   protected
