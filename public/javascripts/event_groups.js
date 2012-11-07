@@ -21,46 +21,41 @@ Ext.onReady(function(){
   var tree = Ext.create('Ext.tree.Panel', {
     id: 'tree',
     store: store,
-    width: 250,
-    height: 300,
+    width: 200,
+    height: 600,
+    title: 'Event Groups',
     viewConfig: {
       plugins: {
         ptype: 'treeviewdragdrop',
         appendOnly: true
       }
     },
-    renderTo: document.body
-  });
-
-  var store2 = Ext.create('Ext.data.TreeStore', {
-    proxy: {
-      type: 'ajax',
-      url: 'get-nodes.php'
-    },
-    root: {
-      text: 'Custom Ext JS',
-      id: 'src',
-      expanded: true,
-      children: []
-    },
-    folderSort: true,
-    sorters: [{
-      property: 'text',
-      direction: 'ASC'
+    dockedItems: [{
+      xtype: 'toolbar',
+      items: [{
+        text: 'New',
+        handler: function() {
+          jQuery.ajax('/event_groups/new').done(function(data) { details.body.update(data); })
+          details.body.update("loading...");
+        }
+      }]
     }]
   });
 
-  var tree2 = Ext.create('Ext.tree.Panel', {
-    id: 'tree2',
-    width: 250,
-    height: 300,
-    store: store2,
-    viewConfig: {
-      plugins: {
-        ptype: 'treeviewdragdrop',
-        appendOnly: true
-      }
+  var details = Ext.create('Ext.tree.Panel', {
+    width: 950,
+    height: 600,
+    title: 'Details'
+  });
+
+  Ext.create('Ext.container.Container', {
+    renderTo: "eventGroupUI",
+    width: 1150,
+    height: 600,
+    frame: true,
+    layout: {
+      type: 'hbox'
     },
-    renderTo: document.body
+    items: [tree, details],
   });
 });

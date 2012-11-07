@@ -103,7 +103,8 @@ class EventGroupsController < AjaxTreeController
     @nodes = [] if read_fragment({:action => 'index'})
 
     respond_to do |format|
-      format.js { render :inline => %|[{"text":"app","id":"src\/app","cls":"folder"},
+      format.js { render :inline => %|
+       [{"text":"app","id":"src\/app","cls":"folder"},
         {"text":"ComponentManager.js","id":"src\/ComponentManager.js","leaf":true,"cls":"file"},
         {"text":"core","id":"src\/core","cls":"folder"},
         {"text":"XTemplateParser.js","id":"src\/XTemplateParser.js","leaf":true,"cls":"file"},
