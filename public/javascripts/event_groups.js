@@ -1,5 +1,7 @@
 Ext.require(['*']);
 
+var tree_id;
+
 Ext.onReady(function(){
   var store = Ext.create('Ext.data.TreeStore', {
     proxy: {
@@ -8,7 +10,7 @@ Ext.onReady(function(){
     },
     root: {
       text: 'Ext JS',
-      id: 'src',
+      id: 'roots',
       expanded: true
     },
     folderSort: true,
@@ -21,9 +23,22 @@ Ext.onReady(function(){
   var tree = Ext.create('Ext.tree.Panel', {
     id: 'tree',
     store: store,
-    width: 200,
+    width: 300,
     height: 600,
     title: 'Event Groups',
+    rootVisible: false,
+    listeners: {
+      itemClick: function(view, rec, item, index, eventObj) {
+        details.setTitle(rec.raw.text);
+        tree_id = rec.raw.id;
+        details.getActiveTab().loader.url = '/event_groups/' + tree_id + '/edit';
+        details.getActiveTab().loader.load();
+        /*
+        jQuery.ajax('/event_groups/edit/' + rec.raw.id).done(function(data) { details.body.update(data); });
+        details.body.update("loading...");
+        */
+      }
+    },
     viewConfig: {
       plugins: {
         ptype: 'treeviewdragdrop',
@@ -42,10 +57,30 @@ Ext.onReady(function(){
     }]
   });
 
-  var details = Ext.create('Ext.tree.Panel', {
-    width: 950,
+  //var details = Ext.create('Ext.tree.tabPanel', {
+  var details = Ext.createWidget('tabpanel', {
+    width: 850,
     height: 600,
-    title: 'Details'
+    title: 'Event Group',
+    items: [{
+      title: 'Edit',
+      loader: {
+        url: '/inital.html',
+        contentType: 'html',
+        loadMask: true
+      },
+      listeners: {
+        activate: function(tab) {
+          // can't figure out how to get the selected tree id - thought the following line would work but no dice
+          //tab.loader.url = '/event_groups/' + tree.getSelectionModel().getSelectedNode();
+          tab.loader.url = '/event_groups/' + tree_id + '/edit';
+          tab.loader.load();
+        }
+      }
+    },{
+      title: 'Resources',
+      html: 'html'
+    }]
   });
 
   Ext.create('Ext.container.Container', {

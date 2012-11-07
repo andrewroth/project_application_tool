@@ -53,6 +53,10 @@ class Node < ActiveRecord::Base
     self.ancestors.size
   end
 
+  def leaf?
+    self.children.empty?
+  end
+
 #- Class methods ----
 
   def self.types_options()
