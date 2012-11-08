@@ -1,0 +1,50 @@
+var eventGroupsStore;
+
+Ext.onReady(function() {
+  
+  var eventGroupsStore = Ext.create('Ext.data.TreeStore', {
+      proxy: {
+          type: 'ajax',
+          url: '/event_groups.js'
+      },
+      root: {
+          id: 'src',
+          expanded: true
+      },
+      folderSort: true
+  });
+
+  var tree = Ext.create('Ext.tree.Panel', {
+    width: 200,
+    height: 600,
+    frame: true,
+    title: 'Event Groups',
+    dockedItems: [{
+      xtype: 'toolbar',
+      items: [{
+        text: 'New',
+        handler: function() {
+          jQuery.ajax('/event_groups/new').done(function(data) { details.body.update(data); })
+          details.body.update("loading...");
+        }
+      }]
+    }],
+    store: eventGroupsStore
+  });
+
+  var details = Ext.create('Ext.tree.Panel', {
+    width: 950,
+    height: 600,
+    frame: true,
+    title: 'Details'
+  });
+
+  Ext.create('Ext.container.Container', {
+    renderTo: "eventGroupUI",
+    width: 1150,
+    layout: {
+      type: 'hbox'
+    },
+    items: [tree, details],
+  });
+})

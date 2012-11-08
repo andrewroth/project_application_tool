@@ -17,6 +17,8 @@ class EventGroup < Node
   has_many :tags
   has_many :eventgroup_coordinators, :conditions => { :end_date => nil }
   has_many :prep_items
+  has_many :event_group_resources
+  has_many :resources, :through => :event_group_resources
 
   has_attachment :content_type => :image, 
                  :storage => :file_system,

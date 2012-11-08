@@ -4,6 +4,7 @@ class CreateEventGroupResources < ActiveRecord::Migration
       t.integer :event_group_id
       t.integer :resource_id
       t.string :description
+      t.string :title
 
       t.timestamps
     end

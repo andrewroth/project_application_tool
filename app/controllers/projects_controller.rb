@@ -5,9 +5,22 @@ class ProjectsController < ApplicationController
   include Permissions
   include BulkPrinting
 
-  before_filter :get_project
+  before_filter :get_project, :except => [ :index ]
   before_filter :ensure_project_staff
-  
+
+  def index
+    @event_group = params[:event_group_id] ? EventGroup.find(params[:event_group_id]) : @eg
+    @projects = @event_group.projects
+
+    respond_to do |format|
+      format.json { render :json => {
+        :success => true,
+        :message => "Loaded data",
+        :data => @projects
+      } }
+    end
+  end
+
   def bulk_summary_forms
     @page_title = "Acceptance Summary Forms"
     form = @eg.application_form

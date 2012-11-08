@@ -106,10 +106,19 @@ class EventGroupsController < AjaxTreeController
       format.js { 
         if params[:id] == 'roots'
           @nodes = EventGroup.roots
+          @resources = []
         else
-          @nodes = EventGroup.find(params[:id]).children
+          eg = EventGroup.find(params[:id])
+          @nodes = eg.children
+          @resources = eg.event_group_resources
         end
-        render :inline => @nodes.collect{ |n| { :text => n.title, :id => n.id, :leaf => n.leaf? } }.to_json
+        if params[:resources] == 'true'
+          response_array = @nodes.collect{ |n| { :text => n.title, :id => n.id, :leaf => false, :allowDrag => false, :allowDrop => false } }
+          response_array += @resources.collect{ |egr| { :text => egr.title, :id => "#{eg.id}_#{egr.id}", :leaf => true, :allowDrag => true, :allowDrop => false } }
+          render :inline => response_array.to_json
+        else
+          render :inline => @nodes.collect{ |n| { :text => n.title, :id => n.id, :leaf => false, :expandable => !n.leaf? } }.to_json
+        end
       }
       format.html {
         super

@@ -1,39 +1,44 @@
-class PrepItemCategoriesController < ApplicationController
+class EventGroupResourcesController < ApplicationController
   def index
-    @prep_item_categories = PrepItemCategory.all
+    if params[:event_group_id]
+      @event_group_resources = EventGroup.find(params[:event_group_id]).event_group_resources
+    else
+      @event_group_resources = []
+    end
 
     respond_to do |format|
       format.json { render :json => { 
         :success => true,
         :message => "Loaded data",
-        :data => @prep_item_categories
+        :data => @event_group_resources
       } }
     end
   end
 
   def create
-    @prep_item_category = PrepItemCategory.new(:title => params[:title], :event_group_id => @eg.id)
+    # TODO
+    @event_group_resource = EventGroupResource.new(:title => params[:title], :description => params[:description])
 
     respond_to do |format|
-      if @prep_item_category.save
-        format.json { render :json => { :success => true, :prep_item_categories => [@prep_item_category] } }
+      if @event_group_resource.save
+        format.json { render :json => { :success => true, :event_group_resources => [@event_group_resource] } }
       end
     end
   end
 
   def update
-    @prep_item_category = PrepItemCategory.find(params[:id])
+    @event_group_resource = EventGroupResource.find(params[:id])
 
     respond_to do |format|
-      if @prep_item_category.update_attributes(:title => params[:title], :event_group_id => @eg.id)
-        format.json { render :json => { :success => true, :prep_item_categories => [@prep_item_category] } }
+      if @event_group_resource.update_attributes(:title => params[:title], :description => params[:description])
+        format.json { render :json => { :success => true, :event_group_resources => [@event_group_resource] } }
       end
     end
   end
 
   def destroy
-    @prep_item_category = PrepItemCategory.find(params[:id])
-    @prep_item_category.destroy
+    @event_group_resource = EventGroupResource.find(params[:id])
+    @event_group_resource.destroy
 
     respond_to do |format|
       format.json { render :json => { :success => true } }
