@@ -18,7 +18,7 @@
          },
         :loading => "$('saving_#{p.id}').show();",
         :loaded => "$('saving_#{p.id}').hide();",
-    	:complete => visual_effect(:highlight, "row_#{p.id}"),
-        :with =>  "'profile[motivation_code]='+escape($('profile_#{p.id}_motivation_code').value)"
+        :complete => visual_effect(:highlight, "row_#{p.id}"),
+        :with =>  "'_method=PUT&profile[motivation_code]='+escape($('profile_#{p.id}_motivation_code').value)"
    %>
 </td>
