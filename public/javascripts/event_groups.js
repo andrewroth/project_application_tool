@@ -1,5 +1,53 @@
 Ext.require(['*']);
 
+/* fix for waitMsg not hiding */
+/* http://www.sencha.com/forum/showthread.php?228970-4.1.1-GA-Form-Submit-Problem */
+Ext.define('Ext.form.SubmitFix', {
+  override: 'Ext.ZIndexManager',
+
+  register : function(comp) {
+    var me = this,
+    compAfterHide = comp.afterHide;
+
+    if (comp.zIndexManager) {
+      comp.zIndexManager.unregister(comp);
+    }
+    comp.zIndexManager = me;
+
+    me.list[comp.id] = comp;
+    me.zIndexStack.push(comp);
+
+    // Hook into Component's afterHide processing
+    comp.afterHide = function() {
+      compAfterHide.apply(comp, arguments);
+      me.onComponentHide(comp);
+    };
+  },
+
+  /**
+   * Unregisters a {@link Ext.Component} from this ZIndexManager. This should not
+   * need to be called. Components are automatically unregistered upon destruction.
+   * See {@link #register}.
+   * @param {Ext.Component} comp The Component to unregister.
+   */
+  unregister : function(comp) {
+    var me = this,
+    list = me.list;
+
+    delete comp.zIndexManager;
+    if (list && list[comp.id]) {
+      delete list[comp.id];
+
+      // Relinquish control of Component's afterHide processing
+      delete comp.afterHide;
+      Ext.Array.remove(me.zIndexStack, comp);
+
+      // Destruction requires that the topmost visible floater be activated. Same as hiding.
+      me._activateLast();
+    }
+  }
+});
+
 var current_event_group_id;
 
 var projectsStore;
@@ -26,7 +74,7 @@ Ext.define('Resource', {
 
 Ext.define('EventGroupResource', {
   extend: 'Ext.data.Model',
-  fields: ['id', 'title', 'description']
+  fields: ['id', 'title', 'description', 'size']
 });
 
 Ext.onReady(function(){
@@ -104,7 +152,7 @@ Ext.onReady(function(){
     store: copyStore,
     width: 424,
     height: 300,
-    title: 'Copy Resources - Drag to Resources Grid',
+    title: 'Copy Resources - Drag to Resources (left)',
     rootVisible: false,
     listeners: {
       itemClick: function(view, rec, item, index, eventObj) {
@@ -226,7 +274,7 @@ Ext.onReady(function(){
       sortable: true,
       dataIndex: 'description',
       field: {
-        xtype: 'textfield',
+        xtype: 'textarea',
         allowBlank: false
       }
     }, {
@@ -249,6 +297,64 @@ Ext.onReady(function(){
     }]
   });
 
+  var upload = Ext.create('Ext.form.Panel', {
+    frame: true,
+    title: 'Resource Upload Form',
+    bodyPadding: '10 10 0',
+    width: 848,
+    colspan: 2,
+
+    defaults: {
+      anchor: '100%',
+      allowBlank: false,
+      msgTarget: 'side',
+      labelWidth: 50
+    },
+
+    items: [{
+      xtype: 'textfield',
+      fieldLabel: 'Title',
+      name: 'resource[title]',
+    },{
+      xtype: 'textarea',
+      fieldLabel: 'Desc:',
+      name: 'resource[description]',
+    },{
+      xtype: 'filefield',
+      id: 'form-file',
+      emptyText: 'Select a file',
+      fieldLabel: 'File',
+      name: 'resource[uploaded_data]',
+      buttonText: '',
+      buttonConfig: {
+        iconCls: 'upload-icon'
+      }
+    }],
+
+    buttons: [{
+      text: 'Save',
+      handler: function(){
+        var form = this.up('form').getForm();
+        if (form.isValid()) {
+          form.submit({
+            url: '/resources.json',
+            waitMsg: 'Uploading Resource...',
+            success: function(fp, o) {
+              eventGroupResourceStore.load();
+              form.reset();
+            },
+            params: { event_group_id: current_event_group_id }
+          });
+        }
+      }
+    },{
+      text: 'Reset',
+      handler: function() {
+        this.up('form').getForm().reset();
+      }
+    }]
+  });
+
   var resourcesPanel = Ext.create('Ext.Panel', {
     title: "Resources",
     width: 850,
@@ -257,13 +363,8 @@ Ext.onReady(function(){
       columns: 2,
     },
     items: [
-      resourcesGrid, copyTree,
-    {
-      title: "Upload",
-      html: "3",
-      colspan: "2",
-      width: 848
-    }]
+      resourcesGrid, copyTree, upload
+    ]
   });
 
   //var details = Ext.create('Ext.tree.tabPanel', {

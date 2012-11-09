@@ -1,5 +1,8 @@
 class PrepItemsController < ApplicationController
+  include Permissions
+
   before_filter :set_menu_titles
+  before_filter :ensure_staff
   in_place_edit_for :prep_item, :title
   in_place_edit_for :prep_item, :description
   

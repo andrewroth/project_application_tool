@@ -1,4 +1,8 @@
 class PrepItemCategoriesController < ApplicationController
+  include Permissions
+
+  before_filter :ensure_staff
+
   def index
     @prep_item_categories = PrepItemCategory.all
 

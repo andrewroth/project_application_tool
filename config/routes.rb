@@ -92,6 +92,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :event_group_resources
 
+  map.resources :resources
+
   map.resources :viewers, :member => { 
     :merge => [ :get, :post ], 
     :deactivate => [ :get, :post ], 
