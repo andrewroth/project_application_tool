@@ -1,6 +1,6 @@
 Ext.require(['*']);
 
-var tree_id;
+var current_event_group_id;
 
 var projectsStore;
 var eventGroupResourceStore;
@@ -141,12 +141,12 @@ Ext.onReady(function(){
     listeners: {
       itemClick: function(view, rec, item, index, eventObj) {
         details.setTitle(rec.raw.text);
-        tree_id = rec.raw.id;
+        current_event_group_id = rec.raw.id;
         /* set edit tab ajax url */
-        details.items.getAt(0).loader.url = '/event_groups/' + tree_id + '/edit';
+        details.items.getAt(0).loader.url = '/event_groups/' + current_event_group_id + '/edit';
         details.items.getAt(0).loader.load();
         /* set event group id for resources */
-        eventGroupResourceStore.getProxy().extraParams = { event_group_id: tree_id };
+        eventGroupResourceStore.getProxy().extraParams = { event_group_id: current_event_group_id };
         eventGroupResourceStore.load();
       }
     },
@@ -162,6 +162,8 @@ Ext.onReady(function(){
     }]
   });
 
+  var resourcesRowEditing = Ext.create('Ext.grid.plugin.RowEditing');
+
   var resourcesGrid = Ext.create('Ext.grid.Panel', {
     width: 424,
     height: 300,
@@ -169,16 +171,34 @@ Ext.onReady(function(){
     title: "Resources",
     store: eventGroupResourceStore,
     viewConfig: {
-      plugins: {
-        ptype: 'gridviewdragdrop',
-        dropGroup: 'copyDragGroup',
-        dragGroup: 'resourcesDragGroup'
-      },
+      plugins: [{
+          ptype: 'gridviewdragdrop',
+          dropGroup: 'copyDragGroup',
+          dragGroup: 'resourcesDragGroup'
+        }//,
+        //resourcesRowEditing
+      ],
       listeners: {
         drop: function(node, data, dropRec, dropPosition) {
           //var dropOn = dropRec ? ' ' + dropPosition + ' ' + dropRec.get('name') : ' on empty view';
           //console.log("Drag from right to left", 'Dropped ' + data.records[0].get('name') + dropOn);
-          console.log('drop event');
+          data.records.each(function(record, i) { 
+            debugger;
+            data_split = record.data.id.split('_');
+            eg_id = data_split[0];
+            eg_resource_id = data_split[1];
+            resource_id = data_split[2];
+            /* this is a shortcut - just use ajax to create the node and reload the list.  I'm sure it can
+            * be done better using extjs store to send the new data.. but right now I just need this working. 
+            * */
+            Ext.Ajax.request({
+              method: 'POST',
+              url: '/event_group_resources',
+              params: { event_group_id: current_event_group_id, eg_resource_id: eg_resource_id, 
+                title: record.data.title, description: record.data.description, resource_id: resource_id }
+            });
+          });
+          eventGroupResourceStore.load();
         }
       }
     },
@@ -268,7 +288,7 @@ Ext.onReady(function(){
         activate: function(tab) {
           // can't figure out how to get the selected tree id - thought the following line would work but no dice
           //tab.loader.url = '/event_groups/' + tree.getSelectionModel().getSelectedNode();
-          tab.loader.url = '/event_groups/' + tree_id + '/edit';
+          tab.loader.url = '/event_groups/' + current_event_group_id + '/edit';
           tab.loader.load();
         }
       }

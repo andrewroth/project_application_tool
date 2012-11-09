@@ -90,6 +90,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :event_groups, :collection => [ :scope ], :member => [ :set_as_scope ]
 
+  map.resources :event_group_resources
+
   map.resources :viewers, :member => { 
     :merge => [ :get, :post ], 
     :deactivate => [ :get, :post ], 

@@ -16,8 +16,12 @@ class EventGroupResourcesController < ApplicationController
   end
 
   def create
-    # TODO
-    @event_group_resource = EventGroupResource.new(:title => params[:title], :description => params[:description])
+    @event_group_resource = EventGroupResource.find_or_create_by_event_group_id_and_resource_id params[:event_group_id], params[:resource_id]
+    if params[:eg_resource_id]
+      eg_resource = EventGroupResource.find params[:eg_resource_id]
+      @event_group_resource.description = eg_resource.description;
+      @event_group_resource.title = eg_resource.title;
+    end
 
     respond_to do |format|
       if @event_group_resource.save
