@@ -50,7 +50,7 @@ Ext.onReady(function(){
   eventGroupResourceStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
     autoSync: true,
-    model: 'Project',
+    model: 'EventGroupResource',
     proxy: {
       type: 'rest',
       url: '/event_group_resources',
@@ -170,20 +170,18 @@ Ext.onReady(function(){
     frame: true,
     title: "Resources",
     store: eventGroupResourceStore,
+    plugins: [resourcesRowEditing],
     viewConfig: {
-      plugins: [{
-          ptype: 'gridviewdragdrop',
-          dropGroup: 'copyDragGroup',
-          dragGroup: 'resourcesDragGroup'
-        }//,
-        //resourcesRowEditing
-      ],
+      plugins: {
+        ptype: 'gridviewdragdrop',
+        dropGroup: 'copyDragGroup',
+        dragGroup: 'resourcesDragGroup'
+      },
       listeners: {
         drop: function(node, data, dropRec, dropPosition) {
           //var dropOn = dropRec ? ' ' + dropPosition + ' ' + dropRec.get('name') : ' on empty view';
           //console.log("Drag from right to left", 'Dropped ' + data.records[0].get('name') + dropOn);
           data.records.each(function(record, i) { 
-            debugger;
             data_split = record.data.id.split('_');
             eg_id = data_split[0];
             eg_resource_id = data_split[1];
@@ -236,10 +234,6 @@ Ext.onReady(function(){
       flex: 1,
       sortable: true,
       dataIndex: 'size',
-      field: {
-        xtype: 'textfield',
-        allowBlank: false
-      }
     }],
     dockedItems: [{
       xtype: 'toolbar',
