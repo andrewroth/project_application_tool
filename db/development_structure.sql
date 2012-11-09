@@ -102,6 +102,15 @@ CREATE TABLE `donation_types` (
   KEY `donation_types_description_index` (`description`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
+CREATE TABLE `event_group_resource_projects` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_group_resource_id` int(11) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `event_group_resources` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `event_group_id` int(11) DEFAULT NULL,
@@ -111,7 +120,7 @@ CREATE TABLE `event_group_resources` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `event_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -679,7 +688,7 @@ CREATE TABLE `resources` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `schema_migrations` (
   `version` varchar(255) NOT NULL,
@@ -695,7 +704,7 @@ CREATE TABLE `sessions` (
   PRIMARY KEY (`id`),
   KEY `index_sessions_on_session_id` (`session_id`),
   KEY `index_sessions_on_updated_at` (`updated_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=790250 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=790251 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `support_coaches` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -999,6 +1008,8 @@ INSERT INTO schema_migrations (version) VALUES ('20121107201422');
 INSERT INTO schema_migrations (version) VALUES ('20121107202023');
 
 INSERT INTO schema_migrations (version) VALUES ('20121108201616');
+
+INSERT INTO schema_migrations (version) VALUES ('20121109211139');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

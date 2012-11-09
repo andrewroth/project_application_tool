@@ -74,7 +74,7 @@ Ext.define('Resource', {
 
 Ext.define('EventGroupResource', {
   extend: 'Ext.data.Model',
-  fields: ['id', 'title', 'description', 'size']
+  fields: ['id', 'title', 'description', 'size', 'project_ids']
 });
 
 Ext.onReady(function(){
@@ -150,7 +150,7 @@ Ext.onReady(function(){
   var copyTree = Ext.create('Ext.tree.Panel', {
     id: 'copyTree',
     store: copyStore,
-    width: 424,
+    width: 324,
     height: 300,
     title: 'Copy Resources - Drag to Resources (left)',
     rootVisible: false,
@@ -194,6 +194,8 @@ Ext.onReady(function(){
         details.items.getAt(0).loader.url = '/event_groups/' + current_event_group_id + '/edit';
         details.items.getAt(0).loader.load();
         /* set event group id for resources */
+        projectsStore.getProxy().extraParams = { event_group_id: current_event_group_id };
+        projectsStore.load();
         eventGroupResourceStore.getProxy().extraParams = { event_group_id: current_event_group_id };
         eventGroupResourceStore.load();
       }
@@ -213,7 +215,7 @@ Ext.onReady(function(){
   var resourcesRowEditing = Ext.create('Ext.grid.plugin.RowEditing');
 
   var resourcesGrid = Ext.create('Ext.grid.Panel', {
-    width: 424,
+    width: 524,
     height: 300,
     frame: true,
     title: "Resources",
@@ -279,9 +281,33 @@ Ext.onReady(function(){
       }
     }, {
       text: 'Size',
-      flex: 1,
+      width: 80,
       sortable: true,
       dataIndex: 'size',
+    }, {
+      text: 'Projects',
+      flex: 1,
+      sortable: true,
+      dataIndex: 'project_ids',
+      editor: {
+        xtype: 'combobox',
+        store: projectsStore,
+        queryMode: 'local',
+        displayField: 'title',
+        valueField: 'id',
+        editable: false,
+        multiSelect: true,
+      },
+      renderer: function(ids) {
+        project_names = [];
+        for (var i = 0; i < ids.length; i++) {
+          record = projectsStore.findRecord("id", ids[i]);
+          if (record != null) {
+            project_names.push(record.get('title'));
+          }
+        }
+        return project_names.join(', ');
+      }
     }],
     dockedItems: [{
       xtype: 'toolbar',

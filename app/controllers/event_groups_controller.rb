@@ -113,7 +113,7 @@ class EventGroupsController < AjaxTreeController
           @resources = eg.event_group_resources
         end
         if params[:resources] == 'true'
-          response_array = @nodes.collect{ |n| { :text => n.title, :id => n.id, :leaf => false, :allowDrag => false, :allowDrop => false, :expandable => !n.leaf? } }
+          response_array = @nodes.collect{ |n| { :text => n.title, :id => n.id, :leaf => false, :allowDrag => false, :allowDrop => false, :expandable => (!n.leaf? || n.event_group_resources.present?) } }
           response_array += @resources.collect{ |egr| { :text => egr.title, :id => "#{eg.id}_#{egr.id}_#{egr.resource.id}", :leaf => true, :allowDrag => true, :allowDrop => false } }
           render :inline => response_array.to_json
         else

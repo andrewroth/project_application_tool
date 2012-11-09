@@ -17,6 +17,8 @@ class EventGroupResourcesController < ApplicationController
 
   def create
     @event_group_resource = EventGroupResource.find_or_create_by_event_group_id_and_resource_id params[:event_group_id], params[:resource_id]
+    @event_group_resource.project_ids = params[:project_ids]
+
     if params[:eg_resource_id]
       eg_resource = EventGroupResource.find params[:eg_resource_id]
       @event_group_resource.description = eg_resource.description;
@@ -32,6 +34,7 @@ class EventGroupResourcesController < ApplicationController
 
   def update
     @event_group_resource = EventGroupResource.find(params[:id])
+    @event_group_resource.project_ids = params[:project_ids]
 
     respond_to do |format|
       if @event_group_resource.update_attributes(:title => params[:title], :description => params[:description])
