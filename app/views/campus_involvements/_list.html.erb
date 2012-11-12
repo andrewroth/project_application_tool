@@ -1,4 +1,5 @@
 <%- @appln_person ||= @instance.viewer.person if @instance -%>
+<%- @visibility_override = true %>
 <%- if @appln_person -%>
   <%- custom_element_item("Campus: ", :appln_person, :campus_id) do |m, c, classes| -%>
     <label>Campus:</label><br/>
