@@ -15,7 +15,7 @@ class ReferenceEmailsController < ApplicationController
               'app_withdrawn'         => 'App email: To applicant, that app has been withdrawn',
               'app_submitted'         => 'App email: To applicant, that app submitted and waiting on refs',
               'app_accepted'          => 'App email: To applicant, that app accepted',
-              'app_withdrawn_notify'  => 'App email: To projects coordinators, project administrators and project directors, that app withdrawn'
+              'app_withdrawn_notify'  => 'App email: To projects coordinators, project administrators and project directors, that app withdrawn',
               'profile_accepted'      => 'Profile email: To project directors, that applicant was accepted to a project'
             }
   
