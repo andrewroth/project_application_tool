@@ -77,8 +77,8 @@
           Langley, BC V2Y 1N5</p>
         </div>
         <h3 class="supportTitles">Tax Receipts for Cash/Cheque Donors</h3>
-        <p>All donations need to be recorded on a record of funds form. Your project number and student ID are
-        <%= @profile.project.cost_center %>-<%= @profile.motivation_code %>. Collect cheques and cash, enter donor
+        <p>All donations need to be recorded on a record of funds form. Your project title and project code are 
+        <i><%= @profile.project.title %> <%= @profile.motivation_code %></i>. Collect cheques and cash, enter donor
         information on the form and send the completed form and all cheques and money orders in to the address
       above every couple of weeks. Please do not send cash in the mail.  <% if @eg.get_record_of_funds_form %>Download the form <%= link_to "here", @eg.get_record_of_funds_form.public_filename %>.<% end %>
         </p>
