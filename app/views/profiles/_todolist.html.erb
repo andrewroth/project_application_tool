@@ -2,13 +2,14 @@
   <ul id="toDoList">
     <% @profile.all_prep_items.group_by(&:prep_item_category).sort.each do |category, prep_items| %>
       <% prep_items.group_by(&:deadline).sort.each do |deadline, prep_items| %>
+        <%= [ category.try(:title), deadline.strftime("%B %d") ].compact.join(" - ") %>
         <% prep_items.sort.each do |prep_item| %>
           <% ppi = @profile.profile_prep_items.find_by_prep_item_id(prep_item.id) %>
           <% next if ppi.try(:completed_at) %>
           <li class="toDoPriority<%= prep_item.priority %>">
             <%= check_box_tag :"#{prep_item.title}", "1", false, :id => "pi_#{prep_item.id}" %>
             <% content_tag(:span, :id => "pi_#{prep_item.id}_span", :onClick => "$('pi_#{prep_item.id}').checked = !$('pi_#{prep_item.id}').checked; complete_prep_item(#{prep_item.id}, #{@profile.id})", :class => "button") do %>
-              <%= [ category.try(:title), deadline, prep_item.title ].compact.join(" - ") %>
+              <%= prep_item.title %>
             <% end %>
             <%= tooltip(prep_item.id, prep_item.description) %>
             <script>Event.observe('pi_<%= prep_item.id %>', 'change', function() { complete_prep_item(<%= prep_item.id %>, <%= @profile.id %>); })</script>

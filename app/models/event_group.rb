@@ -4,6 +4,7 @@ class EventGroup < Node
   belongs_to :ministry
   belongs_to :location
   belongs_to :key_logo, :class_name => "Attachment", :foreign_key => "key_logo_attachment_id"
+  belongs_to :record_of_funds, :class_name => "Attachment", :foreign_key => "record_of_funds_attachment_id"
 
   has_many :custom_reports
   has_many :projects
@@ -24,14 +25,23 @@ class EventGroup < Node
                  :storage => :file_system,
                  :path_prefix => 'public/event_groups'
 
-  belongs_to :key_logo, :class_name => "Attachment", :foreign_key => "key_logo_attachment_id"
-
   attr :filter_hidden, true
 
   def key_logo_uploaded_data=(f)
     return unless f.is_a?(Tempfile)
     key_logo = Attachment.create(:uploaded_data => f)
     self.key_logo_attachment_id = key_logo.id
+  end
+
+  def record_of_funds_uploaded_data=(f)
+    return unless f.is_a?(Tempfile)
+    record_of_funds = Attachment.create(:uploaded_data => f)
+    self.record_of_funds_attachment_id = record_of_funds.id
+  end
+
+  def get_record_of_funds_form
+    return nil if parent.nil? && self.record_of_funds.nil?
+    return self.record_of_funds || parent.try(:record_of_funds)
   end
 
   def nested_children

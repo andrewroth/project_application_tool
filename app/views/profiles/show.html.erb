@@ -28,6 +28,10 @@
     </div>
   </div>
   <div id="centerColumn">
+    <% unless @profile.seen_help %>
+      <%= render "profiles/help" %>
+    <% end %>
+
     <div id="supportBox">
       <h3 class="boxTitle"><img src="/images/boxTitle/supportIcon.png" class="boxTitleIcon"> Support</h3>
       <div class="boxContent">
@@ -58,7 +62,8 @@
           </tbody></table>
         </div>
         <h3 class="supportTitles">Expenses</h3>
-        <p>You can add some costs, such as vaccinations and medical expenses, to your fundraising amount. Check your acceptance package, or check with your support coach to be sure your expense is covered. <a href="#">Edit expenses.</a></p>
+        <p>You can add some costs, such as vaccinations and medical expenses, to your fundraising amount. Check your acceptance package, or check with your support coach to be sure your expense is covered.
+          <%= link_to_function "Edit Expenses", %|new Ext.Window({title: "Expenses", modal: true, autoLoad: {url: '/profiles/#{@profile.id}/costing', scripts: true}, width: 600, height: 600}).show()| %></p>
         <h3 class="supportTitles">How to Receive Donations</h3>
         <div id="supportBoxLeftColumn">
           <h4>Online</h4>
@@ -72,40 +77,46 @@
           Langley, BC V2Y 1N5</p>
         </div>
         <h3 class="supportTitles">Tax Receipts for Cash/Cheque Donors</h3>
-        <p>For donors giving by cheque to receive a tax receipt, you must fill out the Record of Funds form. Your project number and student ID are <%= @profile.project.cost_center %>-<%= @profile.motivation_code %>. Download it <a href="#">here</a>.</p>
+        <p>All donations need to be recorded on a record of funds form. Your project number and student ID are
+        <%= @profile.project.cost_center %>-<%= @profile.motivation_code %>. Collect cheques and cash, enter donor
+        information on the form and send the completed form and all cheques and money orders in to the address
+      above every couple of weeks. Please do not send cash in the mail.  <% if @eg.get_record_of_funds_form %>Download the form <%= link_to "here", @eg.get_record_of_funds_form.public_filename %>.<% end %>
+        </p>
+        <p>Need more info on donations? Check the finance acceptance document in the Resource section.</p>
       </div>
     </div>
-    <div id="newPATBox">
-      <h3 class="boxTitle"><img src="/images/boxTitle/helpIcon.png" class="boxTitleIcon"> How to Use the New PAT</h3>
-      <div class="boxContent"><p>Quisque lacus quam, egestas ac tincidunt a, lacinia vel velit. Aenean facilisis nulla vitae urna tincidunt congue sed ut dui. Morbi malesuada nulla nec purus convallis consequat. Vivamus id mollis quam. Morbi ac commodo nulla. In condimentum orci id nisl volutpat bibendum. Quisque commodo hendrerit lorem quis egestas. Maecenas quis tortor arcu. Vivamus rutrum nunc non neque consectetur quis placerat neque lobortis. Nam vestibulum, arcu sodales feugiat consectetur, nisl orci bibendum elit, eu euismod magna sapien ut nibh. Donec semper quam scelerisque tortor dictum gravida. In hac habitasse platea dictumst. Nam pulvinar, odio sed rhoncus suscipit, sem diam ultrices mauris, eu consequat purus metus eu velit. Proin metus odio, aliquam eget molestie nec, gravida ut sapien. Phasellus quis est sed turpis sollicitudin venenatis sed eu odio. Praesent eget neque eu eros interdum malesuada non vel leo. Sed fringilla porta ligula egestas tincidunt. Nullam risus magna, ornare vitae varius eget, scelerisque a libero. Morbi eu porttitor.</p>
-    </div></div>
   </div>
   <div id="rightColumn">
+    <!--
     <div id="forumBox">
-      <h3 class="boxTitle">&nbsp;<!--<img src="/images/boxTitle/forumIcon.png" class="boxTitleIcon">Forum--></h3>
+      <h3 class="boxTitle">img src="/images/boxTitle/forumIcon.png" class="boxTitleIcon">Forum</h3>
       <div class="boxContent">
-        <!--
         <h4 class="forumQuestion">Forum content?</h4>
         <p class="forumAnswer"> Nam pulvinar, odio sed rhoncus suscipit, sem diam ultrices mauris, eu consequat purus metus eu velit. Proin metus odio, aliquam eget molestie nec, gravida ut sapien. Phasellus quis est sed turpis sollicitudin venenatis sed eu odio. Praesent eget neque eu eros interdum malesuada non vel leo.</p>
         <h4 class="forumQuestion">Sed fringilla porta ligula egestas tincidunt?</h4>
         <p class="forumAnswer">Nullam risus magna, ornare vitae varius eget, scelerisque a libero. Morbi eu porttitor ipsum. Nullam lorem nisi, posuere quis volutpat eget, luctus nec massa. Pellentesque aliquam lacinia tellus.</p>
-        -->
       </div>
     </div>
+    -->
     <div id="resourcesBox">
-      <h3 class="boxTitle">&nbsp;<!--<img src="/images/boxTitle/resourcesIcon.png" class="boxTitleIcon"> Resources--></h3>
+      <h3 class="boxTitle">&nbsp;<img src="/images/boxTitle/resourcesIcon.png" class="boxTitleIcon"> Resources</h3>
       <div class="boxContent">
-        <!--
-        <ul id="resourcesList">
-          <li><h4>Links</h4></li>
-          <li><a href="#">Project Schedule</a></li>
-          <li><a href="#">Packing List</a></li>
-          <li><a href="#">Itinerary</a></li>
-          <li><h4>Files/PDFs</h4></li>
-          <li><a href="#">Packing List</a> <a href="#"><img src="/images/searchIcon.png"></a> <a href="#"><img src="/images/downArrow.png"></a> </li>
-          <li><a href="#">Itinerary</a> <a href="#"><img src="/images/searchIcon.png"></a> <a href="#"><img src="/images/downArrow.png"></a> </li>
-        </ul>
-        -->
+        <% if @eg.resources.present? %>
+          <ul id="resourcesList">
+            <li><h4>Files/PDFs</h4></li>
+            <% @eg.resources.each do |resource| %>
+              <li>
+                <% link_to resource.public_filename do %>
+                  <%= resource.title %>
+                  <img src="/images/downArrow.png">
+                <% end %>
+                <%= tooltip(resource.id, resource.description) %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="smallDescriptionText">No resources available at this time.</p>
+        <% end %>
       </div>
     </div>
   </div>

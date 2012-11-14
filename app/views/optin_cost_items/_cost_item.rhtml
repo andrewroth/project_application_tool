@@ -22,14 +22,16 @@ current_project_value = case cost_item.class.name
     <label>Description: </label> 
     <span id="cost_item_description_<%=cost_item.id.to_s%>_in_place_editor" class="in_place_editor_field" 
 title="Click to edit" ><%= cost_item.description %></span>
-        <%= in_place_editor_onComplete( "cost_item_description_#{cost_item.id}_in_place_editor", '/optin_cost_items/set_cost_item_description/'+cost_item.id.to_s, :update => 'sums', :url => {:controller => 'optin_cost_items', :action => 'sums', :profile_id => @profile.id} ) %>
+        <%= in_place_editor_onComplete( "cost_item_description_#{cost_item.id}_in_place_editor", '/optin_cost_items/set_cost_item_description/'+cost_item.id.to_s, 
+                                       :update => 'sums', :url => {:controller => 'optin_cost_items', :action => 'sums', :profile_id => @profile.id} ) %>
     <br />
 <label>Amount: </label>
 
 <span id="cost_item_amount_<%=cost_item.id.to_s%>_in_place_editor" class="in_place_editor_field" 
 title="Click to edit" style="background-color: transparent; background-image: none;"><%= cost_item.amount %></span>
 
-  <%= in_place_editor_onComplete( "cost_item_amount_#{cost_item.id}_in_place_editor", '/optin_cost_items/set_cost_item_amount/'+cost_item.id.to_s+'&profile_id='+@profile.id.to_s, :update => 'sums', :url => {:controller => 'optin_cost_items', :action => 'sums', :profile_id => @profile.id} ) %>
+  <%= in_place_editor_onComplete( "cost_item_amount_#{cost_item.id}_in_place_editor", '/optin_cost_items/set_cost_item_amount/'+cost_item.id.to_s+'&profile_id='+@profile.id.to_s, 
+                                 :update => 'sums', :url => {:controller => 'optin_cost_items', :action => 'sums', :profile_id => @profile.id} ) %>
 <br />
 <% else %>
     <label>Description: </label><%= cost_item.description %> <br />

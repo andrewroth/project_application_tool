@@ -1,2 +1,70 @@
-<p><%= render :remote, :controller => 'optin_cost_items', :action => :index, :profile_id => @profile.id, :show_loading => true %>
-</p>
+<%= javascript_include_tag "application.js" %>
+
+<style>
+  table.expenses {
+    color: #6A659B;
+  }
+
+  #expenses_content {
+    border: 1px solid #B2C8E8;
+    font-size: 14px;
+    border-collapse: collapse;
+  }
+
+  #expenses_header, .total_amount, a#delete, h3 { color: #4A76C8; font-size: 16px; }
+  a#delete { position: relative; top: 10px; }
+  .total_header { color: #6A659B; font-size: 16px; }
+  table.expenses td.delete { min-width: 30px; max-width: 30px; width: 30px; }
+  table.expenses td.index { width: 40px; }
+  table.expenses td.item { width: 350px; }
+  table.expenses td.amount { width: 60px; }
+  table.expenses td.covered { width: 100px; text-align: left; padding-left: 20px; }
+  table.expenses td { margin: 5px; }
+  table.expenses tr { height: 30px; }
+  table.expenses td { vertical-align: middle; }
+
+  #expenses_content td.amount { text-align: right; }
+  
+  #sums {
+    float: right;
+  }
+
+  #expenses_wrapper {
+    width: 550px;
+    margin: 10px;
+  }
+
+  .amount .inplaceeditor-form input[type="text"] { width: 100px; }
+  .item .inplaceeditor-form input[type="text"] { width: 200px; }
+
+  h3 {
+    font-size: 24px !important;
+    font-weight: normal !important;
+  }
+
+  table#expenses_content tr.even { background-color: #E9F1FE; }
+</style>
+
+<div id="expenses_wrapper">
+  <table class="expenses" id="expenses_header">
+    <tr>
+      <td class='delete'></td>
+      <td class='index'></td>
+      <td class='item'>Item</td>
+      <td class='amount'>Amount</td>
+      <td class='covered'>Opted In</td>
+    </tr>
+  </table>
+
+  <%= render :partial => "optin_cost_items/expenses_content" %>
+
+  <%= link_to_remote 'New Cost Item', {
+      :url => { :controller => 'optin_cost_items', :action => 'create', :profile_id => @profile.id },
+      :loading => "$('spt_loading').show();", :loaded => "$('spt_loading').hide();", 
+    }, { :id => "delete" }
+  %>
+
+  <div id="sums" style="float: right">
+    <%= render "optin_cost_items/sums" %>
+  </div>
+</div>

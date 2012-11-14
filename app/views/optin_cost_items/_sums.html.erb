@@ -1,0 +1,2 @@
+<%- @total, *@sums = @profile.calculate_sums(@cost_items) %>
+<span class="total_header">Expenses Total:</span> <span class="total_amount"><%= number_to_currency(@total) %></span>

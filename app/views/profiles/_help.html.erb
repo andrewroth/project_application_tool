@@ -1,0 +1,19 @@
+<script>
+  function hide_help() {
+    jQuery("#newPATBox").insertAfter(jQuery("#supportBox")); jQuery("#newPATBox .boxContent").toggle(); jQuery("#newPATBox a").toggle();
+  }
+</script>
+
+<div id="newPATBox">
+  <h3 class="boxTitle"><img src="/images/boxTitle/helpIcon.png" class="boxTitleIcon">
+    How to Use the New PAT &#183;
+    <%= link_to_function "Show", "hide_help()", :class => "show_link", :style => ("display:none" unless @profile.seen_help) %>
+    <%= link_to_function "Hide", "hide_help()", :class => "hide_link", :style => ("display:none" if @profile.seen_help) %>
+  </h3>
+  
+  <div class="boxContent">
+    <p>
+      How to use the new PAT for accepted students goes here.
+    </p>
+  </div>
+</div>

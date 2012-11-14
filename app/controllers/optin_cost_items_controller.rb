@@ -47,9 +47,6 @@ class OptinCostItemsController < ApplicationController
 
   def destroy
     @cost_item.destroy
-    get_cost_items
-    list
-    render :partial => 'list'
   end
   
   def create
@@ -70,10 +67,10 @@ class OptinCostItemsController < ApplicationController
       flash[:notice] = 'CostItem was successfully created.'
       get_cost_items
       list
-      render :file => 'optin_cost_items/create.rjs', :use_full_path => true
     else
       render :action => 'new'
     end
+    @profile.reload
   end
   
   def update

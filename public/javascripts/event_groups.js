@@ -300,6 +300,7 @@ Ext.onReady(function(){
       },
       renderer: function(ids) {
         project_names = [];
+        if (ids === undefined) { return; }
         for (var i = 0; i < ids.length; i++) {
           record = projectsStore.findRecord("id", ids[i]);
           if (record != null) {

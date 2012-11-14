@@ -36,7 +36,7 @@ class ProfilesController < ApplicationController
         [ "#{Person._(:preferred_first_name)} like ? or #{Person._(:last_name)} like ?", "%#{filter}%", "%#{filter}%" ]
       elsif filters.size == 2
         filter_1, filter_2 = filters
-	filter_2.gsub!(' ','%')
+        filter_2.gsub!(' ','%')
         [ "(#{Person._(:preferred_first_name)} like ? and #{Person._(:last_name)} like ?) or (#{Person._(:preferred_first_name)} like ? or #{Person._(:last_name)} like ?)", 
              "%#{filter_1}%", "%#{filter_2}%", "%#{filter_s}%", "%#{filter_s}%" ]
       end
@@ -172,6 +172,9 @@ class ProfilesController < ApplicationController
  
   def costing
     @submenu_title = 'costing'
+    @cost_items = @profile.all_cost_items(@eg)
+    @cost_items.sort!
+    @opted = Hash[*@cost_items.collect{ |ci| [ci.id, !ci.optins.find_by_profile_id(@profile).nil?] }.flatten]
   end
 
   def travel
@@ -285,6 +288,7 @@ class ProfilesController < ApplicationController
 
   def show
     @page_title = "Dashboard"
+    @profile.update_attribute :seen_help, true
   end
 
   def old_dashboard

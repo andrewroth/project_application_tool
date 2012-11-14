@@ -20,7 +20,7 @@ module MainHelper
   end
 
   def costing_link(profile_id)
-    link 'costing', "/optin_cost_items/index?profile_id=#{profile_id}"
+    link 'costing', "/profiles/#{profile_id}/costing"
   end
 
   def travel_link(profile_id)

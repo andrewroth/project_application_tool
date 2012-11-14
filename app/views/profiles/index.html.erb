@@ -2,6 +2,7 @@
 <style>
   .boxWrapper { width: 100%; margin-top: 20px; }
   ul { margin-top: 1em; }
+  p:not(:last-child) { margin-bottom: 1em; }
 </style>
 
 <div id="contentWrapper">
@@ -27,7 +28,10 @@
         <p>You can continue the following applications:
         <ul>
           <% for profile in @started %>
-            <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (started)</li>
+            <li><%= link_to profile.form_title, :action => "continue", :profile_id => profile.id %> (started) - 
+              <%= link_to "Withdraw", {:controller => "appln", :action => :withdraw, :appln_id => profile.appln.id, :profile_id => profile.id}, :method => :post,
+                :confirm => "Are you sure you want to withdraw?\n\n (click cancel if you DO NOT want to withdraw)" %>
+            </li>
           <% end %>
         </ul>
         </p>

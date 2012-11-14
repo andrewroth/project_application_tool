@@ -229,7 +229,7 @@ background: rgb(255, 255, 255);
 background: rgba(255, 255, 255, 0.5);
 }
 
-#toDoBox, #supportBox, #forumBox {
+#toDoBox, #supportBox, #forumBox, #newPATBox {
   margin: 0px 0px 20px 0px;
 }
 
@@ -253,7 +253,6 @@ background: rgba(255, 255, 255, 0.5);
 
 #newPATBox{
   width:95%;
-  height:100px;
   border: solid thin #d6e4f4;
   margin-left:auto;
   margin-right:auto;

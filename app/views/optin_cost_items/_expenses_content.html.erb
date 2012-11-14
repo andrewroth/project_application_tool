@@ -1,0 +1,60 @@
+<table class="expenses" id="expenses_content">
+  <% @profile.all_cost_items(@eg).each_with_index do |cost_item, i| %>
+    <tr id="<%= cost_item.id %>" class="<%= i.even? ? 'even' : 'odd' %>">
+      <td class='delete'>
+        <% if cost_item.class == ProfileCostItem %>
+          <%= link_to_remote image_tag('delete.png'), 
+            :url => { :controller => 'optin_cost_items', :action => 'destroy', :cost_item_id => cost_item.id, :profile_id => @profile.id },
+            :loading => "$('spt_loading').show();",
+            :loaded => "$('spt_loading').hide(); #{remote_function(:update => 'sums', :url => {:controller => 'optin_cost_items', :action => 'sums', :profile_id => @profile.id})}",
+            :confirm => 'Are you sure?' %>
+        <% end %>
+      </td>
+      <td class='index'><%= i + 1 %></td>
+      <td class='item'>
+        <% if cost_item.class == ProfileCostItem %>
+          <span id="cost_item_description_<%=cost_item.id.to_s%>_in_place_editor" class="in_place_editor_field" 
+            title="Click to edit" ><%= cost_item.description %></span>
+          <%= in_place_editor_onComplete("cost_item_description_#{cost_item.id}_in_place_editor", '/optin_cost_items/set_cost_item_description/'+cost_item.id.to_s,
+                :update => 'sums', :url => {:controller => 'optin_cost_items', :action => 'sums', :profile_id => @profile.id} ) %>
+          <br/>
+        <% else %>
+          <%= cost_item.description %>
+        <% end %>
+      </td>
+      <td class='amount'>
+        <span id="cost_item_amount_<%=cost_item.id.to_s%>_in_place_editor" class="in_place_editor_field" 
+          title="Click to edit" style="background-color: transparent; background-image: none;"><%= cost_item.amount %></span>
+
+          <%= in_place_editor_onComplete( "cost_item_amount_#{cost_item.id}_in_place_editor", '/optin_cost_items/set_cost_item_amount/'+cost_item.id.to_s+'&profile_id='+@profile.id.to_s,
+                                           :update => 'sums', :url => {:controller => 'optin_cost_items', :action => 'sums', :profile_id => @profile.id} ) %>
+        </span>
+      </td>
+      <td class='covered'>
+        <%- name = "optin_#{cost_item.id}" %>
+        <%- locked = cost_item.optional && cost_item.locked && !(@profile.is_a?(Applying) && @profile.status == "started") %>
+        <%- opted = @opted[cost_item.id] %>
+        <input type="checkbox" <%- if locked || !cost_item.optional? %>disabled="true"<% end %> id="<%=name%>" name="<%=name%>" <%= (!cost_item.optional || opted) ? 'checked=\'true\'' : '' %> />
+
+        <% if !cost_item.optional %>
+          <%= tooltip(cost_item.id, "This expense is required, so you have automatically been opted in.") %>
+        <% elsif locked %>
+          <%= image_tag "lock.png" %>
+          <%= tooltip(cost_item.id, "This expense is locked.  You can not opt in or out of it now.") %>
+        <% else %>
+          <%= tooltip(cost_item.id, @eg.cost_item_phrase.present? ? @eg.cost_item_phrase : "Check this to signify that you will support raise for this expense") %>
+        <% end %>
+        <% if cost_item.optional %>
+
+          <!-- save optin value.  it returns the sums html -->
+          <%= observe_field 'optin_' + cost_item.id.to_s,
+            :url => {:controller => 'optin_cost_items', :action => "set_opt", :cost_item_id => cost_item.id, :profile_id => @profile.id},
+            :update => 'sums',
+            :loading => "",
+            :loaded => "new Effect.Highlight('#{cost_item.id}');",
+            :with => "'value=' + $('optin_#{cost_item.id.to_s}').checked" %>
+          <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

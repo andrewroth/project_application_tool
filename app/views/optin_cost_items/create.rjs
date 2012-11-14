@@ -1,2 +1,0 @@
-page.insert_html :bottom, 'cost_item_list', :partial => 'cost_item', :object => @cost_item
-page.visual_effect :highlight, 'cost_item_list', :duration => 3

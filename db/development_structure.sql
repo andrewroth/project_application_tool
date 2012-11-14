@@ -25,7 +25,7 @@ CREATE TABLE `applns` (
   KEY `applns_preference1_id_index` (`preference1_id`),
   KEY `applns_preference2_id_index` (`preference2_id`),
   KEY `applns_as_intern_index` (`as_intern`)
-) ENGINE=InnoDB AUTO_INCREMENT=5673 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5674 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `attachments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -37,7 +37,7 @@ CREATE TABLE `attachments` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `attributes_updated_ats` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -109,7 +109,7 @@ CREATE TABLE `event_group_resource_projects` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `event_group_resources` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -120,7 +120,7 @@ CREATE TABLE `event_group_resources` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `event_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -152,6 +152,7 @@ CREATE TABLE `event_groups` (
   `submit_text` text,
   `key_logo_attachment_id` int(11) DEFAULT NULL,
   `forward_to_cas` tinyint(1) DEFAULT '0',
+  `record_of_funds_attachment_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=latin1;
 
@@ -219,7 +220,7 @@ CREATE TABLE `form_elements` (
   KEY `form_elements_parent_id_index` (`parent_id`),
   KEY `form_elements_type_index` (`type`),
   KEY `form_elements_position_index` (`position`)
-) ENGINE=InnoDB AUTO_INCREMENT=36045 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=36047 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `form_flags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -240,7 +241,7 @@ CREATE TABLE `form_page_elements` (
   KEY `form_page_elements_page_id_index` (`page_id`),
   KEY `form_page_elements_element_id_index` (`element_id`),
   KEY `form_page_elements_position_index` (`position`)
-) ENGINE=InnoDB AUTO_INCREMENT=15782 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15784 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `form_page_flags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -497,6 +498,7 @@ CREATE TABLE `profiles` (
   `confirmed_at` datetime DEFAULT NULL,
   `cached_costing_total` decimal(8,2) DEFAULT NULL,
   `reuse_appln_id` int(11) DEFAULT NULL,
+  `seen_help` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `profiles_appln_id_index` (`appln_id`),
   KEY `profiles_project_id_index` (`project_id`),
@@ -507,7 +509,7 @@ CREATE TABLE `profiles` (
   KEY `profiles_locked_by_index` (`locked_by`),
   KEY `profiles_withdrawn_by_index` (`withdrawn_by`),
   KEY `profiles_reason_id_index` (`reason_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6671 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6672 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `project_administrators` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -688,7 +690,7 @@ CREATE TABLE `resources` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `schema_migrations` (
   `version` varchar(255) NOT NULL,
@@ -704,7 +706,7 @@ CREATE TABLE `sessions` (
   PRIMARY KEY (`id`),
   KEY `index_sessions_on_session_id` (`session_id`),
   KEY `index_sessions_on_updated_at` (`updated_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=790251 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=790254 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `support_coaches` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1010,6 +1012,10 @@ INSERT INTO schema_migrations (version) VALUES ('20121107202023');
 INSERT INTO schema_migrations (version) VALUES ('20121108201616');
 
 INSERT INTO schema_migrations (version) VALUES ('20121109211139');
+
+INSERT INTO schema_migrations (version) VALUES ('20121112192947');
+
+INSERT INTO schema_migrations (version) VALUES ('20121112220650');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
