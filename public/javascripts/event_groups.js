@@ -74,7 +74,7 @@ Ext.define('Resource', {
 
 Ext.define('EventGroupResource', {
   extend: 'Ext.data.Model',
-  fields: ['id', 'title', 'description', 'size', 'project_ids']
+  fields: ['id', 'title', 'description', 'human_size', 'project_ids']
 });
 
 Ext.onReady(function(){
@@ -150,7 +150,7 @@ Ext.onReady(function(){
   var copyTree = Ext.create('Ext.tree.Panel', {
     id: 'copyTree',
     store: copyStore,
-    width: 324,
+    width: 1,
     height: 300,
     title: 'Copy Resources - Drag to Resources (left)',
     rootVisible: false,
@@ -215,7 +215,7 @@ Ext.onReady(function(){
   var resourcesRowEditing = Ext.create('Ext.grid.plugin.RowEditing');
 
   var resourcesGrid = Ext.create('Ext.grid.Panel', {
-    width: 524,
+    width: 848,
     height: 300,
     frame: true,
     title: "Resources",
@@ -276,14 +276,14 @@ Ext.onReady(function(){
       sortable: true,
       dataIndex: 'description',
       field: {
-        xtype: 'textarea',
-        allowBlank: false
+        xtype: 'textfield',
+        allowBlank: false,
       }
     }, {
       text: 'Size',
       width: 80,
       sortable: true,
-      dataIndex: 'size',
+      dataIndex: 'human_size',
     }, {
       text: 'Projects',
       flex: 1,
@@ -318,6 +318,18 @@ Ext.onReady(function(){
           var selection = resourcesGrid.getView().getSelectionModel().getSelection()[0];
           if (selection) {
             eventGroupResourceStore.remove(selection);
+          }
+        },
+      }, {
+        text: 'Copy From Another Event Group',
+        enableToggle: true,
+        handler: function() {
+          if (copyTree.width > 1) {
+            copyTree.setWidth(1);
+            resourcesGrid.setWidth(848);
+          } else {
+            resourcesGrid.setWidth(524);
+            copyTree.setWidth(324);
           }
         }
       }]
@@ -399,6 +411,7 @@ Ext.onReady(function(){
     width: 850,
     height: 600,
     title: 'Event Group',
+    autoScroll: true,
     items: [{
       title: 'Edit',
       loader: {
