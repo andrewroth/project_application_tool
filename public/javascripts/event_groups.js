@@ -183,7 +183,7 @@ Ext.onReady(function(){
     id: 'tree',
     store: store,
     width: 300,
-    height: 600,
+    height: 500,
     title: 'Event Groups',
     rootVisible: false,
     listeners: {
@@ -409,10 +409,11 @@ Ext.onReady(function(){
   //var details = Ext.create('Ext.tree.tabPanel', {
   var details = Ext.createWidget('tabpanel', {
     width: 850,
-    height: 600,
+    height: 500,
     title: 'Event Group',
-    autoScroll: true,
     items: [{
+      margins: '5 5 5 5',
+      autoScroll: true,
       title: 'Edit',
       loader: {
         url: '/inital.html',
@@ -435,7 +436,7 @@ Ext.onReady(function(){
   Ext.create('Ext.container.Container', {
     renderTo: "eventGroupUI",
     width: 1150,
-    height: 600,
+    height: 500,
     frame: true,
     layout: {
       type: 'hbox'
