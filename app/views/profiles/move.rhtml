@@ -3,13 +3,15 @@
 
 <% form_tag :action => :update, :id => @profile.id do -%>
 
-<p>Owner: <%= @profile.viewer ? @profile.viewer.name : '?' %> <span class="button" onClick="new Effect.BlindDown('change_ownership')">Change</span>
-<div id='change_ownership' style='display:none'>
-  <% content_for(:viewer_title) do %>
-    Change owner to:
-  <% end %>
-  <%= render :partial => 'viewer_form' %>
-</div>
+  <%= hidden_field_tag "_method", "PUT" %>
+
+  <p>Owner: <%= @profile.viewer ? @profile.viewer.name : '?' %> <span class="button" onClick="new Effect.BlindDown('change_ownership')">Change</span>
+  <div id='change_ownership' style='display:none'>
+    <% content_for(:viewer_title) do %>
+      Change owner to:
+    <% end %>
+    <%= render :partial => 'viewer_form' %>
+  </div>
 
 <%= render :partial => 'form' %>
 
