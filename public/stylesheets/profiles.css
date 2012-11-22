@@ -511,3 +511,8 @@ background: rgba(255, 255, 255, 0.5);
   margin-top: 0px;
   margin-bottom: 0px;
 }
+
+#newPATBox p { margin-bottom: 1em; }
+#newPATBox p:last-child { margin-bottom: 0em; }
+.big { font-size: 16px }
+h3 { font-size: 16px; font-weight: bold; }

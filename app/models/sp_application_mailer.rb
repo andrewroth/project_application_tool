@@ -16,6 +16,18 @@ class SpApplicationMailer < ActionMailer::Base
     render_from_email 'app_accepted'
   end
   
+  def profile_accepted(acceptance)
+    setup(acceptance.appln)
+    @subject = 'An applicant has been accepted'
+    @body[:project] = acceptance.project.title
+    @body[:support_coach] = (acceptance.support_coach_str == acceptance.support_coach_none) ?
+             nil : acceptance.support_coach_str
+    @body[:applied_as_intern] = acceptance.appln.as_intern?
+    @body[:accepted_as_intern] = acceptance.as_intern?
+    @recipients = acceptance.project.project_directors.collect(&:viewer).collect(&:email)
+    render_from_email 'profile_accepted'
+  end
+
   def submitted(app)
     setup(app)
     @subject = 'Your Application has been Received'

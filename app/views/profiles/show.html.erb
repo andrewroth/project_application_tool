@@ -35,7 +35,7 @@
     <div id="supportBox">
       <h3 class="boxTitle"><img src="/images/boxTitle/supportIcon.png" class="boxTitleIcon"> Support</h3>
       <div class="boxContent">
-        <h2>You need to raise <%= format_currency(@profile.cached_costing_total) %><% if @profile.project.support_deadline %>by <%= @profile.project.support_deadline %><% end %></h2>
+        <h2 class='big'>You need to raise <%= format_currency(@profile.cached_costing_total) %><% if @profile.project.support_deadline %>by <%= @profile.project.support_deadline %><% end %></h2>
         <% if @profile.support_coach %>
           <p>Your support coach <b><%= @profile.support_coach.name %></b> is here to help you do that.</p>
           <p><b><%= @profile.support_coach.name %></b> •
@@ -45,6 +45,8 @@
           <b>phone</b>: <%= local_phone %>
           <% end %> •
           <b><%= @profile.support_coach.email %></b> </p>
+        <% else %>
+          <p>No support coach assigned.</p>
         <% end %>
         <h3 id="youveRaisedTitle">You've raised $<span style="color:green;"><%= in_place_editor_field(:profile, :support_claimed_currency) %></span> <span style="color:grey;">We've received $2,500.</span></h3>
         <div id="chartContainer">
@@ -80,11 +82,16 @@
         <p>All donations need to be recorded on a record of funds form. Your project title and project code are 
         <i><%= @profile.project.title %> <%= @profile.motivation_code %></i>. Collect cheques and cash, enter donor
         information on the form and send the completed form and all cheques and money orders in to the address
-      above every couple of weeks. Please do not send cash in the mail.  <% if @eg.get_record_of_funds_form %>Download the form <%= link_to "here", @eg.get_record_of_funds_form.public_filename %>.<% end %>
+        above every couple of weeks. Please do not send cash in the mail.  <% if @eg.get_record_of_funds_form %>
+        Download the form <%= link_to "here", @eg.get_record_of_funds_form.public_filename %>.<% end %>
         </p>
         <p>Need more info on donations? Check the finance acceptance document in the Resource section.</p>
       </div>
     </div>
+
+    <% if @profile.seen_help %>
+      <%= render "profiles/help" %>
+    <% end %>
   </div>
   <div id="rightColumn">
     <!--

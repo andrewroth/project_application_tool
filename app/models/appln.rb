@@ -134,6 +134,7 @@ class Appln < ActiveRecord::Base
       profile.accept!
 
       SpApplicationMailer.deliver_accepted(profile, @viewer.email)
+      SpApplicationMailer.deliver_profile_accepted(profile)
     end
   end
 

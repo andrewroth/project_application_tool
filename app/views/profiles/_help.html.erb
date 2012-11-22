@@ -7,13 +7,23 @@
 <div id="newPATBox">
   <h3 class="boxTitle"><img src="/images/boxTitle/helpIcon.png" class="boxTitleIcon">
     How to Use the New PAT &#183;
-    <%= link_to_function "Show", "hide_help()", :class => "show_link", :style => ("display:none" unless @profile.seen_help) %>
-    <%= link_to_function "Hide", "hide_help()", :class => "hide_link", :style => ("display:none" if @profile.seen_help) %>
+    <%= link_to_function "Show", "hide_help()", :class => "show_link", :style => ("display:none" if @profile.seen_help) %>
+    <%= link_to_function "Hide", "hide_help()", :class => "hide_link", :style => ("display:none" unless @profile.seen_help) %>
   </h3>
   
   <div class="boxContent">
-    <p>
-      How to use the new PAT for accepted students goes here.
-    </p>
+    <p>Welcome to the new PAT! Let’s jump right in: Read the acceptance package found in the “Resources” section. It will tell you most of the information you need to know to prepare for project.</p>
+
+    <p>There are some important deadlines coming up to send paperwork into the office. You can track these using the “To Do” box on the left.</p>
+
+    <p>You should also start support raising or Ministry Partner Development (MPD) right away. To help you with this you have been assigned a support coach. Your support coach is a trained staff familiar with this project. They will pray for you, assist you with your support letter and encourage you. Your support coach should contact you within a week or two. Their contact info is available in the “Support” box.</p>
+
+    <% if @eg.show_mpdtool -%>
+    <p>To get started with support raising check out this MPD tool in the “Resources” section in the top right.</p>
+    <% end -%>
+
+    <p>As you receive donations, record them on the printable form in the “Support” box, then send the donations and the form to Project Services every couple of weeks. Please also update the “Support” box weekly with your new level of support as you receive it. As Power to Change processes donations that you send in and are given on-line, they will appear on the detailed list in the “support” box.</p>
+
+    <p>As the time to leave for project gets closer you can check the packing list and travel itinerary in the “Travel Information” at the bottom left.</p>
   </div>
 </div>

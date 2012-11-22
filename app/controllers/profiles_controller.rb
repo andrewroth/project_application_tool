@@ -62,10 +62,10 @@ class ProfilesController < ApplicationController
 
     # make new app if necessary
     if params[:profile][:appln_id] == 'new'
-       form = @eg.application_form
-       @appln = Appln.create :form_id => form.id,
-         :viewer_id => params[:profile][:viewer_id]
-       params[:profile][:appln_id] = @appln.id
+      form = @eg.application_form
+      @appln = Appln.create :form_id => form.id,
+        :viewer_id => params[:profile][:viewer_id]
+      params[:profile][:appln_id] = @appln.id
     end
 
     success = @profile.manual_update(params[:profile], @viewer)

@@ -54,6 +54,7 @@ class ProcessorController < ApplicationController
     profile.accept!
 
     SpApplicationMailer.deliver_accepted(profile, @viewer.email)
+    SpApplicationMailer.deliver_profile_accepted(profile)
 
     flash[:notice] = "#{@appln.viewer.name} accepted to #{@project.title}"
     redirect_to :controller => "main", :action => "your_projects"
