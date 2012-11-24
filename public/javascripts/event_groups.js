@@ -183,7 +183,7 @@ Ext.onReady(function(){
     id: 'tree',
     store: store,
     width: 300,
-    height: 500,
+    height: 550,
     title: 'Event Groups',
     rootVisible: false,
     listeners: {
@@ -341,6 +341,7 @@ Ext.onReady(function(){
     title: 'Resource Upload Form',
     bodyPadding: '10 10 0',
     width: 848,
+    height: 198,
     colspan: 2,
 
     defaults: {
@@ -409,7 +410,7 @@ Ext.onReady(function(){
   //var details = Ext.create('Ext.tree.tabPanel', {
   var details = Ext.createWidget('tabpanel', {
     width: 850,
-    height: 500,
+    height: 550,
     title: 'Event Group',
     items: [{
       margins: '5 5 5 5',
@@ -436,7 +437,7 @@ Ext.onReady(function(){
   Ext.create('Ext.container.Container', {
     renderTo: "eventGroupUI",
     width: 1150,
-    height: 500,
+    height: 554,
     frame: true,
     layout: {
       type: 'hbox'
