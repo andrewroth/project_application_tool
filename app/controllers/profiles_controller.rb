@@ -289,6 +289,7 @@ class ProfilesController < ApplicationController
   def show
     @page_title = "Dashboard"
     @profile.update_attribute :seen_help, true
+    @percent_support = [[@profile.support_claimed_percent, @profile.support_received_percent].max, 100].min
   end
 
   def old_dashboard
