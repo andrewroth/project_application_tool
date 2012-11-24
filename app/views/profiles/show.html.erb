@@ -51,7 +51,7 @@
         <h3 id="youveRaisedTitle">You've raised $<span style="color:green;"><%= in_place_editor_field(:profile, :support_claimed_currency) %></span> <span style="color:grey;">We've received $<%= "%0.2f" % @profile.donations_total %>.</span></h3>
         <div id="chartContainer">
           <dl id="chart">
-            <dd><span id="data-one" style="width: <%= [@profile.support_claimed_percent, 100].min %>%"><%= @profile.support_claimed_percent %>%</span></dd>
+            <dd><span id="data-one" style="width: <%= [[@profile.support_claimed_percent, @profile.donations_total].max, 100].min %>%"><%= @profile.support_claimed_percent %>%</span></dd>
           </dl>
         </div>
         <div id="chartNumbers">
