@@ -61,6 +61,11 @@ class Profile < ActiveRecord::Base
     ((support_claimed.to_f / cached_costing_total.to_f) * 100).to_i
   end
 
+  def support_received_percent
+    return 0 if cached_costing_total.to_f == 0
+    ((donations_total.to_f / cached_costing_total.to_f) * 100).to_i
+  end
+
   def form_title() appln.form.questionnaire.title if appln && appln.form && appln.form.questionnaire end
 
   # params:
