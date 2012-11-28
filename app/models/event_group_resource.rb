@@ -21,7 +21,7 @@ class EventGroupResource < ActiveRecord::Base
 
   def set_url
     if !self.url.present? && resource.filename
-      self.url = resource.public_filename
+      self.url = $site_url + resource.public_filename
     end
   end
 end

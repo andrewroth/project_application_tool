@@ -34,6 +34,7 @@ class ApplicationController < ActionController::Base
   before_filter :verify_event_group_chosen
   before_filter :set_event_group
 
+  before_filter :set_site_url
   before_filter :get_profile_and_appln
   
   # ensure students only go to the students page
@@ -211,4 +212,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :brand_link
 
+  def set_site_url
+    if request.port != 80
+      $site_url = "#{request.protocol}#{request.host_with_port}"
+    else
+      $site_url = "#{request.protocol}#{request.host}"
+    end
+  end
 end
