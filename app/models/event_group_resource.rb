@@ -7,11 +7,21 @@ class EventGroupResource < ActiveRecord::Base
   has_many :projects, :through => :event_group_resource_projects
   delegate :size, :to => :resource
 
+  before_save :set_url
+
   def human_size
     number_to_human_size(size)
   end
 
   def as_json(params)
     super(params.merge(:methods => [ :human_size, :project_ids ]))
+  end
+
+  protected
+
+  def set_url
+    if !self.url.present? && resource.filename
+      self.url = resource.public_filename
+    end
   end
 end

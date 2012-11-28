@@ -8,7 +8,7 @@ class ResourcesController < ApplicationController
 
     if @resource.save && params[:event_group_id].present?
       event_group = EventGroup.find params[:event_group_id]
-      event_group.event_group_resources.create! :resource => @resource, :title => @resource.title, :description => @resource.description
+      event_group.event_group_resources.create! :resource => @resource, :title => @resource.title, :description => @resource.description, :url => @resource.url
     end
 
     respond_to do |format|

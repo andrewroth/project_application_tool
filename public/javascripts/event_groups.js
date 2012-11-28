@@ -69,12 +69,12 @@ Ext.define('Resource', {
     name: 'id',
     type: 'int',
     useNull: true
-  }, 'title', 'description']
+  }, 'url', 'title', 'description']
 });
 
 Ext.define('EventGroupResource', {
   extend: 'Ext.data.Model',
-  fields: ['id', 'title', 'description', 'human_size', 'project_ids']
+  fields: ['id', 'url', 'title', 'description', 'human_size', 'project_ids']
 });
 
 Ext.onReady(function(){
@@ -183,7 +183,7 @@ Ext.onReady(function(){
     id: 'tree',
     store: store,
     width: 300,
-    height: 550,
+    height: 600,
     title: 'Event Groups',
     rootVisible: false,
     listeners: {
@@ -309,6 +309,14 @@ Ext.onReady(function(){
         }
         return project_names.join(', ');
       }
+    }, {
+      text: 'Url',
+      flex: 1,
+      sortable: true,
+      dataIndex: 'url',
+      editor: {
+        editable: false
+      }
     }],
     dockedItems: [{
       xtype: 'toolbar',
@@ -341,7 +349,7 @@ Ext.onReady(function(){
     title: 'Resource Upload Form',
     bodyPadding: '10 10 0',
     width: 848,
-    height: 198,
+    height: 248,
     colspan: 2,
 
     defaults: {
@@ -360,6 +368,12 @@ Ext.onReady(function(){
       fieldLabel: 'Desc:',
       name: 'resource[description]',
     },{
+      xtype: 'textfield',
+      fieldLabel: 'Url:',
+      allowBlank: true,
+      name: 'resource[url]',
+    },{
+      allowBlank: true,
       xtype: 'filefield',
       id: 'form-file',
       emptyText: 'Select a file',
@@ -410,7 +424,7 @@ Ext.onReady(function(){
   //var details = Ext.create('Ext.tree.tabPanel', {
   var details = Ext.createWidget('tabpanel', {
     width: 850,
-    height: 550,
+    height: 600,
     title: 'Event Group',
     items: [{
       margins: '5 5 5 5',
@@ -437,7 +451,7 @@ Ext.onReady(function(){
   Ext.create('Ext.container.Container', {
     renderTo: "eventGroupUI",
     width: 1150,
-    height: 554,
+    height: 604,
     frame: true,
     layout: {
       type: 'hbox'
