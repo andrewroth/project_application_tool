@@ -372,6 +372,18 @@ Ext.onReady(function(){
       fieldLabel: 'Url:',
       allowBlank: true,
       name: 'resource[url]',
+      enableKeyEvents: true,
+      listeners: {
+        keyup: function(el, b) {
+          if (el.lastValue != "") {
+            jQuery("#form-file-inputEl").val("Disabled because a URL was entered");
+            jQuery("#form-file-fileInputEl").attr("disabled", "true");
+          } else {
+            jQuery("#form-file-inputEl").val("Select a file");
+            jQuery("#form-file-fileInputEl").removeAttr("disabled");
+          }
+        }
+      }
     },{
       allowBlank: true,
       xtype: 'filefield',
