@@ -48,7 +48,7 @@
         <% else %>
           <p>No support coach assigned.</p>
         <% end %>
-        <h3 id="youveRaisedTitle">You've raised $<span style="color:green;"><%= in_place_editor_field(:profile, :support_claimed_currency) %></span> <span style="color:grey;">We've received $<%= "%0.2f" % @profile.donations_total %>.</span></h3>
+        <h3 id="youveRaisedTitle">You've raised $<span style="color:green;"><%= in_place_editor_field(:profile, :support_claimed_currency) %> <% tooltip('claimed') do %>Click the amount to the left to change it<% end %></span> <span style="color:grey;">We've received $<%= "%0.2f" % @profile.donations_total %>.</span></h3>
         <div id="chartContainer">
           <dl id="chart">
             <dd><span id="data-one" style="width: <%= @percent_support %>%"><%= @percent_support %>%</span></dd>

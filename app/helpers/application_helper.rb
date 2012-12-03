@@ -251,7 +251,7 @@ module ApplicationHelper
     return if !block_given? && !tip_html.present?
     html = image_tag("/extjs/resources/themes/images/default/shared/icon-question.gif", :height => "14", :id => "tip_#{id}", :"data-tip_html_selector" => "#tip_#{id}_html")
     html += content_tag("div", :id => "tip_#{id}_html", :style => "display:none") do
-      tip_html || capture(collection, &block)
+      tip_html || capture(&block)
     end
     block_given? ? concat(html) : html
   end
