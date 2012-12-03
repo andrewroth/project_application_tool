@@ -68,7 +68,11 @@
 
       <p><b>Upload a logo for the key login screen: </b><%= f.file_field :key_logo_uploaded_data %></p>
 
-      <p><b>Record of Funds Form: </b><%= f.file_field :record_of_funds_uploaded_data %></p>
+      <p><b>Record of Funds Form: </b><%= f.file_field :record_of_funds_uploaded_data %>
+        currently: <%= @event_group.get_record_of_funds_form.present? ? 
+         link_to(@event_group.get_record_of_funds_form.filename, @event_group.get_record_of_funds_form.public_filename) : 
+         "not set" %>
+      </p>
 
       <tr><td colspan='2'>
           <p>
