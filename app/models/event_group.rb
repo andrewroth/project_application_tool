@@ -157,4 +157,7 @@ class EventGroup < Node
     end
   end
 
+  def support_address_html
+    support_address.present? ? support_address.gsub("\n", "<br/>") : parent.try(:support_address_html).to_s
+  end
 end

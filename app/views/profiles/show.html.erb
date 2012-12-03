@@ -74,9 +74,13 @@
         <div id="supportBoxRightColumn">
           <h4>Snail Mail</h4>
           <p>Make cheques payable to:<br>
-          Power to Change Ministries<br>
-          20385 - 64th Avenue<br>
-          Langley, BC V2Y 1N5</p>
+          <% if @eg.support_address_html.present? %>
+            <%= @eg.support_address_html %>
+          <% else %>
+            Power to Change Ministries<br>
+            20385 - 64th Avenue<br>
+            Langley, BC V2Y 1N5</p>
+          <% end %>
         </div>
         <h3 class="supportTitles">Tax Receipts for Cash/Cheque Donors</h3>
         <p>All donations need to be recorded on a record of funds form. Your project title and project code are 
