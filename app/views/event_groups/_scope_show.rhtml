@@ -1,7 +1,9 @@
 <% node_label = if node.has_logo? then render(:partial => 'logo', :locals => { :node => node }) else
     node.to_s end %>
 
-<% if (@viewer.is_eventgroup_coordinator?(node) || !node.projects.empty?) && node.children.empty? %>
+<%# note - in order to make eventgroup coordinators see the scope page as close to everyone else (since they want to
+  be able to test it), they have to show hidden event groups to be able to click in to an event group with no children %>
+<% if (@viewer.is_eventgroup_coordinator?(node) || !node.projects.empty?) && (params[:show_hidden] == 'true' || node.children.empty?) %>
   <%= link_to node_label, set_as_scope_event_group_url(node.id) %>
 <% else %>
   <%= node_label %>

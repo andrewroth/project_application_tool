@@ -19,9 +19,7 @@ function update_links() {
 <%= if @columns then "<div id='scope_c'>" end %>
 
 <div id="event_group_links" class="<%= if @columns then "centerblock" end %>">
-  <% cache(:controller => 'event_groups', :action => 'index') do %>
-    <%= render :partial => 'ajax_tree/tree' %>
-  <% end %>
+  <%= render :partial => 'ajax_tree/tree' %>
 </div>
 
 <p id="event_group_remember">
