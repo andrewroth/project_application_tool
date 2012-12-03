@@ -30,7 +30,7 @@
               <!--<td><%= link_to "view summary", :controller => "appln", :action => "view_summary", :id => acceptance.id, :project_id => project.id %></td>-->
               <td><%= format_currency acceptance.support_claimed %><br /><%= format_date acceptance.support_claimed_updated_at %></td>
               <td><%= format_currency acceptance.donations_total %></td>
-              <td><%= costing_link acceptance.id %> <%= profile_notes_link acceptance.id, acceptance.profile_notes.length %> </td>
+              <td><%= costing_link acceptance.id %> <%= profile_notes_link acceptance.id, acceptance.profile_notes.length %> <%= link_to("dashboard", profile_path(accepance.id)) %></td>
             </tr>
         <% end %>
         </table>

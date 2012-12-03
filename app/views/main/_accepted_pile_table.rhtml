@@ -1,27 +1,27 @@
 <% if @accepted.length > 0 %>
-    <form>
+  <form>
     <p><%= sortable_table %>
-      <thead><tr>
+    <thead><tr>
         <%= th 'name' %>
         <%= th 'campus' %>
         <%= th 'project' %>
         <% if @full_view || @restricted_full_view %>
-            <%= th 'appln (entire)' %>
+          <%= th 'appln (entire)' %>
         <% end %>
         <%= th 'appln (summary)' %>
         <%= th 'accepted at', 'str', true %>
         <% if @full_view || @restricted_full_view %>
-            <%= th 'support claimed', 'string' %>
-            <%= th 'support recvd', 'currency' %>
-            <%= th 'support goal', 'currency'%>
-            <%= th 'support coach', 'dropdown' %>
+          <%= th 'support claimed', 'string' %>
+          <%= th 'support recvd', 'currency' %>
+          <%= th 'support goal', 'currency'%>
+          <%= th 'support coach', 'dropdown' %>
         <% end %>
         <%= th 'intern' %>
         <%= th 'other' %>
-      </tr></thead>
-      <tbody>
-        <% for acceptance in @accepted %>
-          <% 
+    </tr></thead>
+    <tbody>
+      <% for acceptance in @accepted %>
+        <% 
           if defined?(project).nil? || acceptance.project != project
             project = acceptance.project
             @viewer.set_project project
@@ -29,116 +29,113 @@
             @full_view = @viewer.fullview?
             @cache = ProfileDonation.cache project.id
           end
-          %>
+        %>
 
-          <tr id="row_<%=acceptance.id%>">
-	    <% appln = acceptance.appln; viewer = acceptance.viewer %>
-	    <% viewer = appln.viewer if viewer.nil? && appln %>
-	    <% if viewer.nil? %>
-	      <td colspan='2'>missing viewer for acceptance <%= acceptance.id %></td>
-            <% else %>
-              <td><%=h viewer.name %></td>
-              <td><% if viewer.person %>
-	        <%= h viewer.person.campus_abbrev %>
-		  <% else %>
-		    no person for viewer '<%= viewer.username %>' id <%= viewer.id %>
-		  <% end %>
-	       </td>
+        <tr id="row_<%=acceptance.id%>">
+          <% appln = acceptance.appln; viewer = acceptance.viewer %>
+          <% viewer = appln.viewer if viewer.nil? && appln %>
+          <% if viewer.nil? %>
+            <td colspan='2'>missing viewer for acceptance <%= acceptance.id %></td>
+          <% else %>
+            <td><%=h viewer.name %></td>
+            <td><% if viewer.person %>
+                <%= h viewer.person.campus_abbrev %>
+              <% else %>
+                no person for viewer '<%= viewer.username %>' id <%= viewer.id %>
+              <% end %>
+            </td>
 
-	    <% end %>
-            <td><%= acceptance.project.title %></td>
-            <% if @full_view %>
-                <td>
-                  <%= view_entire_link acceptance.id %>
-                </td>
-            <% elsif @restricted_full_view %>
-                <td></td>
-            <% end %>
-
+          <% end %>
+          <td><%= acceptance.project.title %></td>
+          <% if @full_view %>
             <td>
-              <%= view_summary_link acceptance.id %>
+              <%= view_entire_link acceptance.id %>
             </td>
+          <% elsif @restricted_full_view %>
+            <td></td>
+          <% end %>
 
-            <%- if @eg.show_dates_as_distance %>
-              <td value="<%= format_date(acceptance.accepted_at) %>"><%= format_date(acceptance.accepted_at, :distance) %><%= " ago" if acceptance.accepted_at %></td>
-            <%- else -%>
-              <td><%= format_date(acceptance.accepted_at) %></td>
-            <%- end -%>
+          <td>
+            <%= view_summary_link acceptance.id %>
+          </td>
 
-            <% if @full_view %>
-              <td value="<%= '%010d' % (format_currency acceptance.support_claimed.to_i * 100).to_i %>_<%= format_date acceptance.support_claimed_updated_at %>">
-                <%= format_currency acceptance.support_claimed %><br />
-                <%- if @eg.show_dates_as_distance %>
-                  <%= format_date acceptance.support_claimed_updated_at %></td>
-                <%- else %>
-                  <%= format_date(acceptance.support_claimed_updated_at, :distance) %><%= " ago" if acceptance.support_claimed_updated_at %>
-                <%- end %>
-                <td><%= format_currency acceptance.donations_total(:cache => @cache) %></td>
-                <td><%= format_currency acceptance.cached_costing_total %></td>
-                <td>
-                    <% if @viewer.can_modify_profile_in_project project %>
-                        <% name = "support_coach_#{acceptance.id}" %>
-                        <% support_coach_id = acceptance.support_coach.nil? ? '' : acceptance.support_coach_id %>
-                        <%= render :partial => 'support_coach_choice', :locals => { :name => name, 
-                                                :current => support_coach_id, :project => project } %>
+          <%- if @eg.show_dates_as_distance %>
+            <td value="<%= format_date(acceptance.accepted_at) %>"><%= format_date(acceptance.accepted_at, :distance) %><%= " ago" if acceptance.accepted_at %></td>
+          <%- else -%>
+            <td><%= format_date(acceptance.accepted_at) %></td>
+          <%- end -%>
 
-                  	    <%= observe_field name,
-                                   :url => {
-                                      :controller => :acceptance,
-                                      :action => :update_support_coach,
-                                      :id => acceptance.id,
-                                      :update => "support_coach_#{acceptance.id}",
-                                      :profile_id => acceptance.id,
-                                   },
-                              	:complete => visual_effect(:highlight, "row_#{acceptance.id}"),
-                                  :with =>  "'support_coach_id='+escape($('#{name}').value)"
-                         %>
-                    <% else %>
-                        <%= acceptance.support_coach_str
-                          %>
-                    <% end %>
-                </td>
-            <% elsif @restricted_full_view %>
-                <td></td>
+          <% if @full_view %>
+            <td value="<%= '%010d' % (format_currency acceptance.support_claimed.to_i * 100).to_i %>_<%= format_date acceptance.support_claimed_updated_at %>">
+              <%= format_currency acceptance.support_claimed %><br />
+              <%- if @eg.show_dates_as_distance %>
+                <%= format_date acceptance.support_claimed_updated_at %></td>
+            <%- else %>
+              <%= format_date(acceptance.support_claimed_updated_at, :distance) %><%= " ago" if acceptance.support_claimed_updated_at %>
+            <%- end %>
+            <td><%= format_currency acceptance.donations_total(:cache => @cache) %></td>
+            <td><%= format_currency acceptance.cached_costing_total %></td>
+            <td>
+              <% if @viewer.can_modify_profile_in_project project %>
+                <% name = "support_coach_#{acceptance.id}" %>
+                <% support_coach_id = acceptance.support_coach.nil? ? '' : acceptance.support_coach_id %>
+                <%= render :partial => 'support_coach_choice', :locals => { :name => name, 
+                  :current => support_coach_id, :project => project } %>
+
+                  <%= observe_field name,
+                    :url => {
+                    :controller => :acceptance,
+                    :action => :update_support_coach,
+                    :id => acceptance.id,
+                    :update => "support_coach_#{acceptance.id}",
+                    :profile_id => acceptance.id,
+                  },
+                  :complete => visual_effect(:highlight, "row_#{acceptance.id}"),
+                  :with =>  "'support_coach_id='+escape($('#{name}').value)"
+                %>
+              <% else %>
+                <%= acceptance.support_coach_str
+              %>
             <% end %>
-            </td>
-            <td><%= render :partial => 'accepted_pile_table_intern', :object => acceptance %></td>
-            <td> <!-- other -->
-                <% if @viewer.is_eventgroup_coordinator?(@eg) %>
-                  <% name = "acceptance_#{acceptance.id}" %>
-                    
-                  <%= withdraw_move_link acceptance.id %>
-
-                  <%= manual_donations_link acceptance.motivation_code %>
-                  
-                  <!-- link to costing page -->
-                  <%= costing_link acceptance.id %>
-                <% else %>
-                  <% if acceptance.as_intern? %>intern<% end %>
-                  
-                  <% if @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_project_administrator? %>
-                      <!-- link to costing page -->
-                      <%= costing_link acceptance.id %>
-                  <% end %>
-                <% end %>
-		
-		<% if @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor? %>
-		  <% if appln %>
-                    <%= edit_always_editable_link acceptance.id %>
-		  <% else %>
-		    Error: no appln for acceptance <%= acceptance.id %>
-		  <% end %>
-                <% end %>
-
-                <%= travel_link acceptance.id %>
-                <%= profile_notes_link acceptance.id, acceptance.profile_notes.length %>
-            </td>
-          </tr>
+          </td>
+        <% elsif @restricted_full_view %>
+          <td></td>
         <% end %>
-      </tbody>
-    </table></p>
-    
+      </td>
+      <td><%= render :partial => 'accepted_pile_table_intern', :object => acceptance %></td>
+      <td> <!-- other -->
+        <% if @viewer.is_eventgroup_coordinator?(@eg) %>
+          <% name = "acceptance_#{acceptance.id}" %>
+          <%= withdraw_move_link acceptance.id %>
+          <%= manual_donations_link acceptance.motivation_code %>
+          <%= costing_link acceptance.id %>
+          <%= link_to("dashboard", profile_path(acceptance.id)) %>
+        <% else %>
+        <% if acceptance.as_intern? %>intern<% end %>
+
+          <% if @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_project_administrator? %>
+            <!-- link to costing page -->
+            <%= costing_link acceptance.id %>
+          <% end %>
+        <% end %>
+
+        <% if @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor? %>
+          <% if appln %>
+            <%= edit_always_editable_link acceptance.id %>
+          <% else %>
+            Error: no appln for acceptance <%= acceptance.id %>
+          <% end %>
+        <% end %>
+
+        <%= travel_link acceptance.id %>
+        <%= profile_notes_link acceptance.id, acceptance.profile_notes.length %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table></p>
+
   </form>
 <% else %>
-    <p><i>empty</i></p>
+  <p><i>empty</i></p>
 <% end %>

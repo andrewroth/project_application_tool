@@ -1,6 +1,12 @@
 <p class="smallDescriptionText">Do not check items until they are completed. Hover over the "?" for more information.</p>
   <ul id="toDoList">
-    <% @profile.all_prep_items.group_by(&:prep_item_category).sort.each do |category, prep_items| %>
+    <% @grouped = @profile.all_prep_items.group_by(&:prep_item_category)
+       @grouped.keys.sort{ |a, b|
+         # handle nil value (happens when no category set)
+         if a.nil? && b.nil? then 0 elsif a.nil? then -1 elsif b.nil? then 1 else a <=> b  end
+       }.each do |category|
+    %>
+      <% prep_items = @grouped[category] %>
       <% prep_items.group_by(&:deadline).sort.each do |deadline, prep_items| %>
         <%= [ category.try(:title), deadline.strftime("%B %d") ].compact.join(" - ") %>
         <% prep_items.sort.each do |prep_item| %>
@@ -10,8 +16,8 @@
             <%= check_box_tag :"#{prep_item.title}", "1", false, :id => "pi_#{prep_item.id}" %>
             <% content_tag(:span, :id => "pi_#{prep_item.id}_span", :onClick => "$('pi_#{prep_item.id}').checked = !$('pi_#{prep_item.id}').checked; complete_prep_item(#{prep_item.id}, #{@profile.id})", :class => "button") do %>
               <%= prep_item.title %>
-            <% end %>
-            <%= tooltip(prep_item.id, prep_item.description) %>
+          <% end %>
+          <%= tooltip(prep_item.id, prep_item.description) %>
             <script>Event.observe('pi_<%= prep_item.id %>', 'change', function() { complete_prep_item(<%= prep_item.id %>, <%= @profile.id %>); })</script>
           </li>
         <% end %>
