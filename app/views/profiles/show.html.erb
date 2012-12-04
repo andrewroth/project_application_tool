@@ -48,7 +48,8 @@
         <% else %>
           <p>No support coach assigned.</p>
         <% end %>
-        <h3 id="youveRaisedTitle">You've raised $<span style="color:green;"><%= in_place_editor_field(:profile, :support_claimed_currency) %> <% tooltip('claimed') do %>Click the amount to the left to change it<% end %></span> <span style="color:grey;">We've received $<%= "%0.2f" % @profile.donations_total %>.</span></h3>
+        <h3 id="youveRaisedTitle">You've raised $<span style="color:green;"><%= in_place_editor_field(:profile, :support_claimed_currency) %> <% tooltip('claimed') do %>Click the amount to the left to change it<% end %></span> <span style="color:grey;">We've received $<%= "%0.2f" % @profile.donations_total %>. <%= link_to_function "Details", %|new Ext.Window({title: "Details", modal: true, autoLoad: {url: '/profiles/#{@profile.id}/support_received', scripts: true}, width: 900, height: 600}).show()| %></span></h3>
+        </p>
         <div id="chartContainer">
           <dl id="chart">
             <dd><span id="data-one" style="width: <%= @percent_support %>%"><%= @percent_support %>%</span></dd>
@@ -69,7 +70,7 @@
         <h3 class="supportTitles">How to Receive Donations</h3>
         <div id="supportBoxLeftColumn">
           <h4>Online</h4>
-          <p>Send this info &amp; donate link to supporters: <a href="#"><%= link_to_function "Click to copy", "Ext.MessageBox.show({title: 'Donate Link', msg: 'Copy the donate link below', width: 600, buttons: Ext.MessageBox.OK, multiline: true, value: 'link here', defaultTextHeight: 20}); jQuery('.x-window').find('textarea').select()" %></a></p>
+          <p>Send this info &amp; donate link to supporters: <a href="#"><%= link_to_function "Click to copy", "Ext.MessageBox.show({title: 'Donate Link', msg: 'Copy the donate link below', width: 600, buttons: Ext.MessageBox.OK, multiline: true, value: '#{@profile.project.url || 'http://powertochange.com/'}', defaultTextHeight: 20}); jQuery('.x-window').find('textarea').select()" %></a></p>
         </div>
         <div id="supportBoxRightColumn">
           <h4>Snail Mail</h4>
