@@ -290,6 +290,7 @@ class ProfilesController < ApplicationController
     @page_title = "Dashboard"
     @profile.update_attribute :seen_help, true
     @percent_support = [[@profile.support_claimed_percent, @profile.support_received_percent].max, 100].min
+    @resources = @eg.event_group_resources.find(:all, :joins => :projects, :conditions => [ "project_id = ?", @profile.project.id ])
   end
 
   def old_dashboard

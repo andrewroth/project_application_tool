@@ -111,10 +111,10 @@
     <div id="resourcesBox">
       <h3 class="boxTitle">&nbsp;<img src="/images/boxTitle/resourcesIcon.png" class="boxTitleIcon"> Resources</h3>
       <div class="boxContent">
-        <% if @eg.event_group_resources.present? %>
+        <% if @resources.present? %>
           <ul id="resourcesList">
             <li><h4>Files/PDFs</h4></li>
-            <% @eg.event_group_resources.each do |resource| %>
+            <% @resources.each do |resource| %>
               <li>
                 <% link_to resource.url, :target => "_blank" do %>
                   <%= resource.title %>
