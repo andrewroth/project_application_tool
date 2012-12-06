@@ -212,8 +212,8 @@ h3.boxTitle{
 }
 
 .smallDescriptionText{
-  text-align:center;
-  font-size:10px;
+  text-align: center;
+  font-size: 12px;
 }
 
 .boxContent{
@@ -260,7 +260,7 @@ background: rgba(255, 255, 255, 0.5);
 }
 
 #newPATBox p{
-  font-size:12px;
+  font-size:14px;
   line-height:1.3;
 }
 
