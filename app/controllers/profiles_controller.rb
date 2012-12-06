@@ -13,12 +13,11 @@ class ProfilesController < ApplicationController
                                               
   before_filter :set_title
   before_filter :get_profile, :except => [ :index, :list, :set_profile_going, :new, :create ] + INFO_ACTIONS
-  before_filter :ensure_profile_ownership, :except => [ :view, :index, :list, :update, :set_profile_going, 
+  before_filter :ensure_profile_ownership_or_support_coach, :except => [ :view, :index, :list, :update, :set_profile_going, 
                                                         :class_options, :new, :viewer_id_dropdown, :populate_applications, 
                                                         :start, :continue, :create ] + INFO_ACTIONS
   before_filter :set_subject, :only => INFO_ACTIONS
   before_filter :ensure_self_or_eventgroup_coordinator, :only => INFO_ACTIONS
-  before_filter :ensure_profile_ownership_or_eventgroup_coordinator, :only => [ :view, :update ]
   before_filter :ensure_eventgroup_coordinator, :only => [ :new, :create ]
 
   in_place_edit_for :profile, :support_claimed_currency
@@ -356,4 +355,9 @@ class ProfilesController < ApplicationController
       }
     end
 
+    def ensure_profile_ownership_or_support_coach
+      unless @subject == @viewer || is_eventgroup_coordinator || @viewer.support_coaching_profiles.include?(@profile)
+        render :inline => "no permission"
+      end
+    end
 end

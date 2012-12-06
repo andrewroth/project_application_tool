@@ -16,6 +16,7 @@ module ViewerMethods
       has_many :eventgroup_coordinators, :conditions => { :end_date => nil }, :foreign_key => "viewer_id"
       has_many :all_eventgroup_coordinators, :class_name => "EventgroupCoordinator", :foreign_key => "viewer_id"
       has_many :eventgroups_coordinating, :class_name => "EventGroup", :through => :eventgroup_coordinators, :source => :event_group
+      has_many :support_coaching_profiles, :class_name => "Acceptance", :foreign_key => "support_coach_id"
 
       # ------ roles
       def base.roles() [ :project_staff, :project_director, :project_administrator, :support_coach, :processor ] end
