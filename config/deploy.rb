@@ -27,6 +27,7 @@ task :after_update_code, :roles => :app do
   run <<-CMD
     ln -s #{shared_path}/config/database.yml #{release_path}/config/database.yml &&
     mkdir -p -m 770 #{shared_path}/tmp/{cache,sessions,sockets,pids} &&
+    mkdir -p -m 770 #{release_path}/tmp/cache &&
     ln -s #{shared_path}/public/attachments #{release_path}/public/attachments &&
     ln -s #{shared_path}/public/event_groups #{release_path}/public/event_groups
   CMD
