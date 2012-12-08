@@ -356,7 +356,7 @@ class ProfilesController < ApplicationController
     end
 
     def ensure_profile_ownership_or_support_coach
-      unless @subject == @viewer || is_eventgroup_coordinator || @viewer.support_coaching_profiles.include?(@profile)
+      unless has_profile_ownership || @subject == @viewer || is_eventgroup_coordinator || @viewer.support_coaching_profiles.include?(@profile)
         render :inline => "no permission"
       end
     end
