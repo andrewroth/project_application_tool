@@ -1,19 +1,13 @@
 <p class="smallDescriptionText">Do not check items until they are completed. Hover over the "?" for more information.</p>
   <ul id="toDoList">
-    <% @grouped = @profile.all_prep_items.group_by(&:prep_item_category)
-       @grouped.keys.sort{ |a, b|
-         # handle nil value (happens when no category set)
-         if a.nil? && b.nil? then 0 elsif a.nil? then -1 elsif b.nil? then 1 else a <=> b  end
-       }.each do |category|
-    %>
-      <% prep_items = @grouped[category] %>
+    <% @profile.all_prep_items.group_by(&:category).sort.each do |category, prep_items| %>
       <% prep_items.group_by(&:deadline).sort.each do |deadline, prep_items| %>
-        <%= [ category.try(:title), deadline.strftime("%B %d") ].compact.join(" - ") %>
+        <%= [ deadline, category.try(:title) ].compact.join(" - ") %>
         <% prep_items.sort.each do |prep_item| %>
           <% ppi = @profile.profile_prep_items.find_by_prep_item_id(prep_item.id) %>
           <% next if ppi.try(:completed_at) %>
           <li class="toDoPriority<%= prep_item.priority %>">
-            <%= check_box_tag :"#{prep_item.title}", "1", false, :id => "pi_#{prep_item.id}" %>
+            <%= check_box_tag :"#{prep_item.title}", "1", false, :id => "pi_#{prep_item.id}", :class => "left" %>
             <% content_tag(:span, :id => "pi_#{prep_item.id}_span", :onClick => "$('pi_#{prep_item.id}').checked = !$('pi_#{prep_item.id}').checked; complete_prep_item(#{prep_item.id}, #{@profile.id})", :class => "button") do %>
               <%= prep_item.title %>
           <% end %>
