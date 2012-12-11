@@ -16,7 +16,9 @@ function after_ajax() {
       target: el.id,
       html: jQuery(jQuery(el).attr("data-tip_html_selector")).html(),
       anchor: 'left',
-      anchorToTarget: true
+      anchorToTarget: true,
+      dismissDelay: 5000,
+      hideDelay: 5000
     });
   });
 }
