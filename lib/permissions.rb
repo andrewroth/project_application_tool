@@ -248,6 +248,14 @@ module Permissions
     r = yield @profile, @profile.project
   end
 
+  def is_any_project_administrator
+    @viewer.project_director_projects.find_by_id(@eg.projects.collect(&:id))
+  end
+
+  def is_any_project_director
+    @viewer.project_director_projects.find_by_id(@eg.projects.collect(&:id))
+  end
+
   def ensure_permission(m, args)
     value = self.send(m, *args)
     @debug = @debug.to_s + "permission method checked: #{m}  value: #{value}<br />"
