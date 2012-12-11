@@ -30,6 +30,7 @@ task :after_update_code, :roles => :app do
     mkdir -p -m 770 #{release_path}/tmp/cache &&
     ln -s #{shared_path}/public/attachments #{release_path}/public/attachments &&
     ln -s #{shared_path}/public/event_groups #{release_path}/public/event_groups
+    ln -s #{shared_path}/public/resources #{release_path}/public/resources
   CMD
 
   run "cd #{release_path} && git submodule init"
