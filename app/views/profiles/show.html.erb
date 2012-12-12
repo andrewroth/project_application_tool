@@ -69,8 +69,10 @@
           <%= link_to_function "Edit Expenses", %|new Ext.Window({title: "Expenses", modal: true, autoLoad: {url: '/profiles/#{@profile.id}/costing', scripts: true}, width: 600, height: 600}).show()| %></p>
         <h3 class="supportTitles">How to Receive Donations</h3>
         <div id="supportBoxLeftColumn">
-          <h4>Online</h4>
+          <h4>Online - Canada</h4>
           <p>Send this info &amp; donate link to supporters: <a href="#"><%= link_to_function "Click to copy", "Ext.MessageBox.show({title: 'Donate Link', msg: 'Copy the donate link below', width: 600, buttons: Ext.MessageBox.OK, multiline: true, value: '#{@profile.project.url || 'http://powertochange.com/'}', defaultTextHeight: 20}); jQuery('.x-window').find('textarea').select()" %></a></p>
+          <h4>Online - US</h4>
+          <p>For US donations, please see acceptance handbook for donation details.</p>
         </div>
         <div id="supportBoxRightColumn">
           <h4>Snail Mail</h4>
@@ -83,7 +85,7 @@
             Langley, BC V2Y 1N5</p>
           <% end %>
         </div>
-        <h3 class="supportTitles">Tax Receipts for Cash/Cheque Donors</h3>
+        <h3 class="supportTitles" style="clear:both">Tax Receipts for Cash/Cheque Donors</h3>
         <p>All donations need to be recorded on a record of funds form. Your project title is  
         <span style='font-style: italic'><%= @profile.project.title %></span> and your project code is 
         <%= @profile.motivation_code.present? && @profile.motivation_code != "0" ? "<span style='font-style: italic'>#{@profile.motivation_code}</span>".html_safe : "not yet assigned" %>.
