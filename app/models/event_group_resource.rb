@@ -14,7 +14,11 @@ class EventGroupResource < ActiveRecord::Base
   end
 
   def as_json(params)
-    super(params.merge(:methods => [ :human_size, :project_ids ]))
+    super(params.merge(:methods => [ :human_size, :project_ids, :filetype ]))
+  end
+
+  def filetype
+    File.extname(resource.filename)[1,5]
   end
 
   protected
