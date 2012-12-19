@@ -1,31 +1,17 @@
 <%= javascript_include_tag "application.js" %>
 
 <style>
-  /* TODO: inline styling is ugly */
-  table.expenses {
-    color: #6A659B;
-  }
+  /* TODO: Put in css file.  inline styling is ugly */
 
-  #expenses_content {
-    border: 1px solid #B2C8E8;
-    font-size: 14px;
-    border-collapse: collapse;
-  }
-
-  #expenses_header, .total_amount, a#delete, h3 { color: #4A76C8; font-size: 16px; }
+  #expenses td.item { width: 375px; }
+  #expenses td.covered { width: 80px; }
+  #expenses td.delete { width: 30px; }
+  #expenses td.index { width: 25px; }
+  
+  #expenses, .total_amount, a#delete, h3 { color: #4A76C8; font-size: 16px; }
   a#delete { position: relative; top: 10px; }
   .total_header { color: #6A659B; font-size: 16px; }
-  table.expenses td.delete { min-width: 30px; max-width: 30px; width: 30px; }
-  table.expenses td.index { width: 40px; }
-  table.expenses td.item { width: 350px; }
-  table.expenses td.amount { width: 60px; }
-  table.expenses td.covered { width: 100px; text-align: left; padding-left: 20px; }
-  table.expenses td { margin: 5px; }
-  table.expenses tr { height: 30px; }
-  table.expenses td { vertical-align: middle; }
 
-  #expenses_content td.amount { text-align: right; }
-  
   #sums {
     float: right;
   }
@@ -42,22 +28,23 @@
     font-size: 24px !important;
     font-weight: normal !important;
   }
-
-  table#expenses_content tr.even { background-color: #E9F1FE; }
 </style>
 
 <div id="expenses_wrapper">
-  <table class="expenses" id="expenses_header">
-    <tr>
-      <td class='delete'></td>
-      <td class='index'></td>
-      <td class='item'>Item</td>
-      <td class='amount'>Amount</td>
-      <td class='covered'>Opted In</td>
-    </tr>
+  <table class="expenses dashboard_table" id="expenses">
+    <thead>
+      <tr>
+        <th class='delete'></th>
+        <th class='index'></th>
+        <th class='item left'>Item</th>
+        <th class='amount right'>Amount</th>
+        <th class='covered left'>Opted In</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => "optin_cost_items/expenses_content" %>
+    </tbody>
   </table>
-
-  <%= render :partial => "optin_cost_items/expenses_content" %>
 
   <%= link_to_remote 'New Cost Item', {
       :url => { :controller => 'optin_cost_items', :action => 'create', :profile_id => @profile.id },

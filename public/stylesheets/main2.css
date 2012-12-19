@@ -667,6 +667,44 @@ div.yui-skin-cnxbar {
   .x-reset .new_event_group p {
     margin-bottom: 2px; }
 
-.left {
-  float: left;
-}
+.dashboard_table {
+  border: 0px;
+  border-collapse: collapse;
+  font-family: Arial; }
+
+.dashboard_table tr:first-child td {
+  border-top: 1px solid #98BF21; }
+
+.dashboard_table td:first-child {
+  border-left: 1px solid #98BF21; }
+
+.dashboard_table td:last-child {
+  border-right: 1px solid #98BF21; }
+
+.dashboard_table tr:last-child td {
+  border-bottom: 1px solid #98BF21; }
+
+.dashboard_table td {
+  color: #6A659B; }
+
+.dashboard_table th, .dashboard_table td {
+  margin: 5px;
+  padding: 5px;
+  height: 31px; }
+
+.dashboard_table .left {
+  text-align: left; }
+
+.dashboard_table .right {
+  text-align: right; }
+
+.dashboard_table th {
+  color: #4A76C8;
+  font-size: 16px;
+  font-weight: normal; }
+
+.dashboard_table tr {
+  font-size: 14px; }
+
+.dashboard_table tr.odd {
+  background-color: #e9f1fe; }

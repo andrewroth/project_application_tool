@@ -1,2 +1,2 @@
-jQuery('#expenses_content').replaceWith('<%= escape_javascript(render :partial => 'expenses_content', :object => @cost_item) %>')
+jQuery('#expenses tbody').html('<%= escape_javascript(render :partial => 'expenses_content', :object => @cost_item) %>')
 new Effect.Highlight(jQuery("#expenses_content tr").last()[0])

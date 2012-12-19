@@ -15,17 +15,6 @@
     margin: 5px;
   }
 
-  #donations_content {
-    border: 1px solid #B2C8E8;
-    font-size: 14px;
-    border-collapse: collapse;
-  }
-
-  #donations_content tr td {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-  table#donations_content tr.even { background-color: #E9F1FE; }
 </style>
 
 <div id="support_received">
@@ -36,41 +25,45 @@
   <%= render :partial => 'manual_donations_statuses_explanation' %>
   <hr/>
 	<p>Power to Change offices have received these donations for you:<p>
-	<table class="donations" id="donations_content">
-	  <tr>
-	    <th>Date</th>
-	    <th>Donor Name</th>
-	    <th>Type</th>
-	    <th>OriginalAmount</th>
-	    <th>Conversion</th>
-	    <th>Amount</th>
-	    <th>Status</th>
-	  </tr>
-		<% total = 0 %>
-		<% @donations.each_with_index do |donation, i| %>
-		  <tr class="<%= i.even? ? 'even' : 'odd' %>">
-		    <td><%= donation.donation_date %></td>
-		    <td><%= donation.donor_name %></td>
-		    <td><%= donation.donation_type %></td>
-        <td align="right">
-          <% if a = donation.respond_to?(:original_amount) && !donation.original_amount.to_s.empty? %>
-            $<%= "%0.2f" % donation.original_amount.to_f %>
-          <% else %>&nbsp;<% end %>
-        </td>
-        <td align="right">
-          <% if r = donation.respond_to?(:conversion_rate) && !donation.conversion_rate.to_s.empty? %>
-            $<%= "%0.2f" % donation.conversion_rate.to_f %>
-          <% else %>&nbsp;<% end %>
-        </td>
-		    <td align="right">$<%= "%0.2f" % donation.amount.to_f %></td>
-		    <td><%= donation.status if donation.respond_to?(:status) %></td>
-		  <tr>
-		<% end %>
-	  <td> </td>
-    <td>&nbsp;</td>
-	  <td><b>TOTAL</b></td>
-    <td align="right"></td>
-    <td>&nbsp;</td>
-    <td align="right"><b><%= number_to_currency(@profile.donations_total) %></b></td>
+	<table class="donations dashboard_table" id="donations_content">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Donor Name</th>
+        <th>Type</th>
+        <th>OriginalAmount</th>
+        <th>Conversion</th>
+        <th>Amount</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% total = 0 %>
+      <% @donations.each_with_index do |donation, i| %>
+        <tr class="<%= i.even? ? 'even' : 'odd' %>">
+          <td><%= donation.donation_date %></td>
+          <td><%= donation.donor_name %></td>
+          <td><%= donation.donation_type %></td>
+          <td align="right">
+            <% if a = donation.respond_to?(:original_amount) && !donation.original_amount.to_s.empty? %>
+              $<%= "%0.2f" % donation.original_amount.to_f %>
+            <% else %>&nbsp;<% end %>
+          </td>
+          <td align="right">
+            <% if r = donation.respond_to?(:conversion_rate) && !donation.conversion_rate.to_s.empty? %>
+              $<%= "%0.2f" % donation.conversion_rate.to_f %>
+            <% else %>&nbsp;<% end %>
+          </td>
+          <td align="right">$<%= "%0.2f" % donation.amount.to_f %></td>
+          <td><%= donation.status if donation.respond_to?(:status) %></td>
+        <tr>
+      <% end %>
+      <tr>
+        <td class="right" colspan="3"><b>TOTAL</b></td>
+        <td class=""><b><%= number_to_currency(@profile.donations_total(:orig => true)) %></b></td>
+        <td>&nbsp;</td>
+        <td class="" colspan="2"><b><%= number_to_currency(@profile.donations_total) %></b></td>
+      </tr>
+    </tbody>
 	</table>
 </div>
