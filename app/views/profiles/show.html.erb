@@ -48,7 +48,7 @@
         <% else %>
           <p>No support coach assigned.</p>
         <% end %>
-        <h3 id="youveRaisedTitle">You've raised $<span style="color:green;"><%= in_place_editor_field(:profile, :support_claimed_currency) %> <% tooltip('claimed') do %>Click the amount to the left to change it<% end %></span> <span style="color:grey;">We've received $<%= "%0.2f" % @profile.donations_total %>. <%= link_to_function "Details", %|new Ext.Window({title: "Details", modal: true, autoLoad: {url: '/profiles/#{@profile.id}/support_received', scripts: true}, width: 900, height: 600}).show()| %></span></h3>
+        <h3 id="youveRaisedTitle">You've raised $<span style="color:green;"><%= in_place_editor_field(:profile, :support_claimed_currency) %> <% tooltip('claimed') do %>Click the amount to the left to change it<% end %></span> <span style="color:grey;">We've received $<%= "%0.2f" % @profile.donations_total %>. <%= link_to_function "Details", %|new Ext.Window({title: "Details", modal: true, autoLoad: {url: '/profiles/#{@profile.id}/support_received', scripts: true}, width: 900, height: 600, autoScroll: true}).show()| %></span></h3>
         </p>
         <div id="chartContainer">
           <dl id="chart">
