@@ -688,9 +688,9 @@ div.yui-skin-cnxbar {
   color: #6A659B; }
 
 .dashboard_table th, .dashboard_table td {
-  margin: 5px;
-  padding: 5px;
-  height: 31px; }
+  margin: 5px !important;
+  padding: 5px !important;
+  height: 31px !important; }
 
 .dashboard_table .left {
   text-align: left; }
