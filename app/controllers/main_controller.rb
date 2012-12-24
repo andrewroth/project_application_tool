@@ -284,7 +284,6 @@ render :partial => "viewer_specifics"
         people = Person.search_by_name params[:name]
         @profiles = @profiles.find_all{ |p| people.include?(p.viewer.try(:person)) }
       end
-      render :template => "main/received_paperwork_native"
     end
   end
 
@@ -299,12 +298,11 @@ render :partial => "viewer_specifics"
   protected
   
   def load_prep_items_and_project
-    @prep_items = @eg.prep_items.find_all_by_paperwork(true)
     if params[:project_id].present?
       @project = Project.find(params[:project_id])
-      @prep_items += @project.prep_items
+      @prep_items = @project.prep_items.find_all_by_paperwork(true)
     else
-      @prep_items += @eg.prep_items
+      @prep_items = @eg.prep_items.find_all_by_paperwork(true)
     end
     @prep_items.uniq!
   end
