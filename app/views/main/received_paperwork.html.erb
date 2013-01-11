@@ -51,9 +51,27 @@
 
 <script>
   jQuery(function() {
+    /*
     jQuery("#visible_header").remove();
+    th_widths = jQuery(".datagrid th").map(function() { return jQuery(this).css("width") });
     jQuery(".datagrid").clone().attr('id', 'visible_header').appendTo('body');
-    jQuery("#visible_header tbody").css("visibility", "hidden");
-    jQuery("#visible_header").hide();
+    jQuery("#visible_header tbody").remove();
+    jQuery("#visible_header th").each(function(i, th) { jQuery(th).css("width", th_widths[i]) });
+    */
+  });
+
+  function position_header() {
+    if (jQuery(window).scrollTop() > tableTop) { 
+      jQuery(".datagrid th").css("position", "relative").css("top", jQuery(window).scrollTop() - tableTop); 
+    } else { 
+      jQuery(".datagrid th").css("position", "static"); 
+    } 
+  }
+
+  jQuery(function() { 
+    tableTop = jQuery(".datagrid thead").position().top; 
+ 
+    jQuery(window).scroll(function() { position_header(); }); 
+    jQuery(".datagrid thead").click(function() { position_header(); });
   });
 </script>

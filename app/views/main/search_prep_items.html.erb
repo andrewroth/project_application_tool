@@ -12,16 +12,6 @@
 </div>
 
 <script>
-  jQuery(function() {
-    jQuery(window).scroll(function() {
-      scrollTop = jQuery(window).scrollTop();
-      if (scrollTop > jQuery(".datagrid").position().top) {
-        jQuery("#visible_header").show().css("position", "absolute").css("top", jQuery(window).scrollTop());
-      } else {
-        jQuery("#visible_header").hide();
-      }
-    });
-  });
 </script>
 
 <% end %>
