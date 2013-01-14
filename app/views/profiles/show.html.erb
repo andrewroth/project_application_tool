@@ -14,16 +14,35 @@
       </div>
     </div>
     <div id="travelBox">
-      <h3 class="boxTitle"><img src="/images/boxTitle/travelIcon.png" class="boxTitleIcon"> Travel Information</h3>
+      <h3 class="boxTitle"><img src="/images/boxTitle/travelIcon.png" class="boxTitleIcon">Travel Information</h3>
       <div class="boxContent">
-        <ul id="travelList">
-          <li><span style="color:grey;">Itinerary</a></li>
-        </ul>
-        <p class="smallDescriptionText">Itinerary will become blue when available.
-          <% if @profile.project.itinerary_available %>
-            You will not receive itinerary info before <%= @profile.project.itinerary_available %>
-          <% end %>
-        </p>
+        <% if @profile.travel_segments.present? %>
+          <ul id="travelList">
+            <li>
+              <span class="itinerary_available">
+                <%= link_to "Itinerary", { :controller => "profile_travel_segments", :action => :assigned, :profile_id => @profile.id, :restricted => true, :print => "pdf", :filename => "itinerary" }, :target => "_blank" %>
+              </span>
+            </li>
+          </ul>
+        <% else %>
+          <ul id="travelList">
+            <li>
+              <span class="itinerary_unavailable">Itinerary</span>
+            </li>
+          </ul>
+          <p class="smallDescriptionText">Itinerary will become blue when available.
+            <% if @profile.project.itinerary_available %>
+              You will not receive itinerary info before <%= @profile.project.itinerary_available %>
+            <% end %>
+          </p>
+        <% end %>
+        <% unless @profile.travel_segments.present? %>
+          <p class="smallDescriptionText">Itinerary will become blue when available.
+            <% if @profile.project.itinerary_available %>
+              You will not receive itinerary info before <%= @profile.project.itinerary_available %>
+            <% end %>
+          </p>
+        <% end %>
       </div>
     </div>
   </div>
