@@ -1163,10 +1163,18 @@ class ReportsController < ApplicationController
         if prep_item.can_be_assigned(profile)
           profile_prep_item = profile.profile_prep_items.find_or_create_by_prep_item_id(prep_item.id)
 
-          if profile_prep_item.completed_at
-            row << (csv_requested ? "Y" : "<p class='prep_items_submitted_column'>[&#x2713;]</p>")
+          if prep_item.paperwork
+            if profile_prep_item.completed_at
+              row << (csv_requested ? "Y" : "<p class='prep_items_submitted_column'>[&#x2713;]</p>")
+            else
+              row << (csv_requested ? "n" : "<p class='prep_items_submitted_column'>[&nbsp;]</p>")
+            end
           else
-            row << (csv_requested ? "n" : "<p class='prep_items_submitted_column'>[&nbsp;]</p>")
+            if profile_prep_item.completed_at
+              row << (csv_requested ? "Y" : "<p class='prep_items_todo_column'>[&#x2713;]</p>")
+            else
+              row << (csv_requested ? "n" : "<p class='prep_items_todo_column'>[&nbsp;]</p>")
+            end
           end
 
           if prep_item.paperwork && profile_prep_item.received_at

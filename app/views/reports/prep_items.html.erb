@@ -1,8 +1,9 @@
 
 <h1><%= @page_title %></h1>
 
-<p class='prep_items_submitted_column'>completed column is in this color</p>
+<p class='prep_items_submitted_column'>submitted column is in this color</p>
 <p class='prep_items_received_column'>received column is in this color</p>
+<p class='prep_items_todo_column'>todo column is in this color</p>
 
 <% content_for :header do %>
   <tr>
@@ -20,7 +21,7 @@
     <% i = 2 -%>
     <% while i < @columns.length -%>
       <%- paper = @prep_items[i - 2].paperwork -%>
-      <th><% if paper %>sub<% else %>done<% end %></th>
+      <th><% if paper %>sub<% else %>todo<% end %></th>
       <th><% if paper %>rec<% end %></th>
       <% i += 1 %>
     <% end %>

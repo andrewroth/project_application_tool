@@ -63,6 +63,10 @@ table#prep_items th {
   font-family: courier;
   color: blue; }
 
+.prep_items_todo_column {
+  font-family: courier;
+  color: red; }
+
 table#application_status {
   margin-left: 2em; }
 
