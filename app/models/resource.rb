@@ -1,3 +1,4 @@
+# TODO: merge EventGroupResource into this
 class Resource < ActiveRecord::Base
   has_many :event_group_resources
   has_many :event_groups, :through => :event_group_resources

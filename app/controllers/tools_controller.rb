@@ -85,32 +85,7 @@ class ToolsController < ApplicationController
     @eg_column = EventGroup.find(params[:event_group_id]).children.count > 0
     #@profiles = []
   end
-  
-  def accept_from_paper
-    @project = Project.find params[:project_id]
-    
-    form = @eg.application_form
-      @appln = Appln.create :form_id => form.id,
-        :viewer_id => params[:viewer_id],
-        :status => "started"
-    
-    @appln.save!
-    @appln.accepted!
-    
-    as_intern = params[:as_intern] == '1' || params[:as_intern] == 'true'    
-    acceptance = Acceptance.create :appln_id => @appln.id, :project_id => @project.id, 
-      :support_claimed => 0, :support_coach_id => params[:support_coach_id], 
-      :accepted_by_viewer_id => @viewer.id, :as_intern => as_intern,
-      :viewer_id => @appln.viewer.id
-     
-    SpApplicationMailer.deliver_accepted(acceptance, @viewer.email)
-    
-    flash[:notice] = "#{@appln.viewer.name} accepted to #{@project.title}.  " + 
-        "<a href='/appln/view_always_editable?appln_id=#{@appln.id}'>Edit their always editable fields.</a>"
-    
-    redirect_to :action => 'input_from_paper_index'
-  end
-  
+
   def input_from_paper_index
     @possible_viewers = Viewer.find(:all).collect{|v| 
       if v.is_student? then v else nil end
@@ -128,7 +103,7 @@ class ToolsController < ApplicationController
     @possible_projects = @eg.projects.find processor_for_project_ids
     @possible_projects.sort!{ |a,b| a.title <=> b.title }
   end
-  
+
   def get_reference_request_email
     @reference = ApplnReference.find params[:ref_id]
     @appln = Appln.find(@reference.instance_id)
