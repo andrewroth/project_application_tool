@@ -18,7 +18,7 @@ class EventGroupResource < ActiveRecord::Base
   end
 
   def filetype
-    File.extname(resource.filename)[1,5]
+    File.extname(resource.filename.to_s)[1,5]
   end
 
   protected
