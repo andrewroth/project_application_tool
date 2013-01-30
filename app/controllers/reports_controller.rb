@@ -1124,9 +1124,14 @@ class ReportsController < ApplicationController
 
     i = 1
     for prep_item in @prep_items
-     columns_arr += [ "#{prep_item.title}#{" (rec#{i})" if csv_requested}", 'string']
-     columns_arr += [ "(sub#{i})", 'string' ] if csv_requested
-     i += 1
+      if prep_item.paperwork
+        columns_arr += [ "#{prep_item.title}#{" (sub#{i})" if csv_requested}", 'string']
+        columns_arr += [ "(rec#{i})", 'string' ] if csv_requested
+      else
+        columns_arr += [ "#{prep_item.title}#{" (done#{i})" if csv_requested}", 'string']
+        columns_arr += [ " ", 'string' ] if csv_requested
+      end
+      i += 1
     end
 
     #for i in 1 .. @prep_items.size
@@ -1139,7 +1144,6 @@ class ReportsController < ApplicationController
     @columns = MyOrderedHash.new columns_arr
 
     # ensure profile_prep_items is current
-    @prep_items.each { |pi| pi.ensure_all_profile_prep_items_exist }
     @profiles = @prep_items.collect(&:profiles).flatten.uniq
     @profiles.delete_if{ |profile| 
       !@projects.include?(profile.project) || !([StaffProfile, Acceptance].include?(profile.class))
@@ -1148,23 +1152,29 @@ class ReportsController < ApplicationController
     
     for profile in @profiles
       row = []
-      row += [ ("(staff) " if profile.class == StaffProfile).to_s + profile.viewer.name, profile.project.name ]
+      if profile.class == StaffProfile
+        name = "(staff) #{profile.viewer.try(:name)}"
+      else
+        name = profile.viewer.name
+      end
+      row += [ name, profile.project.name ]
+
       for prep_item in @prep_items
-        profile_prep_item = profile.profile_prep_item prep_item
+        if prep_item.can_be_assigned(profile)
+          profile_prep_item = profile.profile_prep_items.find_or_create_by_prep_item_id(prep_item.id)
 
-        if prep_item.applies_to_profile_check_cheked_in(profile) && profile_prep_item
-
-          if csv_requested
-            check_r = if profile_prep_item.received then "Y" else "n" end
-            check_s = if profile_prep_item.submitted then "Y" else "n" end
-            row += [ check_r, check_s ]
+          if profile_prep_item.completed_at
+            row << (csv_requested ? "Y" : "<p class='prep_items_submitted_column'>[&#x2713;]</p>")
           else
-            check_r = if profile_prep_item.received then "[&#x2713;]" else "[&nbsp;]" end
-            check_s = if profile_prep_item.submitted then "[&#x2713;]" else "[&nbsp;]" end
-            check_r_html = "<p class='prep_items_received_column'>#{check_r}</p>"
-            check_s_html = "<p class='prep_items_submitted_column'>#{check_s}</p>"
+            row << (csv_requested ? "n" : "<p class='prep_items_submitted_column'>[&nbsp;]</p>")
+          end
 
-            row += [ check_r_html, check_s_html ]
+          if prep_item.paperwork && profile_prep_item.received_at
+            row << (csv_requested ? "Y" : "<p class='prep_items_received_column'>[&#x2713;]</p>")
+          elsif prep_item.paperwork && !profile_prep_item.received_at
+            row << (csv_requested ? "n" : "<p class='prep_items_received_column'>[&nbsp;]</p>")
+          else
+            row << (csv_requested ? " " : "&nbsp;")
           end
         else
           row += [ csv_requested ? "" : "&nbsp" ] * 2
@@ -1703,22 +1713,7 @@ class ReportsController < ApplicationController
   end
 
   def set_prep_items
-    includes = [ :projects, :event_group ]
-
-    @prep_items = if params[:prep_item_id].nil? || params[:prep_item_id] == 'all' then
-      PrepItem.find :all, :include => includes
-    else
-      PrepItem.find params[:prep_item_id].split(','), :include => includes
-    end
-    
-    # ensure @prep_items apply to some project
-    @prep_items.delete_if { |pi|
-       if pi.applies_to == :projects
-         (@projects & pi.projects).empty?
-       elsif pi.applies_to == :event_group
-         pi.event_group != @eg
-       end
-    }
+    @prep_items = (@projects.collect(&:prep_items) + @eg.prep_items.find_all_by_individual(true)).flatten.compact.uniq
   end
 
   def set_viewer
