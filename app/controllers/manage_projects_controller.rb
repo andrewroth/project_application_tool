@@ -126,8 +126,14 @@ class ManageProjectsController < ApplicationController
   end
   
   def destroy
-    @eg.projects.find(params[:id]).destroy
-    redirect_to :action => 'list'
+    @project = @eg.projects.find(params[:id])
+    if @project.acceptances.present?
+      flash[:error] = "You can't delete this project because there are acceptances for it.  Try hiding it instead. (Edit then check off Hidden)"
+      redirect_to :back
+    else
+      @project.destroy
+      redirect_to :action => 'list'
+    end
   end
   
   def set_prefix
