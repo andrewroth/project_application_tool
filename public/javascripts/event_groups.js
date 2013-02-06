@@ -205,8 +205,8 @@ Ext.onReady(function(){
       items: [{
         text: 'New',
         handler: function() {
-          jQuery.ajax('/event_groups/new').done(function(data) { details.body.update(data); })
-          details.body.update("loading...");
+          details.items.getAt(0).loader.url = '/event_groups/new';
+          details.items.getAt(0).loader.load();
         }
       }]
     }]
