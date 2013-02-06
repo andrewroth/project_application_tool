@@ -69,7 +69,7 @@ class Node < ActiveRecord::Base
   end
   
   def self.to_list_options
-      roots_to_dropdown_list :roots => self.roots, :include_blank => true
+    roots_to_dropdown_list :roots => self.roots, :include_blank => true
   end
 
   def self.roots_to_dropdown_list(params)

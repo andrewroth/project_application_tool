@@ -65,10 +65,11 @@ class AjaxTreeController < ApplicationController
   def update
     respond_to do |format|
       if @node.update_attributes(params[:node] || params[:"#{singular_name}"])
-        flash[:notice] = 'node_table was successfully updated.'
+        flash[:notice] = "#{node_table} was successfully updated."
         format.html { redirect_to send("#{pluralized_name}_url") }
         format.xml  { head :ok }
       else
+        set_tree_list
         format.html { render({:action => "edit"}, {}) }
         format.xml  { render :xml => @node.errors.to_xml }
       end

@@ -27,6 +27,14 @@ class EventGroup < Node
 
   attr :filter_hidden, true
 
+  validate :no_parent_loop
+
+  def no_parent_loop
+    if self.parent_id == id
+      errors.add(:parent_id, "not able to be set.  You are trying to set the parent of this event group to itself.")
+    end
+  end
+
   def key_logo_uploaded_data=(f)
     return unless f.is_a?(Tempfile)
     key_logo = Attachment.create(:uploaded_data => f)
