@@ -29,7 +29,6 @@ module TravelSegmentTagsAutocomplete
       @items2 << @items[i]
     end
     
-    render :inline => "<%= auto_complete_result2(@items2, 'name', '#{tag}', 
-                              '#{tags.join(', ') + (', ' if !tags.empty?).to_s }') %>"
+    render :inline => "<%= auto_complete_result2(@items2, 'name', '#{CGI::escape(tag)}', '#{CGI::escape(tags.join(', ') + (', ' if !tags.empty?).to_s)}') %>"
   end
 end
