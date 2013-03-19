@@ -18,7 +18,7 @@
         <p>Your application has been accepted to the projects listed below!  Click on the link to go to an acceptance page.
         <ul>
           <% for acceptance in @acceptances %>
-            <li><%= link_to acceptance.project.title, :action => "acceptance", :profile_id => acceptance.id %> (accepted)</li>
+            <li><%= link_to acceptance.project.title, :action => "show", :id => acceptance.id %> (accepted)</li>
           <% end %>
         </ul>
         </p>
