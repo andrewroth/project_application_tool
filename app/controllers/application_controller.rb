@@ -88,10 +88,7 @@ class ApplicationController < ActionController::Base
   end
   
   def verify_user
-    #if session[:needs_read_login_message_confirm]
-    #  redirect_to :controller => "security", :action => "motd"
-    #elsif (session[:user_id].nil?)
-    if (session[:user_id].nil?)
+    unless session[:user_id].present?
       session[:url_to_redirect_when_logged_in] = request.path
       redirect_to :controller => "security", :action => "login"
       return false

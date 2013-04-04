@@ -1,3 +1,0 @@
-<% require "#{ENV['RAILS_ROOT'] || RAILS_ROOT}/vendor/plugins/git_branch_configs/init" %>
-<% require "#{ENV['RAILS_ROOT'] || RAILS_ROOT}/vendor/plugins/moonshine_multisite/lib/database_yml" %>
-<%= DatabaseYml.database_yml %>
