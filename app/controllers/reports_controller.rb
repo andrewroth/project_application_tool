@@ -1137,21 +1137,13 @@ class ReportsController < ApplicationController
       end
       i += 1
     end
-
-    #for i in 1 .. @prep_items.size
-    #columns_arr += [
-     # ("Form " + i.to_s).to_sym, 'string',
-      #("s" + i.to_s).to_sym, 'boolean',
-      #("r" + i.to_s).to_sym, 'boolean']
-    #end
-    
+   
     @columns = MyOrderedHash.new columns_arr
 
     # ensure profile_prep_items is current
-    @profiles = @prep_items.collect(&:profiles).flatten.uniq
-    @profiles.delete_if{ |profile| 
-      !@projects.include?(profile.project) || !([StaffProfile, Acceptance].include?(profile.class))
-    }
+    prep_item_applicable_profiles = Hash[@prep_items.collect{ |prep_item| [ prep_item, prep_item.applicable_profiles(@project) ] }]
+    @prep_items.delete_if{ |prep_item| prep_item_applicable_profiles[prep_item].empty? }
+    @profiles = Profile.find(prep_item_applicable_profiles.values.flatten.collect(&:id), :include => :received_prep_items)
     @participants = []
     
     for profile in @profiles
