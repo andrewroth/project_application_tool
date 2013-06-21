@@ -20,7 +20,7 @@ rails 2.3 seems to have a bug with eager loading
 
   potential_coaches = Project.find_all_by_id(project.id).collect{ |p|
     p.support_coaches + p.project_staffs + p.project_administrators + p.project_directors 
-  }.flatten.collect { |e| e.viewer }
+  }.flatten.collect { |e| e.viewer }.compact
 
   potential_coaches.sort! { |a,b| a.name <=> b.name }
 
