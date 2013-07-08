@@ -27,7 +27,6 @@
             @viewer.set_project project
 
             @full_view = @viewer.fullview?
-            @cache = ProfileDonation.cache project.id
           end
         %>
 
@@ -73,7 +72,7 @@
             <%- else %>
               <%= format_date(acceptance.support_claimed_updated_at, :distance) %><%= " ago" if acceptance.support_claimed_updated_at %>
             <%- end %>
-            <td><%= format_currency acceptance.donations_total(:cache => @cache) %></td>
+            <td><%= format_currency acceptance.donations_total %></td>
             <td><%= format_currency acceptance.cached_costing_total %></td>
             <td>
               <% if @viewer.can_modify_profile_in_project project %>
