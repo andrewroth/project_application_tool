@@ -70,38 +70,23 @@ end
     %>
 
     
-  <% 
-    cache(:controller => 'main', :action => 'your_projects', :section => 'Applying',
-          :project_id => your_project.id, :role => @viewer.roles_wrt_project(your_project)) do
-  %>
-    <p>Processor's pile:
+  <p>Processor's pile:
+  <blockquote>
+    <%= render :partial => "processor_pile", :locals => { :project => your_project } %>
+  </blockquote>
+  </p>
+
+  <p>Staff:
     <blockquote>
-      <%= render :partial => "processor_pile", :locals => { :project => your_project } %>
+      <%= render :partial => "staff_pile", :locals => { :project => your_project } %>
     </blockquote>
-    </p>
-  <% end %>
+  </p>
 
-  <% 
-    cache(:controller => 'main', :action => 'your_projects', :section => 'StaffProfile',
-          :project_id => your_project.id, :role => @viewer.roles_wrt_project(your_project)) do
-  %>
-    <p>Staff:
-      <blockquote>
-        <%= render :partial => "staff_pile", :locals => { :project => your_project } %>
-      </blockquote>
-    </p>
-  <% end %>
-
-  <% 
-    cache(:controller => 'main', :action => 'your_projects', :section => 'Withdrawn',
-          :project_id => your_project.id, :role => @viewer.roles_wrt_project(your_project)) do
-  %>
-    <!-- these piles will now have their own intros which are removed if empty -->
-    <% if @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor? %>
-      <p>Withdrawn pile:
-      <blockquote>
-        <%= render :partial => "withdrawn_pile", :locals => {:project => your_project }%>
-      </blockquote>
-    <% end %>
+  <!-- these piles will now have their own intros which are removed if empty -->
+  <% if @viewer.is_eventgroup_coordinator?(@eg) || @viewer.is_processor? %>
+    <p>Withdrawn pile:
+    <blockquote>
+      <%= render :partial => "withdrawn_pile", :locals => {:project => your_project }%>
+    </blockquote>
   <% end %>
 <% end %>
