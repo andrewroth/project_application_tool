@@ -2,7 +2,7 @@
 <h3 style="display:inline-block"><%= your_project.title %></h3>
 
 <% if profile = @viewer.profiles.find_by_project_id(@project.id) %>
-  (<%= link_to("Dashboard", profile_path(profile)) %>)
+  (<%= link_to("View #{@viewer.person.full_name} Dashboard", profile_path(profile)) %>)
 <% end %>
 
 <br/>
